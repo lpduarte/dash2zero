@@ -20,6 +20,7 @@ import { SupplierDetailsTable } from "@/components/dashboard/SupplierDetailsTabl
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
+import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -248,6 +249,15 @@ const Index = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <PerformanceHeatmap suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="benchmark">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Comparação com Setor de Atividade Similar
+                </AccordionTrigger>
+                <AccordionContent>
+                  <SectorBenchmarking suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
