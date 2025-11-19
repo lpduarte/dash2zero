@@ -26,6 +26,8 @@ import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { RatingLegend } from "@/components/dashboard/RatingLegend";
+import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
+import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -155,6 +157,11 @@ const Index = () => {
           onFilterChange={handleFilterChange}
           onReset={handleResetFilters}
         />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <TopSuppliersHighlight suppliers={filteredSuppliers} />
+          <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
+        </div>
 
         <div className="space-y-6">
           <div>
