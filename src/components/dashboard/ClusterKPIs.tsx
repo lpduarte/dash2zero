@@ -103,7 +103,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
-            KPIs por Cluster do Grupo
+            KPIs por Cluster do Banco Montepio/Município
           </CardTitle>
         </CardHeader>
         <CardContent>
