@@ -61,11 +61,16 @@ const CompaniesList = () => {
       "NIF/NIPC",
       "Email",
       "Setor",
+      "Secção",
+      "Atividade económica (CAE)",
       "Distrito",
       "Município",
       "Faturação anual (€)",
       "Colaboradores",
+      "Média de horas de funcionamento por dia",
+      "Dias laborais por ano",
       "Área (m²)",
+      "Data de criação",
       "Âmbito 1 (tCO2-e)",
       "Âmbito 2 (tCO2-e)",
       "Âmbito 3 (tCO2-e)",
@@ -80,11 +85,16 @@ const CompaniesList = () => {
           company.id,
           company.contact.email,
           company.sector,
+          "-",
+          company.sector,
           company.region,
           "-",
           company.revenue * 1000000,
           company.employees,
+          8,
+          260,
           company.area,
+          "2023-01-01",
           company.scope1,
           company.scope2,
           company.scope3,
@@ -152,19 +162,28 @@ const CompaniesList = () => {
             </Button>
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
+          <div className="border rounded-lg overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="bg-primary hover:bg-primary">
-                  <TableHead className="text-primary-foreground">Nome</TableHead>
-                  <TableHead className="text-primary-foreground">NIF/NIPC</TableHead>
-                  <TableHead className="text-primary-foreground">Email</TableHead>
-                  <TableHead className="text-primary-foreground">Setor</TableHead>
-                  <TableHead className="text-primary-foreground">Secção</TableHead>
-                  <TableHead className="text-primary-foreground">Atividade económica (CAE)</TableHead>
-                  <TableHead className="text-primary-foreground">Colaboradores</TableHead>
-                  <TableHead className="text-primary-foreground">Faturação (M€)</TableHead>
-                  <TableHead className="text-primary-foreground">Emissões (tCO2-e)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[180px]">Nome</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[120px]">NIF/NIPC</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[200px]">Email</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Setor</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[100px]">Secção</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[200px]">Atividade económica (CAE)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[100px]">Distrito</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[120px]">Município</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Faturação anual (€)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Colaboradores</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[180px]">Média de horas/dia</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[160px]">Dias laborais/ano</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[100px]">Área (m²)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[130px]">Data de criação</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Âmbito 1 (tCO2-e)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Âmbito 2 (tCO2-e)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[140px]">Âmbito 3 (tCO2-e)</TableHead>
+                  <TableHead className="text-primary-foreground min-w-[180px]">Emissões Totais (tCO2-e)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -178,10 +197,19 @@ const CompaniesList = () => {
                     <TableCell>{company.contact.email}</TableCell>
                     <TableCell>{company.sector}</TableCell>
                     <TableCell>-</TableCell>
-                    <TableCell className="max-w-xs truncate">{company.sector}</TableCell>
+                    <TableCell>{company.sector}</TableCell>
+                    <TableCell>{company.region}</TableCell>
+                    <TableCell>-</TableCell>
+                    <TableCell>{(company.revenue * 1000000).toLocaleString('pt-PT')}</TableCell>
                     <TableCell>{company.employees}</TableCell>
-                    <TableCell>{company.revenue.toFixed(1)} M</TableCell>
-                    <TableCell>{company.totalEmissions.toFixed(0)}</TableCell>
+                    <TableCell>8</TableCell>
+                    <TableCell>260</TableCell>
+                    <TableCell>{company.area.toLocaleString('pt-PT')}</TableCell>
+                    <TableCell>22/10/2025</TableCell>
+                    <TableCell>{company.scope1.toFixed(2)}</TableCell>
+                    <TableCell>{company.scope2.toFixed(2)}</TableCell>
+                    <TableCell>{company.scope3.toFixed(2)}</TableCell>
+                    <TableCell className="font-semibold">{company.totalEmissions.toFixed(2)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
