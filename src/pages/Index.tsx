@@ -151,7 +151,7 @@ const Index = () => {
 
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold mb-4">Visão Global do Grupo</h2>
+            <h2 className="text-2xl font-bold mb-4">Visão Global do Banco Montepio/Município</h2>
             <div className="grid gap-6 md:grid-cols-2 mb-6">
               <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
               <DataSourceCounter suppliers={filteredSuppliers} />

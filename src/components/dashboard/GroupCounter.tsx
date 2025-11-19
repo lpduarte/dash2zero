@@ -24,7 +24,7 @@ export const GroupCounter = ({
           
           <div className="flex-1">
             <h3 className="text-sm font-medium text-muted-foreground mb-2">
-              Empresas do Grupo
+              Empresas do Banco Montepio/Município
             </h3>
             
             <div className="flex items-baseline gap-3 mb-3">

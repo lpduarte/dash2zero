@@ -92,7 +92,7 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
   return (
     <Card className="bg-gradient-to-br from-primary/10 via-accent/5 to-success/10 border-primary/30">
       <CardHeader>
-        <CardTitle className="text-2xl">KPIs Globais do Grupo</CardTitle>
+        <CardTitle className="text-2xl">KPIs Globais do Banco Montepio/Município</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
