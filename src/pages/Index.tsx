@@ -3,6 +3,7 @@ import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { GroupCounter } from "@/components/dashboard/GroupCounter";
 import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
+import { GlobalKPIs } from "@/components/dashboard/GlobalKPIs";
 import { ClusterKPIs } from "@/components/dashboard/ClusterKPIs";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
@@ -151,10 +152,11 @@ const Index = () => {
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold mb-4">Visão Global do Grupo</h2>
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 md:grid-cols-2 mb-6">
               <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
               <DataSourceCounter suppliers={filteredSuppliers} />
             </div>
+            <GlobalKPIs suppliers={filteredSuppliers} />
           </div>
 
           <div>
