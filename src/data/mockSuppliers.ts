@@ -32,6 +32,7 @@ export const mockSuppliers: Supplier[] = [
     },
     sustainabilityReport: "https://ecotech.pt/sustainability-2023.pdf",
     rating: "A",
+    dataSource: "get2zero",
   },
   {
     id: "2",
@@ -63,6 +64,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://greenbuild.pt",
     },
     rating: "B",
+    dataSource: "formulario",
   },
   {
     id: "3",
@@ -94,6 +96,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://transporteverde.pt",
     },
     rating: "C",
+    dataSource: "get2zero",
   },
   {
     id: "4",
@@ -126,6 +129,7 @@ export const mockSuppliers: Supplier[] = [
     },
     sustainabilityReport: "https://sustentapt.pt/relatorio-2023.pdf",
     rating: "B",
+    dataSource: "formulario",
   },
   {
     id: "5",
@@ -158,6 +162,7 @@ export const mockSuppliers: Supplier[] = [
     },
     sustainabilityReport: "https://cleanservices.pt/impact-report-2023.pdf",
     rating: "A",
+    dataSource: "get2zero",
   },
   {
     id: "6",
@@ -189,6 +194,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://digitalsol.pt",
     },
     rating: "B",
+    dataSource: "formulario",
   },
   {
     id: "7",
@@ -220,6 +226,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://obrasmega.pt",
     },
     rating: "D",
+    dataSource: "get2zero",
   },
   {
     id: "8",
@@ -251,5 +258,6 @@ export const mockSuppliers: Supplier[] = [
       website: "https://fleetpro.pt",
     },
     rating: "D",
+    dataSource: "formulario",
   },
 ];
