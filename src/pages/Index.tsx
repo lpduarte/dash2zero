@@ -23,6 +23,7 @@ import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
+import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -303,6 +304,15 @@ const Index = () => {
 
           <TabsContent value="comparative" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="recommendations">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Cenários de Otimização e Recomendações
+                </AccordionTrigger>
+                <AccordionContent>
+                  <SupplierRecommendations suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem value="partner-comparison">
                 <AccordionTrigger className="text-lg font-semibold">
                   Comparação de Parceiros e Análise What-If
