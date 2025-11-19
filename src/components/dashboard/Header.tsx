@@ -1,6 +1,8 @@
 import { Leaf, LayoutDashboard, List } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { NotificationBell } from "./NotificationBell";
+import { mockSuppliers } from "@/data/mockSuppliers";
 
 export const Header = () => {
   const location = useLocation();
@@ -21,32 +23,36 @@ export const Header = () => {
             </div>
           </div>
 
-          <nav className="flex gap-2">
-            <Link
-              to="/"
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
-                location.pathname === "/"
-                  ? "bg-primary-foreground/20"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              <LayoutDashboard className="h-4 w-4" />
-              Dashboard
-            </Link>
-            <Link
-              to="/empresas"
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
-                location.pathname === "/empresas"
-                  ? "bg-primary-foreground/20"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              <List className="h-4 w-4" />
-              Empresas
-            </Link>
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav className="flex gap-2">
+              <Link
+                to="/"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
+                  location.pathname === "/"
+                    ? "bg-primary-foreground/20"
+                    : "hover:bg-primary-foreground/10"
+                )}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
+              </Link>
+              <Link
+                to="/empresas"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
+                  location.pathname === "/empresas"
+                    ? "bg-primary-foreground/20"
+                    : "hover:bg-primary-foreground/10"
+                )}
+              >
+                <List className="h-4 w-4" />
+                Empresas
+              </Link>
+            </nav>
+            
+            <NotificationBell suppliers={mockSuppliers} />
+          </div>
         </div>
       </div>
     </header>
