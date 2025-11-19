@@ -28,6 +28,7 @@ export interface Supplier {
   };
   sustainabilityReport?: string;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';
+  dataSource: 'formulario' | 'get2zero';
 }
 
 export type SectorFilter = 'all' | 'manufacturing' | 'technology' | 'construction' | 'transport' | 'services';

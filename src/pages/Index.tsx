@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
+import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
@@ -133,6 +134,8 @@ const Index = () => {
           onFilterChange={handleFilterChange}
           onReset={handleResetFilters}
         />
+
+        <DataSourceCounter suppliers={filteredSuppliers} />
 
         <MetricsOverview suppliers={filteredSuppliers} />
 
