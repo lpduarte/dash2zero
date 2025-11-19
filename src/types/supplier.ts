@@ -7,7 +7,12 @@ export interface Supplier {
   scope2: number;
   scope3: number;
   totalEmissions: number;
-  emissionsPerRevenue: number; // tons CO2e per million EUR
+  emissionsPerRevenue: number; // kg CO2e per EUR
+  emissionsPerEmployee: number; // tons CO2e per employee
+  emissionsPerArea: number; // tons CO2e per m²
+  employees: number;
+  area: number; // m²
+  revenue: number; // million EUR
   renewableEnergy: number; // percentage
   wasteRecycled: number; // percentage
   hasSBTi: boolean;
