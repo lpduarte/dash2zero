@@ -33,6 +33,7 @@ export const mockSuppliers: Supplier[] = [
     sustainabilityReport: "https://ecotech.pt/sustainability-2023.pdf",
     rating: "A",
     dataSource: "get2zero",
+    cluster: "fornecedor",
   },
   {
     id: "2",
@@ -65,6 +66,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "B",
     dataSource: "formulario",
+    cluster: "cliente",
   },
   {
     id: "3",
@@ -97,6 +99,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "C",
     dataSource: "get2zero",
+    cluster: "fornecedor",
   },
   {
     id: "4",
@@ -130,6 +133,7 @@ export const mockSuppliers: Supplier[] = [
     sustainabilityReport: "https://sustentapt.pt/relatorio-2023.pdf",
     rating: "B",
     dataSource: "formulario",
+    cluster: "parceiro",
   },
   {
     id: "5",
@@ -163,6 +167,7 @@ export const mockSuppliers: Supplier[] = [
     sustainabilityReport: "https://cleanservices.pt/impact-report-2023.pdf",
     rating: "A",
     dataSource: "get2zero",
+    cluster: "subcontratado",
   },
   {
     id: "6",
@@ -195,6 +200,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "B",
     dataSource: "formulario",
+    cluster: "cliente",
   },
   {
     id: "7",
@@ -227,6 +233,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "D",
     dataSource: "get2zero",
+    cluster: "fornecedor",
   },
   {
     id: "8",
@@ -259,5 +266,6 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "D",
     dataSource: "formulario",
+    cluster: "subcontratado",
   },
 ];

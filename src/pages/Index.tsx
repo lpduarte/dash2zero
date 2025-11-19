@@ -1,8 +1,7 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
-import { GroupCounter } from "@/components/dashboard/GroupCounter";
-import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
+import { ClusterKPIs } from "@/components/dashboard/ClusterKPIs";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
@@ -147,10 +146,7 @@ const Index = () => {
           onReset={handleResetFilters}
         />
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
-          <DataSourceCounter suppliers={filteredSuppliers} />
-        </div>
+        <ClusterKPIs suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
