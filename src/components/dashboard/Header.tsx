@@ -14,9 +14,9 @@ export const Header = () => {
               <Leaf className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">dash2zero</h1>
+              <h1 className="text-3xl font-bold">Banco Montepio</h1>
               <p className="text-primary-foreground/90 text-sm">
-                Dashboard de Sustentabilidade de Fornecedores
+                dash2zero - Dashboard de Sustentabilidade de Fornecedores
               </p>
             </div>
           </div>
