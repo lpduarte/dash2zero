@@ -8,8 +8,17 @@ import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel"
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { TrendsChart } from "@/components/dashboard/TrendsChart";
+import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
+import { ESGScoreCard } from "@/components/dashboard/ESGScoreCard";
+import { RankingChart } from "@/components/dashboard/RankingChart";
+import { RadarComparison } from "@/components/dashboard/RadarComparison";
+import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
+import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
+import { SupplierDetailsTable } from "@/components/dashboard/SupplierDetailsTable";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const Index = () => {
   const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>({
@@ -127,7 +136,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <WelcomeBanner />
         
         <AdvancedFilterPanel
@@ -136,31 +145,146 @@ const Index = () => {
           onReset={handleResetFilters}
         />
 
-        <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
-
-        <DataSourceCounter suppliers={filteredSuppliers} />
-
-        <MetricsOverview suppliers={filteredSuppliers} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <ComparisonChart suppliers={filteredSuppliers} />
-          <TrendsChart suppliers={filteredSuppliers} />
+        <div className="grid gap-6 md:grid-cols-2">
+          <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
+          <DataSourceCounter suppliers={filteredSuppliers} />
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2">
-            Fornecedores ({filteredSuppliers.length})
-          </h2>
-          <p className="text-muted-foreground">
-            Ordenados por rating de sustentabilidade e emissões totais
-          </p>
-        </div>
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="environmental">Métricas Ambientais</TabsTrigger>
+            <TabsTrigger value="esg">ESG & Compliance</TabsTrigger>
+            <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
+            <TabsTrigger value="details">Detalhes</TabsTrigger>
+          </TabsList>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredSuppliers.map((supplier) => (
-            <SupplierCard key={supplier.id} supplier={supplier} />
-          ))}
-        </div>
+          <TabsContent value="overview" className="space-y-6">
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="kpis">
+                <AccordionTrigger className="text-lg font-semibold">
+                  KPIs Principais
+                </AccordionTrigger>
+                <AccordionContent>
+                  <MetricsOverview suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="charts">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Gráficos de Comparação
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <ComparisonChart suppliers={filteredSuppliers} />
+                    <TrendsChart suppliers={filteredSuppliers} />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="suppliers">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Cards dos Fornecedores ({filteredSuppliers.length})
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {filteredSuppliers.map((supplier) => (
+                      <SupplierCard key={supplier.id} supplier={supplier} />
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TabsContent>
+
+          <TabsContent value="environmental" className="space-y-6">
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="breakdown">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Distribuição de Emissões por Scope
+                </AccordionTrigger>
+                <AccordionContent>
+                  <EmissionsBreakdown suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="trends">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Tendências Históricas
+                </AccordionTrigger>
+                <AccordionContent>
+                  <TrendsChart suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="heatmap">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Desempenho por Região e Setor
+                </AccordionTrigger>
+                <AccordionContent>
+                  <PerformanceHeatmap suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TabsContent>
+
+          <TabsContent value="esg" className="space-y-6">
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="score">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Score ESG Agregado
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ESGScoreCard suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="comparison">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Comparação de Fornecedores
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ComparisonChart suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TabsContent>
+
+          <TabsContent value="comparative" className="space-y-6">
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="ranking">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Ranking - Top 10 Menores Emissões
+                </AccordionTrigger>
+                <AccordionContent>
+                  <RankingChart suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="radar">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Comparação Multi-Critério (Radar)
+                </AccordionTrigger>
+                <AccordionContent>
+                  <RadarComparison suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="scatter">
+                <AccordionTrigger className="text-lg font-semibold">
+                  ESG vs Volume de Negócios
+                </AccordionTrigger>
+                <AccordionContent>
+                  <ScatterPlot suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TabsContent>
+
+          <TabsContent value="details" className="space-y-6">
+            <SupplierDetailsTable suppliers={filteredSuppliers} />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
