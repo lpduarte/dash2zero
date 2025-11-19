@@ -24,6 +24,7 @@ import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
+import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -297,6 +298,15 @@ const Index = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <FinancialAnalysis suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="pareto">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Gráfico de Pareto - Fator de Emissões vs Investimento
+                </AccordionTrigger>
+                <AccordionContent>
+                  <EmissionsParetoChart suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
