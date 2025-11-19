@@ -19,6 +19,7 @@ import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { SupplierDetailsTable } from "@/components/dashboard/SupplierDetailsTable";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
+import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -229,6 +230,15 @@ const Index = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <TrendsChart suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="scope3">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Análise Detalhada do Alcance 3 por Fornecedor
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Scope3Analysis suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
 
