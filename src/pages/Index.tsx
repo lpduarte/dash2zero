@@ -15,6 +15,8 @@ import { RadarComparison } from "@/components/dashboard/RadarComparison";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
 import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { SupplierDetailsTable } from "@/components/dashboard/SupplierDetailsTable";
+import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
+import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -276,6 +278,24 @@ const Index = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <ScatterPlot suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="average">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Emissões Médias por Parceiro
+                </AccordionTrigger>
+                <AccordionContent>
+                  <AverageEmissionsChart suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="bestworst">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Melhor e Pior Desempenho
+                </AccordionTrigger>
+                <AccordionContent>
+                  <BestWorstSuppliers suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
