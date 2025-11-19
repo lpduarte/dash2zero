@@ -26,6 +26,8 @@ import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { RatingLegend } from "@/components/dashboard/RatingLegend";
+import { ExportOptions } from "@/components/dashboard/ExportOptions";
+import { NotificationCenter } from "@/components/dashboard/NotificationCenter";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -149,6 +151,11 @@ const Index = () => {
       
       <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <WelcomeBanner />
+        
+        <div className="grid gap-6 md:grid-cols-2">
+          <ExportOptions suppliers={filteredSuppliers} />
+          <NotificationCenter suppliers={filteredSuppliers} />
+        </div>
         
         <AdvancedFilterPanel
           filters={advancedFilters}
