@@ -32,3 +32,20 @@ export interface Supplier {
 
 export type SectorFilter = 'all' | 'manufacturing' | 'technology' | 'construction' | 'transport' | 'services';
 export type RegionFilter = 'all' | 'north' | 'center' | 'south' | 'islands';
+
+export interface AdvancedFilters {
+  nifGroup: string;
+  nif: string;
+  district: string;
+  municipality: string;
+  companySize: string;
+  revenue: string;
+  caeSection: string;
+  caeDivision: string;
+  company: string;
+  carbonYear: string;
+  dateRange: {
+    start: string;
+    end: string;
+  };
+}
