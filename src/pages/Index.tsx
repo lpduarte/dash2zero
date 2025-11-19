@@ -22,6 +22,7 @@ import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
+import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -169,10 +170,11 @@ const Index = () => {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="environmental">Métricas Ambientais</TabsTrigger>
-            <TabsTrigger value="esg">ESG, Compliance & Financeira</TabsTrigger>
+            <TabsTrigger value="esg">ESG & Compliance</TabsTrigger>
+            <TabsTrigger value="financial">Financeira</TabsTrigger>
             <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
             <TabsTrigger value="details">Detalhes</TabsTrigger>
           </TabsList>
@@ -266,15 +268,6 @@ const Index = () => {
 
           <TabsContent value="esg" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="financial">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Análise Financeira e Eficiência Carbónica
-                </AccordionTrigger>
-                <AccordionContent>
-                  <FinancialAnalysis suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
               <AccordionItem value="score">
                 <AccordionTrigger className="text-lg font-semibold">
                   Score ESG Agregado
@@ -295,8 +288,30 @@ const Index = () => {
             </Accordion>
           </TabsContent>
 
+          <TabsContent value="financial" className="space-y-6">
+            <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="analysis">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Análise Financeira e Eficiência Carbónica
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FinancialAnalysis suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </TabsContent>
+
           <TabsContent value="comparative" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="partner-comparison">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Comparação de Parceiros e Análise What-If
+                </AccordionTrigger>
+                <AccordionContent>
+                  <PartnerComparison suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem value="ranking">
                 <AccordionTrigger className="text-lg font-semibold">
                   Ranking - Top 10 Menores Emissões
