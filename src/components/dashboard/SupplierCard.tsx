@@ -84,18 +84,28 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
       </div>
 
       {/* Emissions Overview */}
-      <div className="grid grid-cols-2 gap-4 mb-4 p-4 bg-muted rounded-lg">
-        <div>
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
           <p className="text-xs text-muted-foreground mb-1">Emissões Totais</p>
-          <p className="text-2xl font-bold text-primary">{supplier.totalEmissions}</p>
-          <p className="text-xs text-muted-foreground">t CO₂e</p>
+          <p className="text-xl font-bold text-primary">{supplier.totalEmissions}</p>
+          <p className="text-xs text-muted-foreground">tonCO₂e</p>
         </div>
-        <div>
-          <p className="text-xs text-muted-foreground mb-1">Por Receita</p>
-          <p className="text-2xl font-bold text-card-foreground">{supplier.emissionsPerRevenue}</p>
-          <p className="text-xs text-muted-foreground">t CO₂e/M€</p>
+        <div className="p-3 bg-secondary/5 border border-secondary/20 rounded-lg">
+          <p className="text-xs text-muted-foreground mb-1">Por Colaborador</p>
+          <p className="text-xl font-bold text-secondary">{supplier.emissionsPerEmployee.toFixed(2)}</p>
+          <p className="text-xs text-muted-foreground">tonCO₂e/colab</p>
         </div>
-        <div className="col-span-2 flex items-center gap-2 text-sm">
+        <div className="p-3 bg-accent/5 border border-accent/20 rounded-lg">
+          <p className="text-xs text-muted-foreground mb-1">Por m²</p>
+          <p className="text-xl font-bold text-accent">{supplier.emissionsPerArea.toFixed(3)}</p>
+          <p className="text-xs text-muted-foreground">tonCO₂e/m²</p>
+        </div>
+        <div className="p-3 bg-success/5 border border-success/20 rounded-lg">
+          <p className="text-xs text-muted-foreground mb-1">Por Faturação</p>
+          <p className="text-xl font-bold text-success">{supplier.emissionsPerRevenue.toFixed(1)}</p>
+          <p className="text-xs text-muted-foreground">kgCO₂e/€</p>
+        </div>
+        <div className="col-span-2 flex items-center gap-2 text-sm p-2 bg-success/5 rounded">
           <TrendingDown className="h-4 w-4 text-success" />
           <span className="text-success font-medium">
             {emissionReduction.toFixed(1)}% redução (2021-2023)
