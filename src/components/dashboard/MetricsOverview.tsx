@@ -11,6 +11,20 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   const avgEmissionsPerEmployee = suppliers.reduce((acc, s) => acc + s.emissionsPerEmployee, 0) / suppliers.length;
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
+  
+  // Calculate average emissions by sector (CAE)
+  const sectorEmissions = suppliers.reduce((acc, s) => {
+    if (!acc[s.sector]) acc[s.sector] = [];
+    acc[s.sector].push(s.totalEmissions);
+    return acc;
+  }, {} as Record<string, number[]>);
+  
+  const avgEmissionsBySector = Object.values(sectorEmissions).reduce((acc, emissions) => {
+    const sectorAvg = emissions.reduce((sum, e) => sum + e, 0) / emissions.length;
+    return acc + sectorAvg;
+  }, 0) / Object.keys(sectorEmissions).length;
+  
+  const companiesCalculated = suppliers.length;
 
   const metrics = [
     {
@@ -45,24 +59,38 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       color: "text-success",
       bgColor: "bg-success/10",
     },
+    {
+      title: "Média por CAE",
+      value: Math.round(avgEmissionsBySector || 0),
+      unit: "tonCO₂e",
+      icon: Building,
+      color: "text-chart-1",
+      bgColor: "bg-chart-1/10",
+    },
+    {
+      title: "Empresas calculadas",
+      value: companiesCalculated,
+      unit: "empresas",
+      icon: Factory,
+      color: "text-chart-2",
+      bgColor: "bg-chart-2/10",
+    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
       {metrics.map((metric) => (
-        <Card key={metric.title} className="p-6 shadow-md hover:shadow-lg transition-shadow">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-card-foreground mb-3">{metric.title}</p>
-              <div className="flex items-baseline gap-2">
-                <div className={`${metric.bgColor} ${metric.color} p-2 rounded`}>
-                  <metric.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-3xl font-bold text-card-foreground">{metric.value}</p>
-                  <p className="text-sm text-muted-foreground mt-1">{metric.unit}</p>
-                </div>
+        <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground">{metric.title}</p>
+              <div className={`${metric.bgColor} ${metric.color} p-1.5 rounded`}>
+                <metric.icon className="h-4 w-4" />
               </div>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-card-foreground">{metric.value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{metric.unit}</p>
             </div>
           </div>
         </Card>
