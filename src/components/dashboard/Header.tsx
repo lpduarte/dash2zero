@@ -35,7 +35,19 @@ export const Header = () => {
                 )}
               >
                 <LayoutDashboard className="h-4 w-4" />
-                Dashboard
+                Overview
+              </Link>
+              <Link
+                to="/analise"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
+                  location.pathname === "/analise"
+                    ? "bg-primary-foreground/20"
+                    : "hover:bg-primary-foreground/10"
+                )}
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                Análise
               </Link>
               <Link
                 to="/empresas"

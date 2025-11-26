@@ -33,7 +33,7 @@ import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-const Index = () => {
+const Analysis = () => {
   const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>({
     nifGroup: "all",
     nif: "all",
@@ -405,4 +405,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Analysis;
