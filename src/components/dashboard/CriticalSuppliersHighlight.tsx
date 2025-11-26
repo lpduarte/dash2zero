@@ -2,13 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, TrendingUp, Target, ArrowRight } from "lucide-react";
+import { AlertTriangle, TrendingUp, Target, ArrowRight, ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
 
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
 
 export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighlightProps) => {
+  const [isOpen, setIsOpen] = useState(true);
   const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
   
   const criticalSuppliers = suppliers.filter(s => 
@@ -23,26 +26,31 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
 
   return (
     <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div>
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <AlertTriangle className="h-6 w-6 text-danger" />
-              Fornecedores Críticos - Atenção Prioritária
-            </CardTitle>
-            <p className="text-sm text-muted-foreground mt-2">
-              Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
-            </p>
-          </div>
-          <div className="text-right">
-            <Badge className="bg-danger text-lg px-4 py-2">
-              {criticalSuppliers.length}
-            </Badge>
-            <p className="text-xs text-muted-foreground mt-1">críticos</p>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <CardHeader className="pb-3">
+          <CollapsibleTrigger className="flex items-center justify-between w-full group">
+            <div className="flex items-start justify-between flex-1">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-2xl text-left">
+                  <AlertTriangle className="h-6 w-6 text-danger" />
+                  Fornecedores Críticos - Atenção Prioritária
+                </CardTitle>
+                <p className="text-sm text-muted-foreground mt-2 text-left">
+                  Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
+                </p>
+              </div>
+              <div className="text-right mr-4">
+                <Badge className="bg-danger text-lg px-4 py-2">
+                  {criticalSuppliers.length}
+                </Badge>
+                <p className="text-xs text-muted-foreground mt-1">críticos</p>
+              </div>
+            </div>
+            <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+        </CardHeader>
+        <CollapsibleContent>
+          <CardContent>
         <div className="mb-4 p-4 bg-muted/50 rounded-lg">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
@@ -130,7 +138,9 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
             </div>
           </div>
         </div>
-      </CardContent>
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
     </Card>
   );
 };
