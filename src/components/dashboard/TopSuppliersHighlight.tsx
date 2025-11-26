@@ -10,17 +10,17 @@ interface TopSuppliersHighlightProps {
 export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps) => {
   const topSuppliers = [...suppliers]
     .sort((a, b) => a.totalEmissions - b.totalEmissions)
-    .slice(0, 10);
+    .slice(0, 5);
 
   return (
     <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-2xl">
           <Award className="h-6 w-6 text-success" />
-          Top 10 Fornecedores do Banco Montepio/Município
+          Top 5 Fornecedores do Banco Montepio/Município
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Os 10 fornecedores com melhor desempenho ambiental - menores emissões totais
+          Os 5 fornecedores com melhor desempenho ambiental - menores emissões totais
         </p>
       </CardHeader>
       <CardContent>

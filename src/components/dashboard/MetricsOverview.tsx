@@ -12,17 +12,18 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
   
-  // Calculate average emissions by sector (CAE)
+  // Calculate average emissions by sector (CAE) - desmultiplicado
   const sectorEmissions = suppliers.reduce((acc, s) => {
-    if (!acc[s.sector]) acc[s.sector] = [];
-    acc[s.sector].push(s.totalEmissions);
+    if (!acc[s.sector]) {
+      acc[s.sector] = { total: 0, count: 0 };
+    }
+    acc[s.sector].total += s.totalEmissions;
+    acc[s.sector].count += 1;
     return acc;
-  }, {} as Record<string, number[]>);
+  }, {} as Record<string, { total: number; count: number }>);
   
-  const avgEmissionsBySector = Object.values(sectorEmissions).reduce((acc, emissions) => {
-    const sectorAvg = emissions.reduce((sum, e) => sum + e, 0) / emissions.length;
-    return acc + sectorAvg;
-  }, 0) / Object.keys(sectorEmissions).length;
+  // Get number of different CAE sectors
+  const numDifferentCAEs = Object.keys(sectorEmissions).length;
   
   const companiesCalculated = suppliers.length;
 
@@ -60,9 +61,9 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-success/10",
     },
     {
-      title: "Média por CAE",
-      value: Math.round(avgEmissionsBySector || 0),
-      unit: "tonCO₂e",
+      title: "Diferentes CAEs",
+      value: numDifferentCAEs,
+      unit: "setores",
       icon: Building,
       color: "text-chart-1",
       bgColor: "bg-chart-1/10",

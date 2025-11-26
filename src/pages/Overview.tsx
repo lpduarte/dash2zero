@@ -7,6 +7,7 @@ import { GroupCounter } from "@/components/dashboard/GroupCounter";
 import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
+import { TopSuppliersByCAE } from "@/components/dashboard/TopSuppliersByCAE";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 
@@ -87,6 +88,8 @@ const Overview = () => {
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
           <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
         </div>
+
+        <TopSuppliersByCAE suppliers={filteredSuppliers} />
       </main>
     </div>
   );
