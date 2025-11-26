@@ -1,4 +1,4 @@
-import { Leaf, LayoutDashboard, List } from "lucide-react";
+import { Leaf, LayoutDashboard, List, FolderKanban } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "./NotificationBell";
@@ -67,6 +67,18 @@ export const Header = () => {
               >
                 <List className="h-4 w-4" />
                 Empresas
+              </Link>
+              <Link
+                to="/clusters"
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
+                  location.pathname === "/clusters"
+                    ? "bg-primary-foreground/20"
+                    : "hover:bg-primary-foreground/10"
+                )}
+              >
+                <FolderKanban className="h-4 w-4" />
+                Clusters
               </Link>
             </nav>
             
