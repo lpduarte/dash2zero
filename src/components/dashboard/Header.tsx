@@ -11,15 +11,22 @@ export const Header = () => {
     <header className="bg-gradient-primary text-primary-foreground py-6 px-8 shadow-md">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary-foreground/20 p-3 rounded-lg">
-              <Leaf className="h-8 w-8" />
+          <div className="flex items-center gap-4">
+            {/* Logo placeholder */}
+            <div className="w-16 h-16 bg-primary-foreground/20 rounded-lg flex items-center justify-center border-2 border-primary-foreground/30">
+              <span className="text-xs text-primary-foreground/60 font-medium">LOGO</span>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold">dash2zero</h1>
-              <p className="text-primary-foreground/90 text-sm">
-                Dashboard de Sustentabilidade de Fornecedores
-              </p>
+            
+            <div className="flex items-center gap-3">
+              <div className="bg-primary-foreground/20 p-3 rounded-lg">
+                <Leaf className="h-8 w-8" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold">dash2zero</h1>
+                <p className="text-primary-foreground/90 text-sm">
+                  Dashboard de Sustentabilidade de Fornecedores
+                </p>
+              </div>
             </div>
           </div>
 
