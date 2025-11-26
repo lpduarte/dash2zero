@@ -11,20 +11,6 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   const avgEmissionsPerEmployee = suppliers.reduce((acc, s) => acc + s.emissionsPerEmployee, 0) / suppliers.length;
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
-  
-  // Calculate average emissions by sector (CAE) - desmultiplicado
-  const sectorEmissions = suppliers.reduce((acc, s) => {
-    if (!acc[s.sector]) {
-      acc[s.sector] = { total: 0, count: 0 };
-    }
-    acc[s.sector].total += s.totalEmissions;
-    acc[s.sector].count += 1;
-    return acc;
-  }, {} as Record<string, { total: number; count: number }>);
-  
-  // Get number of different CAE sectors
-  const numDifferentCAEs = Object.keys(sectorEmissions).length;
-  
   const companiesCalculated = suppliers.length;
 
   const metrics = [
@@ -61,14 +47,6 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-success/10",
     },
     {
-      title: "Diferentes CAEs",
-      value: numDifferentCAEs,
-      unit: "setores",
-      icon: Building,
-      color: "text-chart-1",
-      bgColor: "bg-chart-1/10",
-    },
-    {
       title: "Empresas calculadas",
       value: companiesCalculated,
       unit: "empresas",
@@ -79,7 +57,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
       {metrics.map((metric) => (
         <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex flex-col gap-3">

@@ -1,29 +1,39 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Leaf, Zap } from "lucide-react";
+import { Award, TrendingDown, Leaf, Zap, ChevronDown } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useState } from "react";
 
 interface TopSuppliersHighlightProps {
   suppliers: Supplier[];
 }
 
 export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps) => {
+  const [isOpen, setIsOpen] = useState(true);
   const topSuppliers = [...suppliers]
     .sort((a, b) => a.totalEmissions - b.totalEmissions)
     .slice(0, 5);
 
   return (
     <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <Award className="h-6 w-6 text-success" />
-          Top 5 Fornecedores do Banco Montepio/Município
-        </CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Os 5 fornecedores com melhor desempenho ambiental - menores emissões totais
-        </p>
-      </CardHeader>
-      <CardContent>
+      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+        <CardHeader className="pb-3">
+          <CollapsibleTrigger className="flex items-center justify-between w-full group">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-2xl text-left">
+                <Award className="h-6 w-6 text-success" />
+                Top 5 Fornecedores do Banco Montepio/Município
+              </CardTitle>
+              <p className="text-sm text-muted-foreground text-left mt-1">
+                Os 5 fornecedores com melhor desempenho ambiental - menores emissões totais
+              </p>
+            </div>
+            <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+          </CollapsibleTrigger>
+        </CardHeader>
+        <CollapsibleContent>
+          <CardContent>
         <div className="grid gap-3">
           {topSuppliers.map((supplier, index) => (
             <div
@@ -89,7 +99,9 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
             </div>
           ))}
         </div>
-      </CardContent>
+          </CardContent>
+        </CollapsibleContent>
+      </Collapsible>
     </Card>
   );
 };
