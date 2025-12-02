@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Building2, Users, Handshake, Briefcase, TrendingDown, Factory, Leaf, Zap } from "lucide-react";
+import { Building2, Users, Handshake, Briefcase, TrendingDown, Factory, Recycle, Zap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ClusterKPIsProps {
@@ -69,8 +69,8 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
     const clusterSuppliers = suppliers.filter(s => s.cluster === clusterType);
     const totalEmissions = clusterSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
     const avgEmissions = clusterSuppliers.length > 0 ? totalEmissions / clusterSuppliers.length : 0;
-    const avgRenewableEnergy = clusterSuppliers.length > 0 
-      ? clusterSuppliers.reduce((sum, s) => sum + s.renewableEnergy, 0) / clusterSuppliers.length 
+    const avgWasteRecycled = clusterSuppliers.length > 0 
+      ? clusterSuppliers.reduce((sum, s) => sum + s.wasteRecycled, 0) / clusterSuppliers.length 
       : 0;
     const avgEmissionsPerEmployee = clusterSuppliers.length > 0
       ? clusterSuppliers.reduce((sum, s) => sum + s.emissionsPerEmployee, 0) / clusterSuppliers.length
@@ -84,7 +84,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
       count: clusterSuppliers.length,
       totalEmissions,
       avgEmissions,
-      avgRenewableEnergy,
+      avgWasteRecycled,
       avgEmissionsPerEmployee,
       hasSBTiCount,
       avgCertifications,
@@ -108,7 +108,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {allClustersData.map(({ cluster, count, totalEmissions, avgEmissions, avgRenewableEnergy }) => {
+            {allClustersData.map(({ cluster, count, totalEmissions, avgEmissions, avgWasteRecycled }) => {
               const Icon = clusterIcons[cluster];
               const colors = clusterColors[cluster];
               
@@ -143,17 +143,17 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                       
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground flex items-center gap-1">
-                          <Leaf className="h-3 w-3" />
-                          Renovável Média
+                          <Recycle className="h-3 w-3" />
+                          Reciclagem Média
                         </span>
-                        <span className="font-semibold">{avgRenewableEnergy.toFixed(1)}%</span>
+                        <span className="font-semibold">{avgWasteRecycled.toFixed(1)}%</span>
                       </div>
                       
                       <div className="mt-3 pt-3 border-t border-border/50">
                         <div className="w-full bg-muted rounded-full h-2">
                           <div 
                             className={`${colors.bar} h-2 rounded-full transition-all duration-500`}
-                            style={{ width: `${Math.min(avgRenewableEnergy, 100)}%` }}
+                            style={{ width: `${Math.min(avgWasteRecycled, 100)}%` }}
                           />
                         </div>
                       </div>
@@ -207,11 +207,11 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                       <CardContent className="pt-6">
                         <div className="flex items-center gap-3 mb-2">
                           <div className="bg-success/10 p-2 rounded-lg">
-                            <Leaf className="h-5 w-5 text-success" />
+                            <Recycle className="h-5 w-5 text-success" />
                           </div>
-                          <span className="text-sm text-muted-foreground">Energia Renovável</span>
+                          <span className="text-sm text-muted-foreground">Reciclagem</span>
                         </div>
-                        <p className="text-3xl font-bold text-success">{data.avgRenewableEnergy.toFixed(1)}%</p>
+                        <p className="text-3xl font-bold text-success">{data.avgWasteRecycled.toFixed(1)}%</p>
                         <p className="text-xs text-muted-foreground mt-1">média do cluster</p>
                       </CardContent>
                     </Card>
@@ -266,13 +266,13 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                         </div>
                         <div>
                           <div className="flex justify-between text-sm mb-1">
-                            <span className="text-muted-foreground">Energia Renovável</span>
-                            <span className="font-medium">{data.avgRenewableEnergy.toFixed(1)}%</span>
+                            <span className="text-muted-foreground">Reciclagem</span>
+                            <span className="font-medium">{data.avgWasteRecycled.toFixed(1)}%</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2">
                             <div 
                               className="bg-success h-2 rounded-full"
-                              style={{ width: `${data.avgRenewableEnergy}%` }}
+                              style={{ width: `${data.avgWasteRecycled}%` }}
                             />
                           </div>
                         </div>

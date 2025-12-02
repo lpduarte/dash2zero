@@ -13,7 +13,6 @@ export interface Supplier {
   employees: number;
   area: number; // m²
   revenue: number; // million EUR
-  renewableEnergy: number; // percentage
   wasteRecycled: number; // percentage
   hasSBTi: boolean;
   certifications: string[];

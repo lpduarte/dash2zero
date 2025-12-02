@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Leaf, Zap, ChevronDown } from "lucide-react";
+import { Award, TrendingDown, Recycle, Zap, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
 
@@ -80,11 +80,11 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
 
                 <div>
                   <div className="flex items-center justify-center gap-1 mb-1">
-                    <Leaf className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Renovável</span>
+                    <Recycle className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Reciclagem</span>
                   </div>
-                  <p className="text-lg font-bold text-primary">{supplier.renewableEnergy}%</p>
-                  <p className="text-xs text-muted-foreground">energia</p>
+                  <p className="text-lg font-bold text-primary">{supplier.wasteRecycled}%</p>
+                  <p className="text-xs text-muted-foreground">resíduos</p>
                 </div>
 
                 <div>

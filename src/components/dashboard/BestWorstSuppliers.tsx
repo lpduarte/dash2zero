@@ -51,8 +51,8 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
               <div>
-                <p className="text-xs text-muted-foreground">Energia Renovável</p>
-                <p className="text-lg font-semibold text-foreground">{best.renewableEnergy}%</p>
+                <p className="text-xs text-muted-foreground">Reciclagem</p>
+                <p className="text-lg font-semibold text-foreground">{best.wasteRecycled}%</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Rating ESG</p>
@@ -109,8 +109,8 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
 
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
               <div>
-                <p className="text-xs text-muted-foreground">Energia Renovável</p>
-                <p className="text-lg font-semibold text-foreground">{worst.renewableEnergy}%</p>
+                <p className="text-xs text-muted-foreground">Reciclagem</p>
+                <p className="text-lg font-semibold text-foreground">{worst.wasteRecycled}%</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Rating ESG</p>

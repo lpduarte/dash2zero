@@ -7,14 +7,14 @@ export const RatingLegend = () => {
     {
       rating: "A",
       label: "Excelente",
-      description: "Desempenho excecional em sustentabilidade. Emissões muito baixas, alto uso de energia renovável, múltiplas certificações, compromisso SBTi validado.",
+      description: "Desempenho excecional em sustentabilidade. Emissões muito baixas, alta taxa de reciclagem, múltiplas certificações, compromisso SBTi validado.",
       color: "bg-success",
       threshold: "< 1000 ton CO₂e ou FE < 30 kg/€",
     },
     {
       rating: "B",
       label: "Bom",
-      description: "Bom desempenho ambiental. Emissões moderadas, uso significativo de energia renovável, algumas certificações ambientais.",
+      description: "Bom desempenho ambiental. Emissões moderadas, boa taxa de reciclagem, algumas certificações ambientais.",
       color: "bg-primary",
       threshold: "1000-3000 ton CO₂e ou FE 30-60 kg/€",
     },
@@ -28,7 +28,7 @@ export const RatingLegend = () => {
     {
       rating: "D",
       label: "Fraco",
-      description: "Desempenho abaixo da média. Emissões elevadas, pouco ou nenhum uso de energia renovável, ausência de certificações significativas.",
+      description: "Desempenho abaixo da média. Emissões elevadas, baixa taxa de reciclagem, ausência de certificações significativas.",
       color: "bg-danger",
       threshold: "5000-8000 ton CO₂e ou FE 100-150 kg/€",
     },
@@ -50,7 +50,7 @@ export const RatingLegend = () => {
         </CardTitle>
         <p className="text-sm text-muted-foreground">
           Os ratings são atribuídos com base numa análise combinada de emissões totais, fator de emissão, 
-          uso de energia renovável, certificações e compromissos SBTi.
+          taxa de reciclagem, certificações e compromissos SBTi.
         </p>
       </CardHeader>
       <CardContent>
@@ -82,7 +82,7 @@ export const RatingLegend = () => {
         <div className="mt-4 p-4 bg-muted/50 rounded-lg">
           <p className="text-xs text-muted-foreground">
             <strong>Nota:</strong> O rating final considera múltiplos fatores ponderados incluindo emissões absolutas, 
-            intensidade carbónica (FE), percentagem de energia renovável, certificações ambientais (ISO 14001, etc.), 
+            intensidade carbónica (FE), taxa de reciclagem, certificações ambientais (ISO 14001, etc.), 
             compromissos SBTi, e tendências históricas de melhoria. Um fornecedor pode ter um rating superior se demonstrar 
             forte compromisso e progressos consistentes, mesmo com emissões moderadas.
           </p>

@@ -82,8 +82,8 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
       if (alternative.certifications.length > critical.certifications.length) {
         benefits.push(`${alternative.certifications.length - critical.certifications.length} certificações adicionais`);
       }
-      if (alternative.renewableEnergy > critical.renewableEnergy + 20) {
-        benefits.push(`${(alternative.renewableEnergy - critical.renewableEnergy).toFixed(0)}% mais energia renovável`);
+      if (alternative.wasteRecycled > critical.wasteRecycled + 20) {
+        benefits.push(`${(alternative.wasteRecycled - critical.wasteRecycled).toFixed(0)}% mais reciclagem`);
       }
       if (feImprovement > 20) {
         benefits.push(`Fator de Emissão ${feImprovement.toFixed(0)}% mais baixo`);
