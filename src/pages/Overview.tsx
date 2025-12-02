@@ -43,7 +43,7 @@ const Overview = () => {
           clusterCounts={clusterCounts}
         />
         
-        <MetricsOverview suppliers={filteredSuppliers} totalCompanies={15000} />
+        <MetricsOverview suppliers={filteredSuppliers} totalCompanies={100} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
@@ -54,7 +54,7 @@ const Overview = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-3">
-            <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
+            <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={100} />
           </div>
         </div>
 
