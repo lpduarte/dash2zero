@@ -30,7 +30,7 @@ import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
 import { mockClusters, emailTemplates } from "@/data/mockClusters";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { Cluster, ClusterProvider } from "@/types/cluster";
-import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, Briefcase, LayoutGrid } from "lucide-react";
+import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, Briefcase, LayoutGrid, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 10;
@@ -46,7 +46,7 @@ const clusterOptions = [
 ];
 
 export default function ClusterManagement() {
-  const [clusters] = useState<Cluster[]>(mockClusters);
+  const [clusters, setClusters] = useState<Cluster[]>(mockClusters);
   const [selectedClusterType, setSelectedClusterType] = useState<ClusterType>('all');
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
@@ -183,7 +183,17 @@ export default function ClusterManagement() {
       <main className="max-w-[1400px] mx-auto px-8 py-8">
         {/* Cluster Selector */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-muted-foreground">Filtrar por Cluster</h3>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setCreateClusterDialogOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Cluster
+            </Button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {clusterOptions.map((option) => {
               const Icon = option.icon;
@@ -405,7 +415,15 @@ export default function ClusterManagement() {
       <CreateClusterDialog
         open={createClusterDialogOpen}
         onOpenChange={setCreateClusterDialogOpen}
-        onCreate={() => {}}
+        onCreate={(name) => {
+          const newCluster: Cluster = {
+            id: name.toLowerCase().replace(/\s+/g, '-'),
+            name,
+            providers: [],
+            createdAt: new Date(),
+          };
+          setClusters([...clusters, newCluster]);
+        }}
       />
     </div>
   );
