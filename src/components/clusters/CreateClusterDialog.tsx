@@ -109,7 +109,7 @@ export function CreateClusterDialog({
                     type="button"
                     onClick={() => setSelectedIcon(option.id)}
                     className={cn(
-                      "flex flex-col items-center gap-1 p-3 rounded-lg border transition-all",
+                      "flex items-center justify-center p-3 rounded-lg border transition-all",
                       "hover:bg-accent hover:border-primary/50",
                       selectedIcon === option.id
                         ? "bg-primary text-primary-foreground border-primary"
@@ -118,7 +118,6 @@ export function CreateClusterDialog({
                     title={option.label}
                   >
                     <Icon className="h-5 w-5" />
-                    <span className="text-[10px] truncate w-full text-center">{option.label}</span>
                   </button>
                 );
               })}
