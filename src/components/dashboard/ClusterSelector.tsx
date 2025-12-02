@@ -1,7 +1,7 @@
-import { Building2, Users, Handshake, Briefcase, LayoutGrid } from "lucide-react";
+import { Building2, Users, Handshake, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro' | 'subcontratado';
+type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro';
 
 interface ClusterOption {
   value: ClusterType;
@@ -20,7 +20,6 @@ const clusterOptions: ClusterOption[] = [
   { value: 'fornecedor', label: 'Fornecedores', icon: <Building2 className="h-4 w-4" /> },
   { value: 'cliente', label: 'Clientes', icon: <Users className="h-4 w-4" /> },
   { value: 'parceiro', label: 'Parceiros', icon: <Handshake className="h-4 w-4" /> },
-  { value: 'subcontratado', label: 'Subcontratados', icon: <Briefcase className="h-4 w-4" /> },
 ];
 
 export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts }: ClusterSelectorProps) {

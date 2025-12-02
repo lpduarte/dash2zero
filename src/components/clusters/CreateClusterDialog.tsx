@@ -11,12 +11,45 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import {
+  Building2,
+  Users,
+  Handshake,
+  Factory,
+  Truck,
+  ShoppingCart,
+  Landmark,
+  Globe,
+  Leaf,
+  Box,
+  LucideIcon,
+} from "lucide-react";
 
 interface CreateClusterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (name: string) => void;
+  onCreate: (name: string, icon: string) => void;
 }
+
+interface IconOption {
+  id: string;
+  icon: LucideIcon;
+  label: string;
+}
+
+const iconOptions: IconOption[] = [
+  { id: "building", icon: Building2, label: "Edifício" },
+  { id: "users", icon: Users, label: "Utilizadores" },
+  { id: "handshake", icon: Handshake, label: "Parceria" },
+  { id: "factory", icon: Factory, label: "Fábrica" },
+  { id: "truck", icon: Truck, label: "Transporte" },
+  { id: "cart", icon: ShoppingCart, label: "Compras" },
+  { id: "landmark", icon: Landmark, label: "Instituição" },
+  { id: "globe", icon: Globe, label: "Global" },
+  { id: "leaf", icon: Leaf, label: "Sustentável" },
+  { id: "box", icon: Box, label: "Logística" },
+];
 
 export function CreateClusterDialog({
   open,
@@ -24,6 +57,7 @@ export function CreateClusterDialog({
   onCreate,
 }: CreateClusterDialogProps) {
   const [name, setName] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState<string>("building");
 
   const handleCreate = () => {
     if (!name.trim()) {
@@ -31,36 +65,64 @@ export function CreateClusterDialog({
       return;
     }
 
-    onCreate(name);
+    onCreate(name, selectedIcon);
     toast.success("Cluster criado com sucesso!");
     onOpenChange(false);
     setName("");
+    setSelectedIcon("building");
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Criar Novo Cluster</DialogTitle>
           <DialogDescription>
-            Crie um novo cluster para organizar os seus fornecedores
+            Crie um novo cluster para organizar as suas empresas
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="space-y-6 py-4">
           <div className="space-y-2">
             <Label htmlFor="name">Nome do Cluster</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: Parceiros, Clientes, Subcontratados..."
+              placeholder="Ex: Distribuidores, Investidores..."
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   handleCreate();
                 }
               }}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Ícone</Label>
+            <div className="grid grid-cols-5 gap-2">
+              {iconOptions.map((option) => {
+                const Icon = option.icon;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setSelectedIcon(option.id)}
+                    className={cn(
+                      "flex flex-col items-center gap-1 p-3 rounded-lg border transition-all",
+                      "hover:bg-accent hover:border-primary/50",
+                      selectedIcon === option.id
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-card border-border"
+                    )}
+                    title={option.label}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="text-[10px] truncate w-full text-center">{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -74,3 +136,5 @@ export function CreateClusterDialog({
     </Dialog>
   );
 }
+
+export { iconOptions };

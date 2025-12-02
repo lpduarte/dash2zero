@@ -27,7 +27,7 @@ export interface Supplier {
   sustainabilityReport?: string;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';
   dataSource: 'formulario' | 'get2zero';
-  cluster: 'fornecedor' | 'cliente' | 'parceiro' | 'subcontratado';
+  cluster: 'fornecedor' | 'cliente' | 'parceiro';
 }
 
 export type SectorFilter = 'all' | 'manufacturing' | 'technology' | 'construction' | 'transport' | 'services';
