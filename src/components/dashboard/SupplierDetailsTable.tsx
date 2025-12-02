@@ -50,7 +50,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                 <TableHead>Fornecedor</TableHead>
                 <TableHead>Rating</TableHead>
                 <TableHead>Emissões Totais</TableHead>
-                <TableHead>Reciclagem</TableHead>
                 <TableHead>Certificações</TableHead>
                 <TableHead>SBTi</TableHead>
                 <TableHead>Risco</TableHead>
@@ -68,17 +67,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                       <span className="text-xs text-muted-foreground">
                         {supplier.emissionsPerEmployee.toFixed(2)} ton/emp
                       </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-16 bg-muted rounded-full h-2">
-                        <div
-                          className="bg-success h-2 rounded-full"
-                          style={{ width: `${supplier.wasteRecycled}%` }}
-                        />
-                      </div>
-                      <span className="text-sm">{supplier.wasteRecycled}%</span>
                     </div>
                   </TableCell>
                   <TableCell>

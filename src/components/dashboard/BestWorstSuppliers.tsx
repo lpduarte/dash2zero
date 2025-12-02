@@ -49,15 +49,9 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
-              <div>
-                <p className="text-xs text-muted-foreground">Reciclagem</p>
-                <p className="text-lg font-semibold text-foreground">{best.wasteRecycled}%</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Rating ESG</p>
-                <Badge className="bg-success text-lg px-3 py-1">{best.rating}</Badge>
-              </div>
+            <div className="pt-2 border-t border-border/50">
+              <p className="text-xs text-muted-foreground">Rating ESG</p>
+              <Badge className="bg-success text-lg px-3 py-1">{best.rating}</Badge>
             </div>
 
             <div className="pt-2 border-t border-border/50">
@@ -107,15 +101,9 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
-              <div>
-                <p className="text-xs text-muted-foreground">Reciclagem</p>
-                <p className="text-lg font-semibold text-foreground">{worst.wasteRecycled}%</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Rating ESG</p>
-                <Badge className="bg-danger text-lg px-3 py-1">{worst.rating}</Badge>
-              </div>
+            <div className="pt-2 border-t border-border/50">
+              <p className="text-xs text-muted-foreground">Rating ESG</p>
+              <Badge className="bg-danger text-lg px-3 py-1">{worst.rating}</Badge>
             </div>
 
             <div className="pt-2 border-t border-border/50">

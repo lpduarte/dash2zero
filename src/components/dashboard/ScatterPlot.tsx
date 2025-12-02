@@ -9,7 +9,7 @@ interface ScatterPlotProps {
 export const ScatterPlot = ({ suppliers }: ScatterPlotProps) => {
   // Calculate ESG score for each supplier
   const data = suppliers.map(s => {
-    const esgScore = s.wasteRecycled + (s.hasSBTi ? 20 : 0) + (s.certifications.length * 5);
+    const esgScore = (s.hasSBTi ? 40 : 0) + (s.certifications.length * 15);
     return {
       name: s.name,
       esgScore: esgScore,

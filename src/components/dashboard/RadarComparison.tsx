@@ -17,12 +17,6 @@ export const RadarComparison = ({ suppliers }: RadarComparisonProps) => {
 
   const data = [
     {
-      metric: 'Reciclagem',
-      [topSuppliers[0]?.name || 'S1']: topSuppliers[0]?.wasteRecycled || 0,
-      [topSuppliers[1]?.name || 'S2']: topSuppliers[1]?.wasteRecycled || 0,
-      [topSuppliers[2]?.name || 'S3']: topSuppliers[2]?.wasteRecycled || 0,
-    },
-    {
       metric: 'Baixas Emissões',
       [topSuppliers[0]?.name || 'S1']: 100 - (topSuppliers[0]?.totalEmissions || 0) / maxEmissions * 100,
       [topSuppliers[1]?.name || 'S2']: 100 - (topSuppliers[1]?.totalEmissions || 0) / maxEmissions * 100,

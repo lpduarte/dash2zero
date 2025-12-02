@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Recycle, Zap, ChevronDown } from "lucide-react";
+import { Award, TrendingDown, Zap, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
 
@@ -68,7 +68,7 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
                 <p className="text-xs text-muted-foreground">{supplier.sector} • {supplier.cluster}</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <TrendingDown className="h-3 w-3 text-muted-foreground" />
@@ -76,15 +76,6 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
                   </div>
                   <p className="text-lg font-bold text-success">{supplier.totalEmissions.toFixed(0)}</p>
                   <p className="text-xs text-muted-foreground">ton CO₂e</p>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
-                    <Recycle className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Reciclagem</span>
-                  </div>
-                  <p className="text-lg font-bold text-primary">{supplier.wasteRecycled}%</p>
-                  <p className="text-xs text-muted-foreground">resíduos</p>
                 </div>
 
                 <div>
