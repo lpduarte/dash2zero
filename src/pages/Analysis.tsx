@@ -149,7 +149,7 @@ const Analysis = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
+      <main className="max-w-[1400px] mx-auto py-8 px-8 space-y-8">
         <WelcomeBanner />
         
         <AdvancedFilterPanel
