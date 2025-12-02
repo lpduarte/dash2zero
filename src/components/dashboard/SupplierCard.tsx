@@ -9,7 +9,6 @@ import {
   Mail, 
   Phone, 
   ExternalLink,
-  Leaf,
   Recycle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -133,14 +132,7 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
       </div>
 
       {/* Sustainability Metrics */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="flex items-center gap-2 p-2 bg-success/10 rounded">
-          <Leaf className="h-4 w-4 text-success" />
-          <div>
-            <p className="text-xs text-muted-foreground">Renovável</p>
-            <p className="text-sm font-bold text-success">{supplier.renewableEnergy}%</p>
-          </div>
-        </div>
+      <div className="mb-4">
         <div className="flex items-center gap-2 p-2 bg-accent/10 rounded">
           <Recycle className="h-4 w-4 text-accent" />
           <div>

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { TrendingDown, Factory, Leaf, Award, Users, DollarSign, Zap, Droplet } from "lucide-react";
+import { TrendingDown, Factory, Award, Users, DollarSign, Zap, Droplet } from "lucide-react";
 
 interface GlobalKPIsProps {
   suppliers: Supplier[];
@@ -10,9 +10,6 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
   const totalEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
   const avgEmissionsPerEmployee = suppliers.length > 0 
     ? suppliers.reduce((sum, s) => sum + s.emissionsPerEmployee, 0) / suppliers.length 
-    : 0;
-  const avgRenewableEnergy = suppliers.length > 0
-    ? suppliers.reduce((sum, s) => sum + s.renewableEnergy, 0) / suppliers.length
     : 0;
   const totalEmployees = suppliers.reduce((sum, s) => sum + s.employees, 0);
   const totalRevenue = suppliers.reduce((sum, s) => sum + s.revenue, 0);
@@ -40,19 +37,11 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
       trend: "Média do grupo",
     },
     {
-      icon: Leaf,
-      label: "Energia Renovável Média",
-      value: avgRenewableEnergy.toFixed(1),
-      unit: "%",
-      color: "success",
-      progress: avgRenewableEnergy,
-    },
-    {
       icon: Droplet,
       label: "Resíduos Reciclados",
       value: avgWasteRecycled.toFixed(1),
       unit: "%",
-      color: "accent",
+      color: "success",
       progress: avgWasteRecycled,
     },
     {

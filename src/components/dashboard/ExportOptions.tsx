@@ -35,7 +35,7 @@ export const ExportOptions = ({ suppliers }: ExportOptionsProps) => {
   };
 
   const totalEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
-  const avgRenewableEnergy = suppliers.reduce((sum, s) => sum + s.renewableEnergy, 0) / suppliers.length;
+  const avgWasteRecycled = suppliers.reduce((sum, s) => sum + s.wasteRecycled, 0) / suppliers.length;
   const companiesWithSBTi = suppliers.filter(s => s.hasSBTi).length;
 
   return (
@@ -99,8 +99,8 @@ export const ExportOptions = ({ suppliers }: ExportOptionsProps) => {
                   <span className="font-semibold">{totalEmissions.toFixed(0)} ton CO₂e</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Energia Renovável:</span>
-                  <span className="font-semibold">{avgRenewableEnergy.toFixed(1)}%</span>
+                  <span className="text-muted-foreground">Reciclagem:</span>
+                  <span className="font-semibold">{avgWasteRecycled.toFixed(1)}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Com SBTi:</span>

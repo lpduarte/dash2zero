@@ -50,7 +50,7 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                 <TableHead>Fornecedor</TableHead>
                 <TableHead>Rating</TableHead>
                 <TableHead>Emissões Totais</TableHead>
-                <TableHead>Energia Renovável</TableHead>
+                <TableHead>Reciclagem</TableHead>
                 <TableHead>Certificações</TableHead>
                 <TableHead>SBTi</TableHead>
                 <TableHead>Risco</TableHead>
@@ -75,10 +75,10 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                       <div className="w-16 bg-muted rounded-full h-2">
                         <div
                           className="bg-success h-2 rounded-full"
-                          style={{ width: `${supplier.renewableEnergy}%` }}
+                          style={{ width: `${supplier.wasteRecycled}%` }}
                         />
                       </div>
-                      <span className="text-sm">{supplier.renewableEnergy}%</span>
+                      <span className="text-sm">{supplier.wasteRecycled}%</span>
                     </div>
                   </TableCell>
                   <TableCell>

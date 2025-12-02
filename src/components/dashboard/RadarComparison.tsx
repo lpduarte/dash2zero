@@ -14,16 +14,8 @@ export const RadarComparison = ({ suppliers }: RadarComparisonProps) => {
 
   // Normalize metrics to 0-100 scale
   const maxEmissions = Math.max(...suppliers.map(s => s.totalEmissions));
-  const maxRenewable = 100;
-  const maxWaste = 100;
 
   const data = [
-    {
-      metric: 'Energia Renovável',
-      [topSuppliers[0]?.name || 'S1']: topSuppliers[0]?.renewableEnergy || 0,
-      [topSuppliers[1]?.name || 'S2']: topSuppliers[1]?.renewableEnergy || 0,
-      [topSuppliers[2]?.name || 'S3']: topSuppliers[2]?.renewableEnergy || 0,
-    },
     {
       metric: 'Reciclagem',
       [topSuppliers[0]?.name || 'S1']: topSuppliers[0]?.wasteRecycled || 0,
