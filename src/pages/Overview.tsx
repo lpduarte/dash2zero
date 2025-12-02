@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
-import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
+import { ClusterSelector, ClusterType } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { GroupCounter } from "@/components/dashboard/GroupCounter";
 import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
@@ -9,69 +9,38 @@ import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighli
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { TopSuppliersByCAE } from "@/components/dashboard/TopSuppliersByCAE";
 import { mockSuppliers } from "@/data/mockSuppliers";
-import { AdvancedFilters } from "@/types/supplier";
 
 const Overview = () => {
-  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>({
-    nifGroup: "",
-    nif: "",
-    district: "",
-    municipality: "",
-    companySize: "",
-    revenue: "",
-    caeSection: "",
-    caeDivision: "",
-    company: "",
-    carbonYear: "",
-    dateRange: { start: "", end: "" },
-  });
+  const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
 
-  const handleFilterChange = (key: keyof AdvancedFilters, value: string | { start: string; end: string }) => {
-    setAdvancedFilters(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleResetFilters = () => {
-    setAdvancedFilters({
-      nifGroup: "",
-      nif: "",
-      district: "",
-      municipality: "",
-      companySize: "",
-      revenue: "",
-      caeSection: "",
-      caeDivision: "",
-      company: "",
-      carbonYear: "",
-      dateRange: { start: "", end: "" },
-    });
-  };
+  const clusterCounts = useMemo(() => {
+    return {
+      all: mockSuppliers.length,
+      fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
+      cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
+      parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
+      subcontratado: mockSuppliers.filter(s => s.cluster === 'subcontratado').length,
+    };
+  }, []);
 
   const filteredSuppliers = useMemo(() => {
+    if (selectedCluster === 'all') {
+      return mockSuppliers.sort((a, b) => a.totalEmissions - b.totalEmissions);
+    }
     return mockSuppliers
-      .filter(supplier => {
-        if (advancedFilters.company && !supplier.name.toLowerCase().includes(advancedFilters.company.toLowerCase())) {
-          return false;
-        }
-        if (advancedFilters.caeSection && supplier.sector !== advancedFilters.caeSection) {
-          return false;
-        }
-        if (advancedFilters.district && supplier.region !== advancedFilters.district) {
-          return false;
-        }
-        return true;
-      })
+      .filter(supplier => supplier.cluster === selectedCluster)
       .sort((a, b) => a.totalEmissions - b.totalEmissions);
-  }, [advancedFilters]);
+  }, [selectedCluster]);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <WelcomeBanner />
-        <AdvancedFilterPanel
-          filters={advancedFilters}
-          onFilterChange={handleFilterChange}
-          onReset={handleResetFilters}
+        <ClusterSelector
+          selectedCluster={selectedCluster}
+          onClusterChange={setSelectedCluster}
+          clusterCounts={clusterCounts}
         />
         
         <MetricsOverview suppliers={filteredSuppliers} />
