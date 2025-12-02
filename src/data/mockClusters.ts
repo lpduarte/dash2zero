@@ -1,62 +1,52 @@
-import { Cluster, EmailTemplate } from "@/types/cluster";
+import { Cluster, EmailTemplate, ClusterProvider } from "@/types/cluster";
+import { mockSuppliers } from "./mockSuppliers";
+import { Supplier } from "@/types/supplier";
 
+// Convert Supplier to ClusterProvider format
+const supplierToProvider = (supplier: Supplier): ClusterProvider => ({
+  id: supplier.id,
+  name: supplier.name,
+  nif: `50${supplier.id.padStart(7, '0')}`,
+  email: supplier.contact.email,
+  status: supplier.rating === 'A' || supplier.rating === 'B' ? 'completed' : 
+          supplier.rating === 'C' ? 'in-progress' : 'not-registered',
+  emailsSent: Math.floor(Math.random() * 5),
+  lastContact: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+});
+
+// Group suppliers by cluster type
+const suppliersByCluster = mockSuppliers.reduce((acc, supplier) => {
+  if (!acc[supplier.cluster]) {
+    acc[supplier.cluster] = [];
+  }
+  acc[supplier.cluster].push(supplier);
+  return acc;
+}, {} as Record<string, Supplier[]>);
+
+// Create clusters from real supplier data
 export const mockClusters: Cluster[] = [
   {
-    id: "1",
-    name: "Parceiros Estratégicos",
-    providers: [
-      {
-        id: "p1",
-        name: "Tech Solutions Lda",
-        nif: "501234567",
-        email: "contact@techsolutions.pt",
-        status: "completed",
-        emailsSent: 3,
-        lastContact: new Date("2025-01-15"),
-      },
-      {
-        id: "p2",
-        name: "Green Energy SA",
-        nif: "502345678",
-        email: "info@greenenergy.pt",
-        status: "in-progress",
-        emailsSent: 2,
-        lastContact: new Date("2025-01-20"),
-      },
-      {
-        id: "p3",
-        name: "Logistics Pro",
-        nif: "503456789",
-        email: "hello@logisticspro.pt",
-        status: "not-registered",
-        emailsSent: 1,
-        lastContact: new Date("2025-01-10"),
-      },
-    ],
+    id: "fornecedor",
+    name: "Fornecedores",
+    providers: (suppliersByCluster['fornecedor'] || []).map(supplierToProvider),
     createdAt: new Date("2024-12-01"),
   },
   {
-    id: "2",
-    name: "Clientes Premium",
-    providers: [
-      {
-        id: "p4",
-        name: "Retail Corp",
-        nif: "504567890",
-        email: "contact@retailcorp.pt",
-        status: "not-registered",
-        emailsSent: 0,
-      },
-      {
-        id: "p5",
-        name: "Construction Masters",
-        nif: "505678901",
-        email: "info@constructionmasters.pt",
-        status: "in-progress",
-        emailsSent: 1,
-        lastContact: new Date("2025-01-18"),
-      },
-    ],
+    id: "cliente",
+    name: "Clientes",
+    providers: (suppliersByCluster['cliente'] || []).map(supplierToProvider),
+    createdAt: new Date("2024-12-01"),
+  },
+  {
+    id: "parceiro",
+    name: "Parceiros",
+    providers: (suppliersByCluster['parceiro'] || []).map(supplierToProvider),
+    createdAt: new Date("2024-12-01"),
+  },
+  {
+    id: "subcontratado",
+    name: "Subcontratados",
+    providers: (suppliersByCluster['subcontratado'] || []).map(supplierToProvider),
     createdAt: new Date("2025-01-01"),
   },
 ];
