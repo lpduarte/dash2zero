@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { TrendingDown, Factory, Award, Users, DollarSign, Zap, Droplet } from "lucide-react";
+import { TrendingDown, Factory, Award, Users, DollarSign, Zap } from "lucide-react";
 
 interface GlobalKPIsProps {
   suppliers: Supplier[];
@@ -13,9 +13,6 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
     : 0;
   const totalEmployees = suppliers.reduce((sum, s) => sum + s.employees, 0);
   const totalRevenue = suppliers.reduce((sum, s) => sum + s.revenue, 0);
-  const avgWasteRecycled = suppliers.length > 0
-    ? suppliers.reduce((sum, s) => sum + s.wasteRecycled, 0) / suppliers.length
-    : 0;
   const companiesWithSBTi = suppliers.filter(s => s.hasSBTi).length;
   const totalCertifications = suppliers.reduce((sum, s) => sum + s.certifications.length, 0);
 
@@ -35,14 +32,6 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
       unit: "ton CO₂e/func",
       color: "warning",
       trend: "Média do grupo",
-    },
-    {
-      icon: Droplet,
-      label: "Resíduos Reciclados",
-      value: avgWasteRecycled.toFixed(1),
-      unit: "%",
-      color: "success",
-      progress: avgWasteRecycled,
     },
     {
       icon: Users,

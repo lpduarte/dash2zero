@@ -8,8 +8,7 @@ import {
   MapPin, 
   Mail, 
   Phone, 
-  ExternalLink,
-  Recycle
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -127,17 +126,6 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
           <div className="flex-1 p-2 bg-accent/10 rounded">
             <p className="text-muted-foreground">Scope 3</p>
             <p className="font-bold text-accent">{supplier.scope3} t</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Sustainability Metrics */}
-      <div className="mb-4">
-        <div className="flex items-center gap-2 p-2 bg-accent/10 rounded">
-          <Recycle className="h-4 w-4 text-accent" />
-          <div>
-            <p className="text-xs text-muted-foreground">Reciclado</p>
-            <p className="text-sm font-bold text-accent">{supplier.wasteRecycled}%</p>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Building2, Users, Handshake, Briefcase, TrendingDown, Factory, Recycle, Zap } from "lucide-react";
+import { Building2, Users, Handshake, Briefcase, TrendingDown, Factory, Award, Zap } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ClusterKPIsProps {
@@ -69,9 +69,6 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
     const clusterSuppliers = suppliers.filter(s => s.cluster === clusterType);
     const totalEmissions = clusterSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
     const avgEmissions = clusterSuppliers.length > 0 ? totalEmissions / clusterSuppliers.length : 0;
-    const avgWasteRecycled = clusterSuppliers.length > 0 
-      ? clusterSuppliers.reduce((sum, s) => sum + s.wasteRecycled, 0) / clusterSuppliers.length 
-      : 0;
     const avgEmissionsPerEmployee = clusterSuppliers.length > 0
       ? clusterSuppliers.reduce((sum, s) => sum + s.emissionsPerEmployee, 0) / clusterSuppliers.length
       : 0;
@@ -84,7 +81,6 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
       count: clusterSuppliers.length,
       totalEmissions,
       avgEmissions,
-      avgWasteRecycled,
       avgEmissionsPerEmployee,
       hasSBTiCount,
       avgCertifications,
@@ -108,7 +104,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {allClustersData.map(({ cluster, count, totalEmissions, avgEmissions, avgWasteRecycled }) => {
+            {allClustersData.map(({ cluster, count, totalEmissions, avgEmissions }) => {
               const Icon = clusterIcons[cluster];
               const colors = clusterColors[cluster];
               
@@ -139,23 +135,6 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           Média/Empresa
                         </span>
                         <span className="font-semibold">{avgEmissions.toFixed(0)} t</span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Recycle className="h-3 w-3" />
-                          Reciclagem Média
-                        </span>
-                        <span className="font-semibold">{avgWasteRecycled.toFixed(1)}%</span>
-                      </div>
-                      
-                      <div className="mt-3 pt-3 border-t border-border/50">
-                        <div className="w-full bg-muted rounded-full h-2">
-                          <div 
-                            className={`${colors.bar} h-2 rounded-full transition-all duration-500`}
-                            style={{ width: `${Math.min(avgWasteRecycled, 100)}%` }}
-                          />
-                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -189,7 +168,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-6 md:grid-cols-3">
+                  <div className="grid gap-6 md:grid-cols-2">
                     <Card className="border-primary/30 bg-primary/5">
                       <CardContent className="pt-6">
                         <div className="flex items-center gap-3 mb-2">
@@ -200,19 +179,6 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                         </div>
                         <p className="text-3xl font-bold text-primary">{data.totalEmissions.toFixed(0)}</p>
                         <p className="text-xs text-muted-foreground mt-1">ton CO₂e</p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-success/30 bg-success/5">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="bg-success/10 p-2 rounded-lg">
-                            <Recycle className="h-5 w-5 text-success" />
-                          </div>
-                          <span className="text-sm text-muted-foreground">Reciclagem</span>
-                        </div>
-                        <p className="text-3xl font-bold text-success">{data.avgWasteRecycled.toFixed(1)}%</p>
-                        <p className="text-xs text-muted-foreground mt-1">média do cluster</p>
                       </CardContent>
                     </Card>
 
@@ -261,18 +227,6 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                             <div 
                               className="bg-gradient-to-r from-primary to-accent h-2 rounded-full"
                               style={{ width: `${Math.min((data.avgEmissions / 20000) * 100, 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span className="text-muted-foreground">Reciclagem</span>
-                            <span className="font-medium">{data.avgWasteRecycled.toFixed(1)}%</span>
-                          </div>
-                          <div className="w-full bg-muted rounded-full h-2">
-                            <div 
-                              className="bg-success h-2 rounded-full"
-                              style={{ width: `${data.avgWasteRecycled}%` }}
                             />
                           </div>
                         </div>

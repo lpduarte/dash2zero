@@ -10,11 +10,11 @@ interface ESGScoreCardProps {
 
 export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
   // Calculate aggregate ESG scores
-  const avgWasteRecycled = suppliers.reduce((sum, s) => sum + s.wasteRecycled, 0) / suppliers.length;
   const sbtiPercentage = (suppliers.filter(s => s.hasSBTi).length / suppliers.length) * 100;
+  const certPercentage = (suppliers.filter(s => s.certifications.length > 0).length / suppliers.length) * 100;
   
-  // Environmental score (based on waste recycled and SBTi)
-  const environmentalScore = avgWasteRecycled * 0.6 + sbtiPercentage * 0.4;
+  // Environmental score (based on SBTi and certifications)
+  const environmentalScore = sbtiPercentage * 0.5 + certPercentage * 0.5;
   
   // Social score (mock - in real scenario, would come from supplier data)
   const socialScore = 72;

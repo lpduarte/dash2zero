@@ -16,7 +16,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 2.62,
     emissionsPerArea: 0.146,
     emissionsPerRevenue: 32.5,
-    wasteRecycled: 72,
     hasSBTi: true,
     certifications: ["ISO 14001", "SBTi Validated"],
     yearlyProgress: [
@@ -49,7 +48,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 11.67,
     emissionsPerArea: 0.247,
     emissionsPerRevenue: 85.2,
-    wasteRecycled: 68,
     hasSBTi: false,
     certifications: ["ISO 14001"],
     yearlyProgress: [
@@ -81,7 +79,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 9.31,
     emissionsPerArea: 0.248,
     emissionsPerRevenue: 125.8,
-    wasteRecycled: 55,
     hasSBTi: false,
     certifications: ["ISO 14001"],
     yearlyProgress: [
@@ -113,7 +110,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 7.29,
     emissionsPerArea: 0.219,
     emissionsPerRevenue: 145.6,
-    wasteRecycled: 78,
     hasSBTi: true,
     certifications: ["ISO 14001", "SBTi Validated", "B Corp"],
     yearlyProgress: [
@@ -146,7 +142,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 2.97,
     emissionsPerArea: 0.159,
     emissionsPerRevenue: 22.8,
-    wasteRecycled: 85,
     hasSBTi: true,
     certifications: ["ISO 14001", "SBTi Validated", "Carbon Neutral"],
     yearlyProgress: [
@@ -179,7 +174,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 3.49,
     emissionsPerArea: 0.213,
     emissionsPerRevenue: 38.2,
-    wasteRecycled: 65,
     hasSBTi: false,
     certifications: ["ISO 14001"],
     yearlyProgress: [
@@ -211,7 +205,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 13.75,
     emissionsPerArea: 0.405,
     emissionsPerRevenue: 168.5,
-    wasteRecycled: 48,
     hasSBTi: false,
     certifications: [],
     yearlyProgress: [
@@ -243,7 +236,6 @@ export const mockSuppliers: Supplier[] = [
     emissionsPerEmployee: 8.36,
     emissionsPerArea: 0.190,
     emissionsPerRevenue: 152.3,
-    wasteRecycled: 42,
     hasSBTi: false,
     certifications: [],
     yearlyProgress: [
