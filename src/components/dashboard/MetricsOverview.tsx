@@ -4,14 +4,17 @@ import { Factory, Users, Building, Euro } from "lucide-react";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
+  totalCompanies?: number;
 }
 
-export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
+export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewProps) => {
   const avgTotalEmissions = suppliers.reduce((acc, s) => acc + s.totalEmissions, 0) / suppliers.length;
   const avgEmissionsPerEmployee = suppliers.reduce((acc, s) => acc + s.emissionsPerEmployee, 0) / suppliers.length;
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
   const companiesCalculated = suppliers.length;
+  const total = totalCompanies || companiesCalculated;
+  const percentageCalculated = total > 0 ? Math.round((companiesCalculated / total) * 100) : 0;
 
   const metrics = [
     {
@@ -47,9 +50,9 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-success/10",
     },
     {
-      title: "Empresas calculadas",
-      value: companiesCalculated,
-      unit: "empresas",
+      title: "Pegadas calculadas",
+      value: `${companiesCalculated} de ${total}`,
+      unit: `${percentageCalculated}% do cluster`,
       icon: Factory,
       color: "text-chart-2",
       bgColor: "bg-chart-2/10",
