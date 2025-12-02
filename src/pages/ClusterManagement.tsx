@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Header } from "@/components/dashboard/Header";
 import { ClusterSidebar } from "@/components/clusters/ClusterSidebar";
 import { ClusterStats } from "@/components/clusters/ClusterStats";
 import { ProvidersTable } from "@/components/clusters/ProvidersTable";
@@ -10,7 +11,6 @@ import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
 import { mockClusters, emailTemplates } from "@/data/mockClusters";
 import { Cluster, ClusterProvider } from "@/types/cluster";
 import { Mail, Upload } from "lucide-react";
-import { NavLink } from "@/components/NavLink";
 
 export default function ClusterManagement() {
   const [clusters, setClusters] = useState<Cluster[]>(mockClusters);
@@ -52,23 +52,7 @@ export default function ClusterManagement() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Gestão de Clusters</h1>
-              <p className="text-sm text-muted-foreground">
-                Organize e monitorize os seus fornecedores
-              </p>
-            </div>
-            <div className="flex gap-2">
-              <NavLink to="/">
-                <Button variant="outline">Voltar ao Dashboard</Button>
-              </NavLink>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <div className="flex flex-1 overflow-hidden">
         <ClusterSidebar
