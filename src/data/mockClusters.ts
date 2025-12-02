@@ -43,12 +43,6 @@ export const mockClusters: Cluster[] = [
     providers: (suppliersByCluster['parceiro'] || []).map(supplierToProvider),
     createdAt: new Date("2024-12-01"),
   },
-  {
-    id: "subcontratado",
-    name: "Subcontratados",
-    providers: (suppliersByCluster['subcontratado'] || []).map(supplierToProvider),
-    createdAt: new Date("2025-01-01"),
-  },
 ];
 
 export const emailTemplates: EmailTemplate[] = [

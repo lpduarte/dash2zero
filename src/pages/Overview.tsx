@@ -19,7 +19,6 @@ const Overview = () => {
       fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
       cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
       parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
-      subcontratado: mockSuppliers.filter(s => s.cluster === 'subcontratado').length,
     };
   }, []);
 

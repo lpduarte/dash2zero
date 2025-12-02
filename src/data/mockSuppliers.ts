@@ -157,7 +157,7 @@ export const mockSuppliers: Supplier[] = [
     sustainabilityReport: "https://cleanservices.pt/impact-report-2023.pdf",
     rating: "A",
     dataSource: "get2zero",
-    cluster: "subcontratado",
+    cluster: "fornecedor",
   },
   {
     id: "6",
@@ -250,7 +250,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "D",
     dataSource: "formulario",
-    cluster: "subcontratado",
+    cluster: "cliente",
   },
   {
     id: "9",
@@ -439,7 +439,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "geral@buildright.pt", phone: "+351 295 000 015", website: "https://buildright.pt" },
     rating: "D",
     dataSource: "get2zero",
-    cluster: "subcontratado",
+    cluster: "parceiro",
   },
   {
     id: "16",
@@ -520,7 +520,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "sustentabilidade@marlog.pt", phone: "+351 289 000 018", website: "https://marlog.pt" },
     rating: "C",
     dataSource: "formulario",
-    cluster: "subcontratado",
+    cluster: "fornecedor",
   },
   {
     id: "19",
@@ -655,7 +655,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "sustentabilidade@autopecas.pt", phone: "+351 220 000 023", website: "https://autopecas.pt" },
     rating: "C",
     dataSource: "get2zero",
-    cluster: "subcontratado",
+    cluster: "cliente",
   },
   {
     id: "24",
@@ -817,7 +817,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "info@moverapido.pt", phone: "+351 253 000 029", website: "https://moverapido.pt" },
     rating: "C",
     dataSource: "get2zero",
-    cluster: "subcontratado",
+    cluster: "parceiro",
   },
   {
     id: "30",

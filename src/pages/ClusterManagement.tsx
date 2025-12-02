@@ -30,19 +30,18 @@ import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
 import { mockClusters, emailTemplates } from "@/data/mockClusters";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { Cluster, ClusterProvider } from "@/types/cluster";
-import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, Briefcase, LayoutGrid, Plus } from "lucide-react";
+import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, LayoutGrid, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ITEMS_PER_PAGE = 10;
 
-type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro' | 'subcontratado';
+type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro';
 
 const clusterOptions = [
   { value: 'all' as ClusterType, label: 'Todas', icon: LayoutGrid },
   { value: 'fornecedor' as ClusterType, label: 'Fornecedores', icon: Building2 },
   { value: 'cliente' as ClusterType, label: 'Clientes', icon: Users },
   { value: 'parceiro' as ClusterType, label: 'Parceiros', icon: Handshake },
-  { value: 'subcontratado' as ClusterType, label: 'Subcontratados', icon: Briefcase },
 ];
 
 export default function ClusterManagement() {
@@ -62,7 +61,6 @@ export default function ClusterManagement() {
     fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
     cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
     parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
-    subcontratado: mockSuppliers.filter(s => s.cluster === 'subcontratado').length,
   }), []);
 
   // Get selected cluster data for email functionality
@@ -183,17 +181,7 @@ export default function ClusterManagement() {
       <main className="max-w-[1400px] mx-auto px-8 py-8">
         {/* Cluster Selector */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-muted-foreground">Filtrar por Cluster</h3>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => setCreateClusterDialogOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Cluster
-            </Button>
-          </div>
+          <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
           <div className="flex flex-wrap gap-2">
             {clusterOptions.map((option) => {
               const Icon = option.icon;
@@ -227,6 +215,16 @@ export default function ClusterManagement() {
                 </button>
               );
             })}
+            <button
+              onClick={() => setCreateClusterDialogOpen(true)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
+                "border-dashed border-border hover:border-primary/50 hover:bg-accent text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Plus className="h-4 w-4" />
+              <span className="font-medium">Novo Cluster</span>
+            </button>
           </div>
         </div>
 
@@ -415,7 +413,7 @@ export default function ClusterManagement() {
       <CreateClusterDialog
         open={createClusterDialogOpen}
         onOpenChange={setCreateClusterDialogOpen}
-        onCreate={(name) => {
+        onCreate={(name, icon) => {
           const newCluster: Cluster = {
             id: name.toLowerCase().replace(/\s+/g, '-'),
             name,
@@ -423,6 +421,8 @@ export default function ClusterManagement() {
             createdAt: new Date(),
           };
           setClusters([...clusters, newCluster]);
+          // Icon stored for future use when rendering custom clusters
+          console.log('Created cluster with icon:', icon);
         }}
       />
     </div>
