@@ -9,7 +9,7 @@ export const Header = () => {
 
   return (
     <header className="bg-gradient-primary text-primary-foreground py-6 px-8 shadow-md">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             {/* Logo placeholder */}

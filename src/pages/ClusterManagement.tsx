@@ -63,7 +63,7 @@ export default function ClusterManagement() {
         />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="container mx-auto px-6 py-6">
+          <div className="max-w-[1400px] mx-auto px-8 py-6">
             {selectedCluster ? (
               <>
                 <div className="mb-6 flex items-center justify-between">

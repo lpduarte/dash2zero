@@ -122,7 +122,7 @@ const CompaniesList = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-[1400px] mx-auto py-8 px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-primary mb-6">Lista de empresas</h1>
 
