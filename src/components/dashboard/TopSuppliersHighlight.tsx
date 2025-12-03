@@ -111,7 +111,7 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
                     <span className="text-xs text-muted-foreground">Emissões</span>
                   </div>
                   <p className="text-lg font-bold text-success">{supplier.totalEmissions.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e</p>
                 </div>
 
                 <div>

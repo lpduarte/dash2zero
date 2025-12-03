@@ -39,17 +39,17 @@ export const AverageEmissionsChart = ({ suppliers }: AverageEmissionsChartProps)
             />
             <YAxis 
               tick={{ fill: 'hsl(var(--muted-foreground))' }}
-              label={{ value: 'ton CO₂e / funcionário', angle: -90, position: 'insideLeft' }}
+              label={{ value: 't CO₂e / funcionário', angle: -90, position: 'insideLeft' }}
             />
             <Tooltip 
               formatter={(value: number, name: string, props: any) => [
-                `${value.toFixed(2)} ton CO₂e/func`,
+                `${value.toFixed(2)} t CO₂e/func`,
                 'Média'
               ]}
               labelFormatter={(label: string, payload: any) => {
                 if (payload && payload[0]) {
                   const data = payload[0].payload;
-                  return `${label} (${data.employees} func, ${data.totalEmissions.toFixed(0)} ton total)`;
+                  return `${label} (${data.employees} func, ${data.totalEmissions.toFixed(0)} t total)`;
                 }
                 return label;
               }}

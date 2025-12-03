@@ -178,7 +178,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <span className="text-sm text-muted-foreground">Emissões Totais</span>
                         </div>
                         <p className="text-3xl font-bold text-primary">{data.totalEmissions.toFixed(0)}</p>
-                        <p className="text-xs text-muted-foreground mt-1">ton CO₂e</p>
+                        <p className="text-xs text-muted-foreground mt-1">t CO₂e</p>
                       </CardContent>
                     </Card>
 
@@ -191,7 +191,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <span className="text-sm text-muted-foreground">Emissões/Funcionário</span>
                         </div>
                         <p className="text-3xl font-bold text-warning">{data.avgEmissionsPerEmployee.toFixed(1)}</p>
-                        <p className="text-xs text-muted-foreground mt-1">ton CO₂e média</p>
+                        <p className="text-xs text-muted-foreground mt-1">t CO₂e média</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -221,7 +221,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                         <div>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-muted-foreground">Média de Emissões</span>
-                            <span className="font-medium">{data.avgEmissions.toFixed(0)} ton CO₂e</span>
+                            <span className="font-medium">{data.avgEmissions.toFixed(0)} t CO₂e</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2">
                             <div 

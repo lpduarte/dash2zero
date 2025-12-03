@@ -134,7 +134,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                         </p>
                         <p className="pt-2 border-t">
                           <span className="text-muted-foreground">Total: </span>
-                          <span className="font-bold">{data.total.toFixed(0)} ton CO₂e</span>
+                          <span className="font-bold">{data.total.toFixed(0)} t CO₂e</span>
                         </p>
                       </div>
                     </div>
@@ -172,7 +172,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
               </div>
             </div>
             <div className="mt-3 pt-3 border-t">
-              <p className="text-2xl font-bold text-success">{best.total.toFixed(0)} ton CO₂e</p>
+              <p className="text-2xl font-bold text-success">{best.total.toFixed(0)} t CO₂e</p>
             </div>
           </CardContent>
         </Card>
@@ -199,7 +199,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
               </div>
             </div>
             <div className="mt-3 pt-3 border-t">
-              <p className="text-2xl font-bold text-danger">{worst.total.toFixed(0)} ton CO₂e</p>
+              <p className="text-2xl font-bold text-danger">{worst.total.toFixed(0)} t CO₂e</p>
             </div>
           </CardContent>
         </Card>
@@ -223,19 +223,19 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Emissões Atuais</p>
                   <p className="text-2xl font-bold">{currentTotal.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e</p>
                 </div>
                 
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Emissões Potenciais</p>
                   <p className="text-2xl font-bold text-success">{potentialTotal.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e</p>
                 </div>
                 
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Redução Potencial</p>
                   <p className="text-2xl font-bold text-primary">{potentialReduction.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e (-{reductionPercentage.toFixed(1)}%)</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e (-{reductionPercentage.toFixed(1)}%)</p>
                 </div>
               </div>
             </div>
@@ -259,7 +259,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-muted-foreground">
-                        {supplier.totalEmissions.toFixed(0)} ton CO₂e
+                        {supplier.totalEmissions.toFixed(0)} t CO₂e
                       </span>
                       <Badge className="bg-danger">
                         {((supplier.totalEmissions / totalEmissions) * 100).toFixed(1)}%
@@ -281,7 +281,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
               Parceiros Alternativos Sustentáveis
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Parceiros com emissões 30% abaixo da média ({threshold.toFixed(0)} ton CO₂e)
+              Parceiros com emissões 30% abaixo da média ({threshold.toFixed(0)} t CO₂e)
             </p>
           </CardHeader>
           <CardContent>
@@ -299,7 +299,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">Emissões</span>
-                    <span className="font-bold">{supplier.totalEmissions.toFixed(0)} ton CO₂e</span>
+                    <span className="font-bold">{supplier.totalEmissions.toFixed(0)} t CO₂e</span>
                   </div>
                 </div>
               ))}

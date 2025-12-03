@@ -40,12 +40,12 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
               <div>
                 <p className="text-xs text-muted-foreground">Emissões Totais</p>
                 <p className="text-2xl font-bold text-success">{best.totalEmissions.toFixed(0)}</p>
-                <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                <p className="text-xs text-muted-foreground">t CO₂e</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Por Funcionário</p>
                 <p className="text-2xl font-bold text-success">{best.emissionsPerEmployee.toFixed(2)}</p>
-                <p className="text-xs text-muted-foreground">ton CO₂e/func</p>
+                <p className="text-xs text-muted-foreground">t CO₂e/func</p>
               </div>
             </div>
 
@@ -87,12 +87,12 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
               <div>
                 <p className="text-xs text-muted-foreground">Emissões Totais</p>
                 <p className="text-2xl font-bold text-danger">{worst.totalEmissions.toFixed(0)}</p>
-                <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                <p className="text-xs text-muted-foreground">t CO₂e</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Por Funcionário</p>
                 <p className="text-2xl font-bold text-danger">{worst.emissionsPerEmployee.toFixed(2)}</p>
-                <p className="text-xs text-muted-foreground">ton CO₂e/func</p>
+                <p className="text-xs text-muted-foreground">t CO₂e/func</p>
               </div>
             </div>
 

@@ -82,7 +82,7 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
                         {avgEmissions ? (
                           <div className="text-sm font-medium">
                             {avgEmissions.toFixed(0)}
-                            <div className="text-xs opacity-80">ton CO₂e</div>
+                            <div className="text-xs opacity-80">t CO₂e</div>
                           </div>
                         ) : (
                           <span className="text-xs text-muted-foreground">N/A</span>

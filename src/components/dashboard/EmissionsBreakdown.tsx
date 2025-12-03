@@ -39,7 +39,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip formatter={(value: number) => `${value.toFixed(2)} ton CO₂e`} />
+            <Tooltip formatter={(value: number) => `${value.toFixed(2)} t CO₂e`} />
             <Legend />
           </PieChart>
         </ResponsiveContainer>
@@ -49,7 +49,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
               <div className="text-2xl font-bold" style={{ color: scope.color }}>
                 {scope.value.toFixed(0)}
               </div>
-              <div className="text-sm text-muted-foreground">ton CO₂e</div>
+              <div className="text-sm text-muted-foreground">t CO₂e</div>
             </div>
           ))}
         </div>

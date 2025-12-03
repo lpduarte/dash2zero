@@ -190,7 +190,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
                         </p>
                         <p>
                           <span className="text-muted-foreground">Emissões Totais: </span>
-                          <span>{data.totalEmissions.toFixed(0)} ton CO₂e</span>
+                          <span>{data.totalEmissions.toFixed(0)} t CO₂e</span>
                         </p>
                         <div className="flex gap-2 mt-2">
                           <Badge variant="outline" className="text-xs">{data.sector}</Badge>

@@ -56,7 +56,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
             <div>
               <p className="text-sm text-muted-foreground mb-1">Emissões Totais</p>
               <p className="text-2xl font-bold text-danger">{totalCriticalEmissions.toFixed(0)}</p>
-              <p className="text-xs text-muted-foreground">ton CO₂e</p>
+              <p className="text-xs text-muted-foreground">t CO₂e</p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground mb-1">% do Total do Grupo</p>
@@ -99,7 +99,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Emissões</p>
                   <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e</p>
                 </div>
 
                 <div>
