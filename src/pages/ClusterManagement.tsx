@@ -158,17 +158,6 @@ export default function ClusterManagement() {
     setActiveFilters(activeFilters.filter((f) => f !== filter));
   };
 
-  const getRatingColor = (rating: string) => {
-    const colors: Record<string, string> = {
-      'A': 'bg-green-500 text-white',
-      'B': 'bg-lime-500 text-white',
-      'C': 'bg-amber-500 text-white',
-      'D': 'bg-orange-500 text-white',
-      'E': 'bg-red-500 text-white',
-    };
-    return colors[rating] || 'bg-muted text-muted-foreground';
-  };
-
   const getClusterLabel = () => {
     const option = clusterOptions.find(o => o.value === selectedClusterType);
     return option?.label || 'Cluster';

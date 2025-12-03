@@ -16,22 +16,6 @@ interface SupplierCardProps {
   supplier: Supplier;
 }
 
-const getRatingColor = (rating: string) => {
-  switch (rating) {
-    case 'A':
-      return 'bg-success text-success-foreground';
-    case 'B':
-      return 'bg-primary text-primary-foreground';
-    case 'C':
-      return 'bg-warning text-warning-foreground';
-    case 'D':
-    case 'E':
-      return 'bg-danger text-danger-foreground';
-    default:
-      return 'bg-muted text-muted-foreground';
-  }
-};
-
 const getSectorLabel = (sector: string) => {
   const labels: Record<string, string> = {
     manufacturing: 'Indústria',

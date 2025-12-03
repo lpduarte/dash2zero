@@ -14,19 +14,7 @@ export const RankingChart = ({ suppliers }: RankingChartProps) => {
     .map(s => ({
       name: s.name,
       emissions: s.totalEmissions,
-      rating: s.rating,
     }));
-
-  const getRatingColor = (rating: string) => {
-    switch (rating) {
-      case 'A': return "hsl(var(--success))";
-      case 'B': return "hsl(var(--primary))";
-      case 'C': return "hsl(var(--warning))";
-      case 'D': return "hsl(var(--danger))";
-      case 'E': return "hsl(var(--destructive))";
-      default: return "hsl(var(--muted))";
-    }
-  };
 
   return (
     <Card>
@@ -42,11 +30,7 @@ export const RankingChart = ({ suppliers }: RankingChartProps) => {
             <Tooltip 
               formatter={(value: number) => [`${value.toFixed(2)} ton CO₂e`, 'Emissões']}
             />
-            <Bar dataKey="emissions" radius={[0, 8, 8, 0]}>
-              {topSuppliers.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getRatingColor(entry.rating)} />
-              ))}
-            </Bar>
+            <Bar dataKey="emissions" radius={[0, 8, 8, 0]} fill="hsl(var(--primary))" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

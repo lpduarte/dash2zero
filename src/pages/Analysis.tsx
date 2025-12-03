@@ -25,7 +25,7 @@ import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
-import { RatingLegend } from "@/components/dashboard/RatingLegend";
+
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { mockSuppliers } from "@/data/mockSuppliers";
@@ -278,14 +278,6 @@ const Analysis = () => {
 
           <TabsContent value="esg" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="legend">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Legenda dos Ratings ESG (A, B, C, D, E)
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RatingLegend />
-                </AccordionContent>
-              </AccordionItem>
 
               <AccordionItem value="score">
                 <AccordionTrigger className="text-lg font-semibold">
