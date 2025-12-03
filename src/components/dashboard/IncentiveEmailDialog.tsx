@@ -271,24 +271,25 @@ export const IncentiveEmailDialog = ({
                                   {getClusterIcon(company.cluster)}
                                 </div>
                               </div>
-                              <Badge className={`text-xs shrink-0 ${getEmailCountColor(company.emailsSent)}`}>
-                                {company.emailsSent} email{company.emailsSent !== 1 ? "s" : ""}
-                              </Badge>
-                              {company.emailHistory.length > 0 && (
+                              {company.emailHistory.length > 0 ? (
                                 <CollapsibleTrigger asChild>
-                                  <Button 
-                                    variant="ghost" 
-                                    size="sm" 
-                                    className="h-7 w-7 p-0 shrink-0"
+                                  <button 
+                                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 transition-colors ${getEmailCountColor(company.emailsSent)} hover:opacity-80`}
                                     onClick={() => toggleExpandCompany(company.id)}
                                   >
+                                    {company.emailsSent} email{company.emailsSent !== 1 ? "s" : ""}
                                     {expandedCompany === company.id ? (
-                                      <ChevronDown className="h-4 w-4" />
+                                      <ChevronDown className="h-3.5 w-3.5" />
                                     ) : (
-                                      <ChevronRight className="h-4 w-4" />
+                                      <ChevronRight className="h-3.5 w-3.5" />
                                     )}
-                                  </Button>
+                                  </button>
                                 </CollapsibleTrigger>
+                              ) : (
+                                <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${getEmailCountColor(company.emailsSent)}`}>
+                                  {company.emailsSent} emails
+                                  <ChevronRight className="h-3.5 w-3.5 opacity-30" />
+                                </span>
                               )}
                             </div>
                             <CollapsibleContent>
