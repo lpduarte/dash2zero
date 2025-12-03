@@ -4,7 +4,6 @@ import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
-import { GroupCounter } from "@/components/dashboard/GroupCounter";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { TopSuppliersByCAE } from "@/components/dashboard/TopSuppliersByCAE";
@@ -52,10 +51,6 @@ const Overview = () => {
         </div>
 
         <TopSuppliersByCAE suppliers={filteredSuppliers} />
-        
-        <div className="mb-8">
-          <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={100} />
-        </div>
       </main>
     </div>
   );
