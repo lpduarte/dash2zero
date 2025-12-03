@@ -24,9 +24,9 @@ const Overview = () => {
   // Total de empresas por cluster (soma = 100)
   const clusterTotals: Record<ClusterType, number> = {
     all: 100,
-    fornecedor: 45,
-    cliente: 35,
-    parceiro: 20,
+    fornecedor: 50,
+    cliente: 41,
+    parceiro: 9,
   };
 
   const filteredSuppliers = useMemo(() => {
