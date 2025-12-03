@@ -99,7 +99,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
             </div>
             <div className="flex items-center gap-1.5">
               <span className="text-muted-foreground">Formulário</span>
-              <FileText className="h-3.5 w-3.5 text-secondary-foreground" />
+              <FileText className="h-3.5 w-3.5 text-slate-500" />
             </div>
           </div>
         </div>
