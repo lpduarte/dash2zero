@@ -75,23 +75,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
             </div>
           </div>
           
-          {/* Barra horizontal combinada */}
-          <div className="flex h-8 rounded-md overflow-hidden">
-            <div 
-              className="bg-primary flex items-center justify-center text-white text-xs font-medium transition-all"
-              style={{ width: `${get2zeroPercentage}%` }}
-            >
-              {get2zeroPercentage > 15 && `${get2zeroPercentage}%`}
-            </div>
-            <div 
-              className="bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-medium transition-all"
-              style={{ width: `${formularioPercentage}%` }}
-            >
-              {formularioPercentage > 15 && `${formularioPercentage}%`}
-            </div>
-          </div>
-
-          {/* Legenda */}
+          {/* Legenda - movida para cima */}
           <div className="flex justify-between text-xs">
             <div className="flex items-center gap-1.5">
               <Leaf className="h-3.5 w-3.5 text-primary" />
@@ -103,6 +87,18 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
               <span className="text-muted-foreground">Formulário</span>
               <FileText className="h-3.5 w-3.5 text-slate-500" />
             </div>
+          </div>
+
+          {/* Barra horizontal combinada - alinhada com progress bar do card esquerdo */}
+          <div className="flex h-2 rounded-md overflow-hidden mt-1">
+            <div 
+              className="bg-primary flex items-center justify-center text-white text-xs font-medium transition-all"
+              style={{ width: `${get2zeroPercentage}%` }}
+            />
+            <div 
+              className="bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-medium transition-all"
+              style={{ width: `${formularioPercentage}%` }}
+            />
           </div>
         </div>
       </Card>
