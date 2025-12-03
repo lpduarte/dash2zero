@@ -53,9 +53,9 @@ const Overview = () => {
         
         <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <TopSuppliersHighlight suppliers={filteredSuppliers} />
+        <div className="space-y-6 mb-8">
           <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
+          <TopSuppliersHighlight suppliers={filteredSuppliers} />
         </div>
 
         <TopSuppliersByCAE suppliers={filteredSuppliers} />
