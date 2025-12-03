@@ -21,6 +21,14 @@ const Overview = () => {
     };
   }, []);
 
+  // Total de empresas por cluster (soma = 100)
+  const clusterTotals: Record<ClusterType, number> = {
+    all: 100,
+    fornecedor: 45,
+    cliente: 35,
+    parceiro: 20,
+  };
+
   const filteredSuppliers = useMemo(() => {
     if (selectedCluster === 'all') {
       return mockSuppliers.sort((a, b) => a.totalEmissions - b.totalEmissions);
@@ -43,7 +51,7 @@ const Overview = () => {
         
         <MetricsOverview suppliers={filteredSuppliers} />
         
-        <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterCounts[selectedCluster]} />
+        <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
