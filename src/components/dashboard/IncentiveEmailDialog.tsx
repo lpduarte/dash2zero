@@ -241,7 +241,7 @@ export const IncentiveEmailDialog = ({
               </div>
             </div>
             <ScrollArea className="flex-1 h-[350px]">
-              <div className="p-2 space-y-3" key={clusterFilter}>
+              <div className="p-2 space-y-3 animate-fade-in" key={clusterFilter}>
                 {companiesBySector.map(([sector, sectorCompanies], sectorIndex) => {
                   const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
                   return (
