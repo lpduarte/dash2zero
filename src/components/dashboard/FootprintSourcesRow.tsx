@@ -76,7 +76,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
           </div>
           
           {/* Barra horizontal combinada - alinhada com CTA do card esquerdo */}
-          <div className="flex h-8 rounded-md overflow-hidden mt-4">
+          <div className="flex h-8 rounded-md overflow-hidden mt-2">
             <div 
               className="bg-primary flex items-center justify-center text-white text-xs font-medium transition-all"
               style={{ width: `${get2zeroPercentage}%` }}
