@@ -12,6 +12,7 @@ export interface MissingCompany {
   email: string;
   contactPerson: string;
   sector: string;
+  cluster: "fornecedor" | "cliente" | "parceiro";
   emailsSent: number;
   emailHistory: EmailRecord[];
 }
@@ -23,6 +24,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "geral@techsolutions.pt",
     contactPerson: "João Silva",
     sector: "Tecnologia",
+    cluster: "fornecedor",
     emailsSent: 2,
     emailHistory: [
       {
@@ -47,6 +49,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "ambiente@construcoesribeiro.pt",
     contactPerson: "Maria Santos",
     sector: "Construção",
+    cluster: "fornecedor",
     emailsSent: 1,
     emailHistory: [
       {
@@ -64,6 +67,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "info@transportesmartins.pt",
     contactPerson: "António Martins",
     sector: "Transportes",
+    cluster: "parceiro",
     emailsSent: 3,
     emailHistory: [
       {
@@ -95,6 +99,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "sustentabilidade@alimentarglobal.pt",
     contactPerson: "Sofia Costa",
     sector: "Alimentar",
+    cluster: "cliente",
     emailsSent: 0,
     emailHistory: []
   },
@@ -104,6 +109,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "ambiente@quimicaindustrial.pt",
     contactPerson: "Pedro Almeida",
     sector: "Química",
+    cluster: "fornecedor",
     emailsSent: 1,
     emailHistory: [
       {
@@ -121,6 +127,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "esg@sfabc.pt",
     contactPerson: "Ana Ferreira",
     sector: "Serviços Financeiros",
+    cluster: "cliente",
     emailsSent: 0,
     emailHistory: []
   },
@@ -130,6 +137,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "geral@texteisnorte.pt",
     contactPerson: "Manuel Rodrigues",
     sector: "Têxtil",
+    cluster: "parceiro",
     emailsSent: 2,
     emailHistory: [
       {
@@ -154,6 +162,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     email: "comercial@energiaverde.pt",
     contactPerson: "Carla Mendes",
     sector: "Energia",
+    cluster: "cliente",
     emailsSent: 0,
     emailHistory: []
   }
