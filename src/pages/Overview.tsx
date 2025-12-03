@@ -3,8 +3,8 @@ import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
+import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { GroupCounter } from "@/components/dashboard/GroupCounter";
-import { DataSourceCounter } from "@/components/dashboard/DataSourceCounter";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { TopSuppliersByCAE } from "@/components/dashboard/TopSuppliersByCAE";
@@ -42,7 +42,9 @@ const Overview = () => {
           clusterCounts={clusterCounts}
         />
         
-        <MetricsOverview suppliers={filteredSuppliers} totalCompanies={100} />
+        <MetricsOverview suppliers={filteredSuppliers} />
+        
+        <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={100} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
@@ -51,13 +53,9 @@ const Overview = () => {
 
         <TopSuppliersByCAE suppliers={filteredSuppliers} />
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-3">
-            <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={100} />
-          </div>
+        <div className="mb-8">
+          <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={100} />
         </div>
-
-        <DataSourceCounter suppliers={filteredSuppliers} />
       </main>
     </div>
   );

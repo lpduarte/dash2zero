@@ -61,7 +61,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://greenbuild.pt",
     },
     rating: "B",
-    dataSource: "formulario",
+    dataSource: "get2zero",
     cluster: "cliente",
   },
   {
@@ -187,7 +187,7 @@ export const mockSuppliers: Supplier[] = [
       website: "https://digitalsol.pt",
     },
     rating: "B",
-    dataSource: "formulario",
+    dataSource: "get2zero",
     cluster: "cliente",
   },
   {
@@ -357,7 +357,7 @@ export const mockSuppliers: Supplier[] = [
     ],
     contact: { email: "sustentabilidade@logiexpress.pt", phone: "+351 217 000 012", website: "https://logiexpress.pt" },
     rating: "C",
-    dataSource: "formulario",
+    dataSource: "get2zero",
     cluster: "parceiro",
   },
   {
@@ -465,7 +465,7 @@ export const mockSuppliers: Supplier[] = [
     ],
     contact: { email: "info@datacloud.pt", phone: "+351 217 000 016", website: "https://datacloud.pt" },
     rating: "B",
-    dataSource: "formulario",
+    dataSource: "get2zero",
     cluster: "parceiro",
   },
   {
@@ -573,7 +573,7 @@ export const mockSuppliers: Supplier[] = [
     ],
     contact: { email: "sustentabilidade@textilnorte.pt", phone: "+351 253 000 020", website: "https://textilnorte.pt" },
     rating: "B",
-    dataSource: "formulario",
+    dataSource: "get2zero",
     cluster: "fornecedor",
   },
   {
