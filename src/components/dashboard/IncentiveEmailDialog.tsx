@@ -263,6 +263,11 @@ export const IncentiveEmailDialog = ({
                   </button>
                 )}
               </div>
+              {searchQuery && (
+                <p className="text-[10px] text-muted-foreground">
+                  {filteredCompanies.length} resultado{filteredCompanies.length !== 1 ? 's' : ''} encontrado{filteredCompanies.length !== 1 ? 's' : ''}
+                </p>
+              )}
               {/* Cluster Filter */}
               <div className="flex gap-1">
                 {Object.entries(clusterLabels).map(([key, { label, icon }]) => (
@@ -303,7 +308,7 @@ export const IncentiveEmailDialog = ({
                           className="flex items-center justify-between w-full px-2 py-1.5 bg-muted/30 rounded sticky top-0 hover:bg-muted/50 transition-colors"
                         >
                           <div className="flex items-center gap-2">
-                            <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-300 ${isCollapsed ? '-rotate-90' : ''}`} />
+                            <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-500 ease-in-out ${isCollapsed ? '-rotate-90' : ''}`} />
                             <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -316,18 +321,19 @@ export const IncentiveEmailDialog = ({
                             />
                           </div>
                         </button>
-                        <div className={`overflow-hidden transition-all duration-400 ease-in-out ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'}`}>
-                          {sectorCompanies.map((company, companyIndex) => (
-                          <Collapsible key={company.id} open={expandedCompany === company.id}>
-                            <div 
-                              className="rounded-md border bg-card hover:bg-accent/5 transition-all duration-200 ml-2"
-                              style={{ animationDelay: `${(sectorIndex * 50) + (companyIndex * 30)}ms` }}
-                            >
-                            <div className="flex items-center gap-2 p-2">
-                              <Checkbox
-                                checked={selectedCompanies.includes(company.id)}
-                                onCheckedChange={() => handleSelectCompany(company.id)}
-                              />
+                        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'}`}>
+                          <div className="space-y-1.5 pt-1">
+                            {sectorCompanies.map((company, companyIndex) => (
+                            <Collapsible key={company.id} open={expandedCompany === company.id}>
+                              <div 
+                                className="rounded-md border bg-card hover:bg-accent/5 transition-all duration-200 ml-2"
+                                style={{ animationDelay: `${(sectorIndex * 50) + (companyIndex * 30)}ms` }}
+                              >
+                              <div className="flex items-center gap-2 p-2">
+                                <Checkbox
+                                  checked={selectedCompanies.includes(company.id)}
+                                  onCheckedChange={() => handleSelectCompany(company.id)}
+                                />
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm font-medium truncate">{company.name}</p>
@@ -380,6 +386,7 @@ export const IncentiveEmailDialog = ({
                           </div>
                         </Collapsible>
                       ))}
+                          </div>
                         </div>
                       </div>
                     );
