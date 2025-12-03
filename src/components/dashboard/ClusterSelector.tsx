@@ -37,7 +37,7 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
               "[&_svg]:text-current",
               selectedCluster === option.value
                 ? "bg-primary text-primary-foreground border-primary shadow-md"
-                : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent"
+                : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
             )}
           >
             {option.icon}
