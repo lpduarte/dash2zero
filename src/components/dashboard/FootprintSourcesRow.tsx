@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { Calculator, FileText, Zap } from "lucide-react";
+import { Calculator, Database, Zap, FileText, Mail } from "lucide-react";
 
 interface FootprintSourcesRowProps {
   suppliers: Supplier[];
@@ -20,6 +21,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
   const total = totalCompanies || companiesCalculated;
   const percentageCalculated = total > 0 ? Math.round((companiesCalculated / total) * 100) : 0;
   const percentageColors = getPercentageColor(percentageCalculated);
+  const companiesMissing = total - companiesCalculated;
 
   const formularioCount = suppliers.filter(s => s.dataSource === "formulario").length;
   const get2zeroCount = suppliers.filter(s => s.dataSource === "get2zero").length;
@@ -27,8 +29,8 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
   const get2zeroPercentage = companiesCalculated > 0 ? Math.round((get2zeroCount / companiesCalculated) * 100) : 0;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      {/* Card Pegadas Calculadas */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      {/* Card Pegadas Calculadas com CTA */}
       <Card className={`p-4 shadow-md hover:shadow-lg transition-shadow ${percentageColors.bgLight} ${percentageColors.border} border-2`}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -48,51 +50,61 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
               indicatorClassName={percentageColors.bg}
             />
           </div>
+          {companiesMissing > 0 && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className={`mt-2 ${percentageColors.text} border-current hover:bg-white/50 text-xs`}
+            >
+              <Mail className="h-3 w-3 mr-1.5" />
+              Enviar convite a {companiesMissing} empresas
+            </Button>
+          )}
         </div>
       </Card>
 
-      {/* Card Formulário de Totais */}
-      <Card className="p-4 shadow-md hover:shadow-lg transition-shadow border-2 border-primary/20">
+      {/* Card Origem dos Dados - Combinado */}
+      <Card className="p-4 shadow-md hover:shadow-lg transition-shadow border">
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-medium text-primary">Formulário de Totais</p>
-            <div className="bg-primary/10 text-primary p-1.5 rounded">
-              <FileText className="h-4 w-4" />
+            <p className="text-xs font-medium text-muted-foreground">Origem dos dados</p>
+            <div className="bg-muted text-muted-foreground p-1.5 rounded">
+              <Database className="h-4 w-4" />
             </div>
           </div>
-          <div>
-            <p className="text-2xl font-bold text-primary">{formularioCount}</p>
-            <p className="text-xs text-muted-foreground mt-1">{formularioPercentage}% das pegadas</p>
+          
+          {/* Barra horizontal combinada */}
+          <div className="flex h-8 rounded-md overflow-hidden">
+            <div 
+              className="bg-primary flex items-center justify-center text-white text-xs font-medium transition-all"
+              style={{ width: `${get2zeroPercentage}%` }}
+            >
+              {get2zeroPercentage > 15 && `${get2zeroPercentage}%`}
+            </div>
+            <div 
+              className="bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-medium transition-all"
+              style={{ width: `${formularioPercentage}%` }}
+            >
+              {formularioPercentage > 15 && `${formularioPercentage}%`}
+            </div>
           </div>
-          <div className="mt-1">
-            <Progress 
-              value={formularioPercentage} 
-              className="h-2 bg-primary/10"
-              indicatorClassName="bg-primary"
-            />
-          </div>
-        </div>
-      </Card>
 
-      {/* Card Get2Zero Simple */}
-      <Card className="p-4 shadow-md hover:shadow-lg transition-shadow border-2 border-accent/20">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-medium text-accent">Get2Zero Simple</p>
-            <div className="bg-accent/10 text-accent p-1.5 rounded">
-              <Zap className="h-4 w-4" />
+          {/* Legenda */}
+          <div className="flex justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5 text-primary" />
+                <span className="text-muted-foreground">Get2Zero Simple</span>
+              </div>
+              <span className="font-semibold text-primary">{get2zeroCount}</span>
             </div>
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-accent">{get2zeroCount}</p>
-            <p className="text-xs text-muted-foreground mt-1">{get2zeroPercentage}% das pegadas</p>
-          </div>
-          <div className="mt-1">
-            <Progress 
-              value={get2zeroPercentage} 
-              className="h-2 bg-accent/10"
-              indicatorClassName="bg-accent"
-            />
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-secondary-foreground">{formularioCount}</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-muted-foreground">Formulário</span>
+                <FileText className="h-3.5 w-3.5 text-secondary-foreground" />
+              </div>
+            </div>
           </div>
         </div>
       </Card>
