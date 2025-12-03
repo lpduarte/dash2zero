@@ -10,7 +10,6 @@ export interface MissingCompany {
   id: string;
   name: string;
   email: string;
-  contactPerson: string;
   sector: string;
   cluster: "fornecedor" | "cliente" | "parceiro";
   emailsSent: number;
@@ -22,7 +21,6 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc1",
     name: "TechSolutions Lda",
     email: "geral@techsolutions.pt",
-    contactPerson: "João Silva",
     sector: "Tecnologia",
     cluster: "fornecedor",
     emailsSent: 2,
@@ -47,8 +45,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc2",
     name: "Construções Ribeiro SA",
     email: "ambiente@construcoesribeiro.pt",
-    contactPerson: "Maria Santos",
-    sector: "Construção",
+    sector: "Indústria",
     cluster: "fornecedor",
     emailsSent: 1,
     emailHistory: [
@@ -65,8 +62,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc3",
     name: "Transportes Martins",
     email: "info@transportesmartins.pt",
-    contactPerson: "António Martins",
-    sector: "Transportes",
+    sector: "Logística",
     cluster: "parceiro",
     emailsSent: 3,
     emailHistory: [
@@ -97,8 +93,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc4",
     name: "Alimentar Global Lda",
     email: "sustentabilidade@alimentarglobal.pt",
-    contactPerson: "Sofia Costa",
-    sector: "Alimentar",
+    sector: "Serviços",
     cluster: "cliente",
     emailsSent: 0,
     emailHistory: []
@@ -107,8 +102,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc5",
     name: "Química Industrial SA",
     email: "ambiente@quimicaindustrial.pt",
-    contactPerson: "Pedro Almeida",
-    sector: "Química",
+    sector: "Indústria",
     cluster: "fornecedor",
     emailsSent: 1,
     emailHistory: [
@@ -125,8 +119,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc6",
     name: "Serviços Financeiros ABC",
     email: "esg@sfabc.pt",
-    contactPerson: "Ana Ferreira",
-    sector: "Serviços Financeiros",
+    sector: "Serviços",
     cluster: "cliente",
     emailsSent: 0,
     emailHistory: []
@@ -135,8 +128,7 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc7",
     name: "Têxteis do Norte",
     email: "geral@texteisnorte.pt",
-    contactPerson: "Manuel Rodrigues",
-    sector: "Têxtil",
+    sector: "Indústria",
     cluster: "parceiro",
     emailsSent: 2,
     emailHistory: [
@@ -160,9 +152,67 @@ export const mockMissingCompanies: MissingCompany[] = [
     id: "mc8",
     name: "Energia Verde Lda",
     email: "comercial@energiaverde.pt",
-    contactPerson: "Carla Mendes",
-    sector: "Energia",
+    sector: "Tecnologia",
     cluster: "cliente",
+    emailsSent: 0,
+    emailHistory: []
+  },
+  {
+    id: "mc9",
+    name: "Logística Express",
+    email: "geral@logisticaexpress.pt",
+    sector: "Logística",
+    cluster: "fornecedor",
+    emailsSent: 1,
+    emailHistory: [
+      {
+        id: "e10",
+        sentAt: "2024-03-10T09:00:00Z",
+        subject: "Convite para calcular a sua pegada de carbono",
+        preview: "Prezado parceiro, gostaríamos de convidá-lo...",
+        templateUsed: "Convite Inicial"
+      }
+    ]
+  },
+  {
+    id: "mc10",
+    name: "MetalWorks SA",
+    email: "ambiente@metalworks.pt",
+    sector: "Indústria",
+    cluster: "parceiro",
+    emailsSent: 0,
+    emailHistory: []
+  },
+  {
+    id: "mc11",
+    name: "Digital Services Lda",
+    email: "info@digitalservices.pt",
+    sector: "Tecnologia",
+    cluster: "cliente",
+    emailsSent: 2,
+    emailHistory: [
+      {
+        id: "e11",
+        sentAt: "2024-02-15T10:00:00Z",
+        subject: "Convite para calcular a sua pegada de carbono",
+        preview: "Prezado parceiro, gostaríamos de convidá-lo...",
+        templateUsed: "Convite Inicial"
+      },
+      {
+        id: "e12",
+        sentAt: "2024-03-20T14:00:00Z",
+        subject: "Lembrete: Cálculo de pegada de carbono",
+        preview: "Esperamos que esteja bem. Gostaríamos de relembrar...",
+        templateUsed: "Lembrete"
+      }
+    ]
+  },
+  {
+    id: "mc12",
+    name: "Consultoria Pro",
+    email: "geral@consultoriapro.pt",
+    sector: "Serviços",
+    cluster: "fornecedor",
     emailsSent: 0,
     emailHistory: []
   }
@@ -182,7 +232,7 @@ export const emailTemplates: EmailTemplate[] = [
     name: "Convite Inicial",
     description: "Primeiro contacto para convidar ao cálculo",
     subject: "Convite para calcular a sua pegada de carbono",
-    body: `Prezado/a {contactPerson},
+    body: `Prezado/a,
 
 Gostaríamos de convidá-lo/a a calcular a pegada de carbono da {companyName} através da plataforma Get2Zero.
 
@@ -204,7 +254,7 @@ Equipa de Sustentabilidade`
     name: "Lembrete",
     description: "Follow-up amigável após primeiro contacto",
     subject: "Lembrete: Cálculo de pegada de carbono",
-    body: `Prezado/a {contactPerson},
+    body: `Prezado/a,
 
 Esperamos que esteja bem.
 
@@ -225,7 +275,7 @@ Equipa de Sustentabilidade`
     name: "Benefícios",
     description: "Destacar vantagens competitivas",
     subject: "Benefícios do cálculo de pegada de carbono para a sua empresa",
-    body: `Prezado/a {contactPerson},
+    body: `Prezado/a,
 
 Gostaríamos de partilhar consigo os benefícios que o cálculo da pegada de carbono pode trazer à {companyName}:
 
@@ -254,7 +304,7 @@ Equipa de Sustentabilidade`
     name: "Urgente",
     description: "Comunicação sobre prazos ou requisitos",
     subject: "Importante: Requisitos de sustentabilidade - Ação necessária",
-    body: `Prezado/a {contactPerson},
+    body: `Prezado/a,
 
 Face aos novos requisitos regulamentares e às exigências crescentes de sustentabilidade, reforçamos a importância do cálculo da pegada de carbono da {companyName}.
 

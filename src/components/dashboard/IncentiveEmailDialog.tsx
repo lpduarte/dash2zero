@@ -29,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, Building2, Filter, Users, Handshake, ShoppingCart } from "lucide-react";
 import { mockMissingCompanies, emailTemplates, MissingCompany } from "@/data/mockMissingCompanies";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { format } from "date-fns";
 import { pt } from "date-fns/locale";
 
@@ -131,14 +132,41 @@ export const IncentiveEmailDialog = ({
     return "bg-red-100 text-red-700";
   };
 
-  const getClusterBadge = (cluster: string) => {
+  const getClusterIcon = (cluster: string) => {
     switch (cluster) {
       case "fornecedor":
-        return <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30">Fornecedor</Badge>;
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <ShoppingCart className="h-3.5 w-3.5 text-primary" />
+              </TooltipTrigger>
+              <TooltipContent><p>Fornecedor</p></TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        );
       case "cliente":
-        return <Badge variant="outline" className="text-[10px] bg-blue-100 text-blue-700 border-blue-300">Cliente</Badge>;
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Users className="h-3.5 w-3.5 text-blue-600" />
+              </TooltipTrigger>
+              <TooltipContent><p>Cliente</p></TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        );
       case "parceiro":
-        return <Badge variant="outline" className="text-[10px] bg-purple-100 text-purple-700 border-purple-300">Parceiro</Badge>;
+        return (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <Handshake className="h-3.5 w-3.5 text-purple-600" />
+              </TooltipTrigger>
+              <TooltipContent><p>Parceiro</p></TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        );
       default:
         return null;
     }
@@ -243,9 +271,8 @@ export const IncentiveEmailDialog = ({
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                   <p className="text-sm font-medium truncate">{company.name}</p>
-                                  {getClusterBadge(company.cluster)}
+                                  {getClusterIcon(company.cluster)}
                                 </div>
-                                <p className="text-xs text-muted-foreground truncate">{company.contactPerson}</p>
                               </div>
                               <Badge className={`text-xs shrink-0 ${getEmailCountColor(company.emailsSent)}`}>
                                 {company.emailsSent} email{company.emailsSent !== 1 ? "s" : ""}
@@ -315,7 +342,7 @@ export const IncentiveEmailDialog = ({
                 <SelectContent>
                   {emailTemplates.map((template) => (
                     <SelectItem key={template.id} value={template.id}>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col items-start text-left">
                         <span>{template.name}</span>
                         <span className="text-xs text-muted-foreground">{template.description}</span>
                       </div>
@@ -333,7 +360,7 @@ export const IncentiveEmailDialog = ({
                 placeholder="Assunto do email"
               />
             </div>
-            <div className="grid gap-2 flex-1">
+            <div className="flex flex-col gap-2 flex-1">
               <Label htmlFor="message" className="text-xs font-medium">Mensagem</Label>
               <Textarea
                 id="message"
@@ -343,7 +370,7 @@ export const IncentiveEmailDialog = ({
                 className="min-h-[280px] flex-1 resize-none text-sm"
               />
               <p className="text-[10px] text-muted-foreground">
-                Variáveis disponíveis: {"{contactPerson}"}, {"{companyName}"}
+                Variáveis disponíveis: {"{companyName}"}
               </p>
             </div>
           </div>
