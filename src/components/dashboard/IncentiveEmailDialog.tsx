@@ -407,7 +407,9 @@ export const IncentiveEmailDialog = ({
               <Label htmlFor="template" className="text-xs font-medium">Template de mensagem</Label>
               <Select value={selectedTemplate} onValueChange={handleTemplateChange}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione um template" />
+                  <SelectValue placeholder="Selecione um template">
+                    {emailTemplates.find(t => t.id === selectedTemplate)?.name}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {emailTemplates.map((template) => (
