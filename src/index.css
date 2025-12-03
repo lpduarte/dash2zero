@@ -31,9 +31,9 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --muted: 170 15% 94%;
     --muted-foreground: 175 15% 40%;
 
-    /* Accent: Warm amber for CTAs and highlights */
-    --accent: 38 90% 55%;
-    --accent-foreground: 0 0% 10%;
+    /* Accent: Dark green for highlights (in brand spectrum) */
+    --accent: 175 70% 28%;
+    --accent-foreground: 0 0% 100%;
 
     /* Status colors harmonized with brand */
     --success: 160 65% 40%;
@@ -55,7 +55,7 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     /* Gradients with brand colors */
     --gradient-primary: linear-gradient(135deg, hsl(175 66% 38%) 0%, hsl(175 55% 48%) 100%);
     --gradient-secondary: linear-gradient(135deg, hsl(185 50% 25%) 0%, hsl(175 66% 38%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(38 90% 55%) 0%, hsl(28 85% 50%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(175 70% 28%) 0%, hsl(175 66% 38%) 100%);
     
     /* Shadows with brand tint */
     --shadow-sm: 0 1px 2px 0 hsla(175, 30%, 20%, 0.05);
@@ -86,8 +86,8 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --muted: 175 20% 15%;
     --muted-foreground: 170 15% 60%;
 
-    --accent: 38 85% 60%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 175 65% 35%;
+    --accent-foreground: 0 0% 100%;
 
     --success: 160 60% 45%;
     --success-foreground: 0 0% 100%;
@@ -105,7 +105,7 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
 
     --gradient-primary: linear-gradient(135deg, hsl(175 60% 45%) 0%, hsl(175 55% 55%) 100%);
     --gradient-secondary: linear-gradient(135deg, hsl(185 45% 35%) 0%, hsl(175 60% 45%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(38 85% 60%) 0%, hsl(28 80% 55%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(175 65% 35%) 0%, hsl(175 60% 45%) 100%);
     
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
