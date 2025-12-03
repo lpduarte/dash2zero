@@ -48,7 +48,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       {metrics.map((metric) => (
         <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex flex-col gap-3">
