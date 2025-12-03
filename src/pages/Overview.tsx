@@ -43,7 +43,7 @@ const Overview = () => {
         
         <MetricsOverview suppliers={filteredSuppliers} />
         
-        <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={100} />
+        <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterCounts[selectedCluster]} />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
