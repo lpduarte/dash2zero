@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, LayoutGrid, Users, Handshake, ShoppingCart } from "lucide-react";
+import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, LayoutGrid, Users, Handshake, ShoppingCart, Search } from "lucide-react";
 import { mockMissingCompanies, emailTemplates, MissingCompany } from "@/data/mockMissingCompanies";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { format } from "date-fns";
@@ -59,15 +59,23 @@ export const IncentiveEmailDialog = ({
   const [message, setMessage] = useState(emailTemplates[0].body);
   const [expandedCompany, setExpandedCompany] = useState<string | null>(null);
   const [clusterFilter, setClusterFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const companies = useMemo(() => {
     return mockMissingCompanies.slice(0, companiesMissing);
   }, [companiesMissing]);
 
   const filteredCompanies = useMemo(() => {
-    if (clusterFilter === "all") return companies;
-    return companies.filter(c => c.cluster === clusterFilter);
-  }, [companies, clusterFilter]);
+    let result = companies;
+    if (clusterFilter !== "all") {
+      result = result.filter(c => c.cluster === clusterFilter);
+    }
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(c => c.name.toLowerCase().includes(query));
+    }
+    return result;
+  }, [companies, clusterFilter, searchQuery]);
 
   // Group companies by sector
   const companiesBySector = useMemo(() => {
@@ -224,6 +232,16 @@ export const IncentiveEmailDialog = ({
                   {filteredSelectedCount === filteredCompanies.length ? "Desmarcar todas" : "Selecionar todas as empresas"}
                 </Button>
               </div>
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  placeholder="Pesquisar empresa..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-8 pl-8 text-sm"
+                />
+              </div>
               {/* Cluster Filter */}
               <div className="flex gap-1">
                 {Object.entries(clusterLabels).map(([key, { label, icon }]) => (
@@ -240,23 +258,35 @@ export const IncentiveEmailDialog = ({
                 ))}
               </div>
             </div>
-            <ScrollArea className="flex-1 h-[350px] transition-all duration-500 ease-in-out">
-              <div className="p-2 space-y-3" key={clusterFilter}>
-                {companiesBySector.map(([sector, sectorCompanies], sectorIndex) => {
-                  const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
-                  return (
-                    <div key={sector} className="space-y-1 animate-fade-in" style={{ animationDelay: `${sectorIndex * 50}ms`, animationFillMode: 'backwards' }}>
-                      <div className="flex items-center justify-between px-2 py-1 bg-muted/30 rounded sticky top-0">
-                        <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-muted-foreground">{sectorSelectedCount}/{sectorCompanies.length}</span>
-                          <Checkbox
-                            checked={sectorSelectedCount === sectorCompanies.length}
-                            onCheckedChange={() => handleSelectSector(sectorCompanies)}
-                            className="h-3.5 w-3.5"
-                          />
+            <ScrollArea className="flex-1 max-h-[350px] min-h-[150px]">
+              <div 
+                className="p-2 space-y-3 transition-all duration-500 ease-in-out" 
+                key={`${clusterFilter}-${searchQuery}`}
+              >
+                {companiesBySector.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                    <Search className="h-8 w-8 mb-2 opacity-50" />
+                    <p className="text-sm">Nenhuma empresa encontrada</p>
+                    {searchQuery && (
+                      <p className="text-xs mt-1">Tente ajustar a pesquisa ou os filtros</p>
+                    )}
+                  </div>
+                ) : (
+                  companiesBySector.map(([sector, sectorCompanies], sectorIndex) => {
+                    const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
+                    return (
+                      <div key={sector} className="space-y-1 animate-fade-in" style={{ animationDelay: `${sectorIndex * 50}ms`, animationFillMode: 'backwards' }}>
+                        <div className="flex items-center justify-between px-2 py-1 bg-muted/30 rounded sticky top-0">
+                          <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-muted-foreground">{sectorSelectedCount}/{sectorCompanies.length}</span>
+                            <Checkbox
+                              checked={sectorSelectedCount === sectorCompanies.length}
+                              onCheckedChange={() => handleSelectSector(sectorCompanies)}
+                              className="h-3.5 w-3.5"
+                            />
+                          </div>
                         </div>
-                      </div>
                         {sectorCompanies.map((company, companyIndex) => (
                           <Collapsible key={company.id} open={expandedCompany === company.id}>
                             <div 
@@ -322,7 +352,8 @@ export const IncentiveEmailDialog = ({
                       ))}
                     </div>
                   );
-                })}
+                })
+                )}
               </div>
             </ScrollArea>
             <div className="p-2 border-t bg-muted/30">
