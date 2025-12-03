@@ -50,11 +50,6 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
             </div>
 
             <div className="pt-2 border-t border-border/50">
-              <p className="text-xs text-muted-foreground">Rating ESG</p>
-              <Badge className="bg-success text-lg px-3 py-1">{best.rating}</Badge>
-            </div>
-
-            <div className="pt-2 border-t border-border/50">
               <p className="text-xs text-muted-foreground mb-1">Certificações</p>
               <div className="flex flex-wrap gap-1">
                 {best.certifications.map((cert, i) => (
@@ -99,11 +94,6 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
                 <p className="text-2xl font-bold text-danger">{worst.emissionsPerEmployee.toFixed(2)}</p>
                 <p className="text-xs text-muted-foreground">ton CO₂e/func</p>
               </div>
-            </div>
-
-            <div className="pt-2 border-t border-border/50">
-              <p className="text-xs text-muted-foreground">Rating ESG</p>
-              <Badge className="bg-danger text-lg px-3 py-1">{worst.rating}</Badge>
             </div>
 
             <div className="pt-2 border-t border-border/50">
