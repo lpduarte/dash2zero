@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { Calculator, Database, Zap, FileText, Mail } from "lucide-react";
+import { Calculator, Database, Leaf, FileText, Mail } from "lucide-react";
 
 interface FootprintSourcesRowProps {
   suppliers: Supplier[];
@@ -39,9 +39,21 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
               <Calculator className="h-4 w-4" />
             </div>
           </div>
-          <div>
-            <p className={`text-2xl font-bold ${percentageColors.text}`}>{companiesCalculated} de {total}</p>
-            <p className={`text-xs ${percentageColors.text} mt-1 font-medium`}>{percentageCalculated}% do cluster</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={`text-2xl font-bold ${percentageColors.text}`}>{companiesCalculated} de {total}</p>
+              <p className={`text-xs ${percentageColors.text} mt-1 font-medium`}>{percentageCalculated}% do cluster</p>
+            </div>
+            {companiesMissing > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className={`${percentageColors.text} border-current hover:bg-white/50 text-xs`}
+              >
+                <Mail className="h-3 w-3 mr-1.5" />
+                Convidar {companiesMissing}
+              </Button>
+            )}
           </div>
           <div className="mt-1">
             <Progress 
@@ -50,16 +62,6 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
               indicatorClassName={percentageColors.bg}
             />
           </div>
-          {companiesMissing > 0 && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className={`mt-2 ${percentageColors.text} border-current hover:bg-white/50 text-xs`}
-            >
-              <Mail className="h-3 w-3 mr-1.5" />
-              Enviar convite a {companiesMissing} empresas
-            </Button>
-          )}
         </div>
       </Card>
 
@@ -91,19 +93,13 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
 
           {/* Legenda */}
           <div className="flex justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                <span className="text-muted-foreground">Get2Zero Simple</span>
-              </div>
-              <span className="font-semibold text-primary">{get2zeroCount}</span>
+            <div className="flex items-center gap-1.5">
+              <Leaf className="h-3.5 w-3.5 text-primary" />
+              <span className="text-muted-foreground">Get2Zero Simple</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-secondary-foreground">{formularioCount}</span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-muted-foreground">Formulário</span>
-                <FileText className="h-3.5 w-3.5 text-secondary-foreground" />
-              </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground">Formulário</span>
+              <FileText className="h-3.5 w-3.5 text-secondary-foreground" />
             </div>
           </div>
         </div>
