@@ -96,8 +96,10 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
             <div className="flex items-center gap-1.5">
               <Leaf className="h-3.5 w-3.5 text-primary" />
               <span className="text-muted-foreground">Get2Zero Simple</span>
+              <span className="font-semibold text-primary">{get2zeroCount}</span>
             </div>
             <div className="flex items-center gap-1.5">
+              <span className="font-semibold text-slate-600">{formularioCount}</span>
               <span className="text-muted-foreground">Formulário</span>
               <FileText className="h-3.5 w-3.5 text-slate-500" />
             </div>
