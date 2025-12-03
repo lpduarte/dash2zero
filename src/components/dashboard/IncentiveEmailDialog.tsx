@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, LayoutGrid, Users, Handshake, ShoppingCart, Search } from "lucide-react";
+import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, LayoutGrid, Users, Handshake, ShoppingCart, Search, X } from "lucide-react";
 import { mockMissingCompanies, emailTemplates, MissingCompany } from "@/data/mockMissingCompanies";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { format } from "date-fns";
@@ -60,6 +60,7 @@ export const IncentiveEmailDialog = ({
   const [expandedCompany, setExpandedCompany] = useState<string | null>(null);
   const [clusterFilter, setClusterFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [collapsedSectors, setCollapsedSectors] = useState<Set<string>>(new Set());
 
   const companies = useMemo(() => {
     return mockMissingCompanies.slice(0, companiesMissing);
@@ -131,6 +132,18 @@ export const IncentiveEmailDialog = ({
 
   const toggleExpandCompany = (companyId: string) => {
     setExpandedCompany(prev => prev === companyId ? null : companyId);
+  };
+
+  const toggleSectorCollapse = (sector: string) => {
+    setCollapsedSectors(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(sector)) {
+        newSet.delete(sector);
+      } else {
+        newSet.add(sector);
+      }
+      return newSet;
+    });
   };
 
   const getEmailCountColor = (count: number) => {
@@ -211,7 +224,7 @@ export const IncentiveEmailDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[1100px] max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-[1100px] h-[calc(100vh-200px)] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5 text-primary" />
@@ -239,8 +252,16 @@ export const IncentiveEmailDialog = ({
                   placeholder="Pesquisar empresa..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-8 pl-8 text-sm"
+                  className="h-8 pl-8 pr-8 text-sm"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
               {/* Cluster Filter */}
               <div className="flex gap-1">
@@ -258,7 +279,7 @@ export const IncentiveEmailDialog = ({
                 ))}
               </div>
             </div>
-            <ScrollArea className="flex-1 max-h-[350px] min-h-[150px]">
+            <ScrollArea className="flex-1">
               <div 
                 className="p-2 space-y-3 transition-all duration-500 ease-in-out" 
                 key={`${clusterFilter}-${searchQuery}`}
@@ -274,20 +295,29 @@ export const IncentiveEmailDialog = ({
                 ) : (
                   companiesBySector.map(([sector, sectorCompanies], sectorIndex) => {
                     const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
+                    const isCollapsed = collapsedSectors.has(sector);
                     return (
                       <div key={sector} className="space-y-1 animate-fade-in" style={{ animationDelay: `${sectorIndex * 50}ms`, animationFillMode: 'backwards' }}>
-                        <div className="flex items-center justify-between px-2 py-1 bg-muted/30 rounded sticky top-0">
-                          <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
+                        <button 
+                          onClick={() => toggleSectorCollapse(sector)}
+                          className="flex items-center justify-between w-full px-2 py-1.5 bg-muted/30 rounded sticky top-0 hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-300 ${isCollapsed ? '-rotate-90' : ''}`} />
+                            <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
+                          </div>
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] text-muted-foreground">{sectorSelectedCount}/{sectorCompanies.length}</span>
                             <Checkbox
                               checked={sectorSelectedCount === sectorCompanies.length}
                               onCheckedChange={() => handleSelectSector(sectorCompanies)}
+                              onClick={(e) => e.stopPropagation()}
                               className="h-3.5 w-3.5"
                             />
                           </div>
-                        </div>
-                        {sectorCompanies.map((company, companyIndex) => (
+                        </button>
+                        <div className={`overflow-hidden transition-all duration-400 ease-in-out ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'}`}>
+                          {sectorCompanies.map((company, companyIndex) => (
                           <Collapsible key={company.id} open={expandedCompany === company.id}>
                             <div 
                               className="rounded-md border bg-card hover:bg-accent/5 transition-all duration-200 ml-2"
@@ -350,9 +380,10 @@ export const IncentiveEmailDialog = ({
                           </div>
                         </Collapsible>
                       ))}
-                    </div>
-                  );
-                })
+                        </div>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </ScrollArea>
