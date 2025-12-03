@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, Building2, Filter, Users, Handshake, ShoppingCart } from "lucide-react";
+import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, LayoutGrid, Users, Handshake, ShoppingCart } from "lucide-react";
 import { mockMissingCompanies, emailTemplates, MissingCompany } from "@/data/mockMissingCompanies";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { format } from "date-fns";
@@ -40,7 +40,7 @@ interface IncentiveEmailDialogProps {
 }
 
 const clusterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
-  all: { label: "Todos os clusters", icon: <Filter className="h-4 w-4" /> },
+  all: { label: "Todos", icon: <LayoutGrid className="h-4 w-4" /> },
   fornecedor: { label: "Fornecedores", icon: <ShoppingCart className="h-4 w-4" /> },
   cliente: { label: "Clientes", icon: <Users className="h-4 w-4" /> },
   parceiro: { label: "Parceiros", icon: <Handshake className="h-4 w-4" /> },
@@ -203,7 +203,7 @@ export const IncentiveEmailDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[1000px] max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-[1100px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5 text-primary" />
@@ -219,16 +219,13 @@ export const IncentiveEmailDialog = ({
           <div className="flex flex-col border rounded-lg overflow-hidden">
             <div className="p-3 bg-muted/50 border-b space-y-2">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm font-medium">Empresas ({filteredCompanies.length})</span>
-                </div>
-                <Button variant="ghost" size="sm" onClick={handleSelectAll} className="text-xs h-7">
-                  {filteredSelectedCount === filteredCompanies.length ? "Desmarcar" : "Selecionar todas"}
+                <span className="text-sm font-medium">Filtrar por Cluster</span>
+                <Button variant="outline" size="sm" onClick={handleSelectAll} className="text-xs h-7 border-border">
+                  {filteredSelectedCount === filteredCompanies.length ? "Desmarcar todas" : "Selecionar todas as empresas"}
                 </Button>
               </div>
               {/* Cluster Filter */}
-              <div className="flex gap-1 flex-wrap">
+              <div className="flex gap-1">
                 {Object.entries(clusterLabels).map(([key, { label, icon }]) => (
                   <Button
                     key={key}
