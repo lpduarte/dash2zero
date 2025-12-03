@@ -275,7 +275,7 @@ export const IncentiveEmailDialog = ({
                     key={key}
                     variant={clusterFilter === key ? "default" : "outline"}
                     size="sm"
-                    className="h-7 text-xs gap-1"
+                    className={`h-7 text-xs gap-1 ${clusterFilter !== key ? "hover:bg-primary hover:text-primary-foreground hover:border-primary" : ""}`}
                     onClick={() => setClusterFilter(key)}
                   >
                     {icon}
