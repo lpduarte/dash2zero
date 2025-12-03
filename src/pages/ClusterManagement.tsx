@@ -302,7 +302,6 @@ export default function ClusterManagement() {
                 <TableHeader>
                   <TableRow className="bg-primary hover:bg-primary">
                     <TableHead className="text-primary-foreground min-w-[180px]">Nome</TableHead>
-                    <TableHead className="text-primary-foreground min-w-[100px]">Rating</TableHead>
                     <TableHead className="text-primary-foreground min-w-[200px]">Email</TableHead>
                     <TableHead className="text-primary-foreground min-w-[120px]">Setor</TableHead>
                     <TableHead className="text-primary-foreground min-w-[100px]">Região</TableHead>
@@ -322,9 +321,6 @@ export default function ClusterManagement() {
                       className={index % 2 === 0 ? "bg-muted/50" : "bg-background"}
                     >
                       <TableCell className="font-medium">{company.name}</TableCell>
-                      <TableCell>
-                        <Badge className={getRatingColor(company.rating)}>{company.rating}</Badge>
-                      </TableCell>
                       <TableCell>{company.contact.email}</TableCell>
                       <TableCell className="capitalize">{company.sector}</TableCell>
                       <TableCell className="capitalize">{company.region}</TableCell>

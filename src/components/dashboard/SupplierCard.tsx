@@ -64,9 +64,6 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-xl font-bold text-card-foreground">{supplier.name}</h3>
-            <Badge className={getRatingColor(supplier.rating)}>
-              Rating {supplier.rating}
-            </Badge>
           </div>
           <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
             <span className="flex items-center gap-1">

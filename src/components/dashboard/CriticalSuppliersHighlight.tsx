@@ -85,7 +85,6 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-semibold">{supplier.name}</h4>
-                    <Badge className="bg-danger">{supplier.rating}</Badge>
                     {!supplier.hasSBTi && (
                       <Badge variant="outline" className="text-xs border-warning text-warning">
                         Sem SBTi

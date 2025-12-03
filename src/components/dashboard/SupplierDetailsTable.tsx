@@ -48,7 +48,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
             <TableHeader>
               <TableRow>
                 <TableHead>Fornecedor</TableHead>
-                <TableHead>Rating</TableHead>
                 <TableHead>Emissões Totais</TableHead>
                 <TableHead>Certificações</TableHead>
                 <TableHead>SBTi</TableHead>
@@ -60,7 +59,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
               {suppliers.map((supplier) => (
                 <TableRow key={supplier.id}>
                   <TableCell className="font-medium">{supplier.name}</TableCell>
-                  <TableCell>{getRatingBadge(supplier.rating)}</TableCell>
                   <TableCell>
                     <div className="flex flex-col">
                       <span className="font-medium">{supplier.totalEmissions.toFixed(0)} ton</span>

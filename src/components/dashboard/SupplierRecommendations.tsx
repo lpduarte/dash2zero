@@ -205,10 +205,6 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                           <span className="text-muted-foreground">FE:</span>
                           <span className="font-semibold">{rec.feCurrent.toFixed(1)} kg/€</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Rating:</span>
-                          <Badge className="bg-danger">{rec.critical.rating}</Badge>
-                        </div>
                       </div>
                     </div>
 
@@ -228,10 +224,6 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">FE:</span>
                           <span className="font-semibold">{rec.feAlternative.toFixed(1)} kg/€</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Rating:</span>
-                          <Badge className="bg-success">{rec.alternative.rating}</Badge>
                         </div>
                       </div>
                     </div>
