@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
 import { Calculator, Database, Leaf, FileText, Mail } from "lucide-react";
+import { IncentiveEmailDialog } from "./IncentiveEmailDialog";
 
 interface FootprintSourcesRowProps {
   suppliers: Supplier[];
@@ -17,6 +19,8 @@ const getPercentageColor = (percentage: number) => {
 };
 
 export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSourcesRowProps) => {
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  
   const companiesCalculated = suppliers.length;
   const total = totalCompanies || companiesCalculated;
   const percentageCalculated = total > 0 ? Math.round((companiesCalculated / total) * 100) : 0;
@@ -49,6 +53,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
                 variant="outline" 
                 size="sm" 
                 className={`${percentageColors.text} border-current hover:bg-white/50 text-xs`}
+                onClick={() => setEmailDialogOpen(true)}
               >
                 <Mail className="h-3 w-3 mr-1.5" />
                 Incentivar cálculo
@@ -106,6 +111,12 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
           </div>
         </div>
       </Card>
+
+      <IncentiveEmailDialog
+        open={emailDialogOpen}
+        onOpenChange={setEmailDialogOpen}
+        companiesMissing={companiesMissing}
+      />
     </div>
   );
 };
