@@ -16,7 +16,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Emissões totais",
       value: Math.round(avgTotalEmissions),
-      unit: "tonCO₂e",
+      unit: "t CO₂e",
       icon: Factory,
       color: "text-primary",
       bgColor: "bg-primary/10",
@@ -24,7 +24,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Por colaborador",
       value: avgEmissionsPerEmployee.toFixed(2),
-      unit: "tonCO₂e/colab",
+      unit: "t CO₂e/colab",
       icon: Users,
       color: "text-secondary",
       bgColor: "bg-secondary/10",
@@ -32,7 +32,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Por m²",
       value: avgEmissionsPerArea.toFixed(3),
-      unit: "tonCO₂e/m²",
+      unit: "t CO₂e/m²",
       icon: Building,
       color: "text-accent",
       bgColor: "bg-accent/10",
@@ -40,7 +40,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Por faturação",
       value: avgEmissionsPerRevenue.toFixed(1),
-      unit: "kgCO₂e/€",
+      unit: "kg CO₂e/€",
       icon: Euro,
       color: "text-success",
       bgColor: "bg-success/10",
