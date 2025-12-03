@@ -241,11 +241,11 @@ export const IncentiveEmailDialog = ({
               </div>
             </div>
             <ScrollArea className="flex-1 h-[350px]">
-              <div className="p-2 space-y-3">
-                {companiesBySector.map(([sector, sectorCompanies]) => {
+              <div className="p-2 space-y-3" key={clusterFilter}>
+                {companiesBySector.map(([sector, sectorCompanies], sectorIndex) => {
                   const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
                   return (
-                    <div key={sector} className="space-y-1">
+                    <div key={sector} className="space-y-1 animate-fade-in" style={{ animationDelay: `${sectorIndex * 50}ms`, animationFillMode: 'backwards' }}>
                       <div className="flex items-center justify-between px-2 py-1 bg-muted/30 rounded sticky top-0">
                         <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
                         <div className="flex items-center gap-2">
@@ -257,9 +257,12 @@ export const IncentiveEmailDialog = ({
                           />
                         </div>
                       </div>
-                      {sectorCompanies.map((company) => (
-                        <Collapsible key={company.id} open={expandedCompany === company.id}>
-                          <div className="rounded-md border bg-card hover:bg-accent/5 transition-colors ml-2">
+                        {sectorCompanies.map((company, companyIndex) => (
+                          <Collapsible key={company.id} open={expandedCompany === company.id}>
+                            <div 
+                              className="rounded-md border bg-card hover:bg-accent/5 transition-all duration-200 ml-2"
+                              style={{ animationDelay: `${(sectorIndex * 50) + (companyIndex * 30)}ms` }}
+                            >
                             <div className="flex items-center gap-2 p-2">
                               <Checkbox
                                 checked={selectedCompanies.includes(company.id)}
@@ -292,7 +295,7 @@ export const IncentiveEmailDialog = ({
                                 </span>
                               )}
                             </div>
-                            <CollapsibleContent>
+                            <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up overflow-hidden">
                               <div className="px-2 pb-2 pt-1 border-t bg-muted/30">
                                 <div className="flex items-center gap-1 mb-2">
                                   <History className="h-3 w-3 text-muted-foreground" />
