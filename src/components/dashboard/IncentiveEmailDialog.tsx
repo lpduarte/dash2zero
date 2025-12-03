@@ -295,7 +295,7 @@ export const IncentiveEmailDialog = ({
                                 </span>
                               )}
                             </div>
-                            <CollapsibleContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up overflow-hidden">
+                            <CollapsibleContent>
                               <div className="px-2 pb-2 pt-1 border-t bg-muted/30">
                                 <div className="flex items-center gap-1 mb-2">
                                   <History className="h-3 w-3 text-muted-foreground" />
