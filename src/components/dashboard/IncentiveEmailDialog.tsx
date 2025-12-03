@@ -27,8 +27,8 @@ import {
 } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, Building2 } from "lucide-react";
-import { mockMissingCompanies, emailTemplates, MissingCompany, EmailRecord } from "@/data/mockMissingCompanies";
+import { Mail, Send, Loader2, ChevronDown, ChevronRight, History, Building2, Filter, Users, Handshake, ShoppingCart } from "lucide-react";
+import { mockMissingCompanies, emailTemplates, MissingCompany } from "@/data/mockMissingCompanies";
 import { format } from "date-fns";
 import { pt } from "date-fns/locale";
 
@@ -37,6 +37,13 @@ interface IncentiveEmailDialogProps {
   onOpenChange: (open: boolean) => void;
   companiesMissing: number;
 }
+
+const clusterLabels: Record<string, { label: string; icon: React.ReactNode }> = {
+  all: { label: "Todos os clusters", icon: <Filter className="h-4 w-4" /> },
+  fornecedor: { label: "Fornecedores", icon: <ShoppingCart className="h-4 w-4" /> },
+  cliente: { label: "Clientes", icon: <Users className="h-4 w-4" /> },
+  parceiro: { label: "Parceiros", icon: <Handshake className="h-4 w-4" /> },
+};
 
 export const IncentiveEmailDialog = ({
   open,
@@ -50,10 +57,29 @@ export const IncentiveEmailDialog = ({
   const [subject, setSubject] = useState(emailTemplates[0].subject);
   const [message, setMessage] = useState(emailTemplates[0].body);
   const [expandedCompany, setExpandedCompany] = useState<string | null>(null);
+  const [clusterFilter, setClusterFilter] = useState<string>("all");
 
   const companies = useMemo(() => {
     return mockMissingCompanies.slice(0, companiesMissing);
   }, [companiesMissing]);
+
+  const filteredCompanies = useMemo(() => {
+    if (clusterFilter === "all") return companies;
+    return companies.filter(c => c.cluster === clusterFilter);
+  }, [companies, clusterFilter]);
+
+  // Group companies by sector
+  const companiesBySector = useMemo(() => {
+    const grouped: Record<string, MissingCompany[]> = {};
+    filteredCompanies.forEach(company => {
+      if (!grouped[company.sector]) {
+        grouped[company.sector] = [];
+      }
+      grouped[company.sector].push(company);
+    });
+    // Sort sectors alphabetically
+    return Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b));
+  }, [filteredCompanies]);
 
   const handleTemplateChange = (templateId: string) => {
     setSelectedTemplate(templateId);
@@ -65,10 +91,13 @@ export const IncentiveEmailDialog = ({
   };
 
   const handleSelectAll = () => {
-    if (selectedCompanies.length === companies.length) {
-      setSelectedCompanies([]);
+    const filteredIds = filteredCompanies.map(c => c.id);
+    const allSelected = filteredIds.every(id => selectedCompanies.includes(id));
+    
+    if (allSelected) {
+      setSelectedCompanies(prev => prev.filter(id => !filteredIds.includes(id)));
     } else {
-      setSelectedCompanies(companies.map(c => c.id));
+      setSelectedCompanies(prev => [...new Set([...prev, ...filteredIds])]);
     }
   };
 
@@ -80,6 +109,17 @@ export const IncentiveEmailDialog = ({
     );
   };
 
+  const handleSelectSector = (sectorCompanies: MissingCompany[]) => {
+    const sectorIds = sectorCompanies.map(c => c.id);
+    const allSelected = sectorIds.every(id => selectedCompanies.includes(id));
+    
+    if (allSelected) {
+      setSelectedCompanies(prev => prev.filter(id => !sectorIds.includes(id)));
+    } else {
+      setSelectedCompanies(prev => [...new Set([...prev, ...sectorIds])]);
+    }
+  };
+
   const toggleExpandCompany = (companyId: string) => {
     setExpandedCompany(prev => prev === companyId ? null : companyId);
   };
@@ -89,6 +129,19 @@ export const IncentiveEmailDialog = ({
     if (count === 1) return "bg-blue-100 text-blue-700";
     if (count === 2) return "bg-amber-100 text-amber-700";
     return "bg-red-100 text-red-700";
+  };
+
+  const getClusterBadge = (cluster: string) => {
+    switch (cluster) {
+      case "fornecedor":
+        return <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30">Fornecedor</Badge>;
+      case "cliente":
+        return <Badge variant="outline" className="text-[10px] bg-blue-100 text-blue-700 border-blue-300">Cliente</Badge>;
+      case "parceiro":
+        return <Badge variant="outline" className="text-[10px] bg-purple-100 text-purple-700 border-purple-300">Parceiro</Badge>;
+      default:
+        return null;
+    }
   };
 
   const handleSend = async () => {
@@ -118,9 +171,11 @@ export const IncentiveEmailDialog = ({
     return format(new Date(dateString), "d 'de' MMMM 'de' yyyy, HH:mm", { locale: pt });
   };
 
+  const filteredSelectedCount = filteredCompanies.filter(c => selectedCompanies.includes(c.id)).length;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px] max-h-[90vh] flex flex-col">
+      <DialogContent className="sm:max-w-[1000px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Mail className="h-5 w-5 text-primary" />
@@ -131,77 +186,115 @@ export const IncentiveEmailDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 flex-1 overflow-hidden">
           {/* Lista de Empresas */}
           <div className="flex flex-col border rounded-lg overflow-hidden">
-            <div className="p-3 bg-muted/50 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Empresas ({companies.length})</span>
+            <div className="p-3 bg-muted/50 border-b space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm font-medium">Empresas ({filteredCompanies.length})</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleSelectAll} className="text-xs h-7">
+                  {filteredSelectedCount === filteredCompanies.length ? "Desmarcar" : "Selecionar todas"}
+                </Button>
               </div>
-              <Button variant="ghost" size="sm" onClick={handleSelectAll} className="text-xs h-7">
-                {selectedCompanies.length === companies.length ? "Desmarcar todas" : "Selecionar todas"}
-              </Button>
-            </div>
-            <ScrollArea className="flex-1 h-[280px]">
-              <div className="p-2 space-y-1">
-                {companies.map((company) => (
-                  <Collapsible key={company.id} open={expandedCompany === company.id}>
-                    <div className="rounded-md border bg-card hover:bg-accent/5 transition-colors">
-                      <div className="flex items-center gap-2 p-2">
-                        <Checkbox
-                          checked={selectedCompanies.includes(company.id)}
-                          onCheckedChange={() => handleSelectCompany(company.id)}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{company.name}</p>
-                          <p className="text-xs text-muted-foreground truncate">{company.contactPerson}</p>
-                        </div>
-                        <Badge className={`text-xs ${getEmailCountColor(company.emailsSent)}`}>
-                          {company.emailsSent} email{company.emailsSent !== 1 ? "s" : ""}
-                        </Badge>
-                        {company.emailHistory.length > 0 && (
-                          <CollapsibleTrigger asChild>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              className="h-7 w-7 p-0"
-                              onClick={() => toggleExpandCompany(company.id)}
-                            >
-                              {expandedCompany === company.id ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronRight className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </CollapsibleTrigger>
-                        )}
-                      </div>
-                      <CollapsibleContent>
-                        <div className="px-2 pb-2 pt-1 border-t bg-muted/30">
-                          <div className="flex items-center gap-1 mb-2">
-                            <History className="h-3 w-3 text-muted-foreground" />
-                            <span className="text-xs font-medium text-muted-foreground">Histórico de emails</span>
-                          </div>
-                          <div className="space-y-2">
-                            {company.emailHistory.map((email) => (
-                              <div key={email.id} className="bg-background rounded p-2 text-xs">
-                                <div className="flex items-center justify-between mb-1">
-                                  <Badge variant="outline" className="text-[10px] h-5">{email.templateUsed}</Badge>
-                                  <span className="text-muted-foreground text-[10px]">
-                                    {formatEmailDate(email.sentAt)}
-                                  </span>
-                                </div>
-                                <p className="font-medium text-xs mb-1">{email.subject}</p>
-                                <p className="text-muted-foreground line-clamp-2">{email.preview}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </CollapsibleContent>
-                    </div>
-                  </Collapsible>
+              {/* Cluster Filter */}
+              <div className="flex gap-1 flex-wrap">
+                {Object.entries(clusterLabels).map(([key, { label, icon }]) => (
+                  <Button
+                    key={key}
+                    variant={clusterFilter === key ? "default" : "outline"}
+                    size="sm"
+                    className="h-7 text-xs gap-1"
+                    onClick={() => setClusterFilter(key)}
+                  >
+                    {icon}
+                    {label}
+                  </Button>
                 ))}
+              </div>
+            </div>
+            <ScrollArea className="flex-1 h-[350px]">
+              <div className="p-2 space-y-3">
+                {companiesBySector.map(([sector, sectorCompanies]) => {
+                  const sectorSelectedCount = sectorCompanies.filter(c => selectedCompanies.includes(c.id)).length;
+                  return (
+                    <div key={sector} className="space-y-1">
+                      <div className="flex items-center justify-between px-2 py-1 bg-muted/30 rounded sticky top-0">
+                        <span className="text-xs font-semibold text-muted-foreground">{sector}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] text-muted-foreground">{sectorSelectedCount}/{sectorCompanies.length}</span>
+                          <Checkbox
+                            checked={sectorSelectedCount === sectorCompanies.length}
+                            onCheckedChange={() => handleSelectSector(sectorCompanies)}
+                            className="h-3.5 w-3.5"
+                          />
+                        </div>
+                      </div>
+                      {sectorCompanies.map((company) => (
+                        <Collapsible key={company.id} open={expandedCompany === company.id}>
+                          <div className="rounded-md border bg-card hover:bg-accent/5 transition-colors ml-2">
+                            <div className="flex items-center gap-2 p-2">
+                              <Checkbox
+                                checked={selectedCompanies.includes(company.id)}
+                                onCheckedChange={() => handleSelectCompany(company.id)}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <p className="text-sm font-medium truncate">{company.name}</p>
+                                  {getClusterBadge(company.cluster)}
+                                </div>
+                                <p className="text-xs text-muted-foreground truncate">{company.contactPerson}</p>
+                              </div>
+                              <Badge className={`text-xs shrink-0 ${getEmailCountColor(company.emailsSent)}`}>
+                                {company.emailsSent} email{company.emailsSent !== 1 ? "s" : ""}
+                              </Badge>
+                              {company.emailHistory.length > 0 && (
+                                <CollapsibleTrigger asChild>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    className="h-7 w-7 p-0 shrink-0"
+                                    onClick={() => toggleExpandCompany(company.id)}
+                                  >
+                                    {expandedCompany === company.id ? (
+                                      <ChevronDown className="h-4 w-4" />
+                                    ) : (
+                                      <ChevronRight className="h-4 w-4" />
+                                    )}
+                                  </Button>
+                                </CollapsibleTrigger>
+                              )}
+                            </div>
+                            <CollapsibleContent>
+                              <div className="px-2 pb-2 pt-1 border-t bg-muted/30">
+                                <div className="flex items-center gap-1 mb-2">
+                                  <History className="h-3 w-3 text-muted-foreground" />
+                                  <span className="text-xs font-medium text-muted-foreground">Histórico de emails</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {company.emailHistory.map((email) => (
+                                    <div key={email.id} className="bg-background rounded p-2 text-xs">
+                                      <div className="flex items-center justify-between mb-1">
+                                        <Badge variant="outline" className="text-[10px] h-5">{email.templateUsed}</Badge>
+                                        <span className="text-muted-foreground text-[10px]">
+                                          {formatEmailDate(email.sentAt)}
+                                        </span>
+                                      </div>
+                                      <p className="font-medium text-xs mb-1">{email.subject}</p>
+                                      <p className="text-muted-foreground line-clamp-2">{email.preview}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </CollapsibleContent>
+                          </div>
+                        </Collapsible>
+                      ))}
+                    </div>
+                  );
+                })}
               </div>
             </ScrollArea>
             <div className="p-2 border-t bg-muted/30">
@@ -212,9 +305,9 @@ export const IncentiveEmailDialog = ({
           </div>
 
           {/* Composição do Email */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="template" className="text-xs">Template de mensagem</Label>
+              <Label htmlFor="template" className="text-xs font-medium">Template de mensagem</Label>
               <Select value={selectedTemplate} onValueChange={handleTemplateChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione um template" />
@@ -232,7 +325,7 @@ export const IncentiveEmailDialog = ({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="subject" className="text-xs">Assunto</Label>
+              <Label htmlFor="subject" className="text-xs font-medium">Assunto</Label>
               <Input
                 id="subject"
                 value={subject}
@@ -241,13 +334,13 @@ export const IncentiveEmailDialog = ({
               />
             </div>
             <div className="grid gap-2 flex-1">
-              <Label htmlFor="message" className="text-xs">Mensagem</Label>
+              <Label htmlFor="message" className="text-xs font-medium">Mensagem</Label>
               <Textarea
                 id="message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Corpo do email"
-                className="min-h-[200px] flex-1 resize-none"
+                className="min-h-[280px] flex-1 resize-none text-sm"
               />
               <p className="text-[10px] text-muted-foreground">
                 Variáveis disponíveis: {"{contactPerson}"}, {"{companyName}"}
