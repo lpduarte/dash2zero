@@ -402,7 +402,7 @@ export const IncentiveEmailDialog = ({
           </div>
 
           {/* Composição do Email */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 pr-1">
             <div className="grid gap-2">
               <Label htmlFor="template" className="text-xs font-medium">Template de mensagem</Label>
               <Select value={selectedTemplate} onValueChange={handleTemplateChange}>
