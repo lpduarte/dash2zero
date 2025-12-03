@@ -17,7 +17,7 @@ interface ClusterSelectorProps {
 }
 
 const clusterOptions: ClusterOption[] = [
-  { value: 'all', label: 'Todas', icon: <LayoutGrid className="h-4 w-4" /> },
+  { value: 'all', label: 'Todos', icon: <LayoutGrid className="h-4 w-4" /> },
   { value: 'fornecedor', label: 'Fornecedores', icon: <Building2 className="h-4 w-4" /> },
   { value: 'cliente', label: 'Clientes', icon: <Users className="h-4 w-4" /> },
   { value: 'parceiro', label: 'Parceiros', icon: <Handshake className="h-4 w-4" /> },
