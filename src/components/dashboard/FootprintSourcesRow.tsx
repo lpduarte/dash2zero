@@ -51,7 +51,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
                 className={`${percentageColors.text} border-current hover:bg-white/50 text-xs`}
               >
                 <Mail className="h-3 w-3 mr-1.5" />
-                Convidar {companiesMissing}
+                Incentivar cálculo
               </Button>
             )}
           </div>
