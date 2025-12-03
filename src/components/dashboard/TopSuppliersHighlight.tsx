@@ -59,12 +59,7 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
               </Badge>
 
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-semibold">{supplier.name}</h4>
-                  <Badge className={`bg-${supplier.rating === 'A' ? 'success' : supplier.rating === 'B' ? 'primary' : 'warning'}`}>
-                    {supplier.rating}
-                  </Badge>
-                </div>
+                <h4 className="font-semibold mb-1">{supplier.name}</h4>
                 <p className="text-xs text-muted-foreground">{supplier.sector} • {supplier.cluster}</p>
               </div>
 
