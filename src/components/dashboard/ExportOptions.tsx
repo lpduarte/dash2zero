@@ -95,7 +95,7 @@ export const ExportOptions = ({ suppliers }: ExportOptionsProps) => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Emissões Totais:</span>
-                  <span className="font-semibold">{totalEmissions.toFixed(0)} ton CO₂e</span>
+                  <span className="font-semibold">{totalEmissions.toFixed(0)} t CO₂e</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Com SBTi:</span>

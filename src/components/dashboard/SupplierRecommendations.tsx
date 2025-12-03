@@ -147,7 +147,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                 <span className="text-sm text-muted-foreground">Poupança Potencial</span>
               </div>
               <p className="text-3xl font-bold text-success">{totalPotentialSavings.toFixed(0)}</p>
-              <p className="text-xs text-muted-foreground mt-1">ton CO₂e (-{totalSavingsPercent.toFixed(0)}%)</p>
+              <p className="text-xs text-muted-foreground mt-1">t CO₂e (-{totalSavingsPercent.toFixed(0)}%)</p>
             </div>
 
             <div className="p-4 bg-card border border-border rounded-lg">

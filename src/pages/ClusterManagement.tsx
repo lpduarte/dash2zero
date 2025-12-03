@@ -117,8 +117,8 @@ export default function ClusterManagement() {
   const handleExport = () => {
     const headers = [
       "Nome", "NIF/NIPC", "Email", "Setor", "Cluster", "Distrito", "Faturação anual (€)",
-      "Colaboradores", "Área (m²)", "Âmbito 1 (tCO2-e)", "Âmbito 2 (tCO2-e)",
-      "Âmbito 3 (tCO2-e)", "Emissões Totais (tCO2-e)", "Rating"
+      "Colaboradores", "Área (m²)", "Âmbito 1 (t CO₂e)", "Âmbito 2 (t CO₂e)",
+      "Âmbito 3 (t CO₂e)", "Emissões Totais (t CO₂e)", "Rating"
     ];
 
     const csvContent = [
@@ -300,7 +300,7 @@ export default function ClusterManagement() {
                     <TableHead className="text-primary-foreground min-w-[120px]">Âmbito 1</TableHead>
                     <TableHead className="text-primary-foreground min-w-[120px]">Âmbito 2</TableHead>
                     <TableHead className="text-primary-foreground min-w-[120px]">Âmbito 3</TableHead>
-                    <TableHead className="text-primary-foreground min-w-[140px]">Total (tCO2-e)</TableHead>
+                    <TableHead className="text-primary-foreground min-w-[140px]">Total (t CO₂e)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

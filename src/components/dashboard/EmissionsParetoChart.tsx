@@ -129,7 +129,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
               <YAxis 
                 yAxisId="left"
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                label={{ value: 'Emissões Totais (ton CO₂e)', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Emissões Totais (t CO₂e)', angle: -90, position: 'insideLeft' }}
               />
               <YAxis 
                 yAxisId="right"
@@ -148,7 +148,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-muted-foreground">Emissões Totais: </span>
-                          <span className="font-bold">{data.totalEmissions.toFixed(0)} ton CO₂e</span>
+                          <span className="font-bold">{data.totalEmissions.toFixed(0)} t CO₂e</span>
                         </p>
                         <p>
                           <span className="text-muted-foreground">Fator de Emissão: </span>
@@ -169,7 +169,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
                 }}
               />
               <Legend />
-              <Bar yAxisId="left" dataKey="totalEmissions" name="Emissões Totais (ton CO₂e)" radius={[8, 8, 0, 0]}>
+              <Bar yAxisId="left" dataKey="totalEmissions" name="Emissões Totais (t CO₂e)" radius={[8, 8, 0, 0]}>
                 {paretoData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getBarColor(index)} />
                 ))}
@@ -232,7 +232,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
                 <div className="flex items-center gap-6 text-sm">
                   <div className="text-right">
                     <p className="font-semibold">{supplier.totalEmissions.toFixed(0)}</p>
-                    <p className="text-xs text-muted-foreground">ton CO₂e</p>
+                    <p className="text-xs text-muted-foreground">t CO₂e</p>
                   </div>
 
                   <div className="text-right">

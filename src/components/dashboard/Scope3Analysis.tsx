@@ -43,7 +43,7 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
               <span className="text-sm text-muted-foreground">Total Alcance 3</span>
             </div>
             <p className="text-3xl font-bold text-primary">{totalScope3.toFixed(0)}</p>
-            <p className="text-xs text-muted-foreground mt-1">ton CO₂e</p>
+            <p className="text-xs text-muted-foreground mt-1">t CO₂e</p>
             <p className="text-xs text-muted-foreground mt-2">
               {((totalScope3 / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100).toFixed(1)}% das emissões totais
             </p>
@@ -106,7 +106,7 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-muted-foreground">Alcance 3: </span>
-                          <span className="font-bold">{data.scope3.toFixed(0)} ton CO₂e</span>
+                          <span className="font-bold">{data.scope3.toFixed(0)} t CO₂e</span>
                         </p>
                         <p>
                           <span className="text-muted-foreground">% do Total: </span>
@@ -114,7 +114,7 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
                         </p>
                         <p>
                           <span className="text-muted-foreground">Emissões Totais: </span>
-                          <span>{data.totalEmissions.toFixed(0)} ton CO₂e</span>
+                          <span>{data.totalEmissions.toFixed(0)} t CO₂e</span>
                         </p>
                         <div className="flex gap-2 mt-2">
                           <Badge variant="outline" className="text-xs">{data.sector}</Badge>
@@ -146,7 +146,7 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
                 <div className="flex justify-between text-sm">
                   <span className="font-medium">{supplier.fullName}</span>
                   <span className="text-muted-foreground">
-                    {supplier.scope3.toFixed(0)} ton CO₂e ({supplier.scope3Percentage.toFixed(1)}%)
+                    {supplier.scope3.toFixed(0)} t CO₂e ({supplier.scope3Percentage.toFixed(1)}%)
                   </span>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2.5">

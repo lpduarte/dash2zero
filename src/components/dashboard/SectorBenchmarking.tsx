@@ -86,7 +86,7 @@ export const SectorBenchmarking = ({ suppliers }: SectorBenchmarkingProps) => {
                     <Badge variant="outline">{sector.count} empresas</Badge>
                   </div>
                   <p className="text-3xl font-bold text-primary">{sector.average.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">ton CO₂e média</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e média</p>
                 </CardContent>
               </Card>
             ))}
@@ -126,11 +126,11 @@ export const SectorBenchmarking = ({ suppliers }: SectorBenchmarkingProps) => {
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-muted-foreground">Emissões: </span>
-                          <span className="font-bold">{data.emissions.toFixed(0)} ton CO₂e</span>
+                          <span className="font-bold">{data.emissions.toFixed(0)} t CO₂e</span>
                         </p>
                         <p>
                           <span className="text-muted-foreground">Média do Setor: </span>
-                          <span className="font-bold">{data.sectorAvg.toFixed(0)} ton CO₂e</span>
+                          <span className="font-bold">{data.sectorAvg.toFixed(0)} t CO₂e</span>
                         </p>
                         <p>
                           <span className="text-muted-foreground">Desvio: </span>
