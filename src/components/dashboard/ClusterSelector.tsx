@@ -33,7 +33,7 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
             onClick={() => onClusterChange(option.value)}
             className={cn(
               "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-              "hover:shadow-md hover:scale-[1.02]",
+              "hover:shadow-md",
               "[&_svg]:text-current",
               selectedCluster === option.value
                 ? "bg-primary text-primary-foreground border-primary shadow-md"
