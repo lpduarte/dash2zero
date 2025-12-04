@@ -111,14 +111,14 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
             </SelectTrigger>
             <SelectContent className="w-[220px]">
               <SelectItem value="all">
-                <div className="flex items-center justify-between w-[170px]">
+                <div className="flex items-center justify-between w-[150px]">
                   <span>Todas as regiões</span>
                   <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
               </SelectItem>
               {regions.map(r => (
                 <SelectItem key={r.value} value={r.value}>
-                  <div className="flex items-center justify-between w-[170px]">
+                  <div className="flex items-center justify-between w-[150px]">
                     <span>{r.label}</span>
                     <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{r.count}</span>
                   </div>
@@ -138,14 +138,14 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
             </SelectTrigger>
             <SelectContent className="w-[250px]">
               <SelectItem value="all">
-                <div className="flex items-center justify-between w-[200px]">
+                <div className="flex items-center justify-between w-[180px]">
                   <span>Todas as atividades</span>
                   <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
               </SelectItem>
               {sectors.map(s => (
                 <SelectItem key={s.value} value={s.value}>
-                  <div className="flex items-center justify-between w-[200px]">
+                  <div className="flex items-center justify-between w-[180px]">
                     <span>{s.label}</span>
                     <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
                   </div>
