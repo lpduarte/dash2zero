@@ -10,7 +10,7 @@ import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
 import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
-
+import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
@@ -149,6 +149,16 @@ const Analysis = () => {
 
           <TabsContent value="environmental" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
+
+              <AccordionItem value="scope3">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Análise Detalhada do Alcance 3 por Fornecedor
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Scope3Analysis suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem value="heatmap">
                 <AccordionTrigger className="text-lg font-semibold">
                   Desempenho por Região e Setor
