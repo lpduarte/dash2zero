@@ -155,54 +155,6 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Fornecedores Críticos - Priorização de Ações</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {criticalSuppliersWithPercent.map((supplier, index) => (
-              <div 
-                key={supplier.fullName}
-                className="flex items-center justify-between p-3 border border-danger/30 rounded-lg bg-danger/5 hover:bg-danger/10 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1">
-                  <Badge className="bg-danger w-8 h-8 flex items-center justify-center text-sm font-bold">
-                    {index + 1}
-                  </Badge>
-                  <div className="flex-1">
-                    <p className="font-semibold">{supplier.fullName}</p>
-                    <p className="text-xs text-muted-foreground">{supplier.cluster}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-6 text-sm">
-                  <div className="text-right">
-                    <p className="font-semibold">{supplier.totalEmissions.toFixed(0)}</p>
-                    <p className="text-xs text-muted-foreground">t CO₂e</p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="font-semibold text-warning">{supplier.fe.toFixed(1)}</p>
-                    <p className="text-xs text-muted-foreground">kg/€ FE</p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="font-semibold text-primary">{supplier.revenue.toFixed(1)}</p>
-                    <p className="text-xs text-muted-foreground">M€ invest.</p>
-                  </div>
-
-                  <div className="text-right min-w-[80px]">
-                    <Badge variant="outline" className="text-xs">
-                      {supplier.cumulativePercent.toFixed(0)}% acum.
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
