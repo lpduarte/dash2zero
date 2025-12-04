@@ -2,11 +2,21 @@ import { Building2, Users, Handshake } from "lucide-react";
 
 export const sectorLabels: Record<string, string> = {
   all: "Todas as atividades",
-  manufacturing: "Indústria",
   technology: "Tecnologia",
   construction: "Construção",
-  transport: "Transporte",
-  services: "Serviços"
+  logistics: "Logística",
+  chemicals: "Química",
+  glass: "Vidro",
+  metals: "Metalurgia",
+  plastics: "Plásticos",
+  textiles: "Têxtil",
+  ceramics: "Cerâmica",
+  food: "Alimentar",
+  automotive: "Automóvel",
+  packaging: "Embalagens",
+  paper: "Papel",
+  services: "Serviços",
+  manufacturing: "Indústria"
 };
 
 export const clusterLabels: Record<string, string> = {
