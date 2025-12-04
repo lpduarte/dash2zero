@@ -122,18 +122,18 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
               <SelectValue placeholder="Filtrar por atividade" />
             </SelectTrigger>
             <SelectContent className="w-[280px]">
-              <SelectItem value="all" className="[&>span]:w-full">
-                <span className="flex items-center justify-between w-full">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-[230px]">
                   <span>{sectorLabels.all}</span>
                   <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
-                </span>
+                </div>
               </SelectItem>
               {uniqueSectors.map((sector) => (
-                <SelectItem key={sector} value={sector} className="[&>span]:w-full">
-                  <span className="flex items-center justify-between w-full">
+                <SelectItem key={sector} value={sector}>
+                  <div className="flex items-center justify-between w-[230px]">
                     <span>{sectorLabels[sector] || sector}</span>
                     <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
-                  </span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
