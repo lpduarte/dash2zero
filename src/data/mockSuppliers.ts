@@ -1,5 +1,12 @@
 import { Supplier } from "@/types/supplier";
 
+// Helper function to generate mock NIFs
+const generateNIF = (id: string): string => {
+  const baseNum = parseInt(id.replace(/\D/g, '') || '0', 10);
+  const nif = 500000000 + (baseNum * 12345) % 500000000;
+  return nif.toString().padStart(9, '0');
+};
+
 export const mockSuppliers: Supplier[] = [
   // ENERGIA (único fornecedor - para testar "sem alternativa")
   {
@@ -24,7 +31,7 @@ export const mockSuppliers: Supplier[] = [
       { year: 2022, emissions: 8800 },
       { year: 2023, emissions: 8500 },
     ],
-    contact: { email: "ambiente@powermax.pt", phone: "+351 217 000 099", website: "https://powermax.pt" },
+    contact: { email: "ambiente@powermax.pt", phone: "+351 217 000 099", website: "https://powermax.pt", nif: "501234567" },
     rating: "D",
     dataSource: "get2zero",
     cluster: "fornecedor",
@@ -56,6 +63,7 @@ export const mockSuppliers: Supplier[] = [
       email: "sustainability@ecotech.pt",
       phone: "+351 210 000 001",
       website: "https://ecotech.pt",
+      nif: "502345678",
     },
     sustainabilityReport: "https://ecotech.pt/sustainability-2023.pdf",
     rating: "A",
@@ -88,6 +96,7 @@ export const mockSuppliers: Supplier[] = [
       email: "sustainability@digitalsol.pt",
       phone: "+351 282 000 006",
       website: "https://digitalsol.pt",
+      nif: "503456789",
     },
     rating: "B",
     dataSource: "get2zero",
