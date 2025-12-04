@@ -1,8 +1,9 @@
-import { Building2, Users, Handshake, LayoutGrid } from "lucide-react";
+import { Building2, Users, Handshake, LayoutGrid, TrendingDown, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useRef } from "react";
 
 type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro';
+type ImprovementPotential = 'high' | 'medium' | 'low';
 
 interface ClusterOption {
   value: ClusterType;
@@ -14,6 +15,7 @@ interface ClusterSelectorProps {
   selectedCluster: ClusterType;
   onClusterChange: (cluster: ClusterType) => void;
   clusterCounts: Record<ClusterType, number>;
+  clusterPotentials: Record<ClusterType, ImprovementPotential>;
 }
 
 const clusterOptions: ClusterOption[] = [
@@ -23,7 +25,28 @@ const clusterOptions: ClusterOption[] = [
   { value: 'parceiro', label: 'Parceiros', icon: <Handshake className="h-4 w-4" /> },
 ];
 
-export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts }: ClusterSelectorProps) {
+const getPotentialConfig = (potential: ImprovementPotential, isSelected: boolean) => {
+  const configs = {
+    high: { 
+      icon: TrendingDown, 
+      color: isSelected ? 'text-red-200' : 'text-danger',
+      bgColor: isSelected ? 'bg-red-200/30' : 'bg-danger/15'
+    },
+    medium: { 
+      icon: Minus, 
+      color: isSelected ? 'text-yellow-200' : 'text-warning',
+      bgColor: isSelected ? 'bg-yellow-200/30' : 'bg-warning/15'
+    },
+    low: { 
+      icon: TrendingDown, 
+      color: isSelected ? 'text-green-200' : 'text-success',
+      bgColor: isSelected ? 'bg-green-200/30' : 'bg-success/15'
+    },
+  };
+  return configs[potential];
+};
+
+export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts, clusterPotentials }: ClusterSelectorProps) {
   const [isSticky, setIsSticky] = useState(false);
   const stickyRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -87,6 +110,16 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
               >
                 {clusterCounts[option.value]}
               </span>
+              {(() => {
+                const potential = clusterPotentials[option.value];
+                const config = getPotentialConfig(potential, selectedCluster === option.value);
+                const PotentialIcon = config.icon;
+                return (
+                  <span className={cn("ml-1 p-1 rounded-full", config.bgColor)}>
+                    <PotentialIcon className={cn("h-3 w-3", config.color)} />
+                  </span>
+                );
+              })()}
             </button>
           ))}
         </div>
@@ -95,4 +128,4 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
   );
 }
 
-export type { ClusterType };
+export type { ClusterType, ImprovementPotential };
