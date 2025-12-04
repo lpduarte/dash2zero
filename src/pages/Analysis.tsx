@@ -1,10 +1,5 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
-import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
-import { GroupCounter } from "@/components/dashboard/GroupCounter";
-import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
-import { GlobalKPIs } from "@/components/dashboard/GlobalKPIs";
-import { ClusterKPIs } from "@/components/dashboard/ClusterKPIs";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
@@ -25,9 +20,6 @@ import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
-
-import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
-import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -150,34 +142,11 @@ const Analysis = () => {
       <Header />
       
       <main className="max-w-[1400px] mx-auto py-8 px-8 space-y-8">
-        <WelcomeBanner />
-        
         <AdvancedFilterPanel
           filters={advancedFilters}
           onFilterChange={handleFilterChange}
           onReset={handleResetFilters}
         />
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <TopSuppliersHighlight suppliers={filteredSuppliers} />
-          <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
-        </div>
-
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Visão Global do Banco Montepio/Município</h2>
-            <div className="mb-6">
-              <GroupCounter suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
-            </div>
-            <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={15000} />
-            <GlobalKPIs suppliers={filteredSuppliers} />
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Análise por Cluster</h2>
-            <ClusterKPIs suppliers={filteredSuppliers} totalCompaniesInGroup={15000} />
-          </div>
-        </div>
 
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
