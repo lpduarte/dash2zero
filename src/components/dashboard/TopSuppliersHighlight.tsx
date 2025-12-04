@@ -1,29 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Euro, BarChart3 } from "lucide-react";
+import { Award, TrendingDown, Euro, BarChart3, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface TopSuppliersHighlightProps {
   suppliers: Supplier[];
 }
+
 const getMedalColor = (index: number) => {
   switch (index) {
     case 0:
       return "bg-[#FFD700] text-black";
-    // Gold
     case 1:
       return "bg-[#C0C0C0] text-black";
-    // Silver
     case 2:
       return "bg-[#CD7F32] text-white";
-    // Bronze
     default:
       return "bg-muted text-muted-foreground";
   }
 };
+
 const getMedalBorder = (index: number) => {
   switch (index) {
     case 0:
@@ -36,10 +36,12 @@ const getMedalBorder = (index: number) => {
       return "border-border bg-card";
   }
 };
+
 export const TopSuppliersHighlight = ({
   suppliers
 }: TopSuppliersHighlightProps) => {
   const [selectedSector, setSelectedSector] = useState<string>("all");
+  const [isOpen, setIsOpen] = useState(true);
 
   // Calculate sector averages
   const sectorAverages = suppliers.reduce((acc, s) => {
@@ -79,35 +81,44 @@ export const TopSuppliersHighlight = ({
     acc[s.sector] = (acc[s.sector] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-  return <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10">
+  return <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Award className="h-6 w-6 text-success" />
             As melhores empresas
           </CardTitle>
-          <Select value={selectedSector} onValueChange={setSelectedSector}>
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Filtrar por atividade" />
-            </SelectTrigger>
-            <SelectContent className="w-[280px]">
-              <SelectItem value="all">
-                <div className="flex items-center justify-between w-[230px]">
-                  <span>{sectorLabels.all}</span>
-                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
-                </div>
-              </SelectItem>
-              {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
+          <div className="flex items-center gap-2">
+            <Select value={selectedSector} onValueChange={setSelectedSector}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Filtrar por atividade" />
+              </SelectTrigger>
+              <SelectContent className="w-[280px]">
+                <SelectItem value="all">
                   <div className="flex items-center justify-between w-[230px]">
-                    <span>{sectorLabels[sector] || sector}</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                    <span>{sectorLabels.all}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                   </div>
-                </SelectItem>)}
-            </SelectContent>
-          </Select>
+                </SelectItem>
+                {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
+                    <div className="flex items-center justify-between w-[230px]">
+                      <span>{sectorLabels[sector] || sector}</span>
+                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                    </div>
+                  </SelectItem>)}
+              </SelectContent>
+            </Select>
+            <CollapsibleTrigger asChild>
+              <button className="w-8 h-8 rounded-full border border-border bg-background hover:bg-muted flex items-center justify-center transition-colors">
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+              </button>
+            </CollapsibleTrigger>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CollapsibleContent>
+        <CardContent>
         <div className="grid gap-3">
           {topSuppliers.map((supplier, index) => <div key={supplier.id} className={`flex items-center gap-4 p-4 border rounded-lg transition-all hover:shadow-md ${getMedalBorder(index)}`}>
               <Badge className={`w-10 h-10 flex items-center justify-center text-lg font-bold ${getMedalColor(index)}`}>
@@ -161,6 +172,8 @@ export const TopSuppliersHighlight = ({
               Nenhuma empresa encontrada para esta atividade
             </p>}
         </div>
-      </CardContent>
-    </Card>;
+        </CardContent>
+      </CollapsibleContent>
+    </Card>
+  </Collapsible>;
 };

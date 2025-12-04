@@ -2,18 +2,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3, Info } from "lucide-react";
+import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
+
 export const CriticalSuppliersHighlight = ({
   suppliers
 }: CriticalSuppliersHighlightProps) => {
   const [selectedSector, setSelectedSector] = useState<string>("all");
+  const [isOpen, setIsOpen] = useState(true);
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
 
@@ -82,35 +86,44 @@ export const CriticalSuppliersHighlight = ({
     };
   };
   const improvementPotential = getImprovementPotential();
-  return <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
+  return <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-2xl">
             <AlertTriangle className="h-6 w-6 text-danger" />
             Empresas críticas e alternativas 
           </CardTitle>
-          <Select value={selectedSector} onValueChange={setSelectedSector}>
-            <SelectTrigger className="w-[280px]">
-              <SelectValue placeholder="Filtrar por atividade" />
-            </SelectTrigger>
-            <SelectContent className="w-[280px]">
-              <SelectItem value="all">
-                <div className="flex items-center justify-between w-[230px]">
-                  <span>{sectorLabels.all}</span>
-                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
-                </div>
-              </SelectItem>
-              {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
+          <div className="flex items-center gap-2">
+            <Select value={selectedSector} onValueChange={setSelectedSector}>
+              <SelectTrigger className="w-[280px]">
+                <SelectValue placeholder="Filtrar por atividade" />
+              </SelectTrigger>
+              <SelectContent className="w-[280px]">
+                <SelectItem value="all">
                   <div className="flex items-center justify-between w-[230px]">
-                    <span>{sectorLabels[sector] || sector}</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                    <span>{sectorLabels.all}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                   </div>
-                </SelectItem>)}
-            </SelectContent>
-          </Select>
+                </SelectItem>
+                {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
+                    <div className="flex items-center justify-between w-[230px]">
+                      <span>{sectorLabels[sector] || sector}</span>
+                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                    </div>
+                  </SelectItem>)}
+              </SelectContent>
+            </Select>
+            <CollapsibleTrigger asChild>
+              <button className="w-8 h-8 rounded-full border border-border bg-background hover:bg-muted flex items-center justify-center transition-colors">
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : '-rotate-90'}`} />
+              </button>
+            </CollapsibleTrigger>
+          </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CollapsibleContent>
+        <CardContent>
         <div className="space-y-3">
           {criticalSuppliers.map((supplier, index) => {
           const alternative = findBestAlternative(supplier);
@@ -235,7 +248,8 @@ export const CriticalSuppliersHighlight = ({
               </div>;
         })}
         </div>
-
-      </CardContent>
-    </Card>;
+        </CardContent>
+      </CollapsibleContent>
+    </Card>
+  </Collapsible>;
 };
