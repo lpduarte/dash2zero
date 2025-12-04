@@ -115,8 +115,8 @@ export const SectorBenchmarking = ({
               <YAxis 
                 dataKey="name" 
                 type="category" 
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 9 }} 
-                width={220}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 8 }} 
+                width={280}
                 tickLine={false}
                 interval={0}
               />
