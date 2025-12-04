@@ -38,7 +38,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-secondary/10",
     },
     {
-      title: "Por m²",
+      title: "Por área",
       value: avgEmissionsPerArea.toFixed(3),
       unit: "t CO₂e/m²",
       icon: Building,
