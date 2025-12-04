@@ -1,4 +1,4 @@
-import { Leaf, LayoutDashboard, BarChart3, Boxes } from "lucide-react";
+import { Leaf, LayoutDashboard, Boxes } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "./NotificationBell";
@@ -43,18 +43,6 @@ export const Header = () => {
               >
                 <LayoutDashboard className="h-4 w-4" />
                 Dashboard
-              </Link>
-              <Link
-                to="/analise"
-                className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-md transition-colors",
-                  location.pathname === "/analise"
-                    ? "bg-primary-foreground/20"
-                    : "hover:bg-primary-foreground/10"
-                )}
-              >
-                <BarChart3 className="h-4 w-4" />
-                Análise
               </Link>
               <Link
                 to="/clusters"
