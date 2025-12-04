@@ -58,7 +58,7 @@ export const SectorBenchmarking = ({
       totalInSector: sectorAverages[supplier.sector].count,
       cluster: supplier.cluster
     };
-  }).sort((a, b) => a.deviation - b.deviation);
+  }).sort((a, b) => b.deviation - a.deviation);
 
   const getDeviationColor = (deviation: number) => {
     if (deviation < -20) return "hsl(var(--success))";
