@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Factory, Users, Building, Euro, TrendingUp, TrendingDown } from "lucide-react";
+import { Factory, Users, Maximize2, Euro, TrendingUp, TrendingDown } from "lucide-react";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
@@ -67,7 +67,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       title: "Média por área",
       value: avgEmissionsPerArea.toFixed(3),
       unit: "t CO₂e/m²",
-      icon: Building,
+      icon: Maximize2,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
