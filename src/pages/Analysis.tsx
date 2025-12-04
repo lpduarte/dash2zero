@@ -102,6 +102,15 @@ const Analysis = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
+              <AccordionItem value="breakdown">
+                <AccordionTrigger className="text-lg font-semibold">
+                  Distribuição de Emissões por Scope
+                </AccordionTrigger>
+                <AccordionContent>
+                  <EmissionsBreakdown suppliers={filteredSuppliers} />
+                </AccordionContent>
+              </AccordionItem>
+
               <AccordionItem value="charts">
                 <AccordionTrigger className="text-lg font-semibold">
                   Gráficos de Comparação
@@ -128,14 +137,6 @@ const Analysis = () => {
 
           <TabsContent value="environmental" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="breakdown">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Distribuição de Emissões por Scope
-                </AccordionTrigger>
-                <AccordionContent>
-                  <EmissionsBreakdown suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
 
               <AccordionItem value="scope3">
                 <AccordionTrigger className="text-lg font-semibold">
