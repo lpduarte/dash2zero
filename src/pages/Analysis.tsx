@@ -84,7 +84,7 @@ const Analysis = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="max-w-[1400px] mx-auto py-8 px-8 space-y-8">
+      <main className="max-w-[1400px] mx-auto px-8 py-8">
         <ClusterSelector
           selectedCluster={selectedCluster}
           onClusterChange={setSelectedCluster}
@@ -92,7 +92,7 @@ const Analysis = () => {
           clusterPotentials={clusterPotentials}
         />
 
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6 mt-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="environmental">Métricas Ambientais</TabsTrigger>
