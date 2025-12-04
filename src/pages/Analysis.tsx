@@ -17,6 +17,7 @@ import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { mockSuppliers } from "@/data/mockSuppliers";
+import { getSectorsWithCounts } from "@/data/sectors";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
@@ -24,29 +25,8 @@ const Analysis = () => {
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
 
-  const sectorNames: Record<string, string> = {
-    technology: "Tecnologia",
-    construction: "Construção",
-    manufacturing: "Indústria",
-    transport: "Transporte",
-    services: "Serviços"
-  };
-
-  // Get unique sectors with counts
-  const sectorsWithCounts = useMemo(() => {
-    const sectorCounts = mockSuppliers.reduce((acc, s) => {
-      acc[s.sector] = (acc[s.sector] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    return Object.entries(sectorCounts)
-      .map(([sector, count]) => ({
-        sector,
-        name: sectorNames[sector] || sector,
-        count
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, []);
+  // Get unique sectors with counts from centralized config
+  const sectorsWithCounts = useMemo(() => getSectorsWithCounts(mockSuppliers), []);
 
   // Calculate cluster counts from mock data
   const clusterCounts: Record<ClusterType, number> = useMemo(() => ({
