@@ -1,6 +1,34 @@
 import { Supplier } from "@/types/supplier";
 
 export const mockSuppliers: Supplier[] = [
+  // ENERGIA (único fornecedor - para testar "sem alternativa")
+  {
+    id: "energia-1",
+    name: "PowerMax Energia",
+    sector: "energia",
+    region: "center",
+    scope1: 2800,
+    scope2: 1200,
+    scope3: 4500,
+    totalEmissions: 8500,
+    employees: 450,
+    area: 25000,
+    revenue: 85.00,
+    emissionsPerEmployee: 18.89,
+    emissionsPerArea: 0.34,
+    emissionsPerRevenue: 100.0,
+    hasSBTi: false,
+    certifications: ["ISO 14001"],
+    yearlyProgress: [
+      { year: 2021, emissions: 9200 },
+      { year: 2022, emissions: 8800 },
+      { year: 2023, emissions: 8500 },
+    ],
+    contact: { email: "ambiente@powermax.pt", phone: "+351 217 000 099", website: "https://powermax.pt" },
+    rating: "D",
+    dataSource: "get2zero",
+    cluster: "fornecedor",
+  },
   // TECNOLOGIA
   {
     id: "1",
