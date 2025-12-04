@@ -46,8 +46,9 @@ export const SectorBenchmarking = ({
     const sectorAvg = sectorAverages[supplier.sector].total / sectorAverages[supplier.sector].count;
     const deviation = (supplier.totalEmissions - sectorAvg) / sectorAvg * 100;
     const rank = sectorAverages[supplier.sector].suppliers.sort((a, b) => a.totalEmissions - b.totalEmissions).findIndex(s => s.id === supplier.id) + 1;
+    const truncatedName = supplier.name.length > 22 ? supplier.name.substring(0, 20) + '...' : supplier.name;
     return {
-      name: supplier.name,
+      name: truncatedName,
       fullName: supplier.name,
       emissions: supplier.totalEmissions,
       sectorAvg: sectorAvg,
