@@ -40,15 +40,29 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
     return sectorData ? sectorData.total / sectorData.count : 0;
   };
 
-  // Find best alternative for each critical supplier (same sector, lower emissions)
+  // Find best alternative for each critical supplier (prefer same subsector, then same sector)
   const findBestAlternative = (criticalSupplier: Supplier) => {
-    const alternatives = suppliers.filter(s => 
+    // First try to find alternatives in the same subsector
+    if (criticalSupplier.subsector) {
+      const subsectorAlternatives = suppliers.filter(s => 
+        s.subsector === criticalSupplier.subsector && 
+        s.id !== criticalSupplier.id &&
+        s.totalEmissions < criticalSupplier.totalEmissions
+      ).sort((a, b) => a.totalEmissions - b.totalEmissions);
+      
+      if (subsectorAlternatives.length > 0) {
+        return subsectorAlternatives[0];
+      }
+    }
+    
+    // Fallback to same sector
+    const sectorAlternatives = suppliers.filter(s => 
       s.sector === criticalSupplier.sector && 
       s.id !== criticalSupplier.id &&
       s.totalEmissions < criticalSupplier.totalEmissions
     ).sort((a, b) => a.totalEmissions - b.totalEmissions);
     
-    return alternatives[0] || null;
+    return sectorAlternatives[0] || null;
   };
 
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];

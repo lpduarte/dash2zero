@@ -2,6 +2,7 @@ export interface Supplier {
   id: string;
   name: string;
   sector: string;
+  subsector?: string; // Sub-tipo para melhor matching de alternativas (química, vidro, têxtil, etc.)
   region: string;
   scope1: number; // tons CO2e
   scope2: number;
