@@ -57,12 +57,12 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse table-fixed">
             <thead>
               <tr>
-                <th className="border p-2 text-left font-medium">Setor \ Região</th>
+                <th className="border p-2 text-left font-medium w-[140px]">Setor \ Região</th>
                 {regions.map(region => (
-                  <th key={region} className="border p-2 text-center font-medium">
+                  <th key={region} className="border p-2 text-center font-medium w-[100px]">
                     {getRegionLabel(region)}
                   </th>
                 ))}
