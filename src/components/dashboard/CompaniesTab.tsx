@@ -150,12 +150,11 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
             </SelectContent>
           </Select>
         </div>
-      </div>
 
-      {/* Results count */}
-      <p className="text-sm text-muted-foreground">
-        {filteredSuppliers.length} empresa{filteredSuppliers.length !== 1 ? 's' : ''} encontrada{filteredSuppliers.length !== 1 ? 's' : ''}
-      </p>
+        <p className="text-sm text-muted-foreground ml-auto">
+          {filteredSuppliers.length} empresa{filteredSuppliers.length !== 1 ? 's' : ''} encontrada{filteredSuppliers.length !== 1 ? 's' : ''}
+        </p>
+      </div>
 
       {/* Supplier Cards */}
       <div className="grid gap-6 md:grid-cols-2">
