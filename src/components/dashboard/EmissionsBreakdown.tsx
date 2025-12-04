@@ -12,9 +12,9 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   const totalScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0);
 
   const data = [
-    { name: "Âmbito 1", value: totalScope1, color: "hsl(175 66% 38%)" },
-    { name: "Âmbito 2", value: totalScope2, color: "hsl(175 45% 55%)" },
-    { name: "Âmbito 3", value: totalScope3, color: "hsl(175 30% 72%)" },
+    { name: "Âmbito 1", value: totalScope1, color: "hsl(220 70% 55%)" },
+    { name: "Âmbito 2", value: totalScope2, color: "hsl(280 60% 60%)" },
+    { name: "Âmbito 3", value: totalScope3, color: "hsl(25 85% 55%)" },
   ];
 
   return (
@@ -24,14 +24,14 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
           <h2 className="text-xl font-semibold">Emissões por âmbito</h2>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie
                 data={data}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={80}
+                outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
               >
