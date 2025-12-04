@@ -24,7 +24,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Por faturação",
       value: avgEmissionsPerRevenue.toFixed(1),
-      unit: "kg CO₂e/€",
+      unit: "t CO₂e/€",
       icon: Euro,
       color: "text-success",
       bgColor: "bg-success/10",
