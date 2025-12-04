@@ -162,59 +162,6 @@ export const SectorBenchmarking = ({ suppliers }: SectorBenchmarkingProps) => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Detalhes por Fornecedor</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {comparisonData.map((supplier, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-accent/5 transition-colors">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="flex items-center gap-2">
-                    {getDeviationIcon(supplier.deviation)}
-                    {supplier.rank === 1 && (
-                      <Award className="h-4 w-4 text-success" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold">{supplier.fullName}</p>
-                    <p className="text-xs text-muted-foreground">{supplier.sector}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-6 text-sm">
-                  <div className="text-right">
-                    <p className="font-semibold">{supplier.emissions.toFixed(0)} ton</p>
-                    <p className="text-xs text-muted-foreground">Emissões</p>
-                  </div>
-                  
-                  <div className="text-right">
-                    <p className="font-semibold">{supplier.sectorAvg.toFixed(0)} ton</p>
-                    <p className="text-xs text-muted-foreground">Média Setor</p>
-                  </div>
-                  
-                  <div className="text-right min-w-[80px]">
-                    <Badge 
-                      className={
-                        supplier.deviation < -20 ? 'bg-success' :
-                        supplier.deviation < 0 ? 'bg-primary' :
-                        supplier.deviation < 20 ? 'bg-warning' :
-                        'bg-danger'
-                      }
-                    >
-                      {supplier.deviation > 0 ? '+' : ''}{supplier.deviation.toFixed(1)}%
-                    </Badge>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {supplier.rank}º/{supplier.totalInSector}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
