@@ -193,14 +193,14 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                             <p className="text-xs text-muted-foreground mb-0.5">Alternativa</p>
                             <h4 className="font-semibold text-sm truncate text-success">{alternative.name}</h4>
                           </div>
-                          <div className="text-right shrink-0">
-                            <div className="flex items-baseline gap-2">
+                          <div className="text-right shrink-0 flex items-center gap-2">
+                            <div className="flex items-baseline gap-1">
                               <p className="text-lg font-bold text-success">{alternative.totalEmissions.toFixed(0)}</p>
-                              <Badge className="bg-success text-white text-xs font-bold">
-                                -{savingsPercentage}%
-                              </Badge>
+                              <span className="text-xs text-muted-foreground">t CO₂e</span>
                             </div>
-                            <p className="text-xs text-muted-foreground">t CO₂e</p>
+                            <Badge className="bg-success text-white text-xs font-bold">
+                              -{savingsPercentage}%
+                            </Badge>
                           </div>
                         </div>
                       </div>
