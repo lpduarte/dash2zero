@@ -23,6 +23,16 @@ import {
   Globe,
   Leaf,
   Box,
+  MapPin,
+  Compass,
+  Map,
+  Navigation,
+  Mountain,
+  Waves,
+  Sun,
+  Snowflake,
+  Palmtree,
+  Anchor,
   LucideIcon,
 } from "lucide-react";
 
@@ -39,6 +49,7 @@ interface IconOption {
 }
 
 const iconOptions: IconOption[] = [
+  // Business icons
   { id: "building", icon: Building2, label: "Edifício" },
   { id: "users", icon: Users, label: "Utilizadores" },
   { id: "handshake", icon: Handshake, label: "Parceria" },
@@ -49,6 +60,17 @@ const iconOptions: IconOption[] = [
   { id: "globe", icon: Globe, label: "Global" },
   { id: "leaf", icon: Leaf, label: "Sustentável" },
   { id: "box", icon: Box, label: "Logística" },
+  // Geographic icons
+  { id: "mappin", icon: MapPin, label: "Localização" },
+  { id: "compass", icon: Compass, label: "Norte/Sul" },
+  { id: "map", icon: Map, label: "Região" },
+  { id: "navigation", icon: Navigation, label: "Direção" },
+  { id: "mountain", icon: Mountain, label: "Interior" },
+  { id: "waves", icon: Waves, label: "Litoral" },
+  { id: "sun", icon: Sun, label: "Sul" },
+  { id: "snowflake", icon: Snowflake, label: "Norte" },
+  { id: "palmtree", icon: Palmtree, label: "Ilhas" },
+  { id: "anchor", icon: Anchor, label: "Porto" },
 ];
 
 export function CreateClusterDialog({
