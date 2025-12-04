@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import { 
   Mail, 
-  Phone, 
   ExternalLink,
   FileText,
   Building2,
@@ -11,11 +10,13 @@ import {
   TrendingUp,
   Euro,
   UserRound,
-  Maximize2
+  Maximize2,
+  BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getSectorName } from "@/data/sectors";
+import { mockSuppliers } from "@/data/mockSuppliers";
 
 interface SupplierCardProps {
   supplier: Supplier;
@@ -44,6 +45,12 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
   const clusterInfo = getClusterInfo(supplier.cluster);
   const ClusterIcon = clusterInfo.icon;
 
+  // Calculate sector average
+  const sectorSuppliers = mockSuppliers.filter(s => s.sector === supplier.sector);
+  const sectorAvgEmissions = sectorSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / sectorSuppliers.length;
+  const vsAverage = ((supplier.totalEmissions - sectorAvgEmissions) / sectorAvgEmissions) * 100;
+  const isAboveAverage = vsAverage > 0;
+
   return (
     <Card className="border border-border bg-card hover:shadow-lg transition-all">
       <CardHeader className="pb-3">
@@ -65,17 +72,34 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {/* Main Emissions KPI */}
-        <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="p-1.5 rounded bg-primary/10">
-              <TrendingUp className="h-4 w-4 text-primary" />
+        {/* Main Emissions KPIs */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-1.5 rounded bg-primary/10">
+                <TrendingUp className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm text-muted-foreground">Emissões Totais</span>
             </div>
-            <span className="text-sm text-muted-foreground">Emissões Totais</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-primary">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
+              <span className="text-sm text-muted-foreground">t CO₂e</span>
+            </div>
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-primary">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
-            <span className="text-sm text-muted-foreground">t CO₂e</span>
+
+          <div className={`p-4 rounded-lg border ${isAboveAverage ? 'bg-danger/5 border-danger/20' : 'bg-success/5 border-success/20'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              <div className={`p-1.5 rounded ${isAboveAverage ? 'bg-danger/10' : 'bg-success/10'}`}>
+                <BarChart3 className={`h-4 w-4 ${isAboveAverage ? 'text-danger' : 'text-success'}`} />
+              </div>
+              <span className="text-sm text-muted-foreground">vs Média do Setor</span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className={`text-2xl font-bold ${isAboveAverage ? 'text-danger' : 'text-success'}`}>
+                {isAboveAverage ? '+' : ''}{vsAverage.toFixed(0)}%
+              </span>
+              <span className="text-sm text-muted-foreground">{isAboveAverage ? 'acima' : 'abaixo'}</span>
+            </div>
           </div>
         </div>
 
@@ -128,18 +152,14 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
 
         {/* Contact */}
         <div className="pt-3 border-t border-border">
-          <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground mb-3">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
             <div className="flex items-center gap-1.5 min-w-0">
               <FileText className="h-3 w-3 flex-shrink-0" />
               <span className="truncate">{supplier.contact.nif}</span>
             </div>
-            <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
               <Mail className="h-3 w-3 flex-shrink-0" />
               <span className="truncate">{supplier.contact.email}</span>
-            </div>
-            <div className="flex items-center gap-1.5 min-w-0">
-              <Phone className="h-3 w-3 flex-shrink-0" />
-              <span className="truncate">{supplier.contact.phone}</span>
             </div>
           </div>
           {supplier.sustainabilityReport && (
