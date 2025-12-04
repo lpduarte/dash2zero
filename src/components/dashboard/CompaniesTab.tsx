@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Search, MapPin, Factory, ArrowUpDown } from "lucide-react";
 
-type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc';
+type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-diff-asc' | 'sector-diff-desc';
 
 interface CompaniesTabProps {
   suppliers: Supplier[];
@@ -66,6 +66,23 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
     }));
   }, [suppliers]);
 
+  // Calculate sector averages for sorting
+  const sectorAverages = useMemo(() => {
+    const sectorTotals: Record<string, { total: number; count: number }> = {};
+    suppliers.forEach(s => {
+      if (!sectorTotals[s.sector]) {
+        sectorTotals[s.sector] = { total: 0, count: 0 };
+      }
+      sectorTotals[s.sector].total += s.totalEmissions;
+      sectorTotals[s.sector].count += 1;
+    });
+    const averages: Record<string, number> = {};
+    Object.entries(sectorTotals).forEach(([sector, data]) => {
+      averages[sector] = data.total / data.count;
+    });
+    return averages;
+  }, [suppliers]);
+
   // Filter and sort suppliers
   const filteredSuppliers = useMemo(() => {
     let filtered = suppliers;
@@ -102,11 +119,21 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
           return getRegionLabel(a.region).localeCompare(getRegionLabel(b.region));
         case 'region-desc':
           return getRegionLabel(b.region).localeCompare(getRegionLabel(a.region));
+        case 'sector-diff-asc': {
+          const diffA = ((a.totalEmissions - sectorAverages[a.sector]) / sectorAverages[a.sector]) * 100;
+          const diffB = ((b.totalEmissions - sectorAverages[b.sector]) / sectorAverages[b.sector]) * 100;
+          return diffA - diffB;
+        }
+        case 'sector-diff-desc': {
+          const diffA = ((a.totalEmissions - sectorAverages[a.sector]) / sectorAverages[a.sector]) * 100;
+          const diffB = ((b.totalEmissions - sectorAverages[b.sector]) / sectorAverages[b.sector]) * 100;
+          return diffB - diffA;
+        }
         default:
           return 0;
       }
     });
-  }, [suppliers, selectedRegion, selectedSector, searchTerm, sortBy]);
+  }, [suppliers, selectedRegion, selectedSector, searchTerm, sortBy, sectorAverages]);
 
   return (
     <div className="space-y-6">
@@ -178,17 +205,19 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
 
         <div className="flex items-center gap-2">
           <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[230px]">
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <ArrowUpDown className="h-4 w-4 text-muted-foreground shrink-0" />
                 <SelectValue placeholder="Ordenar por" />
               </div>
             </SelectTrigger>
-            <SelectContent className="w-[200px]">
+            <SelectContent className="w-[230px]">
               <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
               <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
               <SelectItem value="emissions-asc">Emissões (menor)</SelectItem>
               <SelectItem value="emissions-desc">Emissões (maior)</SelectItem>
+              <SelectItem value="sector-diff-asc">vs Média setor (melhor)</SelectItem>
+              <SelectItem value="sector-diff-desc">vs Média setor (pior)</SelectItem>
               <SelectItem value="region-asc">Região (A-Z)</SelectItem>
               <SelectItem value="region-desc">Região (Z-A)</SelectItem>
             </SelectContent>
