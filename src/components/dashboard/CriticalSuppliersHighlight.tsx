@@ -109,9 +109,6 @@ export const CriticalSuppliersHighlight = ({
             </SelectContent>
           </Select>
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
-          Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
-        </p>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -239,19 +236,6 @@ export const CriticalSuppliersHighlight = ({
         })}
         </div>
 
-        <div className="mt-4 p-4 bg-warning/10 border border-warning/30 rounded-lg">
-          <div className="flex items-start gap-3">
-            <Target className="h-5 w-5 text-warning mt-0.5" />
-            <div className="flex-1">
-              <h5 className="font-semibold text-sm mb-1">Recomendação Prioritária</h5>
-              <p className="text-sm text-muted-foreground">
-                Focar esforços de redução nestes {criticalSuppliers.length} fornecedores pode resultar numa 
-                redução de até <strong className="text-warning">{(percentageOfTotal * 0.3).toFixed(0)}%</strong> das 
-                emissões totais do grupo. Consulte a aba "Análise Comparativa" para ver alternativas disponíveis.
-              </p>
-            </div>
-          </div>
-        </div>
       </CardContent>
     </Card>;
 };
