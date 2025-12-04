@@ -57,13 +57,13 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-semibold text-card-foreground">{supplier.name}</h3>
           <div className="flex flex-wrap gap-1.5">
-            <Badge variant="outline" className="text-xs font-normal bg-muted/50">
+            <Badge variant="outline" className="text-xs font-normal text-muted-foreground border-border/60">
               {getSectorName(supplier.sector)}
             </Badge>
-            <Badge variant="outline" className="text-xs font-normal bg-muted/50">
+            <Badge variant="outline" className="text-xs font-normal text-muted-foreground border-border/60">
               {getRegionLabel(supplier.region)}
             </Badge>
-            <Badge variant="secondary" className="text-xs font-normal flex items-center gap-1">
+            <Badge variant="outline" className="text-xs font-normal text-muted-foreground border-border/60 flex items-center gap-1">
               <ClusterIcon className="h-3 w-3" />
               {clusterInfo.label}
             </Badge>
