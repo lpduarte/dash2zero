@@ -81,21 +81,32 @@ export const SectorBenchmarking = ({
               </p>
             </div>
             <Select value={selectedSector} onValueChange={setSelectedSector}>
-              <SelectTrigger className="w-[280px]">
-                <SelectValue placeholder="Filtrar por atividade" />
+              <SelectTrigger className="w-[280px] bg-card border-border">
+                <SelectValue placeholder="Filtrar por atividade">
+                  <span className="flex items-center justify-between w-full">
+                    <span>{selectedSector === 'all' ? 'Todas as atividades' : sectorsWithCounts.find(s => s.sector === selectedSector)?.name}</span>
+                    <span className="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                      {selectedSector === 'all' ? suppliers.length : sectorsWithCounts.find(s => s.sector === selectedSector)?.count}
+                    </span>
+                  </span>
+                </SelectValue>
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">
-                  <span className="flex items-center gap-2">
-                    Todas as atividades
-                    <Badge variant="secondary" className="ml-1">{suppliers.length}</Badge>
+              <SelectContent className="bg-card border-border shadow-lg">
+                <SelectItem value="all" className="cursor-pointer">
+                  <span className="flex items-center justify-between w-full min-w-[220px]">
+                    <span>Todas as atividades</span>
+                    <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                      {suppliers.length}
+                    </span>
                   </span>
                 </SelectItem>
                 {sectorsWithCounts.map((s) => (
-                  <SelectItem key={s.sector} value={s.sector}>
-                    <span className="flex items-center gap-2">
-                      {s.name}
-                      <Badge variant="secondary" className="ml-1">{s.count}</Badge>
+                  <SelectItem key={s.sector} value={s.sector} className="cursor-pointer">
+                    <span className="flex items-center justify-between w-full min-w-[220px]">
+                      <span>{s.name}</span>
+                      <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                        {s.count}
+                      </span>
                     </span>
                   </SelectItem>
                 ))}
