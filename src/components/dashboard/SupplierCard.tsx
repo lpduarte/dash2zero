@@ -1,33 +1,21 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import { 
-  TrendingDown, 
-  Building2, 
-  MapPin, 
   Mail, 
   Phone, 
   ExternalLink,
-  FileText
+  FileText,
+  Building2,
+  Users,
+  Handshake
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { getSectorName } from "@/data/sectors";
 
 interface SupplierCardProps {
   supplier: Supplier;
 }
-
-const getSectorLabel = (sector: string) => {
-  const labels: Record<string, string> = {
-    manufacturing: 'Indústria',
-    technology: 'Tecnologia',
-    construction: 'Construção',
-    transport: 'Transporte',
-    logistics: 'Logística',
-    services: 'Serviços',
-    food: 'Alimentar',
-    energia: 'Energia',
-  };
-  return labels[sector] || sector;
-};
 
 const getRegionLabel = (region: string) => {
   const labels: Record<string, string> = {
@@ -39,28 +27,34 @@ const getRegionLabel = (region: string) => {
   return labels[region] || region;
 };
 
+const getClusterInfo = (cluster: string) => {
+  const info: Record<string, { label: string; icon: typeof Building2 }> = {
+    fornecedor: { label: 'Fornecedor', icon: Building2 },
+    cliente: { label: 'Cliente', icon: Users },
+    parceiro: { label: 'Parceiro', icon: Handshake },
+  };
+  return info[cluster] || { label: cluster, icon: Building2 };
+};
+
 export const SupplierCard = ({ supplier }: SupplierCardProps) => {
-  const emissionReduction = 
-    ((supplier.yearlyProgress[0].emissions - supplier.totalEmissions) / 
-    supplier.yearlyProgress[0].emissions) * 100;
+  const clusterInfo = getClusterInfo(supplier.cluster);
+  const ClusterIcon = clusterInfo.icon;
 
   return (
     <Card className="p-6 shadow-md hover:shadow-lg transition-all">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h3 className="text-xl font-bold text-card-foreground">{supplier.name}</h3>
-          </div>
-          <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Building2 className="h-4 w-4" />
-              {getSectorLabel(supplier.sector)}
-            </span>
-            <span className="flex items-center gap-1">
-              <MapPin className="h-4 w-4" />
-              {getRegionLabel(supplier.region)}
-            </span>
-          </div>
+      <div className="flex flex-col gap-3 mb-4">
+        <h3 className="text-xl font-bold text-card-foreground">{supplier.name}</h3>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="outline" className="text-xs">
+            {getSectorName(supplier.sector)}
+          </Badge>
+          <Badge variant="outline" className="text-xs">
+            {getRegionLabel(supplier.region)}
+          </Badge>
+          <Badge variant="secondary" className="text-xs flex items-center gap-1">
+            <ClusterIcon className="h-3 w-3" />
+            {clusterInfo.label}
+          </Badge>
         </div>
       </div>
 
@@ -86,12 +80,6 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
           <p className="text-xl font-bold text-success">{supplier.emissionsPerRevenue.toFixed(1)}</p>
           <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
         </div>
-        <div className="col-span-2 flex items-center gap-2 text-sm p-2 bg-success/5 rounded">
-          <TrendingDown className="h-4 w-4 text-success" />
-          <span className="text-success font-medium">
-            {emissionReduction.toFixed(1)}% redução (2021-2023)
-          </span>
-        </div>
       </div>
 
       {/* Scope Breakdown */}
@@ -100,15 +88,15 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
         <div className="flex gap-2 text-xs">
           <div className="flex-1 p-2 bg-primary/10 rounded">
             <p className="text-muted-foreground">Âmbito 1</p>
-            <p className="font-bold text-primary">{supplier.scope1} t</p>
+            <p className="font-bold text-primary">{supplier.scope1} t CO₂e</p>
           </div>
           <div className="flex-1 p-2 bg-secondary/10 rounded">
             <p className="text-muted-foreground">Âmbito 2</p>
-            <p className="font-bold text-secondary">{supplier.scope2} t</p>
+            <p className="font-bold text-secondary">{supplier.scope2} t CO₂e</p>
           </div>
           <div className="flex-1 p-2 bg-accent/10 rounded">
             <p className="text-muted-foreground">Âmbito 3</p>
-            <p className="font-bold text-accent">{supplier.scope3} t</p>
+            <p className="font-bold text-accent">{supplier.scope3} t CO₂e</p>
           </div>
         </div>
       </div>
@@ -118,7 +106,7 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
         <div className="grid grid-cols-3 gap-3 text-xs text-muted-foreground mb-3">
           <div className="flex items-center gap-2">
             <FileText className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{supplier.contact.nif || 'N/A'}</span>
+            <span className="truncate">{supplier.contact.nif}</span>
           </div>
           <div className="flex items-center gap-2">
             <Mail className="h-3 w-3 flex-shrink-0" />
