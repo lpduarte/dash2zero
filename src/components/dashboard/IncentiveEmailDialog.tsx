@@ -413,10 +413,10 @@ export const IncentiveEmailDialog = ({
                 </SelectTrigger>
                 <SelectContent>
                   {emailTemplates.map((template) => (
-                    <SelectItem key={template.id} value={template.id}>
+                    <SelectItem key={template.id} value={template.id} className="[&[data-highlighted]]:text-white [&[data-state=checked]]:text-white">
                       <div className="flex flex-col items-start text-left">
                         <span>{template.name}</span>
-                        <span className="text-xs text-muted-foreground">{template.description}</span>
+                        <span className="text-xs opacity-70">{template.description}</span>
                       </div>
                     </SelectItem>
                   ))}
