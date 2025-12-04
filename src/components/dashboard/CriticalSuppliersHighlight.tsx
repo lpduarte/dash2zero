@@ -2,24 +2,43 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, TrendingUp, Target, ArrowRight, ChevronDown } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight, ChevronDown } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
 
+const sectorLabels: Record<string, string> = {
+  all: "Todas as atividades",
+  manufacturing: "Indústria",
+  technology: "Tecnologia",
+  construction: "Construção",
+  transport: "Transporte",
+  services: "Serviços"
+};
+
 export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighlightProps) => {
   const [isOpen, setIsOpen] = useState(true);
-  const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
+  const [selectedSector, setSelectedSector] = useState<string>("all");
   
-  const criticalSuppliers = suppliers.filter(s => 
+  const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
+  const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
+  
+  const criticalSuppliers = filteredSuppliers.filter(s => 
     s.totalEmissions > avgEmissions * 1.2 || 
     s.rating === 'D' || 
     s.rating === 'E' ||
     !s.hasSBTi
   ).sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
+
+  const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
+  const sectorCounts = suppliers.reduce((acc, s) => {
+    acc[s.sector] = (acc[s.sector] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   const totalCriticalEmissions = criticalSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
   const percentageOfTotal = (totalCriticalEmissions / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100;
@@ -28,26 +47,47 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
     <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader className="pb-3">
-          <CollapsibleTrigger className="flex items-center justify-between w-full group">
-            <div className="flex items-start justify-between flex-1">
-              <div>
-                <CardTitle className="flex items-center gap-2 text-2xl text-left">
-                  <AlertTriangle className="h-6 w-6 text-danger" />
-                  Fornecedores Críticos - Atenção Prioritária
-                </CardTitle>
-                <p className="text-sm text-muted-foreground mt-2 text-left">
-                  Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
-                </p>
-              </div>
-              <div className="text-right mr-4">
-                <Badge className="bg-danger text-lg px-4 py-2">
-                  {criticalSuppliers.length}
-                </Badge>
-                <p className="text-xs text-muted-foreground mt-1">críticos</p>
-              </div>
+          <div className="flex items-center justify-between mb-2">
+            <CardTitle className="flex items-center gap-2 text-2xl">
+              <AlertTriangle className="h-6 w-6 text-danger" />
+              Fornecedores Críticos - Atenção Prioritária
+            </CardTitle>
+            <div className="flex items-center gap-3">
+              <Select value={selectedSector} onValueChange={setSelectedSector}>
+                <SelectTrigger className="w-[280px]">
+                  <SelectValue placeholder="Filtrar por atividade" />
+                </SelectTrigger>
+                <SelectContent className="w-[280px]">
+                  <SelectItem value="all">
+                    <div className="flex items-center justify-between w-[230px]">
+                      <span>{sectorLabels.all}</span>
+                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                    </div>
+                  </SelectItem>
+                  {uniqueSectors.map(sector => (
+                    <SelectItem key={sector} value={sector}>
+                      <div className="flex items-center justify-between w-[230px]">
+                        <span>{sectorLabels[sector] || sector}</span>
+                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <CollapsibleTrigger className="flex items-center gap-2">
+                <div className="text-right">
+                  <Badge className="bg-danger text-lg px-4 py-2">
+                    {criticalSuppliers.length}
+                  </Badge>
+                  <p className="text-xs text-muted-foreground mt-1">críticos</p>
+                </div>
+                <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+              </CollapsibleTrigger>
             </div>
-            <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-          </CollapsibleTrigger>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
+          </p>
         </CardHeader>
         <CollapsibleContent>
           <CardContent>
