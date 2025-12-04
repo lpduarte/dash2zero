@@ -24,6 +24,7 @@ export interface Supplier {
     email: string;
     phone: string;
     website: string;
+    nif?: string;
   };
   sustainabilityReport?: string;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';

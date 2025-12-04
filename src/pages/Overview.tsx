@@ -6,7 +6,7 @@ import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
-import { SupplierCard } from "@/components/dashboard/SupplierCard";
+import { CompaniesTab } from "@/components/dashboard/CompaniesTab";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { RankingChart } from "@/components/dashboard/RankingChart";
@@ -114,8 +114,9 @@ const Overview = () => {
         />
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="home">Visão geral</TabsTrigger>
+            <TabsTrigger value="companies">Empresas</TabsTrigger>
             <TabsTrigger value="overview">Detalhes das emissões</TabsTrigger>
             <TabsTrigger value="environmental">Análise por atividade</TabsTrigger>
             <TabsTrigger value="financial">Análise por faturação</TabsTrigger>
@@ -131,6 +132,10 @@ const Overview = () => {
               <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
               <TopSuppliersHighlight suppliers={filteredSuppliers} />
             </div>
+          </TabsContent>
+
+          <TabsContent value="companies" className="space-y-6">
+            <CompaniesTab suppliers={filteredSuppliers} />
           </TabsContent>
 
           <TabsContent value="overview" className="space-y-6">
@@ -149,12 +154,6 @@ const Overview = () => {
             </div>
 
             <SupplierEmissionsChart suppliers={chartFilteredSuppliers} />
-
-            <div className="grid gap-6 md:grid-cols-2">
-              {filteredSuppliers.map((supplier) => (
-                <SupplierCard key={supplier.id} supplier={supplier} />
-              ))}
-            </div>
           </TabsContent>
 
           <TabsContent value="environmental" className="space-y-6">
