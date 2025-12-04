@@ -21,12 +21,12 @@ const Overview = () => {
     };
   }, []);
 
-  // Total de empresas por cluster (soma = 100)
+  // Total de empresas por cluster (universo total do grupo)
   const clusterTotals: Record<ClusterType, number> = {
     all: 100,
-    fornecedor: 50,
-    cliente: 41,
-    parceiro: 9,
+    fornecedor: 35,
+    cliente: 35,
+    parceiro: 30,
   };
 
   const filteredSuppliers = useMemo(() => {
