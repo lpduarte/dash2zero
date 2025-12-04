@@ -108,14 +108,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                 </Badge>
 
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="font-semibold">{supplier.name}</h4>
-                    {!supplier.hasSBTi && (
-                      <Badge variant="outline" className="text-xs border-warning text-warning">
-                        Sem SBTi
-                      </Badge>
-                    )}
-                  </div>
+                  <h4 className="font-semibold mb-1">{supplier.name}</h4>
                   <p className="text-xs text-muted-foreground">{supplier.sector} • {supplier.cluster}</p>
                 </div>
               </div>
