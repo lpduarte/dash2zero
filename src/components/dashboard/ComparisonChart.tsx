@@ -71,7 +71,7 @@ export const ComparisonChart = ({
       </div>
       <div className="flex-1" style={{ minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} barSize={12}>
+          <BarChart data={chartData} barSize={8} barGap={1}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis 
               dataKey="name" 
