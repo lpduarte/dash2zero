@@ -115,9 +115,10 @@ export const SectorBenchmarking = ({
               <YAxis 
                 dataKey="name" 
                 type="category" 
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10, style: { whiteSpace: 'nowrap' } }} 
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
                 width={180}
                 tickLine={false}
+                interval={0}
               />
               <Tooltip content={({ active, payload }) => {
                 if (!active || !payload || !payload[0]) return null;
