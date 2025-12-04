@@ -51,7 +51,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         <Card className="p-4 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">Receita Média</p>
+              <p className="text-xs font-medium text-muted-foreground">Faturação Média</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <TrendingUp className="h-4 w-4" />
               </div>
@@ -66,7 +66,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         <Card className="p-4 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">Receita por Colaborador</p>
+              <p className="text-xs font-medium text-muted-foreground">Faturação por Colaborador</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <Users className="h-4 w-4" />
               </div>
