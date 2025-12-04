@@ -103,9 +103,9 @@ export const SectorBenchmarking = ({
             </Select>
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pl-0">
           <ResponsiveContainer width="100%" height={chartHeight}>
-            <BarChart data={comparisonData} layout="vertical" margin={{ left: 20, right: 20 }}>
+            <BarChart data={comparisonData} layout="vertical" margin={{ left: 0, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 type="number" 
