@@ -88,7 +88,7 @@ export const CriticalSuppliersHighlight = ({
   const improvementPotential = getImprovementPotential();
   return <Collapsible open={isOpen} onOpenChange={setIsOpen}>
     <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
-      <CardHeader className="pb-3">
+      <CardHeader className={isOpen ? "pb-3" : "pb-6"}>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-2xl">
             <AlertTriangle className="h-6 w-6 text-danger" />
