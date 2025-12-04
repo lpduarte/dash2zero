@@ -207,9 +207,16 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                   )}
 
                   {!alternative && (
-                    <div className="flex-1 min-w-0 bg-muted/30 rounded-lg p-2 border border-border/50">
-                      <p className="text-xs text-muted-foreground text-center">Sem alternativa disponível</p>
-                    </div>
+                    <>
+                      <div className="flex flex-col items-center shrink-0 px-3">
+                        <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-muted-foreground/50" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0 bg-muted/20 rounded-lg p-3 border border-border/30">
+                        <p className="text-xs text-muted-foreground text-center py-2">Sem alternativa no mesmo setor</p>
+                      </div>
+                    </>
                   )}
 
                   <Button size="sm" variant="outline" className="shrink-0">
