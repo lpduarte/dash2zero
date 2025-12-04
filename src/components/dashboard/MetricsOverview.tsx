@@ -48,7 +48,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       isImprovement: true,
     },
     {
-      title: "Por faturação",
+      title: "Média por faturação",
       value: avgEmissionsPerRevenue.toFixed(1),
       unit: "t CO₂e/€",
       icon: Euro,
@@ -56,7 +56,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-primary/10",
     },
     {
-      title: "Por colaborador",
+      title: "Média por colaborador",
       value: avgEmissionsPerEmployee.toFixed(2),
       unit: "t CO₂e/colab",
       icon: Users,
@@ -64,7 +64,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-primary/10",
     },
     {
-      title: "Por área",
+      title: "Média por área",
       value: avgEmissionsPerArea.toFixed(3),
       unit: "t CO₂e/m²",
       icon: Building,
