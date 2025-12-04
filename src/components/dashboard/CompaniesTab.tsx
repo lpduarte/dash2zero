@@ -79,7 +79,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
       const search = searchTerm.toLowerCase();
       filtered = filtered.filter(s => 
         s.name.toLowerCase().includes(search) ||
-        s.contact.nif?.toLowerCase().includes(search) ||
+        s.contact.nif.toLowerCase().includes(search) ||
         s.contact.email.toLowerCase().includes(search)
       );
     }

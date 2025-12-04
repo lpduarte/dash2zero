@@ -1,13 +1,22 @@
 import { Supplier } from "@/types/supplier";
 
-// Helper function to generate mock NIFs
+// Helper function to generate mock Portuguese NIFs (starting with 5 for companies)
 const generateNIF = (id: string): string => {
   const baseNum = parseInt(id.replace(/\D/g, '') || '0', 10);
-  const nif = 500000000 + (baseNum * 12345) % 500000000;
+  const nif = 500000000 + (baseNum * 12345) % 499999999;
   return nif.toString().padStart(9, '0');
 };
 
-export const mockSuppliers: Supplier[] = [
+// Process suppliers to ensure all have NIFs
+const addNifToSupplier = (supplier: Omit<Supplier, 'contact'> & { contact: Omit<Supplier['contact'], 'nif'> & { nif?: string } }): Supplier => ({
+  ...supplier,
+  contact: {
+    ...supplier.contact,
+    nif: supplier.contact.nif || generateNIF(supplier.id),
+  },
+});
+
+const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['contact'], 'nif'> & { nif?: string } })[] = [
   // ENERGIA (único fornecedor - para testar "sem alternativa")
   {
     id: "energia-1",
@@ -1697,3 +1706,6 @@ export const mockSuppliers: Supplier[] = [
     cluster: "fornecedor",
   },
 ];
+
+// Export processed suppliers with NIFs
+export const mockSuppliers: Supplier[] = rawSuppliers.map(addNifToSupplier);
