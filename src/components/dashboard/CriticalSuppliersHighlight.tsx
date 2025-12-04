@@ -121,26 +121,6 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
         </p>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 p-4 bg-muted/50 rounded-lg">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Emissões Totais</p>
-              <p className="text-2xl font-bold text-danger">{totalCriticalEmissions.toFixed(0)}</p>
-              <p className="text-xs text-muted-foreground">t CO₂e</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">% do Total do Grupo</p>
-              <p className="text-2xl font-bold text-warning">{percentageOfTotal.toFixed(0)}%</p>
-              <p className="text-xs text-muted-foreground">impacto</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground mb-1">Potencial de Melhoria</p>
-              <p className={`text-2xl font-bold ${improvementPotential.color}`}>{improvementPotential.level}</p>
-              <p className="text-xs text-muted-foreground">prioridade</p>
-            </div>
-          </div>
-        </div>
-
         <div className="space-y-3">
           {criticalSuppliers.map((supplier, index) => {
             const alternative = findBestAlternative(supplier);
