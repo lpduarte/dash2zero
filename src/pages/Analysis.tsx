@@ -101,25 +101,16 @@ const Analysis = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
+            <div className="grid grid-cols-4 gap-6">
+              <div className="col-span-1">
+                <EmissionsBreakdown suppliers={filteredSuppliers} />
+              </div>
+              <div className="col-span-3">
+                <ComparisonChart suppliers={filteredSuppliers} />
+              </div>
+            </div>
+
             <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="breakdown">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Distribuição de Emissões por Scope
-                </AccordionTrigger>
-                <AccordionContent>
-                  <EmissionsBreakdown suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="charts">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Gráficos de Comparação
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ComparisonChart suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
               <AccordionItem value="suppliers">
                 <AccordionTrigger className="text-lg font-semibold">
                   Cards dos Fornecedores ({filteredSuppliers.length})

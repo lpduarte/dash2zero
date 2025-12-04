@@ -21,14 +21,14 @@ export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
 
   const chartData = topSuppliers.map((supplier) => ({
     name: supplier.name.length > 20 ? supplier.name.substring(0, 17) + '...' : supplier.name,
-    'Scope 1': supplier.scope1,
-    'Scope 2': supplier.scope2,
-    'Scope 3': supplier.scope3,
+    'Âmbito 1': supplier.scope1,
+    'Âmbito 2': supplier.scope2,
+    'Âmbito 3': supplier.scope3,
   }));
 
   return (
     <Card className="p-6 shadow-md">
-      <h2 className="text-xl font-bold mb-4">Comparação de Emissões por Scope</h2>
+      <h2 className="text-xl font-bold mb-4">Comparação de Emissões por Âmbito</h2>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart data={chartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -51,9 +51,9 @@ export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
             }}
           />
           <Legend />
-          <Bar dataKey="Scope 1" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Scope 2" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Scope 3" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 1" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 2" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 3" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </Card>

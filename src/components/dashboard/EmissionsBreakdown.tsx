@@ -12,15 +12,15 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   const totalScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0);
 
   const data = [
-    { name: "Scope 1 (Diretas)", value: totalScope1, color: "hsl(var(--danger))" },
-    { name: "Scope 2 (Energia)", value: totalScope2, color: "hsl(var(--warning))" },
-    { name: "Scope 3 (Indiretas)", value: totalScope3, color: "hsl(var(--primary))" },
+    { name: "Âmbito 1 (Diretas)", value: totalScope1, color: "hsl(var(--danger))" },
+    { name: "Âmbito 2 (Energia)", value: totalScope2, color: "hsl(var(--warning))" },
+    { name: "Âmbito 3 (Indiretas)", value: totalScope3, color: "hsl(var(--primary))" },
   ];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Distribuição de Emissões por Scope</CardTitle>
+        <CardTitle>Distribuição de Emissões por Âmbito</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
