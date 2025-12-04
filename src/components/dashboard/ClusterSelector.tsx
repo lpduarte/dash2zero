@@ -34,18 +34,23 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsSticky(!entry.isIntersecting);
+        // Add hysteresis to prevent flickering
+        if (!entry.isIntersecting && !isSticky) {
+          setIsSticky(true);
+        } else if (entry.isIntersecting && entry.intersectionRatio > 0.5 && isSticky) {
+          setIsSticky(false);
+        }
       },
-      { threshold: 0, rootMargin: "-16px 0px 0px 0px" }
+      { threshold: [0, 0.5, 1], rootMargin: "-20px 0px 0px 0px" }
     );
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [isSticky]);
 
   return (
     <>
-      <div ref={sentinelRef} className="h-0" aria-hidden="true" />
+      <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
       <div
         ref={stickyRef}
         className={cn(
