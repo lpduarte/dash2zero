@@ -50,6 +50,7 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
 
   return (
     <>
+      <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
       <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
       <div
         ref={stickyRef}
@@ -60,14 +61,6 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
             : "bg-transparent"
         )}
       >
-        <h3 
-          className={cn(
-            "text-sm font-medium text-muted-foreground overflow-hidden transition-all duration-200",
-            isSticky ? "max-h-0 opacity-0 mb-0" : "max-h-8 opacity-100 mb-3"
-          )}
-        >
-          Filtrar por Cluster
-        </h3>
         <div className="flex flex-wrap gap-2">
           {clusterOptions.map((option) => (
             <button
