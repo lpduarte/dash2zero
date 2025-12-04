@@ -247,14 +247,14 @@ export const SupplierSwitchModal = ({
               {/* FE */}
               <div className="grid grid-cols-[1fr_auto_1fr]">
                 <div className="p-3 bg-danger/5 border-r border-border">
-                  <p className="text-xs text-muted-foreground mb-1">FE (por faturação)</p>
+                  <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                   <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
                 </div>
                 <div className="p-3 flex items-center justify-center bg-muted/20">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
-                  <p className="text-xs text-muted-foreground mb-1">FE (por faturação)</p>
+                  <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                   <div className="flex items-center gap-2">
                     <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
                     {criticalSupplier.emissionsPerRevenue > 0 && (
