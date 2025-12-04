@@ -207,7 +207,7 @@ export const mockSuppliers: Supplier[] = [
     },
     rating: "D",
     dataSource: "get2zero",
-    cluster: "fornecedor",
+    cluster: "cliente",
   },
   {
     id: "15",
@@ -351,7 +351,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "sustentabilidade@marlog.pt", phone: "+351 289 000 018", website: "https://marlog.pt" },
     rating: "C",
     dataSource: "formulario",
-    cluster: "fornecedor",
+    cluster: "cliente",
   },
   {
     id: "29",
@@ -570,7 +570,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "geral@metalpro.pt", phone: "+351 289 000 011", website: "https://metalpro.pt" },
     rating: "D",
     dataSource: "get2zero",
-    cluster: "fornecedor",
+    cluster: "cliente",
   },
   {
     id: "37",
@@ -734,7 +734,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "sustentabilidade@textilnorte.pt", phone: "+351 253 000 020", website: "https://textilnorte.pt" },
     rating: "B",
     dataSource: "get2zero",
-    cluster: "fornecedor",
+    cluster: "cliente",
   },
   {
     id: "41",
@@ -925,7 +925,7 @@ export const mockSuppliers: Supplier[] = [
     contact: { email: "ambiente@foodtech.pt", phone: "+351 217 000 022", website: "https://foodtech.pt" },
     rating: "B",
     dataSource: "formulario",
-    cluster: "fornecedor",
+    cluster: "cliente",
   },
   {
     id: "28",

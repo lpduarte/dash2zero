@@ -24,8 +24,8 @@ const Overview = () => {
   // Total de empresas por cluster (universo total do grupo)
   const clusterTotals: Record<ClusterType, number> = {
     all: 100,
-    fornecedor: 35,
-    cliente: 35,
+    fornecedor: 25,
+    cliente: 45,
     parceiro: 30,
   };
 
