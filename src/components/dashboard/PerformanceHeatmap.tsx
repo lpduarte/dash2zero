@@ -70,8 +70,8 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
             </thead>
             <tbody>
               {sectors.map(sector => (
-                <tr key={sector}>
-                  <td className="border p-2 font-medium">{getSectorLabel(sector)}</td>
+                <tr key={sector} className="h-16">
+                  <td className="border p-4 font-medium h-16">{getSectorLabel(sector)}</td>
                   {regions.map(region => {
                     const avgEmissions = getAverageEmissions(region, sector);
                     return (
