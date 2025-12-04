@@ -104,14 +104,22 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         <div className="flex items-center gap-2">
           <MapPin className="h-4 w-4 text-muted-foreground" />
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[220px]">
               <SelectValue placeholder="Região" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas as regiões ({suppliers.length})</SelectItem>
+            <SelectContent className="w-[220px]">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-[170px]">
+                  <span>Todas as regiões</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                </div>
+              </SelectItem>
               {regions.map(r => (
                 <SelectItem key={r.value} value={r.value}>
-                  {r.label} ({r.count})
+                  <div className="flex items-center justify-between w-[170px]">
+                    <span>{r.label}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{r.count}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
@@ -121,14 +129,22 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
           <Select value={selectedSector} onValueChange={setSelectedSector}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[250px]">
               <SelectValue placeholder="Atividade" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas as atividades ({suppliers.length})</SelectItem>
+            <SelectContent className="w-[250px]">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-[200px]">
+                  <span>Todas as atividades</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                </div>
+              </SelectItem>
               {sectors.map(s => (
                 <SelectItem key={s.value} value={s.value}>
-                  {s.label} ({s.count})
+                  <div className="flex items-center justify-between w-[200px]">
+                    <span>{s.label}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
