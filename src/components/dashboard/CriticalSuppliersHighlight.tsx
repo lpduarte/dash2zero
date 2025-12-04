@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -122,19 +122,28 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
 
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Emissões</p>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">Emissões</span>
+                  </div>
                   <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
                   <p className="text-xs text-muted-foreground">t CO₂e</p>
                 </div>
 
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">FE</p>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <Euro className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">FE</span>
+                  </div>
                   <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
                   <p className="text-xs text-muted-foreground">kg/€</p>
                 </div>
 
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">vs Média</p>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">vs Média</span>
+                  </div>
                   <p className="text-lg font-bold text-danger">
                     +{(((supplier.totalEmissions - avgEmissions) / avgEmissions) * 100).toFixed(0)}%
                   </p>
