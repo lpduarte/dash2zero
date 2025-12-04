@@ -211,51 +211,6 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Ranking de Eficiência Financeira/Carbono</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {financialMetrics.map((supplier, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border border-border rounded-lg hover:bg-accent/5 transition-colors">
-                <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="w-8 h-8 flex items-center justify-center">
-                    {index + 1}
-                  </Badge>
-                  <div>
-                    <p className="font-semibold">{supplier.fullName}</p>
-                    <p className="text-xs text-muted-foreground">{supplier.cluster}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-6">
-                  <div className="text-right">
-                    <p className="font-semibold">{supplier.revenue.toFixed(1)} M€</p>
-                    <p className="text-xs text-muted-foreground">Receita</p>
-                  </div>
-                  
-                  <div className="text-right">
-                    <p className="font-semibold">{(supplier.revenuePerEmployee / 1000).toFixed(0)}k €</p>
-                    <p className="text-xs text-muted-foreground">€/funcionário</p>
-                  </div>
-                  
-                  <Badge 
-                    className={
-                      supplier.emissionsPerRevenue < 30 ? 'bg-success' :
-                      supplier.emissionsPerRevenue < 60 ? 'bg-primary' :
-                      supplier.emissionsPerRevenue < 100 ? 'bg-warning' :
-                      'bg-danger'
-                    }
-                  >
-                    {supplier.emissionsPerRevenue.toFixed(1)} kg/€
-                  </Badge>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
