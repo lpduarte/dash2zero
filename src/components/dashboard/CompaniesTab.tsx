@@ -3,7 +3,7 @@ import { Supplier } from "@/types/supplier";
 import { SupplierCard } from "./SupplierCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, Building2 } from "lucide-react";
+import { Search, MapPin, Factory } from "lucide-react";
 
 interface CompaniesTabProps {
   suppliers: Supplier[];
@@ -102,10 +102,12 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         </div>
         
         <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-muted-foreground" />
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
             <SelectTrigger className="w-[220px]">
-              <SelectValue placeholder="Região" />
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <SelectValue placeholder="Região" />
+              </div>
             </SelectTrigger>
             <SelectContent className="w-[220px]">
               <SelectItem value="all">
@@ -127,10 +129,12 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         </div>
         
         <div className="flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-muted-foreground" />
           <Select value={selectedSector} onValueChange={setSelectedSector}>
             <SelectTrigger className="w-[250px]">
-              <SelectValue placeholder="Atividade" />
+              <div className="flex items-center gap-2">
+                <Factory className="h-4 w-4 text-muted-foreground" />
+                <SelectValue placeholder="Atividade" />
+              </div>
             </SelectTrigger>
             <SelectContent className="w-[250px]">
               <SelectItem value="all">
