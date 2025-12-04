@@ -34,13 +34,21 @@ export const ComparisonChart = ({
           <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
         </div>
         {sectors.length > 0 && onSectorChange && <Select value={selectedSector} onValueChange={onSectorChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Filtrar por atividade" />
             </SelectTrigger>
-            <SelectContent className="bg-background z-50">
-              <SelectItem value="all">Todas as atividades</SelectItem>
+            <SelectContent className="w-[280px]">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-[230px]">
+                  <span>Todas as atividades</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                </div>
+              </SelectItem>
               {sectors.map(s => <SelectItem key={s.sector} value={s.sector}>
-                  {s.name} ({s.count})
+                  <div className="flex items-center justify-between w-[230px]">
+                    <span>{s.name}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
+                  </div>
                 </SelectItem>)}
             </SelectContent>
           </Select>}
