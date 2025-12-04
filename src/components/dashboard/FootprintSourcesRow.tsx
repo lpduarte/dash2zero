@@ -75,7 +75,7 @@ export const FootprintSourcesRow = ({ suppliers, totalCompanies }: FootprintSour
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <p className="text-xs font-medium text-muted-foreground">Origem dos dados</p>
-            <div className="bg-muted text-muted-foreground p-1.5 rounded">
+            <div className="bg-primary/10 text-primary p-1.5 rounded">
               <Database className="h-4 w-4" />
             </div>
           </div>
