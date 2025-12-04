@@ -36,15 +36,15 @@ export const SupplierEmissionsChart = ({ suppliers }: SupplierEmissionsChartProp
         </p>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={Math.max(300, emissionsData.length * 18)}>
-          <BarChart data={emissionsData} layout="vertical" margin={{ left: 150 }} barSize={12}>
+        <ResponsiveContainer width="100%" height={Math.max(250, emissionsData.length * 14)}>
+          <BarChart data={emissionsData} layout="vertical" margin={{ left: 200 }} barSize={5}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} />
+            <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
             <YAxis 
               dataKey="name" 
               type="category" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
-              width={140}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+              width={190}
               interval={0}
             />
             <Tooltip
