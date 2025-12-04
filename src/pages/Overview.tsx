@@ -115,8 +115,8 @@ const Overview = () => {
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
           <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="home">Home</TabsTrigger>
-            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="home">Visão geral</TabsTrigger>
+            <TabsTrigger value="overview">Detalhes das emissões</TabsTrigger>
             <TabsTrigger value="environmental">Análise por atividade</TabsTrigger>
             <TabsTrigger value="financial">Financeira</TabsTrigger>
             <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
