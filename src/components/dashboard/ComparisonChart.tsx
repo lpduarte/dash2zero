@@ -69,7 +69,7 @@ export const ComparisonChart = ({
           </Select>
         )}
       </div>
-      <div className="flex-1 -ml-6" style={{ minHeight: 400 }}>
+      <div className="flex-1" style={{ minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} barSize={4} barGap={1} barCategoryGap={3}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
