@@ -19,7 +19,7 @@ import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChar
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { getSectorsWithCounts } from "@/data/sectors";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 
 const Analysis = () => {
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
@@ -133,131 +133,31 @@ const Analysis = () => {
 
             <SupplierEmissionsChart suppliers={chartFilteredSuppliers} />
 
-            <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="suppliers">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Cards dos Fornecedores ({filteredSuppliers.length})
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    {filteredSuppliers.map((supplier) => (
-                      <SupplierCard key={supplier.id} supplier={supplier} />
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <div className="grid gap-6 md:grid-cols-2">
+              {filteredSuppliers.map((supplier) => (
+                <SupplierCard key={supplier.id} supplier={supplier} />
+              ))}
+            </div>
           </TabsContent>
 
           <TabsContent value="environmental" className="space-y-6">
-            <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="heatmap">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Desempenho por Região e Setor
-                </AccordionTrigger>
-                <AccordionContent>
-                  <PerformanceHeatmap suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="benchmark">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Comparação com Setor de Atividade Similar
-                </AccordionTrigger>
-                <AccordionContent>
-                  <SectorBenchmarking suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <PerformanceHeatmap suppliers={filteredSuppliers} />
+            <SectorBenchmarking suppliers={filteredSuppliers} />
           </TabsContent>
 
           <TabsContent value="financial" className="space-y-6">
-            <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="analysis">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Análise Financeira e Eficiência Carbónica
-                </AccordionTrigger>
-                <AccordionContent>
-                  <FinancialAnalysis suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="pareto">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Gráfico de Pareto - Fator de Emissões vs Investimento
-                </AccordionTrigger>
-                <AccordionContent>
-                  <EmissionsParetoChart suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <FinancialAnalysis suppliers={filteredSuppliers} />
+            <EmissionsParetoChart suppliers={filteredSuppliers} />
           </TabsContent>
 
           <TabsContent value="comparative" className="space-y-6">
-            <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="recommendations">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Cenários de Otimização e Recomendações
-                </AccordionTrigger>
-                <AccordionContent>
-                  <SupplierRecommendations suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="partner-comparison">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Comparação de Parceiros e Análise What-If
-                </AccordionTrigger>
-                <AccordionContent>
-                  <PartnerComparison suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="ranking">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Ranking - Top 10 Menores Emissões
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RankingChart suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="radar">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Comparação Multi-Critério (Radar)
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RadarComparison suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="scatter">
-                <AccordionTrigger className="text-lg font-semibold">
-                  ESG vs Volume de Negócios
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ScatterPlot suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="average">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Emissões Médias por Parceiro
-                </AccordionTrigger>
-                <AccordionContent>
-                  <AverageEmissionsChart suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="bestworst">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Melhor e Pior Desempenho
-                </AccordionTrigger>
-                <AccordionContent>
-                  <BestWorstSuppliers suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+            <SupplierRecommendations suppliers={filteredSuppliers} />
+            <PartnerComparison suppliers={filteredSuppliers} />
+            <RankingChart suppliers={filteredSuppliers} />
+            <RadarComparison suppliers={filteredSuppliers} />
+            <ScatterPlot suppliers={filteredSuppliers} />
+            <AverageEmissionsChart suppliers={filteredSuppliers} />
+            <BestWorstSuppliers suppliers={filteredSuppliers} />
           </TabsContent>
         </Tabs>
       </main>
