@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { SupplierSwitchModal } from "./SupplierSwitchModal";
 
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
@@ -18,6 +19,9 @@ export const CriticalSuppliersHighlight = ({
 }: CriticalSuppliersHighlightProps) => {
   const [selectedSector, setSelectedSector] = useState<string>("all");
   const [isOpen, setIsOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCriticalSupplier, setSelectedCriticalSupplier] = useState<Supplier | null>(null);
+  const [selectedAlternative, setSelectedAlternative] = useState<Supplier | null>(null);
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
 
@@ -61,6 +65,20 @@ export const CriticalSuppliersHighlight = ({
     const sectorAlternatives = suppliers.filter(s => s.sector === criticalSupplier.sector && s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions).sort((a, b) => a.totalEmissions - b.totalEmissions);
     return sectorAlternatives[0] || null;
   };
+
+  // Get all alternatives for a supplier (for manual selection in modal)
+  const getAllAlternatives = (criticalSupplier: Supplier) => {
+    return suppliers
+      .filter(s => s.sector === criticalSupplier.sector && s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions)
+      .sort((a, b) => a.totalEmissions - b.totalEmissions);
+  };
+
+  const handleOpenModal = (supplier: Supplier, alternative: Supplier | null) => {
+    setSelectedCriticalSupplier(supplier);
+    setSelectedAlternative(alternative);
+    setModalOpen(true);
+  };
+
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
   const sectorCounts = suppliers.reduce((acc, s) => {
     acc[s.sector] = (acc[s.sector] || 0) + 1;
@@ -241,7 +259,7 @@ export const CriticalSuppliersHighlight = ({
                       </TooltipProvider>
                     </>}
 
-                  <Button size="sm" variant="outline" className="shrink-0">
+                  <Button size="sm" variant="outline" className="shrink-0" onClick={() => handleOpenModal(supplier, alternative)}>
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
@@ -251,5 +269,15 @@ export const CriticalSuppliersHighlight = ({
         </CardContent>
       </CollapsibleContent>
     </Card>
+
+    {selectedCriticalSupplier && (
+      <SupplierSwitchModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        criticalSupplier={selectedCriticalSupplier}
+        suggestedAlternative={selectedAlternative}
+        allAlternatives={getAllAlternatives(selectedCriticalSupplier)}
+      />
+    )}
   </Collapsible>;
 };
