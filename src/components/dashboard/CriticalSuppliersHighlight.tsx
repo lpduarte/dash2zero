@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3 } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3, RefreshCw } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
@@ -23,6 +23,17 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
     s.rating === 'E' ||
     !s.hasSBTi
   ).sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
+
+  // Find best alternative for each critical supplier (same sector, lower emissions)
+  const findBestAlternative = (criticalSupplier: Supplier) => {
+    const alternatives = suppliers.filter(s => 
+      s.sector === criticalSupplier.sector && 
+      s.id !== criticalSupplier.id &&
+      s.totalEmissions < criticalSupplier.totalEmissions
+    ).sort((a, b) => a.totalEmissions - b.totalEmissions);
+    
+    return alternatives[0] || null;
+  };
 
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
   const sectorCounts = suppliers.reduce((acc, s) => {
@@ -89,58 +100,86 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
         </div>
 
         <div className="space-y-3">
-          {criticalSuppliers.map((supplier, index) => (
-            <div
-              key={supplier.id}
-              className="flex items-center gap-4 p-4 border border-danger/30 rounded-lg bg-card hover:bg-danger/5 transition-colors"
-            >
-              <div className="flex items-center gap-3 flex-1">
-                <Badge className="bg-danger w-10 h-10 flex items-center justify-center text-lg font-bold">
-                  {index + 1}
-                </Badge>
+          {criticalSuppliers.map((supplier, index) => {
+            const alternative = findBestAlternative(supplier);
+            const emissionsSavings = alternative 
+              ? supplier.totalEmissions - alternative.totalEmissions 
+              : 0;
+            const savingsPercentage = alternative 
+              ? ((emissionsSavings / supplier.totalEmissions) * 100).toFixed(0)
+              : 0;
 
-                <div className="flex-1">
-                  <h4 className="font-semibold mb-1">{supplier.name}</h4>
-                  <SupplierLabel sector={supplier.sector} cluster={supplier.cluster} />
+            return (
+              <div
+                key={supplier.id}
+                className="p-4 border border-danger/30 rounded-lg bg-card hover:bg-danger/5 transition-colors"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 flex-1">
+                    <Badge className="bg-danger w-10 h-10 flex items-center justify-center text-lg font-bold">
+                      {index + 1}
+                    </Badge>
+
+                    <div className="flex-1">
+                      <h4 className="font-semibold mb-1">{supplier.name}</h4>
+                      <SupplierLabel sector={supplier.sector} cluster={supplier.cluster} />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">Emissões</span>
+                      </div>
+                      <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
+                      <p className="text-xs text-muted-foreground">t CO₂e</p>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <Euro className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">FE</span>
+                      </div>
+                      <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
+                      <p className="text-xs text-muted-foreground">kg/€</p>
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">vs Média</span>
+                      </div>
+                      <p className="text-lg font-bold text-danger">
+                        +{(((supplier.totalEmissions - avgEmissions) / avgEmissions) * 100).toFixed(0)}%
+                      </p>
+                      <p className="text-xs text-muted-foreground">acima</p>
+                    </div>
+                  </div>
+
+                  <Button size="sm" variant="outline">
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
+
+                {alternative && (
+                  <div className="mt-3 pt-3 border-t border-border/50 flex items-center gap-3">
+                    <RefreshCw className="h-4 w-4 text-success" />
+                    <div className="flex-1">
+                      <p className="text-sm">
+                        <span className="text-muted-foreground">Alternativa sugerida:</span>{" "}
+                        <span className="font-medium">{alternative.name}</span>
+                        <span className="text-muted-foreground"> ({alternative.totalEmissions.toFixed(0)} t CO₂e)</span>
+                      </p>
+                    </div>
+                    <Badge className="bg-success/10 text-success border-success/30">
+                      -{savingsPercentage}% emissões
+                    </Badge>
+                  </div>
+                )}
               </div>
-
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
-                    <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Emissões</span>
-                  </div>
-                  <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">t CO₂e</p>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
-                    <Euro className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">FE</span>
-                  </div>
-                  <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
-                  <p className="text-xs text-muted-foreground">kg/€</p>
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
-                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">vs Média</span>
-                  </div>
-                  <p className="text-lg font-bold text-danger">
-                    +{(((supplier.totalEmissions - avgEmissions) / avgEmissions) * 100).toFixed(0)}%
-                  </p>
-                  <p className="text-xs text-muted-foreground">acima</p>
-                </div>
-              </div>
-
-              <Button size="sm" variant="outline">
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-4 p-4 bg-warning/10 border border-warning/30 rounded-lg">
