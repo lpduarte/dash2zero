@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
-import { TrendingUp, AlertCircle } from "lucide-react";
 
 interface Scope3AnalysisProps {
   suppliers: Supplier[];
@@ -21,10 +20,7 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
     }))
     .sort((a, b) => b.scope3 - a.scope3);
 
-  const totalScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0);
-  const avgScope3 = totalScope3 / suppliers.length;
-  const maxScope3Supplier = scope3Data[0];
-  const minScope3Supplier = scope3Data[scope3Data.length - 1];
+  const avgScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0) / suppliers.length;
 
   const getBarColor = (value: number) => {
     if (value < avgScope3 * 0.5) return "hsl(var(--success))";
@@ -35,49 +31,6 @@ export const Scope3Analysis = ({ suppliers }: Scope3AnalysisProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-primary/30 bg-primary/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Total Alcance 3</span>
-            </div>
-            <p className="text-3xl font-bold text-primary">{totalScope3.toFixed(0)}</p>
-            <p className="text-xs text-muted-foreground mt-1">t CO₂e</p>
-            <p className="text-xs text-muted-foreground mt-2">
-              {((totalScope3 / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100).toFixed(1)}% das emissões totais
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-success/30 bg-success/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm text-muted-foreground">Menor A3</span>
-            </div>
-            <p className="text-xl font-bold text-success">{minScope3Supplier.fullName}</p>
-            <p className="text-2xl font-bold text-success mt-2">{minScope3Supplier.scope3.toFixed(0)}</p>
-            <p className="text-xs text-muted-foreground">
-              {minScope3Supplier.scope3Percentage.toFixed(1)}% das suas emissões
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-danger/30 bg-danger/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle className="h-5 w-5 text-danger" />
-              <span className="text-sm text-muted-foreground">Maior A3</span>
-            </div>
-            <p className="text-xl font-bold text-danger">{maxScope3Supplier.fullName}</p>
-            <p className="text-2xl font-bold text-danger mt-2">{maxScope3Supplier.scope3.toFixed(0)}</p>
-            <p className="text-xs text-muted-foreground">
-              {maxScope3Supplier.scope3Percentage.toFixed(1)}% das suas emissões
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle>Emissões de Alcance 3 por Fornecedor</CardTitle>
