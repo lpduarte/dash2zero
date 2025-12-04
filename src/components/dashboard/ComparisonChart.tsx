@@ -69,19 +69,22 @@ export const ComparisonChart = ({
           </Select>
         )}
       </div>
-      <div className="flex-1">
+      <div className="flex-1" style={{ minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData}>
+          <BarChart data={chartData} barSize={12}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis 
               dataKey="name" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              angle={-45}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+              angle={-90}
               textAnchor="end"
-              height={100}
+              height={140}
+              interval={0}
             />
             <YAxis 
-              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
+              domain={[0, 'auto']}
+              tickCount={8}
             />
             <Tooltip 
               contentStyle={{
