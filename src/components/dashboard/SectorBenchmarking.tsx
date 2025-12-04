@@ -67,7 +67,7 @@ export const SectorBenchmarking = ({
     return "hsl(var(--danger))";
   };
 
-  const chartHeight = Math.max(600, comparisonData.length * 35);
+  const chartHeight = Math.max(400, comparisonData.length * 18);
 
   return (
     <div className="space-y-6">
@@ -152,7 +152,7 @@ export const SectorBenchmarking = ({
                 );
               }} />
               <ReferenceLine x={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
-              <Bar dataKey="deviation" radius={[0, 4, 4, 0]}>
+              <Bar dataKey="deviation" radius={[0, 2, 2, 0]} barSize={10}>
                 {comparisonData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getDeviationColor(entry.deviation)} />
                 ))}
