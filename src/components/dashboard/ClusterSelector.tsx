@@ -55,9 +55,14 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
             : "bg-transparent"
         )}
       >
-        {!isSticky && (
-          <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
-        )}
+        <h3 
+          className={cn(
+            "text-sm font-medium text-muted-foreground overflow-hidden transition-all duration-200",
+            isSticky ? "max-h-0 opacity-0 mb-0" : "max-h-8 opacity-100 mb-3"
+          )}
+        >
+          Filtrar por Cluster
+        </h3>
         <div className="flex flex-wrap gap-2">
           {clusterOptions.map((option) => (
             <button
