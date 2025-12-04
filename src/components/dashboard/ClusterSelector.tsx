@@ -73,7 +73,7 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
 
   return (
     <>
-      <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+      <h3 className="text-sm font-medium text-muted-foreground mb-2">Filtrar por Cluster</h3>
       <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
       <div
         ref={stickyRef}
