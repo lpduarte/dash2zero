@@ -248,7 +248,7 @@ export const SupplierSwitchModal = ({
               <div className="grid grid-cols-[1fr_auto_1fr]">
                 <div className="p-3 bg-danger/5 border-r border-border">
                   <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
-                  <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
+                  <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                 </div>
                 <div className="p-3 flex items-center justify-center bg-muted/20">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -256,7 +256,7 @@ export const SupplierSwitchModal = ({
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                   <div className="flex items-center gap-2">
-                    <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
+                    <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                     {criticalSupplier.emissionsPerRevenue > 0 && (
                       <Badge variant="outline" className="text-xs text-success border-success/50">
                         {((criticalSupplier.emissionsPerRevenue - selectedAlternative.emissionsPerRevenue) / criticalSupplier.emissionsPerRevenue * 100) > 0 ? '-' : '+'}
@@ -293,7 +293,7 @@ export const SupplierSwitchModal = ({
                 <p className="text-2xl font-bold text-primary">
                   -{feImprovement.toFixed(1)}
                 </p>
-                <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
+                <p className="text-xs text-muted-foreground">t CO₂e/€</p>
               </div>
 
               <div className="p-4 rounded-lg border border-warning/30 bg-warning/5 text-center">
