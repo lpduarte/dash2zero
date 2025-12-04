@@ -74,13 +74,13 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
   return (
     <>
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
-      <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
+      <div ref={sentinelRef} className="h-px" aria-hidden="true" />
       <div
         ref={stickyRef}
         className={cn(
-          "sticky top-4 z-50 mb-6 transition-all duration-200 -mx-8 px-8 py-4",
+          "sticky top-4 z-50 mb-6 transition-all duration-200",
           isSticky
-            ? "bg-background/95 backdrop-blur-sm shadow-lg rounded-b-lg"
+            ? "bg-background/95 backdrop-blur-sm shadow-lg rounded-b-lg -mx-8 px-8 py-4"
             : "bg-transparent"
         )}
       >
