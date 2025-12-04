@@ -7,6 +7,7 @@ import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { RankingChart } from "@/components/dashboard/RankingChart";
 import { RadarComparison } from "@/components/dashboard/RadarComparison";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
+import { PortugalEmissionsMap } from "@/components/dashboard/PortugalEmissionsMap";
 import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
@@ -142,6 +143,7 @@ const Analysis = () => {
 
           <TabsContent value="environmental" className="space-y-6">
             <PerformanceHeatmap suppliers={filteredSuppliers} />
+            <PortugalEmissionsMap suppliers={filteredSuppliers} />
             <SectorBenchmarking suppliers={filteredSuppliers} />
           </TabsContent>
 
