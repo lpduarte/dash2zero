@@ -111,7 +111,7 @@ const Analysis = () => {
         <Tabs defaultValue="overview" className="space-y-6 mt-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-            <TabsTrigger value="environmental">Métricas Ambientais</TabsTrigger>
+            <TabsTrigger value="environmental">Análise por atividade</TabsTrigger>
             <TabsTrigger value="financial">Financeira</TabsTrigger>
             <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
           </TabsList>
