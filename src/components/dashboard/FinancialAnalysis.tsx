@@ -47,18 +47,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-primary/30 bg-primary/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="h-5 w-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Volume de Negócios Total</span>
-            </div>
-            <p className="text-3xl font-bold text-primary">{totalRevenue.toFixed(1)}</p>
-            <p className="text-xs text-muted-foreground">M€</p>
-          </CardContent>
-        </Card>
-
+      <div className="grid gap-4 md:grid-cols-3">
         <Card className="border-success/30 bg-success/5">
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 mb-2">
