@@ -7,37 +7,37 @@ import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
-
-export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighlightProps) => {
+export const CriticalSuppliersHighlight = ({
+  suppliers
+}: CriticalSuppliersHighlightProps) => {
   const [selectedSector, setSelectedSector] = useState<string>("all");
-  
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
-  
+
   // Calcular todos os fornecedores críticos primeiro (para a percentagem)
-  const allCriticalSuppliers = filteredSuppliers.filter(s => 
-    s.totalEmissions > avgEmissions * 1.2
-  );
-  
+  const allCriticalSuppliers = filteredSuppliers.filter(s => s.totalEmissions > avgEmissions * 1.2);
+
   // Depois ordenar e limitar a 5 para exibição
-  const criticalSuppliers = [...allCriticalSuppliers]
-    .sort((a, b) => b.totalEmissions - a.totalEmissions)
-    .slice(0, 5);
+  const criticalSuppliers = [...allCriticalSuppliers].sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
 
   // Calculate sector averages for FE comparison
   const sectorAverages = suppliers.reduce((acc, s) => {
     if (!acc[s.sector]) {
-      acc[s.sector] = { total: 0, count: 0 };
+      acc[s.sector] = {
+        total: 0,
+        count: 0
+      };
     }
     acc[s.sector].total += s.emissionsPerRevenue;
     acc[s.sector].count += 1;
     return acc;
-  }, {} as Record<string, { total: number; count: number }>);
-
+  }, {} as Record<string, {
+    total: number;
+    count: number;
+  }>);
   const getSectorAvgFE = (sector: string) => {
     const sectorData = sectorAverages[sector];
     return sectorData ? sectorData.total / sectorData.count : 0;
@@ -47,52 +47,47 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
   const findBestAlternative = (criticalSupplier: Supplier) => {
     // First try to find alternatives in the same subsector
     if (criticalSupplier.subsector) {
-      const subsectorAlternatives = suppliers.filter(s => 
-        s.subsector === criticalSupplier.subsector && 
-        s.id !== criticalSupplier.id &&
-        s.totalEmissions < criticalSupplier.totalEmissions
-      ).sort((a, b) => a.totalEmissions - b.totalEmissions);
-      
+      const subsectorAlternatives = suppliers.filter(s => s.subsector === criticalSupplier.subsector && s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions).sort((a, b) => a.totalEmissions - b.totalEmissions);
       if (subsectorAlternatives.length > 0) {
         return subsectorAlternatives[0];
       }
     }
-    
+
     // Fallback to same sector
-    const sectorAlternatives = suppliers.filter(s => 
-      s.sector === criticalSupplier.sector && 
-      s.id !== criticalSupplier.id &&
-      s.totalEmissions < criticalSupplier.totalEmissions
-    ).sort((a, b) => a.totalEmissions - b.totalEmissions);
-    
+    const sectorAlternatives = suppliers.filter(s => s.sector === criticalSupplier.sector && s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions).sort((a, b) => a.totalEmissions - b.totalEmissions);
     return sectorAlternatives[0] || null;
   };
-
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
   const sectorCounts = suppliers.reduce((acc, s) => {
     acc[s.sector] = (acc[s.sector] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-
   const totalCriticalEmissions = criticalSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
-  const percentageOfTotal = (totalCriticalEmissions / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100;
-  
+  const percentageOfTotal = totalCriticalEmissions / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) * 100;
+
   // Cálculo dinâmico do potencial de melhoria
-  const percentageCritical = (allCriticalSuppliers.length / filteredSuppliers.length) * 100;
+  const percentageCritical = allCriticalSuppliers.length / filteredSuppliers.length * 100;
   const getImprovementPotential = () => {
-    if (percentageCritical > 30) return { level: "Alto", color: "text-danger" };
-    if (percentageCritical > 15) return { level: "Médio", color: "text-warning" };
-    return { level: "Baixo", color: "text-success" };
+    if (percentageCritical > 30) return {
+      level: "Alto",
+      color: "text-danger"
+    };
+    if (percentageCritical > 15) return {
+      level: "Médio",
+      color: "text-warning"
+    };
+    return {
+      level: "Baixo",
+      color: "text-success"
+    };
   };
   const improvementPotential = getImprovementPotential();
-
-  return (
-    <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
+  return <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-2xl">
             <AlertTriangle className="h-6 w-6 text-danger" />
-            Fornecedores Críticos - Atenção Prioritária
+            Empresas críticas e alternativas 
           </CardTitle>
           <Select value={selectedSector} onValueChange={setSelectedSector}>
             <SelectTrigger className="w-[280px]">
@@ -105,14 +100,12 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                   <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
               </SelectItem>
-              {uniqueSectors.map(sector => (
-                <SelectItem key={sector} value={sector}>
+              {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
                   <div className="flex items-center justify-between w-[230px]">
                     <span>{sectorLabels[sector] || sector}</span>
                     <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
                   </div>
-                </SelectItem>
-              ))}
+                </SelectItem>)}
             </SelectContent>
           </Select>
         </div>
@@ -123,22 +116,12 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
       <CardContent>
         <div className="space-y-3">
           {criticalSuppliers.map((supplier, index) => {
-            const alternative = findBestAlternative(supplier);
-            const emissionsSavings = alternative 
-              ? supplier.totalEmissions - alternative.totalEmissions 
-              : 0;
-            const savingsPercentage = alternative 
-              ? ((emissionsSavings / supplier.totalEmissions) * 100).toFixed(0)
-              : 0;
-
-            const sectorAvgFE = getSectorAvgFE(supplier.sector);
-            const feDiff = ((supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100);
-
-            return (
-              <div
-                key={supplier.id}
-                className="p-4 border border-danger/30 rounded-lg bg-card hover:bg-danger/5 transition-colors"
-              >
+          const alternative = findBestAlternative(supplier);
+          const emissionsSavings = alternative ? supplier.totalEmissions - alternative.totalEmissions : 0;
+          const savingsPercentage = alternative ? (emissionsSavings / supplier.totalEmissions * 100).toFixed(0) : 0;
+          const sectorAvgFE = getSectorAvgFE(supplier.sector);
+          const feDiff = (supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100;
+          return <div key={supplier.id} className="p-4 border border-danger/30 rounded-lg bg-card hover:bg-danger/5 transition-colors">
                 <div className="flex items-center gap-4">
                   <Badge className="bg-danger w-8 h-8 flex items-center justify-center text-sm font-bold shrink-0">
                     {index + 1}
@@ -184,8 +167,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                   </div>
 
                   {/* Arrow separator with transition indicator */}
-                  {alternative && (
-                    <>
+                  {alternative && <>
                       <div className="flex flex-col items-center shrink-0 px-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
                           <ArrowRight className="h-4 w-4 text-success" />
@@ -210,11 +192,9 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                           </div>
                         </div>
                       </div>
-                    </>
-                  )}
+                    </>}
 
-                  {!alternative && (
-                    <>
+                  {!alternative && <>
                       <div className="flex flex-col items-center shrink-0 px-3">
                         <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
                           <ArrowRight className="h-4 w-4 text-muted-foreground/50" />
@@ -249,16 +229,14 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </>
-                  )}
+                    </>}
 
                   <Button size="sm" variant="outline" className="shrink-0">
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
-              </div>
-            );
-          })}
+              </div>;
+        })}
         </div>
 
         <div className="mt-4 p-4 bg-warning/10 border border-warning/30 rounded-lg">
@@ -275,6 +253,5 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
           </div>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
