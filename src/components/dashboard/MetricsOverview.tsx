@@ -25,7 +25,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   
   // Determinar nível de potencial de melhoria
   const getImprovementPotential = () => {
-    if (percentageCritical > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingUp };
+    if (percentageCritical > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingDown };
     if (percentageCritical > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: Minus };
     return { level: "Baixo", color: "text-success", bgColor: "bg-success/10", icon: TrendingDown };
   };
