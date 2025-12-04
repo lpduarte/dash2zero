@@ -118,14 +118,22 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
             Top de empresas
           </CardTitle>
           <Select value={selectedSector} onValueChange={setSelectedSector}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Filtrar por atividade" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{sectorLabels.all} ({suppliers.length})</SelectItem>
+              <SelectItem value="all">
+                <span className="flex items-center justify-between w-full gap-3">
+                  {sectorLabels.all}
+                  <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">{suppliers.length}</span>
+                </span>
+              </SelectItem>
               {uniqueSectors.map((sector) => (
                 <SelectItem key={sector} value={sector}>
-                  {sectorLabels[sector] || sector} ({sectorCounts[sector]})
+                  <span className="flex items-center justify-between w-full gap-3">
+                    {sectorLabels[sector] || sector}
+                    <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">{sectorCounts[sector]}</span>
+                  </span>
                 </SelectItem>
               ))}
             </SelectContent>
