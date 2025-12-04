@@ -13,13 +13,10 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
 
-  // Cálculo do potencial de melhoria baseado na percentagem de empresas críticas
+  // Cálculo do potencial de melhoria baseado apenas em emissões acima da média
   const avgEmissions = totalEmissions / suppliers.length;
   const criticalSuppliers = suppliers.filter(s => 
-    s.totalEmissions > avgEmissions * 1.2 || 
-    s.rating === 'D' || 
-    s.rating === 'E' ||
-    !s.hasSBTi
+    s.totalEmissions > avgEmissions * 1.2
   );
   const percentageCritical = (criticalSuppliers.length / suppliers.length) * 100;
   
