@@ -47,40 +47,52 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-success/30 bg-success/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-5 w-5 text-success" />
-              <span className="text-sm text-muted-foreground">Receita Média</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <Card className="p-4 shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground">Receita Média</p>
+              <div className="bg-primary/10 text-primary p-1.5 rounded">
+                <TrendingUp className="h-4 w-4" />
+              </div>
             </div>
-            <p className="text-3xl font-bold text-success">{avgRevenue.toFixed(1)}</p>
-            <p className="text-xs text-muted-foreground">M€ por empresa</p>
-          </CardContent>
+            <div>
+              <p className="text-2xl font-bold text-card-foreground">{avgRevenue.toFixed(1)}</p>
+              <p className="text-xs text-muted-foreground mt-1">M€ por empresa</p>
+            </div>
+          </div>
         </Card>
 
-        <Card className="border-warning/30 bg-warning/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="h-5 w-5 text-warning" />
-              <span className="text-sm text-muted-foreground">Receita por Colaborador</span>
+        <Card className="p-4 shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground">Receita por Colaborador</p>
+              <div className="bg-primary/10 text-primary p-1.5 rounded">
+                <Users className="h-4 w-4" />
+              </div>
             </div>
-            <p className="text-3xl font-bold text-warning">{(avgRevenuePerEmployee / 1000).toFixed(0)}k</p>
-            <p className="text-xs text-muted-foreground">€ média</p>
-          </CardContent>
+            <div>
+              <p className="text-2xl font-bold text-card-foreground">{(avgRevenuePerEmployee / 1000).toFixed(0)}k</p>
+              <p className="text-xs text-muted-foreground mt-1">€ média</p>
+            </div>
+          </div>
         </Card>
 
-        <Card className="border-accent/30 bg-accent/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="h-5 w-5 text-accent" />
-              <span className="text-sm text-muted-foreground">Intensidade Carbónica Média</span>
+        <Card className="p-4 shadow-md hover:shadow-lg transition-shadow">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground">Intensidade Carbónica Média</p>
+              <div className="bg-primary/10 text-primary p-1.5 rounded">
+                <Target className="h-4 w-4" />
+              </div>
             </div>
-            <p className="text-3xl font-bold text-accent">
-              {(suppliers.reduce((sum, s) => sum + s.emissionsPerRevenue, 0) / suppliers.length).toFixed(0)}
-            </p>
-            <p className="text-xs text-muted-foreground">kg CO₂e / €</p>
-          </CardContent>
+            <div>
+              <p className="text-2xl font-bold text-card-foreground">
+                {(suppliers.reduce((sum, s) => sum + s.emissionsPerRevenue, 0) / suppliers.length).toFixed(0)}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">kg CO₂e/€</p>
+            </div>
+          </div>
         </Card>
       </div>
 
