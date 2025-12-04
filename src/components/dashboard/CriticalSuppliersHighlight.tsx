@@ -18,9 +18,15 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
   
-  const criticalSuppliers = filteredSuppliers.filter(s => 
+  // Calcular todos os fornecedores críticos primeiro (para a percentagem)
+  const allCriticalSuppliers = filteredSuppliers.filter(s => 
     s.totalEmissions > avgEmissions * 1.2
-  ).sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
+  );
+  
+  // Depois ordenar e limitar a 5 para exibição
+  const criticalSuppliers = [...allCriticalSuppliers]
+    .sort((a, b) => b.totalEmissions - a.totalEmissions)
+    .slice(0, 5);
 
   // Calculate sector averages for FE comparison
   const sectorAverages = suppliers.reduce((acc, s) => {
@@ -72,7 +78,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
   const percentageOfTotal = (totalCriticalEmissions / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100;
   
   // Cálculo dinâmico do potencial de melhoria
-  const percentageCritical = (criticalSuppliers.length / filteredSuppliers.length) * 100;
+  const percentageCritical = (allCriticalSuppliers.length / filteredSuppliers.length) * 100;
   const getImprovementPotential = () => {
     if (percentageCritical > 30) return { level: "Alto", color: "text-danger" };
     if (percentageCritical > 15) return { level: "Médio", color: "text-warning" };
