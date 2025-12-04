@@ -176,25 +176,29 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                     </div>
                   </div>
 
-                  {/* Arrow separator */}
+                  {/* Arrow separator with transition indicator */}
                   {alternative && (
                     <>
-                      <div className="flex flex-col items-center shrink-0 px-2">
-                        <ArrowRight className="h-5 w-5 text-success" />
-                        <Badge className="bg-success/10 text-success border-success/30 text-xs mt-1">
-                          -{savingsPercentage}%
-                        </Badge>
+                      <div className="flex flex-col items-center shrink-0 px-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
+                          <ArrowRight className="h-4 w-4 text-success" />
+                        </div>
                       </div>
 
                       {/* Alternative supplier */}
-                      <div className="flex-1 min-w-0 bg-success/5 rounded-lg p-2 border border-success/20">
+                      <div className="flex-1 min-w-0 bg-gradient-to-r from-success/10 to-success/5 rounded-lg p-3 border border-success/30">
                         <div className="flex items-center justify-between gap-3">
                           <div className="min-w-0">
                             <p className="text-xs text-muted-foreground mb-0.5">Alternativa</p>
                             <h4 className="font-semibold text-sm truncate text-success">{alternative.name}</h4>
                           </div>
-                          <div className="text-center shrink-0">
-                            <p className="text-lg font-bold text-success">{alternative.totalEmissions.toFixed(0)}</p>
+                          <div className="text-right shrink-0">
+                            <div className="flex items-baseline gap-2">
+                              <p className="text-lg font-bold text-success">{alternative.totalEmissions.toFixed(0)}</p>
+                              <Badge className="bg-success text-white text-xs font-bold">
+                                -{savingsPercentage}%
+                              </Badge>
+                            </div>
                             <p className="text-xs text-muted-foreground">t CO₂e</p>
                           </div>
                         </div>
