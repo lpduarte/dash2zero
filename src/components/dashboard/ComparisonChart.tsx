@@ -17,9 +17,15 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+interface SectorOption {
+  sector: string;
+  name: string;
+  count: number;
+}
+
 interface ComparisonChartProps {
   suppliers: Supplier[];
-  sectors?: string[];
+  sectors?: SectorOption[];
   selectedSector?: string;
   onSectorChange?: (sector: string) => void;
 }
@@ -54,9 +60,9 @@ export const ComparisonChart = ({
             </SelectTrigger>
             <SelectContent className="bg-background z-50">
               <SelectItem value="all">Todas as atividades</SelectItem>
-              {sectors.map((sector) => (
-                <SelectItem key={sector} value={sector}>
-                  {sector}
+              {sectors.map((s) => (
+                <SelectItem key={s.sector} value={s.sector}>
+                  {s.name} ({s.count})
                 </SelectItem>
               ))}
             </SelectContent>
