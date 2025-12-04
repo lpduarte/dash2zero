@@ -105,7 +105,7 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
             <div className="absolute top-2 right-2 p-1.5 rounded bg-primary/10">
               <UserRound className="h-3.5 w-3.5 text-primary" />
             </div>
-            <p className="text-xs text-muted-foreground mb-1">Por Colab.</p>
+            <p className="text-xs text-muted-foreground mb-1">Por colaborador</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerEmployee.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
