@@ -2,8 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight, ChevronDown } from "lucide-react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { AlertTriangle, Target, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -21,7 +20,6 @@ const sectorLabels: Record<string, string> = {
 };
 
 export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighlightProps) => {
-  const [isOpen, setIsOpen] = useState(true);
   const [selectedSector, setSelectedSector] = useState<string>("all");
   
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
@@ -45,52 +43,39 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
 
   return (
     <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
-      <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between mb-2">
-            <CardTitle className="flex items-center gap-2 text-2xl">
-              <AlertTriangle className="h-6 w-6 text-danger" />
-              Fornecedores Críticos - Atenção Prioritária
-            </CardTitle>
-            <div className="flex items-center gap-3">
-              <Select value={selectedSector} onValueChange={setSelectedSector}>
-                <SelectTrigger className="w-[280px]">
-                  <SelectValue placeholder="Filtrar por atividade" />
-                </SelectTrigger>
-                <SelectContent className="w-[280px]">
-                  <SelectItem value="all">
-                    <div className="flex items-center justify-between w-[230px]">
-                      <span>{sectorLabels.all}</span>
-                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
-                    </div>
-                  </SelectItem>
-                  {uniqueSectors.map(sector => (
-                    <SelectItem key={sector} value={sector}>
-                      <div className="flex items-center justify-between w-[230px]">
-                        <span>{sectorLabels[sector] || sector}</span>
-                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <CollapsibleTrigger className="flex items-center gap-2">
-                <div className="text-right">
-                  <Badge className="bg-danger text-lg px-4 py-2">
-                    {criticalSuppliers.length}
-                  </Badge>
-                  <p className="text-xs text-muted-foreground mt-1">críticos</p>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <AlertTriangle className="h-6 w-6 text-danger" />
+            Fornecedores Críticos - Atenção Prioritária
+          </CardTitle>
+          <Select value={selectedSector} onValueChange={setSelectedSector}>
+            <SelectTrigger className="w-[280px]">
+              <SelectValue placeholder="Filtrar por atividade" />
+            </SelectTrigger>
+            <SelectContent className="w-[280px]">
+              <SelectItem value="all">
+                <div className="flex items-center justify-between w-[230px]">
+                  <span>{sectorLabels.all}</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
-                <ChevronDown className={`h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-              </CollapsibleTrigger>
-            </div>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
-          </p>
-        </CardHeader>
-        <CollapsibleContent>
-          <CardContent>
+              </SelectItem>
+              {uniqueSectors.map(sector => (
+                <SelectItem key={sector} value={sector}>
+                  <div className="flex items-center justify-between w-[230px]">
+                    <span>{sectorLabels[sector] || sector}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <p className="text-sm text-muted-foreground mt-2">
+          Fornecedores que requerem ação imediata devido a emissões elevadas ou baixo rating ESG
+        </p>
+      </CardHeader>
+      <CardContent>
         <div className="mb-4 p-4 bg-muted/50 rounded-lg">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
@@ -177,9 +162,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
             </div>
           </div>
         </div>
-          </CardContent>
-        </CollapsibleContent>
-      </Collapsible>
+      </CardContent>
     </Card>
   );
 };
