@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Zap, BarChart3, Building2, Users, Handshake } from "lucide-react";
+import { Award, TrendingDown, Euro, BarChart3, Building2, Users, Handshake } from "lucide-react";
 import { useState } from "react";
 import {
   Select,
@@ -159,7 +159,7 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
 
                 <div>
                   <div className="flex items-center justify-center gap-1 mb-1">
-                    <Zap className="h-3 w-3 text-muted-foreground" />
+                    <Euro className="h-3 w-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">FE</span>
                   </div>
                   <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
