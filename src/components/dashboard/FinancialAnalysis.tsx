@@ -84,56 +84,6 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="border-success/30 bg-success/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-success" />
-                <span className="text-sm font-medium">Melhor Eficiência Financeira/Carbono</span>
-              </div>
-            </div>
-            <p className="text-xl font-bold mb-1">{bestEfficiency.fullName}</p>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <div>
-                <p className="text-xs text-muted-foreground">Intensidade</p>
-                <p className="text-2xl font-bold text-success">{bestEfficiency.emissionsPerRevenue.toFixed(1)}</p>
-                <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Receita</p>
-                <p className="text-2xl font-bold text-success">{bestEfficiency.revenue.toFixed(1)}</p>
-                <p className="text-xs text-muted-foreground">M€</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-danger/30 bg-danger/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-danger" />
-                <span className="text-sm font-medium">Pior Eficiência Financeira/Carbono</span>
-              </div>
-            </div>
-            <p className="text-xl font-bold mb-1">{worstEfficiency.fullName}</p>
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <div>
-                <p className="text-xs text-muted-foreground">Intensidade</p>
-                <p className="text-2xl font-bold text-danger">{worstEfficiency.emissionsPerRevenue.toFixed(1)}</p>
-                <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Receita</p>
-                <p className="text-2xl font-bold text-danger">{worstEfficiency.revenue.toFixed(1)}</p>
-                <p className="text-xs text-muted-foreground">M€</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle>Intensidade de Emissões vs Volume de Negócios</CardTitle>
