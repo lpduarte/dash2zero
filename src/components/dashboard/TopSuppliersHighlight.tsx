@@ -1,41 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Euro, BarChart3, Building2, Users, Handshake } from "lucide-react";
+import { Award, TrendingDown, Euro, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SupplierLabel, sectorLabels } from "./SupplierLabel";
+
 interface TopSuppliersHighlightProps {
   suppliers: Supplier[];
 }
-const sectorLabels: Record<string, string> = {
-  all: "Todas as atividades",
-  manufacturing: "Indústria",
-  technology: "Tecnologia",
-  construction: "Construção",
-  transport: "Transporte",
-  services: "Serviços"
-};
-const clusterLabels: Record<string, string> = {
-  fornecedor: "Fornecedores",
-  cliente: "Clientes",
-  parceiro: "Parceiros"
-};
-const ClusterIcon = ({
-  cluster
-}: {
-  cluster: string;
-}) => {
-  switch (cluster) {
-    case 'fornecedor':
-      return <Building2 className="h-3 w-3" />;
-    case 'cliente':
-      return <Users className="h-3 w-3" />;
-    case 'parceiro':
-      return <Handshake className="h-3 w-3" />;
-    default:
-      return null;
-  }
-};
 const getMedalColor = (index: number) => {
   switch (index) {
     case 0:
@@ -143,9 +116,7 @@ export const TopSuppliersHighlight = ({
 
               <div className="flex-1">
                 <h4 className="font-semibold mb-1">{supplier.name}</h4>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
-                  {sectorLabels[supplier.sector] || supplier.sector} • <ClusterIcon cluster={supplier.cluster} /> {clusterLabels[supplier.cluster] || supplier.cluster}
-                </p>
+                <SupplierLabel sector={supplier.sector} cluster={supplier.cluster} />
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
