@@ -11,7 +11,6 @@ import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissionsChart";
-import { SectorRelativeEmissionsChart } from "@/components/dashboard/SectorRelativeEmissionsChart";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
@@ -133,8 +132,6 @@ const Analysis = () => {
             </div>
 
             <SupplierEmissionsChart suppliers={chartFilteredSuppliers} />
-
-            <SectorRelativeEmissionsChart suppliers={chartFilteredSuppliers} />
 
             <Accordion type="multiple" className="space-y-4">
               <AccordionItem value="suppliers">
