@@ -74,26 +74,22 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
       <CardContent className="space-y-4">
         {/* Main Emissions KPIs */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="p-1.5 rounded bg-primary/10">
-                <TrendingUp className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm text-muted-foreground">Emissões Totais</span>
+          <div className="p-4 rounded-lg bg-primary/5 border border-primary/20 relative">
+            <div className="absolute top-3 right-3 p-2 rounded-lg bg-primary/10">
+              <TrendingUp className="h-4 w-4 text-primary" />
             </div>
+            <p className="text-sm text-muted-foreground mb-2">Emissões Totais</p>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-primary">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
               <span className="text-sm text-muted-foreground">t CO₂e</span>
             </div>
           </div>
 
-          <div className={`p-4 rounded-lg border ${isAboveAverage ? 'bg-danger/5 border-danger/20' : 'bg-success/5 border-success/20'}`}>
-            <div className="flex items-center gap-2 mb-2">
-              <div className={`p-1.5 rounded ${isAboveAverage ? 'bg-danger/10' : 'bg-success/10'}`}>
-                <BarChart3 className={`h-4 w-4 ${isAboveAverage ? 'text-danger' : 'text-success'}`} />
-              </div>
-              <span className="text-sm text-muted-foreground">vs Média do Setor</span>
+          <div className={`p-4 rounded-lg border relative ${isAboveAverage ? 'bg-danger/5 border-danger/20' : 'bg-success/5 border-success/20'}`}>
+            <div className={`absolute top-3 right-3 p-2 rounded-lg ${isAboveAverage ? 'bg-danger/10' : 'bg-success/10'}`}>
+              <BarChart3 className={`h-4 w-4 ${isAboveAverage ? 'text-danger' : 'text-success'}`} />
             </div>
+            <p className="text-sm text-muted-foreground mb-2">vs Média do Setor</p>
             <div className="flex items-baseline gap-2">
               <span className={`text-2xl font-bold ${isAboveAverage ? 'text-danger' : 'text-success'}`}>
                 {isAboveAverage ? '+' : ''}{vsAverage.toFixed(0)}%
@@ -105,27 +101,27 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
 
         {/* Secondary Metrics */}
         <div className="grid grid-cols-3 gap-2">
-          <div className="p-3 rounded-lg border border-border bg-muted/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <UserRound className="h-3 w-3 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Por Colab.</span>
+          <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
+            <div className="absolute top-2 right-2 p-1.5 rounded-md bg-primary/10">
+              <UserRound className="h-3.5 w-3.5 text-primary" />
             </div>
+            <p className="text-xs text-muted-foreground mb-1">Por Colab.</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerEmployee.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
-          <div className="p-3 rounded-lg border border-border bg-muted/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Maximize2 className="h-3 w-3 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Por m²</span>
+          <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
+            <div className="absolute top-2 right-2 p-1.5 rounded-md bg-primary/10">
+              <Maximize2 className="h-3.5 w-3.5 text-primary" />
             </div>
+            <p className="text-xs text-muted-foreground mb-1">Por m²</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
-          <div className="p-3 rounded-lg border border-border bg-muted/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Euro className="h-3 w-3 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Por €</span>
+          <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
+            <div className="absolute top-2 right-2 p-1.5 rounded-md bg-primary/10">
+              <Euro className="h-3.5 w-3.5 text-primary" />
             </div>
+            <p className="text-xs text-muted-foreground mb-1">Por €</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerRevenue.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">kg CO₂e</p>
           </div>
