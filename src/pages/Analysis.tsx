@@ -117,11 +117,11 @@ const Analysis = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-4 gap-6">
-              <div className="col-span-1">
+            <div className="grid grid-cols-4 gap-6 items-stretch">
+              <div className="col-span-1 flex flex-col">
                 <EmissionsBreakdown suppliers={chartFilteredSuppliers} />
               </div>
-              <div className="col-span-3">
+              <div className="col-span-3 flex flex-col">
                 <ComparisonChart 
                   suppliers={chartFilteredSuppliers} 
                   sectors={sectorsWithCounts}
