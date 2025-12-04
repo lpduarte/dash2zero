@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
-import { Award, TrendingDown, Zap } from "lucide-react";
+import { Award, TrendingDown, Zap, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import {
   Select,
@@ -52,6 +52,28 @@ const getMedalBorder = (index: number) => {
 
 export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps) => {
   const [selectedSector, setSelectedSector] = useState<string>("all");
+
+  // Calculate sector averages
+  const sectorAverages = suppliers.reduce((acc, s) => {
+    if (!acc[s.sector]) {
+      acc[s.sector] = { total: 0, count: 0 };
+    }
+    acc[s.sector].total += s.totalEmissions;
+    acc[s.sector].count += 1;
+    return acc;
+  }, {} as Record<string, { total: number; count: number }>);
+
+  const getSectorAverage = (sector: string) => {
+    const data = sectorAverages[sector];
+    return data ? data.total / data.count : 0;
+  };
+
+  const getComparisonToAverage = (supplier: Supplier) => {
+    const avg = getSectorAverage(supplier.sector);
+    if (avg === 0) return { percentage: 0, isBelow: true };
+    const diff = ((supplier.totalEmissions - avg) / avg) * 100;
+    return { percentage: Math.abs(diff), isBelow: diff < 0 };
+  };
 
   const filteredSuppliers = selectedSector === "all"
     ? suppliers
@@ -104,7 +126,7 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
                 <p className="text-xs text-muted-foreground">{sectorLabels[supplier.sector] || supplier.sector} • {supplier.cluster}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <TrendingDown className="h-3 w-3 text-muted-foreground" />
@@ -120,7 +142,27 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
                     <span className="text-xs text-muted-foreground">FE</span>
                   </div>
                   <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
-                  <p className="text-xs text-muted-foreground">kg/€</p>
+                  <p className="text-xs text-muted-foreground">t CO₂e/€</p>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground">vs Setor</span>
+                  </div>
+                  {(() => {
+                    const comparison = getComparisonToAverage(supplier);
+                    return (
+                      <>
+                        <p className={`text-lg font-bold ${comparison.isBelow ? 'text-success' : 'text-destructive'}`}>
+                          {comparison.isBelow ? '-' : '+'}{comparison.percentage.toFixed(0)}%
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {comparison.isBelow ? 'abaixo' : 'acima'}
+                        </p>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
