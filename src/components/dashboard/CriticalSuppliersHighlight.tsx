@@ -115,7 +115,7 @@ export const CriticalSuppliersHighlight = ({
               </SelectContent>
             </Select>
             <CollapsibleTrigger asChild>
-              <button className="ml-2 w-9 h-9 rounded-full border border-border/50 bg-background hover:bg-muted/50 flex items-center justify-center transition-colors shrink-0">
+              <button className="ml-2 w-9 h-9 rounded-full border border-input bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors shrink-0">
                 <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? '' : 'rotate-180'}`} />
               </button>
             </CollapsibleTrigger>
