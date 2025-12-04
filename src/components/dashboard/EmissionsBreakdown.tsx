@@ -18,8 +18,8 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   ];
 
   return (
-    <>
-      <Card>
+    <div className="flex flex-col h-full">
+      <Card className="shadow-sm flex-1">
         <CardHeader>
           <h2 className="text-xl font-semibold">Emissões por âmbito</h2>
         </CardHeader>
@@ -50,7 +50,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
           const total = totalScope1 + totalScope2 + totalScope3;
           const percentage = total > 0 ? (scope.value / total) * 100 : 0;
           return (
-            <Card key={scope.name} className="p-3">
+            <Card key={scope.name} className="p-3 shadow-sm">
               <div className="text-center">
                 <div className="text-xs text-muted-foreground mb-1">
                   Âmbito {index + 1}
@@ -69,6 +69,6 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };

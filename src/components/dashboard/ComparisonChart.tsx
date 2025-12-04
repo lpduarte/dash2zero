@@ -47,7 +47,7 @@ export const ComparisonChart = ({
   }));
 
   return (
-    <Card className="p-6 shadow-md h-full flex flex-col">
+    <Card className="p-6 shadow-sm h-full flex flex-col">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h2 className="text-xl font-semibold">Comparação de Emissões por Âmbito</h2>
