@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
+import { sectorLabels } from "@/data/sectors";
 
 interface PerformanceHeatmapProps {
   suppliers: Supplier[];
@@ -7,7 +8,9 @@ interface PerformanceHeatmapProps {
 
 export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
   const regions = ['north', 'center', 'south', 'islands'];
-  const sectors = ['manufacturing', 'technology', 'construction', 'transport', 'services'];
+  
+  // Get unique sectors from suppliers data
+  const sectors = [...new Set(suppliers.map(s => s.sector))];
 
   const getRegionLabel = (region: string) => {
     const labels: Record<string, string> = {
@@ -20,14 +23,7 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
   };
 
   const getSectorLabel = (sector: string) => {
-    const labels: Record<string, string> = {
-      manufacturing: 'Manufatura',
-      technology: 'Tecnologia',
-      construction: 'Construção',
-      transport: 'Transporte',
-      services: 'Serviços',
-    };
-    return labels[sector] || sector;
+    return sectorLabels[sector] || sector;
   };
 
   const getAverageEmissions = (region: string, sector: string) => {
