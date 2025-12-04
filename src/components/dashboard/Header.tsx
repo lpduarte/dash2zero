@@ -1,4 +1,4 @@
-import { Leaf, LayoutDashboard, FolderKanban } from "lucide-react";
+import { Leaf, LayoutDashboard, BarChart3, Boxes } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "./NotificationBell";
@@ -42,7 +42,7 @@ export const Header = () => {
                 )}
               >
                 <LayoutDashboard className="h-4 w-4" />
-                Overview
+                Dashboard
               </Link>
               <Link
                 to="/analise"
@@ -53,7 +53,7 @@ export const Header = () => {
                     : "hover:bg-primary-foreground/10"
                 )}
               >
-                <LayoutDashboard className="h-4 w-4" />
+                <BarChart3 className="h-4 w-4" />
                 Análise
               </Link>
               <Link
@@ -65,7 +65,7 @@ export const Header = () => {
                     : "hover:bg-primary-foreground/10"
                 )}
               >
-                <FolderKanban className="h-4 w-4" />
+                <Boxes className="h-4 w-4" />
                 Clusters
               </Link>
             </nav>
