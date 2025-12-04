@@ -27,35 +27,38 @@ export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
   }));
 
   return (
-    <Card className="p-6 shadow-md">
-      <h2 className="text-xl font-bold mb-4">Comparação de Emissões por Âmbito</h2>
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-          <XAxis 
-            dataKey="name" 
-            tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-            angle={-45}
-            textAnchor="end"
-            height={100}
-          />
-          <YAxis 
-            tick={{ fill: 'hsl(var(--muted-foreground))' }}
-            label={{ value: 'Emissões (t CO₂e)', angle: -90, position: 'insideLeft' }}
-          />
-          <Tooltip 
-            contentStyle={{
-              backgroundColor: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
-              borderRadius: '8px',
-            }}
-          />
-          <Legend />
-          <Bar dataKey="Âmbito 1" fill="hsl(220 70% 55%)" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Âmbito 2" fill="hsl(280 60% 60%)" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Âmbito 3" fill="hsl(25 85% 55%)" radius={[4, 4, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
+    <Card className="p-6 shadow-md h-full flex flex-col">
+      <div className="mb-4">
+        <h2 className="text-xl font-semibold">Comparação de Emissões por Âmbito</h2>
+        <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
+      </div>
+      <div className="flex-1">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis 
+              dataKey="name" 
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+              angle={-45}
+              textAnchor="end"
+              height={100}
+            />
+            <YAxis 
+              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+            />
+            <Tooltip 
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+              }}
+            />
+            <Bar dataKey="Âmbito 1" fill="hsl(220 70% 55%)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Âmbito 2" fill="hsl(280 60% 60%)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Âmbito 3" fill="hsl(25 85% 55%)" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </Card>
   );
 };
