@@ -121,18 +121,18 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
             <SelectTrigger className="w-[280px]">
               <SelectValue placeholder="Filtrar por atividade" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">
-                <span className="flex items-center justify-between w-full gap-3">
-                  {sectorLabels.all}
-                  <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">{suppliers.length}</span>
+            <SelectContent className="w-[280px]">
+              <SelectItem value="all" className="[&>span]:w-full">
+                <span className="flex items-center justify-between w-full">
+                  <span>{sectorLabels.all}</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </span>
               </SelectItem>
               {uniqueSectors.map((sector) => (
-                <SelectItem key={sector} value={sector}>
-                  <span className="flex items-center justify-between w-full gap-3">
-                    {sectorLabels[sector] || sector}
-                    <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">{sectorCounts[sector]}</span>
+                <SelectItem key={sector} value={sector} className="[&>span]:w-full">
+                  <span className="flex items-center justify-between w-full">
+                    <span>{sectorLabels[sector] || sector}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
                   </span>
                 </SelectItem>
               ))}
