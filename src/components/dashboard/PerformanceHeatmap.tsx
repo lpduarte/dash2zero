@@ -77,7 +77,7 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
                     return (
                       <td
                         key={`${sector}-${region}`}
-                        className={`border p-4 text-center ${getColor(avgEmissions)}`}
+                        className={`border p-4 text-center h-16 ${getColor(avgEmissions)}`}
                       >
                         {avgEmissions ? (
                           <div className="text-sm font-medium">
