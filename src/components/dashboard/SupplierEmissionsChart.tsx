@@ -2,57 +2,55 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
-
 interface SupplierEmissionsChartProps {
   suppliers: Supplier[];
 }
-
-export const SupplierEmissionsChart = ({ suppliers }: SupplierEmissionsChartProps) => {
-  const emissionsData = suppliers
-    .map(s => ({
-      name: s.name.length > 28 ? s.name.substring(0, 25) + '...' : s.name,
-      fullName: s.name,
-      totalEmissions: s.totalEmissions,
-      sector: s.sector,
-      cluster: s.cluster,
-    }))
-    .sort((a, b) => b.totalEmissions - a.totalEmissions);
-
+export const SupplierEmissionsChart = ({
+  suppliers
+}: SupplierEmissionsChartProps) => {
+  const emissionsData = suppliers.map(s => ({
+    name: s.name.length > 28 ? s.name.substring(0, 25) + '...' : s.name,
+    fullName: s.name,
+    totalEmissions: s.totalEmissions,
+    sector: s.sector,
+    cluster: s.cluster
+  })).sort((a, b) => b.totalEmissions - a.totalEmissions);
   const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
-
   const getBarColor = (value: number) => {
     if (value < avgEmissions * 0.5) return "hsl(var(--success))";
     if (value < avgEmissions) return "hsl(var(--primary))";
     if (value < avgEmissions * 1.5) return "hsl(var(--warning))";
     return "hsl(var(--danger))";
   };
-
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
-        <CardTitle>Emissões Totais por Fornecedor</CardTitle>
+        <CardTitle>Emissões totais por empresa</CardTitle>
         <p className="text-sm text-muted-foreground">
           Emissões totais (Alcance 1 + 2 + 3) desagregadas por fornecedor
         </p>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={Math.max(250, emissionsData.length * 14)}>
-          <BarChart data={emissionsData} layout="vertical" margin={{ left: 0, right: 20 }} barSize={5}>
+          <BarChart data={emissionsData} layout="vertical" margin={{
+          left: 0,
+          right: 20
+        }} barSize={5}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
-            <YAxis 
-              dataKey="name" 
-              type="category" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-              width={220}
-              interval={0}
-            />
-            <Tooltip
-              content={({ active, payload }) => {
-                if (!active || !payload || !payload[0]) return null;
-                const data = payload[0].payload;
-                return (
-                  <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+            <XAxis type="number" tick={{
+            fill: 'hsl(var(--muted-foreground))',
+            fontSize: 10
+          }} />
+            <YAxis dataKey="name" type="category" tick={{
+            fill: 'hsl(var(--muted-foreground))',
+            fontSize: 10
+          }} width={220} interval={0} />
+            <Tooltip content={({
+            active,
+            payload
+          }) => {
+            if (!active || !payload || !payload[0]) return null;
+            const data = payload[0].payload;
+            return <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
                     <p className="font-semibold mb-2">{data.fullName}</p>
                     <div className="space-y-1 text-sm">
                       <p>
@@ -64,18 +62,13 @@ export const SupplierEmissionsChart = ({ suppliers }: SupplierEmissionsChartProp
                         <Badge variant="outline" className="text-xs">{data.cluster}</Badge>
                       </div>
                     </div>
-                  </div>
-                );
-              }}
-            />
+                  </div>;
+          }} />
             <Bar dataKey="totalEmissions" radius={[0, 4, 4, 0]}>
-              {emissionsData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry.totalEmissions)} />
-              ))}
+              {emissionsData.map((entry, index) => <Cell key={`cell-${index}`} fill={getBarColor(entry.totalEmissions)} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
