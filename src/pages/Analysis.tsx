@@ -1,17 +1,15 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
-import { AdvancedFilterPanel } from "@/components/dashboard/AdvancedFilterPanel";
+import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { TrendsChart } from "@/components/dashboard/TrendsChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
-import { ESGScoreCard } from "@/components/dashboard/ESGScoreCard";
 import { RankingChart } from "@/components/dashboard/RankingChart";
 import { RadarComparison } from "@/components/dashboard/RadarComparison";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
 import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
-import { SupplierDetailsTable } from "@/components/dashboard/SupplierDetailsTable";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { Scope3Analysis } from "@/components/dashboard/Scope3Analysis";
@@ -21,141 +19,87 @@ import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { SupplierRecommendations } from "@/components/dashboard/SupplierRecommendations";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { mockSuppliers } from "@/data/mockSuppliers";
-import { AdvancedFilters } from "@/types/supplier";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const Analysis = () => {
-  const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>({
-    nifGroup: "all",
-    nif: "all",
-    district: "all",
-    municipality: "all",
-    companySize: "all",
-    revenue: "all",
-    caeSection: "all",
-    caeDivision: "all",
-    company: "all",
-    carbonYear: "all",
-    dateRange: {
-      start: "2023-01",
-      end: "2025-11",
-    },
-  });
+  const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
 
-  const handleFilterChange = (key: keyof AdvancedFilters, value: any) => {
-    setAdvancedFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  // Calculate cluster counts from mock data
+  const clusterCounts: Record<ClusterType, number> = useMemo(() => ({
+    all: mockSuppliers.length,
+    fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
+    cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
+    parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
+  }), []);
 
-  const handleResetFilters = () => {
-    setAdvancedFilters({
-      nifGroup: "all",
-      nif: "all",
-      district: "all",
-      municipality: "all",
-      companySize: "all",
-      revenue: "all",
-      caeSection: "all",
-      caeDivision: "all",
-      company: "all",
-      carbonYear: "all",
-      dateRange: {
-        start: "2023-01",
-        end: "2025-11",
-      },
-    });
-  };
+  // Calculate improvement potentials (based on critical suppliers percentage)
+  const clusterPotentials: Record<ClusterType, ImprovementPotential> = useMemo(() => {
+    const calculatePotential = (suppliers: typeof mockSuppliers): ImprovementPotential => {
+      if (suppliers.length === 0) return 'low';
+      
+      // Calculate sector averages
+      const sectorEmissions: Record<string, number[]> = {};
+      suppliers.forEach(s => {
+        if (!sectorEmissions[s.sector]) sectorEmissions[s.sector] = [];
+        sectorEmissions[s.sector].push(s.totalEmissions);
+      });
+      
+      const sectorAverages: Record<string, number> = {};
+      Object.entries(sectorEmissions).forEach(([sector, emissions]) => {
+        sectorAverages[sector] = emissions.reduce((a, b) => a + b, 0) / emissions.length;
+      });
+      
+      // Count critical suppliers (emissions > 1.2x sector average)
+      const criticalCount = suppliers.filter(s => 
+        s.totalEmissions > (sectorAverages[s.sector] || 0) * 1.2
+      ).length;
+      
+      const criticalPercentage = (criticalCount / suppliers.length) * 100;
+      
+      if (criticalPercentage > 30) return 'high';
+      if (criticalPercentage >= 15) return 'medium';
+      return 'low';
+    };
+
+    return {
+      all: calculatePotential(mockSuppliers),
+      fornecedor: calculatePotential(mockSuppliers.filter(s => s.cluster === 'fornecedor')),
+      cliente: calculatePotential(mockSuppliers.filter(s => s.cluster === 'cliente')),
+      parceiro: calculatePotential(mockSuppliers.filter(s => s.cluster === 'parceiro')),
+    };
+  }, []);
 
   const filteredSuppliers = useMemo(() => {
     let filtered = [...mockSuppliers];
 
-    // Filter by company
-    if (advancedFilters.company !== "all") {
-      filtered = filtered.filter((s) => s.id === advancedFilters.company);
+    // Filter by cluster
+    if (selectedCluster !== 'all') {
+      filtered = filtered.filter((s) => s.cluster === selectedCluster);
     }
 
-    // Filter by district (map regions to districts for demo)
-    if (advancedFilters.district !== "all") {
-      const districtToRegion: Record<string, string> = {
-        porto: "north",
-        braga: "north",
-        lisboa: "center",
-        coimbra: "center",
-        faro: "south",
-      };
-      const region = districtToRegion[advancedFilters.district];
-      if (region) {
-        filtered = filtered.filter((s) => s.region === region);
-      }
-    }
-
-    // Filter by company size (based on employees)
-    if (advancedFilters.companySize !== "all") {
-      filtered = filtered.filter((s) => {
-        switch (advancedFilters.companySize) {
-          case "micro":
-            return s.employees < 10;
-          case "small":
-            return s.employees >= 10 && s.employees < 50;
-          case "medium":
-            return s.employees >= 50 && s.employees < 250;
-          case "large":
-            return s.employees >= 250;
-          default:
-            return true;
-        }
-      });
-    }
-
-    // Filter by revenue range
-    if (advancedFilters.revenue !== "all") {
-      filtered = filtered.filter((s) => {
-        switch (advancedFilters.revenue) {
-          case "0-1m":
-            return s.revenue < 1;
-          case "1m-10m":
-            return s.revenue >= 1 && s.revenue < 10;
-          case "10m-50m":
-            return s.revenue >= 10 && s.revenue < 50;
-          case "50m+":
-            return s.revenue >= 50;
-          default:
-            return true;
-        }
-      });
-    }
-
-    // Sort by rating and total emissions
-    return filtered.sort((a, b) => {
-      if (a.rating !== b.rating) {
-        return a.rating.localeCompare(b.rating);
-      }
-      return a.totalEmissions - b.totalEmissions;
-    });
-  }, [advancedFilters]);
+    // Sort by total emissions
+    return filtered.sort((a, b) => a.totalEmissions - b.totalEmissions);
+  }, [selectedCluster]);
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
       <main className="max-w-[1400px] mx-auto py-8 px-8 space-y-8">
-        <AdvancedFilterPanel
-          filters={advancedFilters}
-          onFilterChange={handleFilterChange}
-          onReset={handleResetFilters}
+        <ClusterSelector
+          selectedCluster={selectedCluster}
+          onClusterChange={setSelectedCluster}
+          clusterCounts={clusterCounts}
+          clusterPotentials={clusterPotentials}
         />
 
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Visão Geral</TabsTrigger>
             <TabsTrigger value="environmental">Métricas Ambientais</TabsTrigger>
-            <TabsTrigger value="esg">ESG & Compliance</TabsTrigger>
             <TabsTrigger value="financial">Financeira</TabsTrigger>
             <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
-            <TabsTrigger value="details">Detalhes</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -240,29 +184,6 @@ const Analysis = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <SectorBenchmarking suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </TabsContent>
-
-          <TabsContent value="esg" className="space-y-6">
-            <Accordion type="multiple" className="space-y-4">
-
-              <AccordionItem value="score">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Score ESG Agregado
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ESGScoreCard suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="comparison">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Comparação de Fornecedores
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ComparisonChart suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -355,10 +276,6 @@ const Analysis = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          </TabsContent>
-
-          <TabsContent value="details" className="space-y-6">
-            <SupplierDetailsTable suppliers={filteredSuppliers} />
           </TabsContent>
         </Tabs>
       </main>
