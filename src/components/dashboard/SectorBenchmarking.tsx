@@ -105,7 +105,7 @@ export const SectorBenchmarking = ({
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={chartHeight}>
-            <BarChart data={comparisonData} layout="vertical" margin={{ left: 0, right: 20 }}>
+            <BarChart data={comparisonData} layout="vertical" margin={{ left: 20, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 type="number" 
@@ -115,9 +115,8 @@ export const SectorBenchmarking = ({
               <YAxis 
                 dataKey="name" 
                 type="category" 
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12, textAnchor: 'start' }} 
-                width={200}
-                tickMargin={-195}
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} 
+                width={180}
               />
               <Tooltip content={({ active, payload }) => {
                 if (!active || !payload || !payload[0]) return null;
