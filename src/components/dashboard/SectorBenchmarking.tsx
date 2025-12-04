@@ -72,27 +72,6 @@ export const SectorBenchmarking = ({ suppliers }: SectorBenchmarkingProps) => {
 
   return (
     <div className="space-y-6">
-      <Card className="border-primary/30 bg-gradient-to-r from-primary/5 to-accent/5">
-        <CardHeader>
-          <CardTitle>Médias de Emissões por Setor</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {sectorData.map((sector, index) => (
-              <Card key={index} className="border-border bg-card">
-                <CardContent className="pt-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold">{sector.sector}</h4>
-                    <Badge variant="outline">{sector.count} empresas</Badge>
-                  </div>
-                  <p className="text-3xl font-bold text-primary">{sector.average.toFixed(0)}</p>
-                  <p className="text-xs text-muted-foreground">t CO₂e média</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
 
       <Card>
         <CardHeader>
