@@ -224,11 +224,22 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                               </div>
                             </div>
                           </TooltipTrigger>
-                          <TooltipContent side="top" className="max-w-[280px]">
-                            <p className="text-xs">
-                              Não existem outras empresas no setor <strong>{sectorLabels[supplier.sector] || supplier.sector}</strong> com 
-                              emissões inferiores a este fornecedor. Considere trabalhar diretamente com esta empresa para reduzir as suas emissões.
-                            </p>
+                          <TooltipContent side="top" className="max-w-[320px]">
+                            <div className="space-y-2">
+                              <p className="text-xs">
+                                Não existem outras empresas no setor <strong>{sectorLabels[supplier.sector] || supplier.sector}</strong> com 
+                                emissões inferiores a este fornecedor.
+                              </p>
+                              <div className="border-t border-border/50 pt-2">
+                                <p className="text-xs font-medium mb-1">Sugestões de ação:</p>
+                                <ul className="text-xs text-muted-foreground space-y-0.5">
+                                  <li>• Realizar auditoria energética conjunta</li>
+                                  <li>• Propor formação em eficiência energética</li>
+                                  <li>• Estabelecer metas de redução contratuais</li>
+                                  <li>• Incentivar certificações ambientais</li>
+                                </ul>
+                              </div>
+                            </div>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
