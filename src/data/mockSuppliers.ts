@@ -384,7 +384,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "17",
     name: "QuimiVerde Chemicals",
-    sector: "chemicals",
+    sector: "manufacturing",
     region: "north",
     scope1: 1820,
     scope2: 920,
@@ -411,7 +411,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "33",
     name: "ChemPro Portugal",
-    sector: "chemicals",
+    sector: "manufacturing",
     region: "center",
     scope1: 1450,
     scope2: 720,
@@ -438,7 +438,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "34",
     name: "EcoQuímica Industrial",
-    sector: "chemicals",
+    sector: "manufacturing",
     region: "south",
     scope1: 980,
     scope2: 520,
@@ -466,7 +466,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "27",
     name: "VidroPT Glass",
-    sector: "glass",
+    sector: "manufacturing",
     region: "center",
     scope1: 1680,
     scope2: 780,
@@ -493,7 +493,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "35",
     name: "CrystalGlass Industries",
-    sector: "glass",
+    sector: "manufacturing",
     region: "north",
     scope1: 1280,
     scope2: 620,
@@ -520,7 +520,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "36",
     name: "VidroSul Embalagens",
-    sector: "glass",
+    sector: "manufacturing",
     region: "south",
     scope1: 920,
     scope2: 480,
@@ -548,7 +548,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "11",
     name: "MetalPro Indústrias",
-    sector: "metals",
+    sector: "manufacturing",
     region: "south",
     scope1: 1450,
     scope2: 680,
@@ -575,7 +575,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "37",
     name: "AçoVerde Metalurgia",
-    sector: "metals",
+    sector: "manufacturing",
     region: "north",
     scope1: 1180,
     scope2: 540,
@@ -602,7 +602,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "38",
     name: "FundoPT Fundição",
-    sector: "metals",
+    sector: "manufacturing",
     region: "center",
     scope1: 920,
     scope2: 420,
@@ -630,7 +630,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "13",
     name: "EcoPlásticos SA",
-    sector: "plastics",
+    sector: "manufacturing",
     region: "north",
     scope1: 890,
     scope2: 420,
@@ -657,7 +657,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "39",
     name: "PolyTech Polymers",
-    sector: "plastics",
+    sector: "manufacturing",
     region: "center",
     scope1: 680,
     scope2: 320,
@@ -684,7 +684,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "40",
     name: "RecyPlast Reciclagem",
-    sector: "plastics",
+    sector: "manufacturing",
     region: "south",
     scope1: 420,
     scope2: 220,
@@ -712,7 +712,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "20",
     name: "TêxtilNorte Fabrics",
-    sector: "textiles",
+    sector: "manufacturing",
     region: "north",
     scope1: 680,
     scope2: 380,
@@ -739,7 +739,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "41",
     name: "FashionGreen Textiles",
-    sector: "textiles",
+    sector: "manufacturing",
     region: "center",
     scope1: 520,
     scope2: 280,
@@ -766,7 +766,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "42",
     name: "ConfecçõesSul Texteis",
-    sector: "textiles",
+    sector: "manufacturing",
     region: "south",
     scope1: 780,
     scope2: 420,
@@ -794,7 +794,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "21",
     name: "CerâmicaSul Tiles",
-    sector: "ceramics",
+    sector: "manufacturing",
     region: "south",
     scope1: 1250,
     scope2: 580,
@@ -821,7 +821,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "43",
     name: "AzulejoPT Cerâmica",
-    sector: "ceramics",
+    sector: "manufacturing",
     region: "center",
     scope1: 980,
     scope2: 450,
@@ -848,7 +848,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "44",
     name: "PorcelanaFina Industries",
-    sector: "ceramics",
+    sector: "manufacturing",
     region: "north",
     scope1: 720,
     scope2: 340,
@@ -958,7 +958,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "23",
     name: "AutoPeças Express",
-    sector: "automotive",
+    sector: "manufacturing",
     region: "north",
     scope1: 780,
     scope2: 350,
@@ -985,7 +985,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "45",
     name: "ComponentAuto Industrial",
-    sector: "automotive",
+    sector: "manufacturing",
     region: "center",
     scope1: 620,
     scope2: 280,
@@ -1012,7 +1012,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "46",
     name: "MoldAuto Precision",
-    sector: "automotive",
+    sector: "manufacturing",
     region: "north",
     scope1: 520,
     scope2: 240,
@@ -1040,7 +1040,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "25",
     name: "PackPro Embalagens",
-    sector: "packaging",
+    sector: "manufacturing",
     region: "center",
     scope1: 540,
     scope2: 280,
@@ -1067,7 +1067,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "47",
     name: "EcoPack Solutions",
-    sector: "packaging",
+    sector: "manufacturing",
     region: "north",
     scope1: 380,
     scope2: 190,
@@ -1094,7 +1094,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "48",
     name: "BoxMaster Packaging",
-    sector: "packaging",
+    sector: "manufacturing",
     region: "south",
     scope1: 620,
     scope2: 320,
@@ -1122,7 +1122,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "30",
     name: "PapelEco Paper",
-    sector: "paper",
+    sector: "manufacturing",
     region: "center",
     scope1: 620,
     scope2: 340,
@@ -1149,7 +1149,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "49",
     name: "CeluloseVerde Industries",
-    sector: "paper",
+    sector: "manufacturing",
     region: "north",
     scope1: 480,
     scope2: 260,
@@ -1176,7 +1176,7 @@ export const mockSuppliers: Supplier[] = [
   {
     id: "50",
     name: "PapelSul Produções",
-    sector: "paper",
+    sector: "manufacturing",
     region: "south",
     scope1: 720,
     scope2: 380,

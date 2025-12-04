@@ -5,18 +5,9 @@ export const sectorLabels: Record<string, string> = {
   technology: "Tecnologia",
   construction: "Construção",
   logistics: "Logística",
-  chemicals: "Química",
-  glass: "Vidro",
-  metals: "Metalurgia",
-  plastics: "Plásticos",
-  textiles: "Têxtil",
-  ceramics: "Cerâmica",
+  manufacturing: "Indústria",
   food: "Alimentar",
-  automotive: "Automóvel",
-  packaging: "Embalagens",
-  paper: "Papel",
-  services: "Serviços",
-  manufacturing: "Indústria"
+  services: "Serviços"
 };
 
 export const clusterLabels: Record<string, string> = {
