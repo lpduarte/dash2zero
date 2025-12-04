@@ -42,7 +42,7 @@ export const PerformanceHeatmap = ({
   };
   return <Card>
       <CardHeader>
-        <h2 className="text-xl font-semibold">Mapa de Desempenho por Região e Setor</h2>
+        <h2 className="text-xl font-semibold">Desempenho por região</h2>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
