@@ -51,9 +51,9 @@ export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
             }}
           />
           <Legend />
-          <Bar dataKey="Âmbito 1" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Âmbito 2" fill="hsl(var(--secondary))" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Âmbito 3" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 1" fill="hsl(220 70% 55%)" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 2" fill="hsl(280 60% 60%)" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Âmbito 3" fill="hsl(25 85% 55%)" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </Card>
