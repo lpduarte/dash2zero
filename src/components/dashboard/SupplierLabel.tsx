@@ -1,15 +1,8 @@
 import { Building2, Users, Handshake } from "lucide-react";
+import { sectorLabels } from "@/data/sectors";
 
-export const sectorLabels: Record<string, string> = {
-  all: "Todas as atividades",
-  technology: "Tecnologia",
-  construction: "Construção",
-  logistics: "Logística",
-  manufacturing: "Indústria",
-  food: "Alimentar",
-  services: "Serviços",
-  energia: "Energia"
-};
+// Re-export for backward compatibility
+export { sectorLabels };
 
 export const clusterLabels: Record<string, string> = {
   fornecedor: "Fornecedores",
