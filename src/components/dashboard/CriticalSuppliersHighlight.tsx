@@ -19,10 +19,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
   
   const criticalSuppliers = filteredSuppliers.filter(s => 
-    s.totalEmissions > avgEmissions * 1.2 || 
-    s.rating === 'D' || 
-    s.rating === 'E' ||
-    !s.hasSBTi
+    s.totalEmissions > avgEmissions * 1.2
   ).sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
 
   // Calculate sector averages for FE comparison
@@ -73,6 +70,15 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
 
   const totalCriticalEmissions = criticalSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
   const percentageOfTotal = (totalCriticalEmissions / suppliers.reduce((sum, s) => sum + s.totalEmissions, 0)) * 100;
+  
+  // Cálculo dinâmico do potencial de melhoria
+  const percentageCritical = (criticalSuppliers.length / filteredSuppliers.length) * 100;
+  const getImprovementPotential = () => {
+    if (percentageCritical > 30) return { level: "Alto", color: "text-danger" };
+    if (percentageCritical > 15) return { level: "Médio", color: "text-warning" };
+    return { level: "Baixo", color: "text-success" };
+  };
+  const improvementPotential = getImprovementPotential();
 
   return (
     <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
@@ -123,7 +129,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
             </div>
             <div>
               <p className="text-sm text-muted-foreground mb-1">Potencial de Melhoria</p>
-              <p className="text-2xl font-bold text-danger">Alto</p>
+              <p className={`text-2xl font-bold ${improvementPotential.color}`}>{improvementPotential.level}</p>
               <p className="text-xs text-muted-foreground">prioridade</p>
             </div>
           </div>
