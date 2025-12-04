@@ -2,6 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
+import { getSectorName } from "@/data/sectors";
+import { Building2, Users, Handshake } from "lucide-react";
+
+const clusterConfig: Record<string, { label: string; icon: React.ReactNode }> = {
+  fornecedor: { label: "Fornecedor", icon: <Building2 className="h-3 w-3" /> },
+  cliente: { label: "Cliente", icon: <Users className="h-3 w-3" /> },
+  parceiro: { label: "Parceiro", icon: <Handshake className="h-3 w-3" /> },
+};
 interface SupplierEmissionsChartProps {
   suppliers: Supplier[];
 }
@@ -50,6 +58,7 @@ export const SupplierEmissionsChart = ({
           }) => {
             if (!active || !payload || !payload[0]) return null;
             const data = payload[0].payload;
+            const cluster = clusterConfig[data.cluster] || { label: data.cluster, icon: null };
             return <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
                     <p className="font-semibold mb-2">{data.fullName}</p>
                     <div className="space-y-1 text-sm">
@@ -58,8 +67,11 @@ export const SupplierEmissionsChart = ({
                         <span className="font-bold">{data.totalEmissions.toFixed(0)} t CO₂e</span>
                       </p>
                       <div className="flex gap-2 mt-2">
-                        <Badge variant="outline" className="text-xs">{data.sector}</Badge>
-                        <Badge variant="outline" className="text-xs">{data.cluster}</Badge>
+                        <Badge variant="outline" className="text-xs">{getSectorName(data.sector)}</Badge>
+                        <Badge variant="outline" className="text-xs flex items-center gap-1">
+                          {cluster.icon}
+                          {cluster.label}
+                        </Badge>
                       </div>
                     </div>
                   </div>;
