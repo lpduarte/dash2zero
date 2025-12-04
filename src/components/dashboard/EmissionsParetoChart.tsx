@@ -54,59 +54,6 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-danger/30 bg-danger/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle className="h-5 w-5 text-danger" />
-              <span className="text-sm text-muted-foreground">Fornecedores Críticos</span>
-            </div>
-            <p className="text-3xl font-bold text-danger">{threshold80Index + 1}</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              {critical20Percent.toFixed(0)}% geram 80% das emissões
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-warning/30 bg-warning/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-5 w-5 text-warning" />
-              <span className="text-sm text-muted-foreground">FE Médio</span>
-            </div>
-            <p className="text-3xl font-bold text-warning">{avgFE.toFixed(1)}</p>
-            <p className="text-xs text-muted-foreground mt-1">kg CO₂e / €</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-primary/30 bg-primary/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="h-5 w-5 text-primary" />
-              <span className="text-sm text-muted-foreground">Investimento Crítico</span>
-            </div>
-            <p className="text-3xl font-bold text-primary">{totalCriticalRevenue.toFixed(1)}</p>
-            <p className="text-xs text-muted-foreground mt-1">
-              M€ ({((totalCriticalRevenue / totalRevenue) * 100).toFixed(0)}% do total)
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-accent/30 bg-accent/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm text-muted-foreground">Amplitude FE</span>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <p className="text-2xl font-bold text-success">{minFE.toFixed(1)}</p>
-              <span className="text-muted-foreground">-</span>
-              <p className="text-2xl font-bold text-danger">{maxFE.toFixed(1)}</p>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">kg CO₂e / €</p>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle>Gráfico de Pareto: Fator de Emissões vs Investimento</CardTitle>
