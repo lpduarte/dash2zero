@@ -118,7 +118,7 @@ const Overview = () => {
             <TabsTrigger value="home">Visão geral</TabsTrigger>
             <TabsTrigger value="overview">Detalhes das emissões</TabsTrigger>
             <TabsTrigger value="environmental">Análise por atividade</TabsTrigger>
-            <TabsTrigger value="financial">Financeira</TabsTrigger>
+            <TabsTrigger value="financial">Análise por faturação</TabsTrigger>
             <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
           </TabsList>
 
