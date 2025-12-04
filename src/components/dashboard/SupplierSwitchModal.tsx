@@ -102,134 +102,178 @@ export const SupplierSwitchModal = ({
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {/* Side-by-side comparison */}
-          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-start">
-            {/* Critical supplier */}
-            <div className="p-4 rounded-lg border border-danger/30 bg-danger/5">
-              <Badge className="bg-danger mb-3">Fornecedor Atual</Badge>
-              <h3 className="font-semibold text-lg mb-1">{criticalSupplier.name}</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+          {/* Headers */}
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-end">
+            <div className="p-4 rounded-t-lg border border-b-0 border-danger/30 bg-danger/5">
+              <Badge className="bg-danger mb-2">Fornecedor Atual</Badge>
+              <h3 className="font-semibold text-lg">{criticalSupplier.name}</h3>
+              <p className="text-sm text-muted-foreground">
                 {sectorLabels[criticalSupplier.sector] || criticalSupplier.sector}
               </p>
+            </div>
 
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-sm text-muted-foreground">Emissões totais</span>
-                  <span className="font-semibold text-danger">
-                    {criticalSupplier.totalEmissions.toLocaleString("pt-PT")} t CO₂e
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-sm text-muted-foreground">Âmbito 1</span>
-                  <span className="font-medium">
-                    {criticalSupplier.scope1.toLocaleString("pt-PT")} t CO₂e
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-sm text-muted-foreground">Âmbito 2</span>
-                  <span className="font-medium">
-                    {criticalSupplier.scope2.toLocaleString("pt-PT")} t CO₂e
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2 border-b border-border/50">
-                  <span className="text-sm text-muted-foreground">Âmbito 3</span>
-                  <span className="font-medium">
-                    {criticalSupplier.scope3.toLocaleString("pt-PT")} t CO₂e
-                  </span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-sm text-muted-foreground">FE (por faturação)</span>
-                  <span className="font-medium">
-                    {criticalSupplier.emissionsPerRevenue.toFixed(1)} kg CO₂e/€
-                  </span>
-                </div>
+            <div className="flex items-center justify-center pb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
+                <ArrowRight className="h-5 w-5 text-success" />
               </div>
             </div>
 
-            {/* Arrow */}
-            <div className="flex flex-col items-center justify-center h-full py-12">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
-                <ArrowRight className="h-6 w-6 text-success" />
-              </div>
-            </div>
-
-            {/* Alternative supplier */}
-            <div className="p-4 rounded-lg border border-success/30 bg-success/5">
-              <Badge className="bg-success mb-3">Alternativa</Badge>
-
-              {/* Alternative selector */}
-              <div className="mb-4">
-                <Select
-                  value={selectedAlternativeId}
-                  onValueChange={setSelectedAlternativeId}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecionar alternativa" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {allAlternatives.map((alt) => (
-                      <SelectItem key={alt.id} value={alt.id}>
-                        <div className="flex items-center justify-between gap-2">
-                          <span>{alt.name}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {alt.totalEmissions.toFixed(0)} t CO₂e
-                          </span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {selectedAlternative ? (
-                <>
-                  <h3 className="font-semibold text-lg mb-1 text-success">
-                    {selectedAlternative.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {sectorLabels[selectedAlternative.sector] || selectedAlternative.sector}
-                  </p>
-
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">Emissões totais</span>
-                      <span className="font-semibold text-success">
-                        {selectedAlternative.totalEmissions.toLocaleString("pt-PT")} t CO₂e
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">Âmbito 1</span>
-                      <span className="font-medium">
-                        {selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">Âmbito 2</span>
-                      <span className="font-medium">
-                        {selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2 border-b border-border/50">
-                      <span className="text-sm text-muted-foreground">Âmbito 3</span>
-                      <span className="font-medium">
-                        {selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-sm text-muted-foreground">FE (por faturação)</span>
-                      <span className="font-medium">
-                        {selectedAlternative.emissionsPerRevenue.toFixed(1)} kg CO₂e/€
-                      </span>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="py-8 text-center text-muted-foreground">
-                  <p>Selecione uma alternativa para comparar</p>
-                </div>
+            <div className="p-4 rounded-t-lg border border-b-0 border-success/30 bg-success/5">
+              <Badge className="bg-success mb-2">Alternativa</Badge>
+              <Select
+                value={selectedAlternativeId}
+                onValueChange={setSelectedAlternativeId}
+              >
+                <SelectTrigger className="w-full mb-1">
+                  <SelectValue placeholder="Selecionar alternativa" />
+                </SelectTrigger>
+                <SelectContent>
+                  {allAlternatives.map((alt) => (
+                    <SelectItem key={alt.id} value={alt.id}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span>{alt.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {alt.totalEmissions.toFixed(0)} t CO₂e
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {selectedAlternative && (
+                <p className="text-sm text-muted-foreground">
+                  {sectorLabels[selectedAlternative.sector] || selectedAlternative.sector}
+                </p>
               )}
             </div>
           </div>
+
+          {/* Comparison rows */}
+          {selectedAlternative && (
+            <div className="border rounded-lg overflow-hidden">
+              {/* Emissões totais */}
+              <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
+                <div className="p-3 bg-danger/5 border-r border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
+                  <p className="font-semibold text-danger">
+                    {criticalSupplier.totalEmissions.toLocaleString("pt-PT")} t CO₂e
+                  </p>
+                </div>
+                <div className="p-3 flex items-center justify-center bg-muted/20">
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="p-3 bg-success/5 border-l border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-success">
+                      {selectedAlternative.totalEmissions.toLocaleString("pt-PT")} t CO₂e
+                    </p>
+                    <Badge className="bg-success text-xs">
+                      -{((criticalSupplier.totalEmissions - selectedAlternative.totalEmissions) / criticalSupplier.totalEmissions * 100).toFixed(0)}%
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+
+              {/* Âmbito 1 */}
+              <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
+                <div className="p-3 bg-danger/5 border-r border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
+                  <p className="font-medium">{criticalSupplier.scope1.toLocaleString("pt-PT")} t CO₂e</p>
+                </div>
+                <div className="p-3 flex items-center justify-center bg-muted/20">
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="p-3 bg-success/5 border-l border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e</p>
+                    {criticalSupplier.scope1 > 0 && (
+                      <Badge variant="outline" className="text-xs text-success border-success/50">
+                        {((criticalSupplier.scope1 - selectedAlternative.scope1) / criticalSupplier.scope1 * 100) > 0 ? '-' : '+'}
+                        {Math.abs((criticalSupplier.scope1 - selectedAlternative.scope1) / criticalSupplier.scope1 * 100).toFixed(0)}%
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Âmbito 2 */}
+              <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
+                <div className="p-3 bg-danger/5 border-r border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
+                  <p className="font-medium">{criticalSupplier.scope2.toLocaleString("pt-PT")} t CO₂e</p>
+                </div>
+                <div className="p-3 flex items-center justify-center bg-muted/20">
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="p-3 bg-success/5 border-l border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e</p>
+                    {criticalSupplier.scope2 > 0 && (
+                      <Badge variant="outline" className="text-xs text-success border-success/50">
+                        {((criticalSupplier.scope2 - selectedAlternative.scope2) / criticalSupplier.scope2 * 100) > 0 ? '-' : '+'}
+                        {Math.abs((criticalSupplier.scope2 - selectedAlternative.scope2) / criticalSupplier.scope2 * 100).toFixed(0)}%
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Âmbito 3 */}
+              <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
+                <div className="p-3 bg-danger/5 border-r border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
+                  <p className="font-medium">{criticalSupplier.scope3.toLocaleString("pt-PT")} t CO₂e</p>
+                </div>
+                <div className="p-3 flex items-center justify-center bg-muted/20">
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="p-3 bg-success/5 border-l border-border">
+                  <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e</p>
+                    {criticalSupplier.scope3 > 0 && (
+                      <Badge variant="outline" className="text-xs text-success border-success/50">
+                        {((criticalSupplier.scope3 - selectedAlternative.scope3) / criticalSupplier.scope3 * 100) > 0 ? '-' : '+'}
+                        {Math.abs((criticalSupplier.scope3 - selectedAlternative.scope3) / criticalSupplier.scope3 * 100).toFixed(0)}%
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* FE */}
+              <div className="grid grid-cols-[1fr_auto_1fr]">
+                <div className="p-3 bg-danger/5 border-r border-border">
+                  <p className="text-xs text-muted-foreground mb-1">FE (por faturação)</p>
+                  <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
+                </div>
+                <div className="p-3 flex items-center justify-center bg-muted/20">
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <div className="p-3 bg-success/5 border-l border-border">
+                  <p className="text-xs text-muted-foreground mb-1">FE (por faturação)</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</p>
+                    {criticalSupplier.emissionsPerRevenue > 0 && (
+                      <Badge variant="outline" className="text-xs text-success border-success/50">
+                        {((criticalSupplier.emissionsPerRevenue - selectedAlternative.emissionsPerRevenue) / criticalSupplier.emissionsPerRevenue * 100) > 0 ? '-' : '+'}
+                        {Math.abs((criticalSupplier.emissionsPerRevenue - selectedAlternative.emissionsPerRevenue) / criticalSupplier.emissionsPerRevenue * 100).toFixed(0)}%
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!selectedAlternative && (
+            <div className="py-8 text-center text-muted-foreground border rounded-lg">
+              <p>Selecione uma alternativa para comparar</p>
+            </div>
+          )}
 
           {/* Impact Summary */}
           {selectedAlternative && (
