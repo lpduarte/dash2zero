@@ -132,7 +132,7 @@ export function CreateClusterDialog({
                     onClick={() => setSelectedIcon(option.id)}
                     className={cn(
                       "flex items-center justify-center p-3 rounded-lg border transition-all",
-                      "hover:bg-accent hover:border-primary/50",
+                      "hover:bg-primary/10 hover:border-primary/50",
                       selectedIcon === option.id
                         ? "bg-primary text-primary-foreground border-primary"
                         : "bg-card border-border"
