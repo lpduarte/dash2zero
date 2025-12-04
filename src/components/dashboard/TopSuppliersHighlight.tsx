@@ -103,6 +103,11 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
     .slice(0, 3);
 
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
+  
+  const sectorCounts = suppliers.reduce((acc, s) => {
+    acc[s.sector] = (acc[s.sector] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
     <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10">
@@ -117,10 +122,10 @@ export const TopSuppliersHighlight = ({ suppliers }: TopSuppliersHighlightProps)
               <SelectValue placeholder="Filtrar por atividade" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{sectorLabels.all}</SelectItem>
+              <SelectItem value="all">{sectorLabels.all} ({suppliers.length})</SelectItem>
               {uniqueSectors.map((sector) => (
                 <SelectItem key={sector} value={sector}>
-                  {sectorLabels[sector] || sector}
+                  {sectorLabels[sector] || sector} ({sectorCounts[sector]})
                 </SelectItem>
               ))}
             </SelectContent>
