@@ -164,7 +164,7 @@ export const SupplierSwitchModal = ({
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between">
                     <p className="font-semibold text-success">
                       {selectedAlternative.totalEmissions.toLocaleString("pt-PT")} t CO₂e
                     </p>
@@ -186,7 +186,7 @@ export const SupplierSwitchModal = ({
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e</p>
                     {criticalSupplier.scope1 > 0 && (
                       <Badge variant="outline" className="text-xs text-success border-success/50">
@@ -209,7 +209,7 @@ export const SupplierSwitchModal = ({
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e</p>
                     {criticalSupplier.scope2 > 0 && (
                       <Badge variant="outline" className="text-xs text-success border-success/50">
@@ -232,7 +232,7 @@ export const SupplierSwitchModal = ({
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e</p>
                     {criticalSupplier.scope3 > 0 && (
                       <Badge variant="outline" className="text-xs text-success border-success/50">
@@ -255,7 +255,7 @@ export const SupplierSwitchModal = ({
                 </div>
                 <div className="p-3 bg-success/5 border-l border-border">
                   <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                     {criticalSupplier.emissionsPerRevenue > 0 && (
                       <Badge variant="outline" className="text-xs text-success border-success/50">
