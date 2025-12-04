@@ -104,8 +104,8 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         <div className="flex items-center gap-2">
           <Select value={selectedRegion} onValueChange={setSelectedRegion}>
             <SelectTrigger className="w-[220px]">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <MapPin className="h-4 w-4 text-muted-foreground shrink-0" />
                 <SelectValue placeholder="Região" />
               </div>
             </SelectTrigger>
@@ -131,8 +131,8 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         <div className="flex items-center gap-2">
           <Select value={selectedSector} onValueChange={setSelectedSector}>
             <SelectTrigger className="w-[250px]">
-              <div className="flex items-center gap-2">
-                <Factory className="h-4 w-4 text-muted-foreground" />
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Factory className="h-4 w-4 text-muted-foreground shrink-0" />
                 <SelectValue placeholder="Atividade" />
               </div>
             </SelectTrigger>
