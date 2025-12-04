@@ -13,7 +13,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
 
-  // Cálculo do potencial de melhoria baseado nos fornecedores críticos
+  // Cálculo do potencial de melhoria baseado na percentagem de empresas críticas
   const avgEmissions = totalEmissions / suppliers.length;
   const criticalSuppliers = suppliers.filter(s => 
     s.totalEmissions > avgEmissions * 1.2 || 
@@ -21,13 +21,12 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     s.rating === 'E' ||
     !s.hasSBTi
   );
-  const criticalEmissions = criticalSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
-  const percentageOfTotal = (criticalEmissions / totalEmissions) * 100;
+  const percentageCritical = (criticalSuppliers.length / suppliers.length) * 100;
   
   // Determinar nível de potencial de melhoria
   const getImprovementPotential = () => {
-    if (percentageOfTotal > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingUp };
-    if (percentageOfTotal > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: Minus };
+    if (percentageCritical > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingUp };
+    if (percentageCritical > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: Minus };
     return { level: "Baixo", color: "text-success", bgColor: "bg-success/10", icon: TrendingDown };
   };
   
@@ -45,7 +44,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     {
       title: "Potencial de Melhoria",
       value: improvementPotential.level,
-      unit: `${percentageOfTotal.toFixed(0)}% em críticos`,
+      unit: `${percentageCritical.toFixed(0)}% das empresas`,
       icon: improvementPotential.icon,
       color: improvementPotential.color,
       bgColor: improvementPotential.bgColor,
