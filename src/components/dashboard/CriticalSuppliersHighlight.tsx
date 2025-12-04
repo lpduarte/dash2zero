@@ -2,10 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3 } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3, Info } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
@@ -213,9 +214,24 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                           <ArrowRight className="h-4 w-4 text-muted-foreground/50" />
                         </div>
                       </div>
-                      <div className="flex-1 min-w-0 bg-muted/20 rounded-lg p-3 border border-border/30">
-                        <p className="text-xs text-muted-foreground text-center py-2">Sem alternativa no mesmo setor</p>
-                      </div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="flex-1 min-w-0 bg-muted/20 rounded-lg p-3 border border-border/30 cursor-help">
+                              <div className="flex items-center justify-center gap-2 py-2">
+                                <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                                <p className="text-xs text-muted-foreground">Sem alternativa no mesmo setor</p>
+                              </div>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="top" className="max-w-[280px]">
+                            <p className="text-xs">
+                              Não existem outras empresas no setor <strong>{sectorLabels[supplier.sector] || supplier.sector}</strong> com 
+                              emissões inferiores a este fornecedor. Considere trabalhar diretamente com esta empresa para reduzir as suas emissões.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </>
                   )}
 
