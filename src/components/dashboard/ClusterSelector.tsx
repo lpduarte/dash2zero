@@ -1,8 +1,10 @@
 import { Building2, Users, Handshake, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useRef } from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro';
+type PotentialLevel = 'Alto' | 'Médio' | 'Baixo';
 
 interface ClusterOption {
   value: ClusterType;
@@ -14,6 +16,7 @@ interface ClusterSelectorProps {
   selectedCluster: ClusterType;
   onClusterChange: (cluster: ClusterType) => void;
   clusterCounts: Record<ClusterType, number>;
+  clusterPotentials?: Record<ClusterType, PotentialLevel>;
 }
 
 const clusterOptions: ClusterOption[] = [
@@ -23,7 +26,18 @@ const clusterOptions: ClusterOption[] = [
   { value: 'parceiro', label: 'Parceiros', icon: <Handshake className="h-4 w-4" /> },
 ];
 
-export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts }: ClusterSelectorProps) {
+const getPotentialIndicator = (potential: PotentialLevel) => {
+  switch (potential) {
+    case 'Alto':
+      return { color: 'bg-danger', label: 'Prioridade Alta' };
+    case 'Médio':
+      return { color: 'bg-warning', label: 'Prioridade Média' };
+    case 'Baixo':
+      return { color: 'bg-success', label: 'Prioridade Baixa' };
+  }
+};
+
+export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts, clusterPotentials }: ClusterSelectorProps) {
   const [isSticky, setIsSticky] = useState(false);
   const stickyRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -62,37 +76,61 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
         )}
       >
         <div className="flex flex-wrap gap-2">
-          {clusterOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onClusterChange(option.value)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                "hover:shadow-md",
-                "[&_svg]:text-current",
-                selectedCluster === option.value
-                  ? "bg-primary text-primary-foreground border-primary shadow-md"
-                  : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
-              )}
-            >
-              {option.icon}
-              <span className="font-medium">{option.label}</span>
-              <span
-                className={cn(
-                  "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
-                  selectedCluster === option.value
-                    ? "bg-primary-foreground/20 text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                )}
-              >
-                {clusterCounts[option.value]}
-              </span>
-            </button>
-          ))}
+          {clusterOptions.map((option) => {
+            const potential = clusterPotentials?.[option.value];
+            const indicator = potential ? getPotentialIndicator(potential) : null;
+            
+            return (
+              <TooltipProvider key={option.value}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => onClusterChange(option.value)}
+                      className={cn(
+                        "relative flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
+                        "hover:shadow-md",
+                        "[&_svg]:text-current",
+                        selectedCluster === option.value
+                          ? "bg-primary text-primary-foreground border-primary shadow-md"
+                          : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      )}
+                    >
+                      {indicator && indicator.color === 'bg-danger' && (
+                        <span 
+                          className={cn(
+                            "absolute -top-1 -right-1 w-3 h-3 rounded-full",
+                            indicator.color,
+                            "animate-pulse shadow-sm"
+                          )} 
+                        />
+                      )}
+                      {option.icon}
+                      <span className="font-medium">{option.label}</span>
+                      <span
+                        className={cn(
+                          "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
+                          selectedCluster === option.value
+                            ? "bg-primary-foreground/20 text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        )}
+                      >
+                        {clusterCounts[option.value]}
+                      </span>
+                    </button>
+                  </TooltipTrigger>
+                  {indicator && (
+                    <TooltipContent>
+                      <p className="text-xs">Potencial de Melhoria: <strong>{potential}</strong></p>
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
+            );
+          })}
         </div>
       </div>
     </>
   );
 }
 
-export type { ClusterType };
+export type { ClusterType, PotentialLevel };

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
-import { ClusterSelector, ClusterType } from "@/components/dashboard/ClusterSelector";
+import { ClusterSelector, ClusterType, PotentialLevel } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
@@ -29,6 +29,27 @@ const Overview = () => {
     parceiro: 75,
   };
 
+  // Calcular potencial de melhoria para cada cluster
+  const clusterPotentials = useMemo(() => {
+    const calculatePotential = (suppliers: typeof mockSuppliers): PotentialLevel => {
+      if (suppliers.length === 0) return 'Baixo';
+      const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
+      const criticalCount = suppliers.filter(s => s.totalEmissions > avgEmissions * 1.2).length;
+      const percentageCritical = (criticalCount / suppliers.length) * 100;
+      
+      if (percentageCritical > 30) return 'Alto';
+      if (percentageCritical > 15) return 'Médio';
+      return 'Baixo';
+    };
+
+    return {
+      all: calculatePotential(mockSuppliers),
+      fornecedor: calculatePotential(mockSuppliers.filter(s => s.cluster === 'fornecedor')),
+      cliente: calculatePotential(mockSuppliers.filter(s => s.cluster === 'cliente')),
+      parceiro: calculatePotential(mockSuppliers.filter(s => s.cluster === 'parceiro')),
+    };
+  }, []);
+
   const filteredSuppliers = useMemo(() => {
     if (selectedCluster === 'all') {
       return mockSuppliers.sort((a, b) => a.totalEmissions - b.totalEmissions);
@@ -47,6 +68,7 @@ const Overview = () => {
           selectedCluster={selectedCluster}
           onClusterChange={setSelectedCluster}
           clusterCounts={clusterCounts}
+          clusterPotentials={clusterPotentials}
         />
         
         <MetricsOverview suppliers={filteredSuppliers} />
