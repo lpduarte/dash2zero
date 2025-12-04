@@ -1,10 +1,8 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
-import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { SupplierCard } from "@/components/dashboard/SupplierCard";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
-import { TrendsChart } from "@/components/dashboard/TrendsChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { RankingChart } from "@/components/dashboard/RankingChart";
 import { RadarComparison } from "@/components/dashboard/RadarComparison";
@@ -104,24 +102,12 @@ const Analysis = () => {
 
           <TabsContent value="overview" className="space-y-6">
             <Accordion type="multiple" className="space-y-4">
-              <AccordionItem value="kpis">
-                <AccordionTrigger className="text-lg font-semibold">
-                  KPIs Principais
-                </AccordionTrigger>
-                <AccordionContent>
-                  <MetricsOverview suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
               <AccordionItem value="charts">
                 <AccordionTrigger className="text-lg font-semibold">
                   Gráficos de Comparação
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <ComparisonChart suppliers={filteredSuppliers} />
-                    <TrendsChart suppliers={filteredSuppliers} />
-                  </div>
+                  <ComparisonChart suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
 
@@ -148,15 +134,6 @@ const Analysis = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <EmissionsBreakdown suppliers={filteredSuppliers} />
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="trends">
-                <AccordionTrigger className="text-lg font-semibold">
-                  Tendências Históricas
-                </AccordionTrigger>
-                <AccordionContent>
-                  <TrendsChart suppliers={filteredSuppliers} />
                 </AccordionContent>
               </AccordionItem>
 
