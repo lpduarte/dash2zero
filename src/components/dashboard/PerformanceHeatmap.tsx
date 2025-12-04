@@ -49,7 +49,7 @@ export const PerformanceHeatmap = ({
           <table className="w-full border-collapse table-fixed">
             <thead>
               <tr>
-                <th className="border p-2 text-left font-medium w-[140px]">Desempenho por região</th>
+                <th className="border p-2 text-left font-medium w-[140px]">​</th>
                 {regions.map(region => <th key={region} className="border p-2 text-center font-medium w-[100px]">
                     {getRegionLabel(region)}
                   </th>)}
