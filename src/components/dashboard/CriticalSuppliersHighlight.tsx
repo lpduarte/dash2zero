@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight, TrendingUp, Euro, BarChart3 } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
@@ -143,20 +143,37 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                     <SupplierLabel sector={supplier.sector} cluster={supplier.cluster} />
                   </div>
 
-                  <div className="text-center shrink-0">
-                    <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
-                    <p className="text-xs text-muted-foreground">t CO₂e</p>
-                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">Emissões</span>
+                      </div>
+                      <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
+                      <p className="text-xs text-muted-foreground">t CO₂e</p>
+                    </div>
 
-                  <div className="text-center shrink-0 px-2 border-l border-border">
-                    <p className="text-sm font-semibold">{supplier.emissionsPerRevenue.toFixed(2)}</p>
-                    <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
-                  </div>
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <Euro className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">FE</span>
+                      </div>
+                      <p className="text-lg font-bold text-warning">{supplier.emissionsPerRevenue.toFixed(1)}</p>
+                      <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
+                    </div>
 
-                  <div className="text-center shrink-0">
-                    <Badge className={feDiff > 0 ? "bg-danger/10 text-danger border-danger/30" : "bg-success/10 text-success border-success/30"}>
-                      {feDiff > 0 ? "+" : ""}{feDiff.toFixed(0)}% vs setor
-                    </Badge>
+                    <div>
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">vs Setor</span>
+                      </div>
+                      <p className={`text-lg font-bold ${feDiff > 0 ? 'text-danger' : 'text-success'}`}>
+                        {feDiff > 0 ? '+' : ''}{feDiff.toFixed(0)}%
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {feDiff > 0 ? 'acima' : 'abaixo'}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Arrow separator */}
