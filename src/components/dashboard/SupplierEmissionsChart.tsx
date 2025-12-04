@@ -10,7 +10,7 @@ interface SupplierEmissionsChartProps {
 export const SupplierEmissionsChart = ({ suppliers }: SupplierEmissionsChartProps) => {
   const emissionsData = suppliers
     .map(s => ({
-      name: s.name.length > 20 ? s.name.substring(0, 17) + '...' : s.name,
+      name: s.name.length > 28 ? s.name.substring(0, 25) + '...' : s.name,
       fullName: s.name,
       totalEmissions: s.totalEmissions,
       sector: s.sector,
@@ -37,14 +37,14 @@ export const SupplierEmissionsChart = ({ suppliers }: SupplierEmissionsChartProp
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={Math.max(250, emissionsData.length * 14)}>
-          <BarChart data={emissionsData} layout="vertical" margin={{ left: 200 }} barSize={5}>
+          <BarChart data={emissionsData} layout="vertical" margin={{ left: 0, right: 20 }} barSize={5}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis type="number" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} />
             <YAxis 
               dataKey="name" 
               type="category" 
               tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
-              width={190}
+              width={220}
               interval={0}
             />
             <Tooltip
