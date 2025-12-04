@@ -2,11 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, Target, ArrowRight, Award, Users, TrendingDown } from "lucide-react";
+import { AlertTriangle, Target, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
@@ -142,58 +141,18 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                       </div>
 
                       {/* Alternative supplier */}
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="flex-1 min-w-0 bg-success/5 rounded-lg p-2 border border-success/20 cursor-pointer hover:bg-success/10 transition-colors">
-                              <div className="flex items-center justify-between gap-3">
-                                <div className="min-w-0">
-                                  <p className="text-xs text-muted-foreground mb-0.5">Alternativa</p>
-                                  <h4 className="font-semibold text-sm truncate text-success">{alternative.name}</h4>
-                                </div>
-                                <div className="text-center shrink-0">
-                                  <p className="text-lg font-bold text-success">{alternative.totalEmissions.toFixed(0)}</p>
-                                  <p className="text-xs text-muted-foreground">t CO₂e</p>
-                                </div>
-                              </div>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="w-64 p-3">
-                            <div className="space-y-2">
-                              <p className="font-semibold text-sm">{alternative.name}</p>
-                              <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="flex items-center gap-1">
-                                  <TrendingDown className="h-3 w-3 text-success" />
-                                  <span className="text-muted-foreground">Emissões:</span>
-                                  <span className="font-medium">{alternative.totalEmissions.toFixed(0)} t</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <Users className="h-3 w-3 text-muted-foreground" />
-                                  <span className="text-muted-foreground">Por colab:</span>
-                                  <span className="font-medium">{alternative.emissionsPerEmployee.toFixed(1)} t</span>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-1 text-xs">
-                                <span className="text-muted-foreground">FE:</span>
-                                <span className="font-medium">{alternative.emissionsPerRevenue.toFixed(2)} kg/€</span>
-                              </div>
-                              {alternative.certifications.length > 0 && (
-                                <div className="flex flex-wrap gap-1 pt-1 border-t border-border/50">
-                                  <Award className="h-3 w-3 text-primary" />
-                                  {alternative.certifications.map((cert, i) => (
-                                    <Badge key={i} variant="outline" className="text-[10px] px-1 py-0">
-                                      {cert}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              )}
-                              <div className="pt-1 border-t border-border/50 text-xs text-success font-medium">
-                                Poupança potencial: {emissionsSavings.toFixed(0)} t CO₂e ({savingsPercentage}%)
-                              </div>
-                            </div>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                      <div className="flex-1 min-w-0 bg-success/5 rounded-lg p-2 border border-success/20">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-xs text-muted-foreground mb-0.5">Alternativa</p>
+                            <h4 className="font-semibold text-sm truncate text-success">{alternative.name}</h4>
+                          </div>
+                          <div className="text-center shrink-0">
+                            <p className="text-lg font-bold text-success">{alternative.totalEmissions.toFixed(0)}</p>
+                            <p className="text-xs text-muted-foreground">t CO₂e</p>
+                          </div>
+                        </div>
+                      </div>
                     </>
                   )}
 
