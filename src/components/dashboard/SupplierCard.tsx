@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import { 
   Mail, 
@@ -7,7 +7,11 @@ import {
   FileText,
   Building2,
   Users,
-  Handshake
+  Handshake,
+  TrendingUp,
+  Euro,
+  UserRound,
+  Maximize2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,91 +45,113 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
   const ClusterIcon = clusterInfo.icon;
 
   return (
-    <Card className="p-6 shadow-md hover:shadow-lg transition-all">
-      <div className="flex flex-col gap-3 mb-4">
-        <h3 className="text-xl font-bold text-card-foreground">{supplier.name}</h3>
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="outline" className="text-xs">
-            {getSectorName(supplier.sector)}
-          </Badge>
-          <Badge variant="outline" className="text-xs">
-            {getRegionLabel(supplier.region)}
-          </Badge>
-          <Badge variant="secondary" className="text-xs flex items-center gap-1">
-            <ClusterIcon className="h-3 w-3" />
-            {clusterInfo.label}
-          </Badge>
+    <Card className="border border-border bg-card hover:shadow-lg transition-all">
+      <CardHeader className="pb-3">
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg font-semibold text-card-foreground">{supplier.name}</h3>
+          <div className="flex flex-wrap gap-1.5">
+            <Badge variant="outline" className="text-xs font-normal bg-muted/50">
+              {getSectorName(supplier.sector)}
+            </Badge>
+            <Badge variant="outline" className="text-xs font-normal bg-muted/50">
+              {getRegionLabel(supplier.region)}
+            </Badge>
+            <Badge variant="secondary" className="text-xs font-normal flex items-center gap-1">
+              <ClusterIcon className="h-3 w-3" />
+              {clusterInfo.label}
+            </Badge>
+          </div>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Emissions Overview */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg">
-          <p className="text-xs text-muted-foreground mb-1">Emissões Totais</p>
-          <p className="text-xl font-bold text-primary">{supplier.totalEmissions}</p>
-          <p className="text-xs text-muted-foreground">t CO₂e</p>
+      <CardContent className="space-y-4">
+        {/* Main Emissions KPI */}
+        <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="p-1.5 rounded bg-primary/10">
+              <TrendingUp className="h-4 w-4 text-primary" />
+            </div>
+            <span className="text-sm text-muted-foreground">Emissões Totais</span>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-bold text-primary">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
+            <span className="text-sm text-muted-foreground">t CO₂e</span>
+          </div>
         </div>
-        <div className="p-3 bg-secondary/5 border border-secondary/20 rounded-lg">
-          <p className="text-xs text-muted-foreground mb-1">Por Colaborador</p>
-          <p className="text-xl font-bold text-secondary">{supplier.emissionsPerEmployee.toFixed(2)}</p>
-          <p className="text-xs text-muted-foreground">t CO₂e/colab</p>
-        </div>
-        <div className="p-3 bg-accent/5 border border-accent/20 rounded-lg">
-          <p className="text-xs text-muted-foreground mb-1">Por m²</p>
-          <p className="text-xl font-bold text-accent">{supplier.emissionsPerArea.toFixed(3)}</p>
-          <p className="text-xs text-muted-foreground">t CO₂e/m²</p>
-        </div>
-        <div className="p-3 bg-success/5 border border-success/20 rounded-lg">
-          <p className="text-xs text-muted-foreground mb-1">Por Faturação</p>
-          <p className="text-xl font-bold text-success">{supplier.emissionsPerRevenue.toFixed(1)}</p>
-          <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
-        </div>
-      </div>
 
-      {/* Scope Breakdown */}
-      <div className="mb-4 space-y-2">
-        <p className="text-sm font-medium mb-2">Breakdown por Âmbito:</p>
-        <div className="flex gap-2 text-xs">
-          <div className="flex-1 p-2 bg-primary/10 rounded">
-            <p className="text-muted-foreground">Âmbito 1</p>
-            <p className="font-bold text-primary">{supplier.scope1} t CO₂e</p>
+        {/* Secondary Metrics */}
+        <div className="grid grid-cols-3 gap-2">
+          <div className="p-3 rounded-lg border border-border bg-muted/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <UserRound className="h-3 w-3 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Por Colab.</span>
+            </div>
+            <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerEmployee.toFixed(1)}</p>
+            <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
-          <div className="flex-1 p-2 bg-secondary/10 rounded">
-            <p className="text-muted-foreground">Âmbito 2</p>
-            <p className="font-bold text-secondary">{supplier.scope2} t CO₂e</p>
+          <div className="p-3 rounded-lg border border-border bg-muted/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <Maximize2 className="h-3 w-3 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Por m²</span>
+            </div>
+            <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
+            <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
-          <div className="flex-1 p-2 bg-accent/10 rounded">
-            <p className="text-muted-foreground">Âmbito 3</p>
-            <p className="font-bold text-accent">{supplier.scope3} t CO₂e</p>
+          <div className="p-3 rounded-lg border border-border bg-muted/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <Euro className="h-3 w-3 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">Por €</span>
+            </div>
+            <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerRevenue.toFixed(1)}</p>
+            <p className="text-xs text-muted-foreground">kg CO₂e</p>
           </div>
         </div>
-      </div>
 
-      {/* Contact */}
-      <div className="pt-4 border-t border-border">
-        <div className="grid grid-cols-3 gap-3 text-xs text-muted-foreground mb-3">
-          <div className="flex items-center gap-2">
-            <FileText className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{supplier.contact.nif}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{supplier.contact.email}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Phone className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{supplier.contact.phone}</span>
+        {/* Scope Breakdown */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-muted-foreground">Emissões por Âmbito</p>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="p-2 rounded border border-[hsl(220_70%_55%/0.3)] bg-[hsl(220_70%_55%/0.1)]">
+              <p className="text-xs text-muted-foreground mb-0.5">Âmbito 1</p>
+              <p className="text-sm font-semibold text-[hsl(220_70%_55%)]">{supplier.scope1.toLocaleString('pt-PT')} t CO₂e</p>
+            </div>
+            <div className="p-2 rounded border border-[hsl(280_60%_60%/0.3)] bg-[hsl(280_60%_60%/0.1)]">
+              <p className="text-xs text-muted-foreground mb-0.5">Âmbito 2</p>
+              <p className="text-sm font-semibold text-[hsl(280_60%_60%)]">{supplier.scope2.toLocaleString('pt-PT')} t CO₂e</p>
+            </div>
+            <div className="p-2 rounded border border-[hsl(25_85%_55%/0.3)] bg-[hsl(25_85%_55%/0.1)]">
+              <p className="text-xs text-muted-foreground mb-0.5">Âmbito 3</p>
+              <p className="text-sm font-semibold text-[hsl(25_85%_55%)]">{supplier.scope3.toLocaleString('pt-PT')} t CO₂e</p>
+            </div>
           </div>
         </div>
-        {supplier.sustainabilityReport && (
-          <Button variant="outline" size="sm" className="w-full" asChild>
-            <a href={supplier.sustainabilityReport} target="_blank" rel="noopener noreferrer">
-              <ExternalLink className="h-3 w-3 mr-2" />
-              Ver Relatório de Sustentabilidade
-            </a>
-          </Button>
-        )}
-      </div>
+
+        {/* Contact */}
+        <div className="pt-3 border-t border-border">
+          <div className="grid grid-cols-3 gap-2 text-xs text-muted-foreground mb-3">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <FileText className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{supplier.contact.nif}</span>
+            </div>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Mail className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{supplier.contact.email}</span>
+            </div>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <Phone className="h-3 w-3 flex-shrink-0" />
+              <span className="truncate">{supplier.contact.phone}</span>
+            </div>
+          </div>
+          {supplier.sustainabilityReport && (
+            <Button variant="outline" size="sm" className="w-full" asChild>
+              <a href={supplier.sustainabilityReport} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="h-3 w-3 mr-2" />
+                Ver Relatório de Sustentabilidade
+              </a>
+            </Button>
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 };
