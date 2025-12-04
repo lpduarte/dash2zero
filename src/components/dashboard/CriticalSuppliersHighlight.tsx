@@ -123,7 +123,7 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
             </div>
             <div>
               <p className="text-sm text-muted-foreground mb-1">Potencial de Melhoria</p>
-              <p className="text-2xl font-bold text-primary">Alto</p>
+              <p className="text-2xl font-bold text-danger">Alto</p>
               <p className="text-xs text-muted-foreground">prioridade</p>
             </div>
           </div>
