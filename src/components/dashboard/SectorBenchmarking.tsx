@@ -67,7 +67,7 @@ export const SectorBenchmarking = ({
     return "hsl(var(--danger))";
   };
 
-  const chartHeight = Math.max(400, comparisonData.length * 18);
+  const chartHeight = Math.max(300, comparisonData.length * 14);
 
   return (
     <div className="space-y-6">
@@ -115,8 +115,9 @@ export const SectorBenchmarking = ({
               <YAxis 
                 dataKey="name" 
                 type="category" 
-                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }} 
+                tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10, style: { whiteSpace: 'nowrap' } }} 
                 width={180}
+                tickLine={false}
               />
               <Tooltip content={({ active, payload }) => {
                 if (!active || !payload || !payload[0]) return null;
@@ -152,7 +153,7 @@ export const SectorBenchmarking = ({
                 );
               }} />
               <ReferenceLine x={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
-              <Bar dataKey="deviation" radius={[0, 2, 2, 0]} barSize={10}>
+              <Bar dataKey="deviation" radius={[0, 2, 2, 0]} barSize={5}>
                 {comparisonData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={getDeviationColor(entry.deviation)} />
                 ))}
