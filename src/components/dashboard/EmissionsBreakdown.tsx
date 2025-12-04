@@ -46,19 +46,28 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
       </Card>
       
       <div className="grid grid-cols-3 gap-3 mt-3">
-        {data.map((scope, index) => (
-          <Card key={scope.name} className="p-3">
-            <div className="text-center">
-              <div className="text-xs text-muted-foreground mb-1">
-                Âmbito {index + 1}
+        {data.map((scope, index) => {
+          const total = totalScope1 + totalScope2 + totalScope3;
+          const percentage = total > 0 ? (scope.value / total) * 100 : 0;
+          return (
+            <Card key={scope.name} className="p-3">
+              <div className="text-center">
+                <div className="text-xs text-muted-foreground mb-1">
+                  Âmbito {index + 1}
+                </div>
+                <div className="text-xl font-bold" style={{ color: scope.color }}>
+                  {scope.value.toFixed(0)}
+                </div>
+                <div className="text-xs text-muted-foreground">t CO₂e</div>
+                <div className="border-t border-border/50 mt-2 pt-2">
+                  <div className="text-sm font-medium" style={{ color: scope.color }}>
+                    {percentage.toFixed(1)}%
+                  </div>
+                </div>
               </div>
-              <div className="text-xl font-bold" style={{ color: scope.color }}>
-                {scope.value.toFixed(0)}
-              </div>
-              <div className="text-xs text-muted-foreground">t CO₂e</div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
     </>
   );
