@@ -28,37 +28,23 @@ import { getSectorsWithCounts } from "@/data/sectors";
 import { Supplier } from "@/types/supplier";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
-const calculateImprovementPotential = (suppliers: Supplier[], clusterType?: string): ImprovementPotential => {
+// Usa média global (não por setor) para consistência com o KPI card
+const calculateImprovementPotential = (suppliers: Supplier[]): ImprovementPotential => {
   if (suppliers.length === 0) return 'low';
   
-  // Calculate sector averages
-  const sectorEmissions: Record<string, number[]> = {};
-  suppliers.forEach(s => {
-    if (!sectorEmissions[s.sector]) sectorEmissions[s.sector] = [];
-    sectorEmissions[s.sector].push(s.totalEmissions);
-  });
+  // Calculate overall average emissions
+  const totalEmissions = suppliers.reduce((acc, s) => acc + s.totalEmissions, 0);
+  const avgEmissions = totalEmissions / suppliers.length;
   
-  const sectorAverages: Record<string, number> = {};
-  Object.entries(sectorEmissions).forEach(([sector, emissions]) => {
-    sectorAverages[sector] = emissions.reduce((a, b) => a + b, 0) / emissions.length;
-  });
-  
-  // Count critical suppliers (emissions > 1.2x sector average)
+  // Count critical suppliers (emissions > 1.2x overall average)
   const criticalCount = suppliers.filter(s => 
-    s.totalEmissions > (sectorAverages[s.sector] || 0) * 1.2
+    s.totalEmissions > avgEmissions * 1.2
   ).length;
   
   const criticalPercentage = (criticalCount / suppliers.length) * 100;
   
-  // Clientes cluster has higher threshold for "low" to show "high" potential
-  if (clusterType === 'cliente') {
-    if (criticalPercentage > 20) return 'high';
-    if (criticalPercentage >= 10) return 'medium';
-    return 'low';
-  }
-  
   if (criticalPercentage > 30) return 'high';
-  if (criticalPercentage >= 15) return 'medium';
+  if (criticalPercentage > 15) return 'medium';
   return 'low';
 };
 
@@ -81,9 +67,9 @@ const Overview = () => {
   const clusterPotentials = useMemo((): Record<ClusterType, ImprovementPotential> => {
     return {
       all: calculateImprovementPotential(mockSuppliers),
-      fornecedor: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'fornecedor'), 'fornecedor'),
-      cliente: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'cliente'), 'cliente'),
-      parceiro: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'parceiro'), 'parceiro'),
+      fornecedor: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'fornecedor')),
+      cliente: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'cliente')),
+      parceiro: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'parceiro')),
     };
   }, []);
 
