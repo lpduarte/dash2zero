@@ -24,6 +24,21 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
     !s.hasSBTi
   ).sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
 
+  // Calculate sector averages for FE comparison
+  const sectorAverages = suppliers.reduce((acc, s) => {
+    if (!acc[s.sector]) {
+      acc[s.sector] = { total: 0, count: 0 };
+    }
+    acc[s.sector].total += s.emissionsPerRevenue;
+    acc[s.sector].count += 1;
+    return acc;
+  }, {} as Record<string, { total: number; count: number }>);
+
+  const getSectorAvgFE = (sector: string) => {
+    const sectorData = sectorAverages[sector];
+    return sectorData ? sectorData.total / sectorData.count : 0;
+  };
+
   // Find best alternative for each critical supplier (same sector, lower emissions)
   const findBestAlternative = (criticalSupplier: Supplier) => {
     const alternatives = suppliers.filter(s => 
@@ -109,6 +124,9 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
               ? ((emissionsSavings / supplier.totalEmissions) * 100).toFixed(0)
               : 0;
 
+            const sectorAvgFE = getSectorAvgFE(supplier.sector);
+            const feDiff = ((supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100);
+
             return (
               <div
                 key={supplier.id}
@@ -128,6 +146,17 @@ export const CriticalSuppliersHighlight = ({ suppliers }: CriticalSuppliersHighl
                   <div className="text-center shrink-0">
                     <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
                     <p className="text-xs text-muted-foreground">t CO₂e</p>
+                  </div>
+
+                  <div className="text-center shrink-0 px-2 border-l border-border">
+                    <p className="text-sm font-semibold">{supplier.emissionsPerRevenue.toFixed(2)}</p>
+                    <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
+                  </div>
+
+                  <div className="text-center shrink-0">
+                    <Badge className={feDiff > 0 ? "bg-danger/10 text-danger border-danger/30" : "bg-success/10 text-success border-success/30"}>
+                      {feDiff > 0 ? "+" : ""}{feDiff.toFixed(0)}% vs setor
+                    </Badge>
                   </div>
 
                   {/* Arrow separator */}
