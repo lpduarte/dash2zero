@@ -1,25 +1,55 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Factory, Users, Building, Euro } from "lucide-react";
+import { Factory, Users, Building, Euro, TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
 }
 
 export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
-  const avgTotalEmissions = suppliers.reduce((acc, s) => acc + s.totalEmissions, 0) / suppliers.length;
+  // Soma total das emissões de todas as empresas
+  const totalEmissions = suppliers.reduce((acc, s) => acc + s.totalEmissions, 0);
   const avgEmissionsPerEmployee = suppliers.reduce((acc, s) => acc + s.emissionsPerEmployee, 0) / suppliers.length;
   const avgEmissionsPerArea = suppliers.reduce((acc, s) => acc + s.emissionsPerArea, 0) / suppliers.length;
   const avgEmissionsPerRevenue = suppliers.reduce((acc, s) => acc + s.emissionsPerRevenue, 0) / suppliers.length;
 
+  // Cálculo do potencial de melhoria baseado nos fornecedores críticos
+  const avgEmissions = totalEmissions / suppliers.length;
+  const criticalSuppliers = suppliers.filter(s => 
+    s.totalEmissions > avgEmissions * 1.2 || 
+    s.rating === 'D' || 
+    s.rating === 'E' ||
+    !s.hasSBTi
+  );
+  const criticalEmissions = criticalSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0);
+  const percentageOfTotal = (criticalEmissions / totalEmissions) * 100;
+  
+  // Determinar nível de potencial de melhoria
+  const getImprovementPotential = () => {
+    if (percentageOfTotal > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingUp };
+    if (percentageOfTotal > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: Minus };
+    return { level: "Baixo", color: "text-success", bgColor: "bg-success/10", icon: TrendingDown };
+  };
+  
+  const improvementPotential = getImprovementPotential();
+
   const metrics = [
     {
       title: "Emissões totais",
-      value: Math.round(avgTotalEmissions),
+      value: Math.round(totalEmissions).toLocaleString('pt-PT'),
       unit: "t CO₂e",
       icon: Factory,
       color: "text-primary",
       bgColor: "bg-primary/10",
+    },
+    {
+      title: "Potencial de Melhoria",
+      value: improvementPotential.level,
+      unit: `${percentageOfTotal.toFixed(0)}% em críticos`,
+      icon: improvementPotential.icon,
+      color: improvementPotential.color,
+      bgColor: improvementPotential.bgColor,
+      isImprovement: true,
     },
     {
       title: "Por faturação",
@@ -48,7 +78,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
       {metrics.map((metric) => (
         <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow">
           <div className="flex flex-col gap-3">
@@ -59,7 +89,9 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
               </div>
             </div>
             <div>
-              <p className="text-2xl font-bold text-card-foreground">{metric.value}</p>
+              <p className={`text-2xl font-bold ${metric.isImprovement ? metric.color : 'text-card-foreground'}`}>
+                {metric.value}
+              </p>
               <p className="text-xs text-muted-foreground mt-1">{metric.unit}</p>
             </div>
           </div>
