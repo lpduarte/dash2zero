@@ -49,7 +49,7 @@ export const PerformanceHeatmap = ({ suppliers }: PerformanceHeatmapProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Mapa de Desempenho por Região e Setor</CardTitle>
+        <h2 className="text-xl font-semibold">Mapa de Desempenho por Região e Setor</h2>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">

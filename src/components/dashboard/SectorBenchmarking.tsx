@@ -75,7 +75,7 @@ export const SectorBenchmarking = ({ suppliers }: SectorBenchmarkingProps) => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Comparação com Média do Setor</CardTitle>
+          <h2 className="text-xl font-semibold">Comparação com Média do Setor</h2>
           <p className="text-sm text-muted-foreground">
             Desvio das emissões de cada fornecedor em relação à média do seu setor
           </p>
