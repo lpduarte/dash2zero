@@ -22,6 +22,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const Analysis = () => {
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
+  const [selectedSector, setSelectedSector] = useState<string>('all');
+
+  // Get unique sectors
+  const sectors = useMemo(() => {
+    const uniqueSectors = [...new Set(mockSuppliers.map(s => s.sector))];
+    return uniqueSectors.sort();
+  }, []);
 
   // Calculate cluster counts from mock data
   const clusterCounts: Record<ClusterType, number> = useMemo(() => ({
@@ -80,6 +87,17 @@ const Analysis = () => {
     return filtered.sort((a, b) => a.totalEmissions - b.totalEmissions);
   }, [selectedCluster]);
 
+  // Suppliers filtered by both cluster and sector (for charts)
+  const chartFilteredSuppliers = useMemo(() => {
+    let filtered = filteredSuppliers;
+    
+    if (selectedSector !== 'all') {
+      filtered = filtered.filter((s) => s.sector === selectedSector);
+    }
+
+    return filtered;
+  }, [filteredSuppliers, selectedSector]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -103,10 +121,15 @@ const Analysis = () => {
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-4 gap-6">
               <div className="col-span-1">
-                <EmissionsBreakdown suppliers={filteredSuppliers} />
+                <EmissionsBreakdown suppliers={chartFilteredSuppliers} />
               </div>
               <div className="col-span-3">
-                <ComparisonChart suppliers={filteredSuppliers} />
+                <ComparisonChart 
+                  suppliers={chartFilteredSuppliers} 
+                  sectors={sectors}
+                  selectedSector={selectedSector}
+                  onSectorChange={setSelectedSector}
+                />
               </div>
             </div>
 

@@ -1,21 +1,35 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
 interface ComparisonChartProps {
   suppliers: Supplier[];
+  sectors?: string[];
+  selectedSector?: string;
+  onSectorChange?: (sector: string) => void;
 }
 
-export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
+export const ComparisonChart = ({ 
+  suppliers, 
+  sectors = [], 
+  selectedSector = 'all',
+  onSectorChange 
+}: ComparisonChartProps) => {
   // Take top 8 suppliers for better readability
   const topSuppliers = suppliers.slice(0, 8);
 
@@ -28,9 +42,26 @@ export const ComparisonChart = ({ suppliers }: ComparisonChartProps) => {
 
   return (
     <Card className="p-6 shadow-md h-full flex flex-col">
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold">Comparação de Emissões por Âmbito</h2>
-        <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h2 className="text-xl font-semibold">Comparação de Emissões por Âmbito</h2>
+          <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
+        </div>
+        {sectors.length > 0 && onSectorChange && (
+          <Select value={selectedSector} onValueChange={onSectorChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filtrar por atividade" />
+            </SelectTrigger>
+            <SelectContent className="bg-background z-50">
+              <SelectItem value="all">Todas as atividades</SelectItem>
+              {sectors.map((sector) => (
+                <SelectItem key={sector} value={sector}>
+                  {sector}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
