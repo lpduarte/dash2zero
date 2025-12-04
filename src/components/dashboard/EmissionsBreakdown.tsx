@@ -18,42 +18,50 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Distribuição de Emissões por Âmbito</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
-              outerRadius={80}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip formatter={(value: number) => `${value.toFixed(2)} t CO₂e`} />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-        <div className="grid grid-cols-3 gap-4 mt-4">
-          {data.map((scope) => (
-            <div key={scope.name} className="text-center">
-              <div className="text-2xl font-bold" style={{ color: scope.color }}>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Distribuição de Emissões por Âmbito</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value: number) => `${value.toFixed(2)} t CO₂e`} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      
+      <div className="grid grid-cols-3 gap-3 mt-3">
+        {data.map((scope, index) => (
+          <Card key={scope.name} className="p-3">
+            <div className="text-center">
+              <div className="text-xs text-muted-foreground mb-1">
+                Âmbito {index + 1}
+              </div>
+              <div className="text-xl font-bold" style={{ color: scope.color }}>
                 {scope.value.toFixed(0)}
               </div>
-              <div className="text-sm text-muted-foreground">t CO₂e</div>
+              <div className="text-xs text-muted-foreground">t CO₂e</div>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 };
