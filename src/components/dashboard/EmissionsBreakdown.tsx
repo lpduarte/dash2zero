@@ -12,16 +12,16 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   const totalScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0);
 
   const data = [
-    { name: "Âmbito 1 (Diretas)", value: totalScope1, color: "hsl(var(--danger))" },
-    { name: "Âmbito 2 (Energia)", value: totalScope2, color: "hsl(var(--warning))" },
-    { name: "Âmbito 3 (Indiretas)", value: totalScope3, color: "hsl(var(--primary))" },
+    { name: "Âmbito 1", value: totalScope1, color: "hsl(175 66% 38%)" },
+    { name: "Âmbito 2", value: totalScope2, color: "hsl(175 45% 55%)" },
+    { name: "Âmbito 3", value: totalScope3, color: "hsl(175 30% 72%)" },
   ];
 
   return (
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Distribuição de Emissões por Âmbito</CardTitle>
+          <h2 className="text-xl font-semibold">Emissões por âmbito</h2>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -31,7 +31,6 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -41,7 +40,6 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
                 ))}
               </Pie>
               <Tooltip formatter={(value: number) => `${value.toFixed(2)} t CO₂e`} />
-              <Legend />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
