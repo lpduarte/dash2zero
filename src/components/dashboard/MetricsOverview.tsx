@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Factory, Users, Building, Euro, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Factory, Users, Building, Euro, TrendingUp, TrendingDown } from "lucide-react";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
@@ -23,7 +23,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   // Determinar nível de potencial de melhoria
   const getImprovementPotential = () => {
     if (percentageCritical > 30) return { level: "Alto", color: "text-danger", bgColor: "bg-danger/10", icon: TrendingDown };
-    if (percentageCritical > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: Minus };
+    if (percentageCritical > 15) return { level: "Médio", color: "text-warning", bgColor: "bg-warning/10", icon: TrendingDown };
     return { level: "Baixo", color: "text-success", bgColor: "bg-success/10", icon: TrendingDown };
   };
   

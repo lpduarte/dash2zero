@@ -1,4 +1,4 @@
-import { Building2, Users, Handshake, LayoutGrid, TrendingDown, Minus } from "lucide-react";
+import { Building2, Users, Handshake, LayoutGrid, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useRef } from "react";
 
@@ -33,7 +33,7 @@ const getPotentialConfig = (potential: ImprovementPotential, isSelected: boolean
       bgColor: isSelected ? 'bg-red-200/30' : 'bg-danger/15'
     },
     medium: { 
-      icon: Minus, 
+      icon: TrendingDown, 
       color: isSelected ? 'text-yellow-200' : 'text-warning',
       bgColor: isSelected ? 'bg-yellow-200/30' : 'bg-warning/15'
     },
