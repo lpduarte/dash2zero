@@ -114,7 +114,7 @@ export const SupplierCard = ({
             </div>
             <p className="text-xs text-muted-foreground mb-1">Por área</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
-            <p className="text-xs text-muted-foreground">t CO₂e</p>
+            <p className="text-xs text-muted-foreground">t CO₂e/m²</p>
           </div>
           <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
             <div className="absolute top-2 right-2 p-1.5 rounded bg-primary/10">
@@ -122,7 +122,7 @@ export const SupplierCard = ({
             </div>
             <p className="text-xs text-muted-foreground mb-1">Por faturação</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerRevenue.toFixed(1)}</p>
-            <p className="text-xs text-muted-foreground">kg CO₂e</p>
+            <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
           </div>
         </div>
 
