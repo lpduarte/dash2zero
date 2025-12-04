@@ -6,7 +6,7 @@ import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
-import { TopSuppliersByCAE } from "@/components/dashboard/TopSuppliersByCAE";
+
 import { mockSuppliers } from "@/data/mockSuppliers";
 
 const Overview = () => {
@@ -58,7 +58,7 @@ const Overview = () => {
           <TopSuppliersHighlight suppliers={filteredSuppliers} />
         </div>
 
-        <TopSuppliersByCAE suppliers={filteredSuppliers} />
+        
       </main>
     </div>
   );
