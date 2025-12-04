@@ -3,7 +3,9 @@ import { Supplier } from "@/types/supplier";
 import { SupplierCard } from "./SupplierCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, Factory } from "lucide-react";
+import { Search, MapPin, Factory, ArrowUpDown } from "lucide-react";
+
+type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc';
 
 interface CompaniesTabProps {
   suppliers: Supplier[];
@@ -37,6 +39,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
   // Get unique regions and sectors with counts
   const regions = useMemo(() => {
@@ -63,7 +66,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
     }));
   }, [suppliers]);
 
-  // Filter suppliers
+  // Filter and sort suppliers
   const filteredSuppliers = useMemo(() => {
     let filtered = suppliers;
     
@@ -84,8 +87,26 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
       );
     }
     
-    return filtered.sort((a, b) => a.name.localeCompare(b.name));
-  }, [suppliers, selectedRegion, selectedSector, searchTerm]);
+    // Apply sorting
+    return [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'emissions-asc':
+          return a.totalEmissions - b.totalEmissions;
+        case 'emissions-desc':
+          return b.totalEmissions - a.totalEmissions;
+        case 'region-asc':
+          return getRegionLabel(a.region).localeCompare(getRegionLabel(b.region));
+        case 'region-desc':
+          return getRegionLabel(b.region).localeCompare(getRegionLabel(a.region));
+        default:
+          return 0;
+      }
+    });
+  }, [suppliers, selectedRegion, selectedSector, searchTerm, sortBy]);
 
   return (
     <div className="space-y-6">
@@ -151,6 +172,25 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                   </div>
                 </SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+            <SelectTrigger className="w-[200px]">
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <ArrowUpDown className="h-4 w-4 text-muted-foreground shrink-0" />
+                <SelectValue placeholder="Ordenar por" />
+              </div>
+            </SelectTrigger>
+            <SelectContent className="w-[200px]">
+              <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
+              <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
+              <SelectItem value="emissions-asc">Emissões (menor)</SelectItem>
+              <SelectItem value="emissions-desc">Emissões (maior)</SelectItem>
+              <SelectItem value="region-asc">Região (A-Z)</SelectItem>
+              <SelectItem value="region-desc">Região (Z-A)</SelectItem>
             </SelectContent>
           </Select>
         </div>
