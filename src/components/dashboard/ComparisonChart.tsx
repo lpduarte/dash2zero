@@ -36,8 +36,8 @@ export const ComparisonChart = ({
   selectedSector = 'all',
   onSectorChange 
 }: ComparisonChartProps) => {
-  // Take top 15 suppliers for display
-  const topSuppliers = suppliers.slice(0, 15);
+  // Show all suppliers
+  const topSuppliers = suppliers;
 
   const chartData = topSuppliers.map((supplier) => ({
     name: supplier.name.length > 20 ? supplier.name.substring(0, 17) + '...' : supplier.name,
