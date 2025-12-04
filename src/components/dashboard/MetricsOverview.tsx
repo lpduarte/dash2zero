@@ -39,7 +39,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
       bgColor: "bg-primary/10",
     },
     {
-      title: "Potencial de Melhoria",
+      title: "Potencial de melhoria",
       value: improvementPotential.level,
       unit: `${percentageCritical.toFixed(0)}% das empresas`,
       icon: improvementPotential.icon,
