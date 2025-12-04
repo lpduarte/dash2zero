@@ -1,58 +1,57 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { 
-  Mail, 
-  ExternalLink,
-  FileText,
-  Building2,
-  Users,
-  Handshake,
-  TrendingUp,
-  Euro,
-  UserRound,
-  Maximize2,
-  BarChart3
-} from "lucide-react";
+import { Mail, ExternalLink, FileText, Building2, Users, Handshake, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getSectorName } from "@/data/sectors";
 import { mockSuppliers } from "@/data/mockSuppliers";
-
 interface SupplierCardProps {
   supplier: Supplier;
 }
-
 const getRegionLabel = (region: string) => {
   const labels: Record<string, string> = {
     north: 'Norte',
     center: 'Centro',
     south: 'Sul',
-    islands: 'Ilhas',
+    islands: 'Ilhas'
   };
   return labels[region] || region;
 };
-
 const getClusterInfo = (cluster: string) => {
-  const info: Record<string, { label: string; icon: typeof Building2 }> = {
-    fornecedor: { label: 'Fornecedor', icon: Building2 },
-    cliente: { label: 'Cliente', icon: Users },
-    parceiro: { label: 'Parceiro', icon: Handshake },
+  const info: Record<string, {
+    label: string;
+    icon: typeof Building2;
+  }> = {
+    fornecedor: {
+      label: 'Fornecedor',
+      icon: Building2
+    },
+    cliente: {
+      label: 'Cliente',
+      icon: Users
+    },
+    parceiro: {
+      label: 'Parceiro',
+      icon: Handshake
+    }
   };
-  return info[cluster] || { label: cluster, icon: Building2 };
+  return info[cluster] || {
+    label: cluster,
+    icon: Building2
+  };
 };
-
-export const SupplierCard = ({ supplier }: SupplierCardProps) => {
+export const SupplierCard = ({
+  supplier
+}: SupplierCardProps) => {
   const clusterInfo = getClusterInfo(supplier.cluster);
   const ClusterIcon = clusterInfo.icon;
 
   // Calculate sector average
   const sectorSuppliers = mockSuppliers.filter(s => s.sector === supplier.sector);
   const sectorAvgEmissions = sectorSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / sectorSuppliers.length;
-  const vsAverage = ((supplier.totalEmissions - sectorAvgEmissions) / sectorAvgEmissions) * 100;
+  const vsAverage = (supplier.totalEmissions - sectorAvgEmissions) / sectorAvgEmissions * 100;
   const isAboveAverage = vsAverage > 0;
-
-  return (
-    <Card className="border border-border bg-card hover:shadow-lg transition-all">
+  return <Card className="border border-border bg-card hover:shadow-lg transition-all">
       <CardHeader className="pb-3">
         <div className="flex flex-col gap-2">
           <h3 className="text-lg font-semibold text-card-foreground">{supplier.name}</h3>
@@ -113,7 +112,7 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
             <div className="absolute top-2 right-2 p-1.5 rounded bg-primary/10">
               <Maximize2 className="h-3.5 w-3.5 text-primary" />
             </div>
-            <p className="text-xs text-muted-foreground mb-1">Por m²</p>
+            <p className="text-xs text-muted-foreground mb-1">Por área</p>
             <p className="text-lg font-semibold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e</p>
           </div>
@@ -158,16 +157,13 @@ export const SupplierCard = ({ supplier }: SupplierCardProps) => {
               <span className="truncate">{supplier.contact.email}</span>
             </div>
           </div>
-          {supplier.sustainabilityReport && (
-            <Button variant="outline" size="sm" className="w-full" asChild>
+          {supplier.sustainabilityReport && <Button variant="outline" size="sm" className="w-full" asChild>
               <a href={supplier.sustainabilityReport} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3 w-3 mr-2" />
                 Ver Relatório de Sustentabilidade
               </a>
-            </Button>
-          )}
+            </Button>}
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
