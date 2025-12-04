@@ -32,7 +32,7 @@ export const SupplierEmissionsChart = ({
   };
   return <Card>
       <CardHeader>
-        <CardTitle>Emissões totais por empresa</CardTitle>
+        <h2 className="text-xl font-semibold">Emissões totais por empresa</h2>
         <p className="text-sm text-muted-foreground">
           Emissões (t CO₂e)
         </p>
