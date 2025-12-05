@@ -2,14 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown } from "lucide-react";
+import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown, FileText } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SupplierSwitchModal } from "./SupplierSwitchModal";
-
+import { ActionPlanModal } from "./ActionPlanModal";
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
@@ -20,6 +20,7 @@ export const CriticalSuppliersHighlight = ({
   const [selectedSector, setSelectedSector] = useState<string>("all");
   const [isOpen, setIsOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+  const [actionPlanOpen, setActionPlanOpen] = useState(false);
   const [selectedCriticalSupplier, setSelectedCriticalSupplier] = useState<Supplier | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<Supplier | null>(null);
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
@@ -113,6 +114,15 @@ export const CriticalSuppliersHighlight = ({
             Empresas críticas e alternativas 
           </CardTitle>
           <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-2"
+              onClick={() => setActionPlanOpen(true)}
+            >
+              <FileText className="h-4 w-4" />
+              Gerar plano de ação
+            </Button>
             <Select value={selectedSector} onValueChange={setSelectedSector}>
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Filtrar por atividade" />
@@ -285,5 +295,11 @@ export const CriticalSuppliersHighlight = ({
         allAlternatives={getAllAlternatives(selectedCriticalSupplier)}
       />
     )}
+
+    <ActionPlanModal
+      open={actionPlanOpen}
+      onOpenChange={setActionPlanOpen}
+      suppliers={suppliers}
+    />
   </Collapsible>;
 };
