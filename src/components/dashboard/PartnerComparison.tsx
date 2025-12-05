@@ -216,41 +216,6 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
           </div>
         </CardContent>
       </Card>
-
-      {alternatives.length > 0 && (
-        <Card className="border-success/30 bg-success/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5" />
-              Parceiros Alternativos Sustentáveis
-            </CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Parceiros com emissões 30% abaixo da média ({threshold.toFixed(0)} t CO₂e)
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-3 md:grid-cols-2">
-              {alternatives.map(supplier => (
-                <div key={supplier.id} className="p-3 border border-success/30 rounded-lg bg-card">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <p className="font-semibold">{supplier.name}</p>
-                      <p className="text-xs text-muted-foreground">{sectorLabels[supplier.sector]}</p>
-                    </div>
-                    <Badge className="bg-success">
-                      {(((avgEmissions - supplier.totalEmissions) / avgEmissions) * 100).toFixed(0)}% abaixo
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Emissões</span>
-                    <span className="font-bold">{supplier.totalEmissions.toFixed(0)} t CO₂e</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
