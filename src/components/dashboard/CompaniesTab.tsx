@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List, Eye } from "lucide-react";
+import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List, Info } from "lucide-react";
 
 type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-asc' | 'sector-desc' | 'sector-diff-asc' | 'sector-diff-desc';
 type ViewMode = 'cards' | 'table';
@@ -310,12 +310,11 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                     <TableCell>
                       <Button
                         variant="ghost"
-                        size="sm"
+                        size="icon"
                         onClick={() => setSelectedSupplier(supplier)}
-                        className="gap-1"
+                        className="h-8 w-8 rounded-full"
                       >
-                        <Eye className="h-4 w-4" />
-                        Ver
+                        <Info className="h-4 w-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
