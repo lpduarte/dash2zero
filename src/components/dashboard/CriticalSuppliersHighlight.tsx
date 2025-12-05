@@ -69,7 +69,7 @@ export const CriticalSuppliersHighlight = ({
   // Get all alternatives for a supplier (for manual selection in modal)
   const getAllAlternatives = (criticalSupplier: Supplier) => {
     return suppliers
-      .filter(s => s.sector === criticalSupplier.sector && s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions)
+      .filter(s => s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions)
       .sort((a, b) => a.totalEmissions - b.totalEmissions);
   };
 

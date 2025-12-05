@@ -144,7 +144,14 @@ export const SupplierSwitchModal = ({
                           acc[sector].push(alt);
                           return acc;
                         }, {} as Record<string, typeof allAlternatives>)
-                      ).map(([sector, alternatives]) => (
+                      )
+                        .sort(([sectorA], [sectorB]) => {
+                          const criticalSectorLabel = sectorLabels[criticalSupplier.sector] || criticalSupplier.sector;
+                          if (sectorA === criticalSectorLabel) return -1;
+                          if (sectorB === criticalSectorLabel) return 1;
+                          return sectorA.localeCompare(sectorB);
+                        })
+                        .map(([sector, alternatives]) => (
                         <div key={sector}>
                           <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50">
                             {sector}
