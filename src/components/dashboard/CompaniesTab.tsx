@@ -3,9 +3,13 @@ import { Supplier } from "@/types/supplier";
 import { SupplierCard } from "./SupplierCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin, Factory, ArrowUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List } from "lucide-react";
 
 type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-diff-asc' | 'sector-diff-desc';
+type ViewMode = 'cards' | 'table';
 
 interface CompaniesTabProps {
   suppliers: Supplier[];
@@ -40,6 +44,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
   const [selectedSector, setSelectedSector] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
+  const [viewMode, setViewMode] = useState<ViewMode>('cards');
 
   // Get unique regions and sectors with counts
   const regions = useMemo(() => {
@@ -137,6 +142,28 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
 
   return (
     <div className="space-y-6">
+      {/* View Toggle */}
+      <div className="flex items-center gap-1 p-1 bg-muted rounded-lg w-fit">
+        <Button
+          variant={viewMode === 'cards' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setViewMode('cards')}
+          className="gap-1.5"
+        >
+          <LayoutGrid className="h-4 w-4" />
+          Cartões
+        </Button>
+        <Button
+          variant={viewMode === 'table' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setViewMode('table')}
+          className="gap-1.5"
+        >
+          <List className="h-4 w-4" />
+          Lista
+        </Button>
+      </div>
+
       {/* Filters */}
       <div className="flex flex-wrap gap-4 items-center">
         <div className="relative flex-1 min-w-[200px] max-w-[300px]">
@@ -229,12 +256,59 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
         </p>
       </div>
 
-      {/* Supplier Cards */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {filteredSuppliers.map((supplier) => (
-          <SupplierCard key={supplier.id} supplier={supplier} />
-        ))}
-      </div>
+      {/* Card View */}
+      {viewMode === 'cards' && (
+        <div className="grid gap-6 md:grid-cols-2">
+          {filteredSuppliers.map((supplier) => (
+            <SupplierCard key={supplier.id} supplier={supplier} />
+          ))}
+        </div>
+      )}
+
+      {/* Table View */}
+      {viewMode === 'table' && (
+        <div className="rounded-md border overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Empresa</TableHead>
+                <TableHead>Atividade</TableHead>
+                <TableHead>Região</TableHead>
+                <TableHead className="text-right">Emissões totais</TableHead>
+                <TableHead className="text-right">vs Média setor</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>NIF</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredSuppliers.map((supplier) => {
+                const sectorAvg = sectorAverages[supplier.sector];
+                const diff = ((supplier.totalEmissions - sectorAvg) / sectorAvg) * 100;
+                return (
+                  <TableRow key={supplier.id}>
+                    <TableCell className="font-medium">{supplier.name}</TableCell>
+                    <TableCell>{getSectorLabel(supplier.sector)}</TableCell>
+                    <TableCell>{getRegionLabel(supplier.region)}</TableCell>
+                    <TableCell className="text-right">
+                      {supplier.totalEmissions.toLocaleString('pt-PT')} t CO₂e
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Badge 
+                        variant="outline" 
+                        className={diff < 0 ? 'text-success border-success/50' : diff > 20 ? 'text-danger border-danger/50' : 'text-warning border-warning/50'}
+                      >
+                        {diff > 0 ? '+' : ''}{diff.toFixed(0)}%
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{supplier.contact.email}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{supplier.contact.nif}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
       {filteredSuppliers.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
