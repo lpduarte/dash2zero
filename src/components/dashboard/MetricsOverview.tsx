@@ -107,7 +107,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   ];
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
         {metrics.map((metric) => (
           <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow relative">
@@ -128,17 +128,43 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
             {metric.isImprovement && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button className="absolute bottom-3 right-3 p-1 rounded-full hover:bg-muted transition-colors">
-                    <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                  <button className={`absolute bottom-3 right-3 ${metric.bgColor} ${metric.color} p-1.5 rounded transition-opacity hover:opacity-80`}>
+                    <Info className="h-3.5 w-3.5" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent side="top" className="max-w-xs">
-                  <div className="space-y-1.5 text-xs">
-                    <p><span className="font-medium">Emissões atuais:</span> {Math.round(totalEmissions).toLocaleString('pt-PT')} t CO₂e</p>
-                    <p><span className="font-medium">Com alternativas:</span> {Math.round(potentialEmissions).toLocaleString('pt-PT')} t CO₂e</p>
-                    <p className="text-success font-medium">
-                      Redução potencial: -{savingsPercentage.toFixed(1)}%
-                    </p>
+                <TooltipContent side="right" className="p-0 w-56">
+                  <div className="p-3 space-y-3">
+                    <p className="text-xs font-medium text-muted-foreground">Cenário de substituição</p>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Atual</span>
+                        <span className="text-sm font-semibold">{Math.round(totalEmissions).toLocaleString('pt-PT')} t</span>
+                      </div>
+                      
+                      <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="absolute inset-y-0 left-0 bg-primary/30 rounded-full"
+                          style={{ width: '100%' }}
+                        />
+                        <div 
+                          className="absolute inset-y-0 left-0 bg-success rounded-full transition-all"
+                          style={{ width: `${100 - savingsPercentage}%` }}
+                        />
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">Potencial</span>
+                        <span className="text-sm font-semibold text-success">{Math.round(potentialEmissions).toLocaleString('pt-PT')} t</span>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-2 border-t border-border">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium">Redução</span>
+                        <span className="text-sm font-bold text-success">-{savingsPercentage.toFixed(1)}%</span>
+                      </div>
+                    </div>
                   </div>
                 </TooltipContent>
               </Tooltip>
