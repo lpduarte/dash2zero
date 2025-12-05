@@ -132,18 +132,37 @@ export const SupplierSwitchModal = ({
                   onValueChange={setSelectedAlternativeId}
                 >
                   <SelectTrigger className="w-full mb-1">
-                    <SelectValue placeholder="Selecionar alternativa" />
+                    <SelectValue placeholder="Selecionar alternativa">
+                      {selectedAlternative?.name}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {allAlternatives.map((alt) => (
-                      <SelectItem key={alt.id} value={alt.id}>
-                        <div className="flex items-center justify-between gap-2">
-                          <span>{alt.name}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {alt.totalEmissions.toFixed(0)} t CO₂e
-                          </span>
+                    {Object.entries(
+                      allAlternatives.reduce((acc, alt) => {
+                        const sector = sectorLabels[alt.sector] || alt.sector;
+                        if (!acc[sector]) acc[sector] = [];
+                        acc[sector].push(alt);
+                        return acc;
+                      }, {} as Record<string, typeof allAlternatives>)
+                    ).map(([sector, alternatives]) => (
+                      <div key={sector}>
+                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50">
+                          {sector}
                         </div>
-                      </SelectItem>
+                        {alternatives.map((alt) => {
+                          const reduction = ((criticalSupplier.totalEmissions - alt.totalEmissions) / criticalSupplier.totalEmissions * 100);
+                          return (
+                            <SelectItem key={alt.id} value={alt.id}>
+                              <div className="flex items-center justify-between gap-3 w-full">
+                                <span>{alt.name}</span>
+                                <Badge className="bg-success text-xs shrink-0">
+                                  -{reduction.toFixed(0)}%
+                                </Badge>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
+                      </div>
                     ))}
                   </SelectContent>
                 </Select>
