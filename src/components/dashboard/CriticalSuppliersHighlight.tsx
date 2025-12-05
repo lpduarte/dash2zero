@@ -259,7 +259,13 @@ export const CriticalSuppliersHighlight = ({
                       </TooltipProvider>
                     </>}
 
-                  <Button size="sm" variant="outline" className="shrink-0" onClick={() => handleOpenModal(supplier, alternative)}>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="shrink-0" 
+                    onClick={() => handleOpenModal(supplier, alternative)}
+                    disabled={!alternative}
+                  >
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </div>
