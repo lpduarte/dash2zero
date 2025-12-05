@@ -280,11 +280,12 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
             <TableHeader>
               <TableRow>
                 <TableHead>Empresa</TableHead>
+                <TableHead>NIF</TableHead>
                 <TableHead>Atividade</TableHead>
                 <TableHead>Região</TableHead>
                 <TableHead className="text-right">Emissões totais</TableHead>
                 <TableHead className="text-right">vs Média setor</TableHead>
-                <TableHead className="w-[80px]"></TableHead>
+                <TableHead className="w-[60px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -292,8 +293,13 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                 const sectorAvg = sectorAverages[supplier.sector];
                 const diff = ((supplier.totalEmissions - sectorAvg) / sectorAvg) * 100;
                 return (
-                  <TableRow key={supplier.id}>
+                  <TableRow 
+                    key={supplier.id} 
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => setSelectedSupplier(supplier)}
+                  >
                     <TableCell className="font-medium">{supplier.name}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{supplier.contact.nif}</TableCell>
                     <TableCell>{getSectorLabel(supplier.sector)}</TableCell>
                     <TableCell>{getRegionLabel(supplier.region)}</TableCell>
                     <TableCell className="text-right">
@@ -311,7 +317,10 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() => setSelectedSupplier(supplier)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedSupplier(supplier);
+                        }}
                         className="h-7 w-7 rounded-full"
                       >
                         <Info className="h-3.5 w-3.5" />
