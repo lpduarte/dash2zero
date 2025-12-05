@@ -17,7 +17,6 @@ import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissionsChart";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
-import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -165,7 +164,6 @@ const Overview = () => {
           </TabsContent>
 
           <TabsContent value="comparative" className="space-y-6">
-            <PartnerComparison suppliers={filteredSuppliers} />
             <RankingChart suppliers={filteredSuppliers} />
             <RadarComparison suppliers={filteredSuppliers} />
             <AverageEmissionsChart suppliers={filteredSuppliers} />
