@@ -300,7 +300,7 @@ export const SupplierSwitchModal = ({
           <div className="space-y-2 mt-6">
             <Label className="flex items-center gap-2">
               <MessageSquare className="h-4 w-4" />
-              Notas e Observações
+              Observações
             </Label>
             <Textarea
               placeholder="Adicione notas sobre esta análise de mudança..."
