@@ -152,13 +152,11 @@ export const SupplierSwitchModal = ({
                         {alternatives.map((alt) => {
                           const reduction = ((criticalSupplier.totalEmissions - alt.totalEmissions) / criticalSupplier.totalEmissions * 100);
                           return (
-                            <SelectItem key={alt.id} value={alt.id} className="pr-2">
-                              <div className="grid grid-cols-[1fr_60px] items-center w-full gap-2">
-                                <span className="truncate">{alt.name}</span>
-                                <Badge className="bg-success text-xs justify-self-end">
-                                  -{reduction.toFixed(0)}%
-                                </Badge>
-                              </div>
+                            <SelectItem key={alt.id} value={alt.id} className="pr-16">
+                              <span>{alt.name}</span>
+                              <Badge className="bg-success text-xs absolute right-2 top-1/2 -translate-y-1/2">
+                                -{reduction.toFixed(0)}%
+                              </Badge>
                             </SelectItem>
                           );
                         })}
