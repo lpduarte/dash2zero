@@ -104,7 +104,7 @@ export const SupplierSwitchModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <RefreshCw className="h-5 w-5 text-primary" />
-            Análise de Mudança de Fornecedor
+            Análise de mudança de fornecedor
           </DialogTitle>
         </DialogHeader>
 
@@ -114,7 +114,7 @@ export const SupplierSwitchModal = ({
             {/* Headers */}
             <div className="grid grid-cols-[1fr_48px_1fr]">
               <div className="p-4 bg-danger/5 border-b border-border">
-                <Badge className="bg-danger mb-2">Fornecedor Atual</Badge>
+                <Badge className="bg-danger mb-2">Empresa atual</Badge>
                 <h3 className="font-semibold text-lg">{criticalSupplier.name}</h3>
                 <p className="text-sm text-muted-foreground">
                   {sectorLabels[criticalSupplier.sector] || criticalSupplier.sector}
