@@ -152,13 +152,28 @@ export const ComparisonChart = ({
               }} 
             />
             {visibleScopes.scope1 && (
-              <Bar dataKey="Âmbito 1" stackId="stack" fill={SCOPE_COLORS['Âmbito 1']} radius={[4, 4, 0, 0]} />
+              <Bar 
+                dataKey="Âmbito 1" 
+                stackId="stack" 
+                fill={SCOPE_COLORS['Âmbito 1']} 
+                radius={!visibleScopes.scope2 && !visibleScopes.scope3 ? [4, 4, 0, 0] : [0, 0, 0, 0]} 
+              />
             )}
             {visibleScopes.scope2 && (
-              <Bar dataKey="Âmbito 2" stackId="stack" fill={SCOPE_COLORS['Âmbito 2']} radius={[4, 4, 0, 0]} />
+              <Bar 
+                dataKey="Âmbito 2" 
+                stackId="stack" 
+                fill={SCOPE_COLORS['Âmbito 2']} 
+                radius={!visibleScopes.scope3 ? [4, 4, 0, 0] : [0, 0, 0, 0]} 
+              />
             )}
             {visibleScopes.scope3 && (
-              <Bar dataKey="Âmbito 3" stackId="stack" fill={SCOPE_COLORS['Âmbito 3']} radius={[4, 4, 0, 0]} />
+              <Bar 
+                dataKey="Âmbito 3" 
+                stackId="stack" 
+                fill={SCOPE_COLORS['Âmbito 3']} 
+                radius={[4, 4, 0, 0]} 
+              />
             )}
           </BarChart>
         </ResponsiveContainer>
