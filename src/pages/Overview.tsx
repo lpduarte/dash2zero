@@ -10,12 +10,9 @@ import { CompaniesTab } from "@/components/dashboard/CompaniesTab";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
-import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
-import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissionsChart";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
-import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -110,13 +107,12 @@ const Overview = () => {
         />
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="home">Visão geral</TabsTrigger>
             <TabsTrigger value="companies">Empresas</TabsTrigger>
             <TabsTrigger value="overview">Detalhes das emissões</TabsTrigger>
             <TabsTrigger value="environmental">Análise por atividade</TabsTrigger>
             <TabsTrigger value="financial">Análise por faturação</TabsTrigger>
-            <TabsTrigger value="comparative">Análise Comparativa</TabsTrigger>
           </TabsList>
 
           <TabsContent value="home" className="space-y-6">
@@ -162,11 +158,6 @@ const Overview = () => {
             <EmissionsParetoChart suppliers={filteredSuppliers} />
           </TabsContent>
 
-          <TabsContent value="comparative" className="space-y-6">
-            <PartnerComparison suppliers={filteredSuppliers} />
-            <AverageEmissionsChart suppliers={filteredSuppliers} />
-            <BestWorstSuppliers suppliers={filteredSuppliers} />
-          </TabsContent>
         </Tabs>
       </main>
     </div>
