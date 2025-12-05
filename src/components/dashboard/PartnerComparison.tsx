@@ -149,62 +149,6 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card className="border-success/30 bg-success/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <TrendingDown className="h-5 w-5 text-success" />
-              <span className="font-semibold">Melhor Parceiro ({selectedSector === "all" ? "Global" : sectorLabels[selectedSector]})</span>
-            </div>
-            <p className="text-xl font-bold mb-2">{best.fullName}</p>
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div>
-                <p className="text-xs text-muted-foreground">A1</p>
-                <p className="text-lg font-bold text-danger">{best.scope1.toFixed(0)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">A2</p>
-                <p className="text-lg font-bold text-warning">{best.scope2.toFixed(0)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">A3</p>
-                <p className="text-lg font-bold text-primary">{best.scope3.toFixed(0)}</p>
-              </div>
-            </div>
-            <div className="mt-3 pt-3 border-t">
-              <p className="text-2xl font-bold text-success">{best.total.toFixed(0)} t CO₂e</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-danger/30 bg-danger/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <AlertCircle className="h-5 w-5 text-danger" />
-              <span className="font-semibold">Pior Parceiro ({selectedSector === "all" ? "Global" : sectorLabels[selectedSector]})</span>
-            </div>
-            <p className="text-xl font-bold mb-2">{worst.fullName}</p>
-            <div className="grid grid-cols-3 gap-2 text-center">
-              <div>
-                <p className="text-xs text-muted-foreground">A1</p>
-                <p className="text-lg font-bold text-danger">{worst.scope1.toFixed(0)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">A2</p>
-                <p className="text-lg font-bold text-warning">{worst.scope2.toFixed(0)}</p>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">A3</p>
-                <p className="text-lg font-bold text-primary">{worst.scope3.toFixed(0)}</p>
-              </div>
-            </div>
-            <div className="mt-3 pt-3 border-t">
-              <p className="text-2xl font-bold text-danger">{worst.total.toFixed(0)} t CO₂e</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       <Card className="border-accent/30 bg-accent/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
