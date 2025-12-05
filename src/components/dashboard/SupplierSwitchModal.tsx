@@ -153,9 +153,9 @@ export const SupplierSwitchModal = ({
                           const reduction = ((criticalSupplier.totalEmissions - alt.totalEmissions) / criticalSupplier.totalEmissions * 100);
                           return (
                             <SelectItem key={alt.id} value={alt.id} className="pr-2">
-                              <div className="flex items-center w-full">
-                                <span className="flex-1">{alt.name}</span>
-                                <Badge className="bg-success text-xs shrink-0 ml-auto">
+                              <div className="grid grid-cols-[1fr_60px] items-center w-full gap-2">
+                                <span className="truncate">{alt.name}</span>
+                                <Badge className="bg-success text-xs justify-self-end">
                                   -{reduction.toFixed(0)}%
                                 </Badge>
                               </div>
