@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List } from "lucide-react";
 
-type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-diff-asc' | 'sector-diff-desc';
+type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-asc' | 'sector-desc' | 'sector-diff-asc' | 'sector-diff-desc';
 type ViewMode = 'cards' | 'table';
 
 interface CompaniesTabProps {
@@ -124,6 +124,10 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
           return getRegionLabel(a.region).localeCompare(getRegionLabel(b.region));
         case 'region-desc':
           return getRegionLabel(b.region).localeCompare(getRegionLabel(a.region));
+        case 'sector-asc':
+          return getSectorLabel(a.sector).localeCompare(getSectorLabel(b.sector));
+        case 'sector-desc':
+          return getSectorLabel(b.sector).localeCompare(getSectorLabel(a.sector));
         case 'sector-diff-asc': {
           const diffA = ((a.totalEmissions - sectorAverages[a.sector]) / sectorAverages[a.sector]) * 100;
           const diffB = ((b.totalEmissions - sectorAverages[b.sector]) / sectorAverages[b.sector]) * 100;
@@ -243,6 +247,8 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
               <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
               <SelectItem value="emissions-asc">Emissões (menor)</SelectItem>
               <SelectItem value="emissions-desc">Emissões (maior)</SelectItem>
+              <SelectItem value="sector-asc">Atividade (A-Z)</SelectItem>
+              <SelectItem value="sector-desc">Atividade (Z-A)</SelectItem>
               <SelectItem value="sector-diff-asc">vs Média setor (melhor)</SelectItem>
               <SelectItem value="sector-diff-desc">vs Média setor (pior)</SelectItem>
               <SelectItem value="region-asc">Região (A-Z)</SelectItem>
