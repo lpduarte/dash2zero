@@ -316,7 +316,7 @@ export const SupplierSwitchModal = ({
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-border">
+          <div className="flex items-center justify-between pt-4">
             <div className="flex items-center gap-2">
               <Button
                 variant={isBookmarked ? "default" : "outline"}
