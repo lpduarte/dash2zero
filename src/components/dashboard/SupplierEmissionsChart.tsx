@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
 import { getSectorName } from "@/data/sectors";
@@ -104,17 +104,18 @@ export const SupplierEmissionsChart = ({
               Emissões ({config.unit})
             </p>
           </div>
-          <Select value={selectedMetric} onValueChange={(v) => setSelectedMetric(v as MetricType)}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="total">{metricConfig.total.label}</SelectItem>
-              <SelectItem value="perRevenue">{metricConfig.perRevenue.label}</SelectItem>
-              <SelectItem value="perEmployee">{metricConfig.perEmployee.label}</SelectItem>
-              <SelectItem value="perArea">{metricConfig.perArea.label}</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex gap-1">
+            {(Object.keys(metricConfig) as MetricType[]).map((key) => (
+              <Button
+                key={key}
+                variant={selectedMetric === key ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedMetric(key)}
+              >
+                {metricConfig[key].label}
+              </Button>
+            ))}
+          </div>
         </div>
       </CardHeader>
       <CardContent>
