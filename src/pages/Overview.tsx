@@ -9,8 +9,6 @@ import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppl
 import { CompaniesTab } from "@/components/dashboard/CompaniesTab";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
-import { RankingChart } from "@/components/dashboard/RankingChart";
-import { RadarComparison } from "@/components/dashboard/RadarComparison";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
@@ -166,8 +164,6 @@ const Overview = () => {
 
           <TabsContent value="comparative" className="space-y-6">
             <PartnerComparison suppliers={filteredSuppliers} />
-            <RankingChart suppliers={filteredSuppliers} />
-            <RadarComparison suppliers={filteredSuppliers} />
             <AverageEmissionsChart suppliers={filteredSuppliers} />
             <BestWorstSuppliers suppliers={filteredSuppliers} />
           </TabsContent>
