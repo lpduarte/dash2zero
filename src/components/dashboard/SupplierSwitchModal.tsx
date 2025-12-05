@@ -126,7 +126,7 @@ export const SupplierSwitchModal = ({
 
               <div className="p-4 bg-success/5 border-b border-border flex flex-col">
                 <Badge className="bg-success mb-2 w-fit">Alternativa</Badge>
-                <div className="flex-1 flex items-center">
+                <div className="flex-1 flex flex-col justify-center gap-2">
                   <Select
                     value={selectedAlternativeId}
                     onValueChange={setSelectedAlternativeId}
@@ -171,6 +171,12 @@ export const SupplierSwitchModal = ({
                       ))}
                     </SelectContent>
                   </Select>
+                  {selectedAlternative && selectedAlternative.sector !== criticalSupplier.sector && (
+                    <p className="text-xs text-warning flex items-center gap-1">
+                      <span className="inline-block w-1.5 h-1.5 rounded-full bg-warning"></span>
+                      Atividade diferente: {sectorLabels[selectedAlternative.sector] || selectedAlternative.sector}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
