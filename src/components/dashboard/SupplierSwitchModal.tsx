@@ -275,36 +275,6 @@ export const SupplierSwitchModal = ({
             </div>
           )}
 
-          {/* Impact Summary */}
-          {selectedAlternative && (
-            <div className="grid grid-cols-3 gap-4">
-              <div className="p-4 rounded-lg border border-success/30 bg-success/5 text-center">
-                <TrendingDown className="h-5 w-5 text-success mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-1">Redução de Emissões</p>
-                <p className="text-2xl font-bold text-success">
-                  -{emissionsSavings.toLocaleString("pt-PT")}
-                </p>
-                <p className="text-xs text-muted-foreground">t CO₂e ({savingsPercentage}%)</p>
-              </div>
-
-              <div className="p-4 rounded-lg border border-primary/30 bg-primary/5 text-center">
-                <Euro className="h-5 w-5 text-primary mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-1">Melhoria no FE</p>
-                <p className="text-2xl font-bold text-primary">
-                  -{feImprovement.toFixed(1)}
-                </p>
-                <p className="text-xs text-muted-foreground">t CO₂e/€</p>
-              </div>
-
-              <div className="p-4 rounded-lg border border-warning/30 bg-warning/5 text-center">
-                <Euro className="h-5 w-5 text-warning mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground mb-1">Impacto Estimado</p>
-                <p className="text-2xl font-bold text-warning">~€{estimatedCostImpact}</p>
-                <p className="text-xs text-muted-foreground">poupança anual estimada</p>
-              </div>
-            </div>
-          )}
-
           {/* Notes section */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
