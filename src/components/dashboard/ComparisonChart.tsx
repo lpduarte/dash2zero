@@ -131,12 +131,11 @@ export const ComparisonChart = ({
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis 
               dataKey="name" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 9 }} 
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 9, dx: -4 }} 
               angle={-90} 
               textAnchor="end" 
               height={180} 
               interval={0}
-              tickMargin={5}
             />
             <YAxis 
               tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
