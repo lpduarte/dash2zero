@@ -309,12 +309,12 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                     </TableCell>
                     <TableCell>
                       <Button
-                        variant="ghost"
+                        variant="outline"
                         size="icon"
                         onClick={() => setSelectedSupplier(supplier)}
-                        className="h-8 w-8 rounded-full"
+                        className="h-7 w-7 rounded-full"
                       >
-                        <Info className="h-4 w-4" />
+                        <Info className="h-3.5 w-3.5" />
                       </Button>
                     </TableCell>
                   </TableRow>
