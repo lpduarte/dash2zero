@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List, Info } from "lucide-react";
 
 type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-asc' | 'sector-desc' | 'sector-diff-asc' | 'sector-diff-desc';
@@ -333,10 +333,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
 
       {/* Supplier Details Modal */}
       <Dialog open={!!selectedSupplier} onOpenChange={(open) => !open && setSelectedSupplier(null)}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Detalhes da Empresa</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-w-2xl p-0 border-0 bg-transparent shadow-none [&>button]:top-4 [&>button]:right-4 [&>button]:z-10">
           {selectedSupplier && (
             <SupplierCard supplier={selectedSupplier} />
           )}
