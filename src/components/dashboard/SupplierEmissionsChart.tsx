@@ -1,5 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
 import { getSectorName } from "@/data/sectors";
@@ -10,77 +12,158 @@ const clusterConfig: Record<string, { label: string; icon: React.ReactNode }> = 
   cliente: { label: "Cliente", icon: <Users className="h-3 w-3" /> },
   parceiro: { label: "Parceiro", icon: <Handshake className="h-3 w-3" /> },
 };
+
+type MetricType = 'total' | 'perRevenue' | 'perEmployee' | 'perArea';
+
+const metricConfig: Record<MetricType, { label: string; title: string; unit: string; tooltip: string }> = {
+  total: { 
+    label: 'Emissões totais', 
+    title: 'Emissões totais por empresa',
+    unit: 't CO₂e',
+    tooltip: 'Emissões Totais'
+  },
+  perRevenue: { 
+    label: 'Por faturação', 
+    title: 'Emissões por faturação',
+    unit: 'kg CO₂e/€',
+    tooltip: 'Emissões por €'
+  },
+  perEmployee: { 
+    label: 'Por colaborador', 
+    title: 'Emissões por colaborador',
+    unit: 't CO₂e/colab',
+    tooltip: 'Emissões por Colaborador'
+  },
+  perArea: { 
+    label: 'Por área', 
+    title: 'Emissões por área',
+    unit: 't CO₂e/m²',
+    tooltip: 'Emissões por m²'
+  },
+};
+
 interface SupplierEmissionsChartProps {
   suppliers: Supplier[];
 }
+
 export const SupplierEmissionsChart = ({
   suppliers
 }: SupplierEmissionsChartProps) => {
+  const [selectedMetric, setSelectedMetric] = useState<MetricType>('total');
+  
+  const getMetricValue = (supplier: Supplier): number => {
+    switch (selectedMetric) {
+      case 'total': return supplier.totalEmissions;
+      case 'perRevenue': return supplier.emissionsPerRevenue;
+      case 'perEmployee': return supplier.emissionsPerEmployee;
+      case 'perArea': return supplier.emissionsPerArea;
+      default: return supplier.totalEmissions;
+    }
+  };
+
   const emissionsData = suppliers.map(s => ({
     name: s.name.length > 28 ? s.name.substring(0, 25) + '...' : s.name,
     fullName: s.name,
+    value: getMetricValue(s),
     totalEmissions: s.totalEmissions,
+    emissionsPerRevenue: s.emissionsPerRevenue,
+    emissionsPerEmployee: s.emissionsPerEmployee,
+    emissionsPerArea: s.emissionsPerArea,
     sector: s.sector,
     cluster: s.cluster
-  })).sort((a, b) => b.totalEmissions - a.totalEmissions);
-  const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
+  })).sort((a, b) => b.value - a.value);
+
+  const avgValue = emissionsData.reduce((sum, s) => sum + s.value, 0) / emissionsData.length;
+
   const getBarColor = (value: number) => {
-    if (value < avgEmissions * 0.5) return "hsl(var(--success))";
-    if (value < avgEmissions) return "hsl(var(--primary))";
-    if (value < avgEmissions * 1.5) return "hsl(var(--warning))";
+    if (value < avgValue * 0.5) return "hsl(var(--success))";
+    if (value < avgValue) return "hsl(var(--primary))";
+    if (value < avgValue * 1.5) return "hsl(var(--warning))";
     return "hsl(var(--danger))";
   };
-  return <Card>
+
+  const config = metricConfig[selectedMetric];
+
+  const formatValue = (value: number): string => {
+    if (selectedMetric === 'perRevenue') {
+      return value.toFixed(3);
+    }
+    if (selectedMetric === 'perArea') {
+      return value.toFixed(2);
+    }
+    return value.toFixed(0);
+  };
+
+  return (
+    <Card>
       <CardHeader>
-        <h2 className="text-xl font-semibold">Emissões totais por empresa</h2>
-        <p className="text-sm text-muted-foreground">
-          Emissões (t CO₂e)
-        </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h2 className="text-xl font-semibold">{config.title}</h2>
+            <p className="text-sm text-muted-foreground">
+              Emissões ({config.unit})
+            </p>
+          </div>
+          <Select value={selectedMetric} onValueChange={(v) => setSelectedMetric(v as MetricType)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="total">{metricConfig.total.label}</SelectItem>
+              <SelectItem value="perRevenue">{metricConfig.perRevenue.label}</SelectItem>
+              <SelectItem value="perEmployee">{metricConfig.perEmployee.label}</SelectItem>
+              <SelectItem value="perArea">{metricConfig.perArea.label}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={Math.max(250, emissionsData.length * 14)}>
           <BarChart data={emissionsData} layout="vertical" margin={{
-          left: 0,
-          right: 20
-        }} barSize={5}>
+            left: 0,
+            right: 20
+          }} barSize={5}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis type="number" tick={{
-            fill: 'hsl(var(--muted-foreground))',
-            fontSize: 10
-          }} />
+              fill: 'hsl(var(--muted-foreground))',
+              fontSize: 10
+            }} />
             <YAxis dataKey="name" type="category" tick={{
-            fill: 'hsl(var(--muted-foreground))',
-            fontSize: 10
-          }} width={220} interval={0} />
+              fill: 'hsl(var(--muted-foreground))',
+              fontSize: 10
+            }} width={220} interval={0} />
             <Tooltip content={({
-            active,
-            payload
-          }) => {
-            if (!active || !payload || !payload[0]) return null;
-            const data = payload[0].payload;
-            const cluster = clusterConfig[data.cluster] || { label: data.cluster, icon: null };
-            return <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                    <p className="font-semibold mb-2">{data.fullName}</p>
-                    <div className="space-y-1 text-sm">
-                      <p>
-                        <span className="text-muted-foreground">Emissões Totais: </span>
-                        <span className="font-bold">{data.totalEmissions.toFixed(0)} t CO₂e</span>
-                      </p>
-                      <div className="flex gap-2 mt-2">
-                        <Badge variant="outline" className="text-xs">{getSectorName(data.sector)}</Badge>
-                        <Badge variant="outline" className="text-xs flex items-center gap-1">
-                          {cluster.icon}
-                          {cluster.label}
-                        </Badge>
-                      </div>
+              active,
+              payload
+            }) => {
+              if (!active || !payload || !payload[0]) return null;
+              const data = payload[0].payload;
+              const cluster = clusterConfig[data.cluster] || { label: data.cluster, icon: null };
+              return (
+                <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+                  <p className="font-semibold mb-2">{data.fullName}</p>
+                  <div className="space-y-1 text-sm">
+                    <p>
+                      <span className="text-muted-foreground">{config.tooltip}: </span>
+                      <span className="font-bold">{formatValue(data.value)} {config.unit}</span>
+                    </p>
+                    <div className="flex gap-2 mt-2">
+                      <Badge variant="outline" className="text-xs">{getSectorName(data.sector)}</Badge>
+                      <Badge variant="outline" className="text-xs flex items-center gap-1">
+                        {cluster.icon}
+                        {cluster.label}
+                      </Badge>
                     </div>
-                  </div>;
-          }} />
-            <Bar dataKey="totalEmissions" radius={[0, 4, 4, 0]}>
-              {emissionsData.map((entry, index) => <Cell key={`cell-${index}`} fill={getBarColor(entry.totalEmissions)} />)}
+                  </div>
+                </div>
+              );
+            }} />
+            <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+              {emissionsData.map((entry, index) => <Cell key={`cell-${index}`} fill={getBarColor(entry.value)} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
