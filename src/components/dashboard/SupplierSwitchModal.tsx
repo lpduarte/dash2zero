@@ -100,7 +100,7 @@ export const SupplierSwitchModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <RefreshCw className="h-5 w-5 text-primary" />
@@ -136,7 +136,7 @@ export const SupplierSwitchModal = ({
                       {selectedAlternative?.name}
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="min-w-[320px]">
                     {Object.entries(
                       allAlternatives.reduce((acc, alt) => {
                         const sector = sectorLabels[alt.sector] || alt.sector;
