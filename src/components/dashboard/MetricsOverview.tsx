@@ -128,8 +128,8 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
             {metric.isImprovement && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button className={`absolute bottom-3 right-3 ${metric.bgColor} ${metric.color} p-1.5 rounded transition-opacity hover:opacity-80`}>
-                    <Info className="h-3.5 w-3.5" />
+                  <button className="absolute bottom-3 right-3 bg-muted text-muted-foreground p-1.5 rounded transition-opacity hover:opacity-80">
+                    <Info className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" className="p-0 w-56">
@@ -139,7 +139,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">Atual</span>
-                        <span className="text-sm font-semibold">{Math.round(totalEmissions).toLocaleString('pt-PT')} t</span>
+                        <span className="text-sm font-semibold">{Math.round(totalEmissions).toLocaleString('pt-PT')} t CO₂e</span>
                       </div>
                       
                       <div className="relative h-2 bg-muted rounded-full overflow-hidden">
@@ -155,7 +155,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
                       
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-muted-foreground">Potencial</span>
-                        <span className="text-sm font-semibold text-success">{Math.round(potentialEmissions).toLocaleString('pt-PT')} t</span>
+                        <span className="text-sm font-semibold text-success">{Math.round(potentialEmissions).toLocaleString('pt-PT')} t CO₂e</span>
                       </div>
                     </div>
                     
