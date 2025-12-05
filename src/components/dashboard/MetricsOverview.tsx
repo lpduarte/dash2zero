@@ -128,7 +128,7 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
             {metric.isImprovement && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button className="absolute bottom-3 right-3 bg-muted text-muted-foreground p-1.5 rounded transition-opacity hover:opacity-80">
+                  <button className="absolute bottom-4 right-4 bg-muted text-muted-foreground p-1.5 rounded transition-opacity hover:opacity-80">
                     <Info className="h-4 w-4" />
                   </button>
                 </TooltipTrigger>
