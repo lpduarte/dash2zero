@@ -1,6 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Factory, Users, Maximize2, Euro, TrendingUp, TrendingDown } from "lucide-react";
+import { Factory, Users, Maximize2, Euro, TrendingUp, TrendingDown, Info } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
@@ -19,6 +25,33 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
     s.totalEmissions > avgEmissions * 1.2
   );
   const percentageCritical = (criticalSuppliers.length / suppliers.length) * 100;
+
+  // Calcular emissões potenciais se trocar para alternativas
+  const calculatePotentialEmissions = () => {
+    let potentialTotal = totalEmissions;
+    
+    criticalSuppliers.forEach(critical => {
+      // Encontrar a melhor alternativa no mesmo setor (ou subsector)
+      const alternatives = suppliers.filter(s => 
+        s.id !== critical.id && 
+        s.sector === critical.sector &&
+        s.totalEmissions < critical.totalEmissions
+      );
+      
+      if (alternatives.length > 0) {
+        // Ordenar por menores emissões
+        const bestAlternative = alternatives.sort((a, b) => a.totalEmissions - b.totalEmissions)[0];
+        // Subtrair a diferença
+        potentialTotal -= (critical.totalEmissions - bestAlternative.totalEmissions);
+      }
+    });
+    
+    return potentialTotal;
+  };
+
+  const potentialEmissions = calculatePotentialEmissions();
+  const emissionsSavings = totalEmissions - potentialEmissions;
+  const savingsPercentage = totalEmissions > 0 ? ((emissionsSavings / totalEmissions) * 100) : 0;
   
   // Determinar nível de potencial de melhoria
   const getImprovementPotential = () => {
@@ -74,25 +107,45 @@ export const MetricsOverview = ({ suppliers }: MetricsOverviewProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
-      {metrics.map((metric) => (
-        <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow">
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">{metric.title}</p>
-              <div className={`${metric.bgColor} ${metric.color} p-1.5 rounded`}>
-                <metric.icon className="h-4 w-4" />
+    <TooltipProvider>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+        {metrics.map((metric) => (
+          <Card key={metric.title} className="p-4 shadow-md hover:shadow-lg transition-shadow relative">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-muted-foreground">{metric.title}</p>
+                <div className={`${metric.bgColor} ${metric.color} p-1.5 rounded`}>
+                  <metric.icon className="h-4 w-4" />
+                </div>
+              </div>
+              <div>
+                <p className={`text-2xl font-bold ${metric.isImprovement ? metric.color : 'text-card-foreground'}`}>
+                  {metric.value}
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">{metric.unit}</p>
               </div>
             </div>
-            <div>
-              <p className={`text-2xl font-bold ${metric.isImprovement ? metric.color : 'text-card-foreground'}`}>
-                {metric.value}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">{metric.unit}</p>
-            </div>
-          </div>
-        </Card>
-      ))}
-    </div>
+            {metric.isImprovement && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="absolute bottom-3 right-3 p-1 rounded-full hover:bg-muted transition-colors">
+                    <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs">
+                  <div className="space-y-1.5 text-xs">
+                    <p><span className="font-medium">Emissões atuais:</span> {Math.round(totalEmissions).toLocaleString('pt-PT')} t CO₂e</p>
+                    <p><span className="font-medium">Com alternativas:</span> {Math.round(potentialEmissions).toLocaleString('pt-PT')} t CO₂e</p>
+                    <p className="text-success font-medium">
+                      Redução potencial: -{savingsPercentage.toFixed(1)}%
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </Card>
+        ))}
+      </div>
+    </TooltipProvider>
   );
 };
