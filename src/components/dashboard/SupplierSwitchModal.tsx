@@ -338,9 +338,9 @@ export const SupplierSwitchModal = ({
                 className={isBookmarked ? "bg-primary" : ""}
               >
                 {isBookmarked ? (
-                  <BookmarkCheck className="h-4 w-4 mr-2" />
+                  <BookmarkCheck className="h-4 w-4 mr-1.5" />
                 ) : (
-                  <Bookmark className="h-4 w-4 mr-2" />
+                  <Bookmark className="h-4 w-4 mr-1.5" />
                 )}
                 {isBookmarked ? "Marcado para revisão" : "Marcar para revisão"}
               </Button>
@@ -354,7 +354,7 @@ export const SupplierSwitchModal = ({
                     });
                   }}
                 >
-                  <Mail className="h-4 w-4 mr-2" />
+                  <Mail className="h-4 w-4 mr-1.5" />
                   Contactar empresa
                 </Button>
               )}
@@ -362,7 +362,7 @@ export const SupplierSwitchModal = ({
 
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={handleExportPDF}>
-                <FileDown className="h-4 w-4 mr-2" />
+                <FileDown className="h-4 w-4 mr-1.5" />
                 Exportar PDF
               </Button>
               <Button onClick={() => onOpenChange(false)}>Fechar</Button>
