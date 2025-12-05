@@ -113,62 +113,58 @@ export const SupplierSwitchModal = ({
           <div className="border border-border rounded-lg overflow-hidden">
             {/* Headers */}
             <div className="grid grid-cols-[1fr_48px_1fr]">
-              <div className="p-4 bg-danger/5 border-b border-border">
-                <Badge className="bg-danger mb-2">Empresa atual</Badge>
-                <h3 className="font-semibold text-lg">{criticalSupplier.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {sectorLabels[criticalSupplier.sector] || criticalSupplier.sector}
-                </p>
+              <div className="p-4 bg-danger/5 border-b border-border flex flex-col">
+                <Badge className="bg-danger mb-2 w-fit">Empresa atual</Badge>
+                <div className="flex-1 flex items-center">
+                  <h3 className="font-semibold text-lg">{criticalSupplier.name}</h3>
+                </div>
               </div>
 
               <div className="flex items-center justify-center bg-muted/10 border-x border-b border-border">
                 <ArrowRight className="h-4 w-4 text-muted-foreground" />
               </div>
 
-              <div className="p-4 bg-success/5 border-b border-border">
-                <Badge className="bg-success mb-2">Alternativa</Badge>
-                <Select
-                  value={selectedAlternativeId}
-                  onValueChange={setSelectedAlternativeId}
-                >
-                  <SelectTrigger className="w-full mb-1">
-                    <SelectValue placeholder="Selecionar alternativa">
-                      {selectedAlternative?.name}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent className="min-w-[320px]">
-                    {Object.entries(
-                      allAlternatives.reduce((acc, alt) => {
-                        const sector = sectorLabels[alt.sector] || alt.sector;
-                        if (!acc[sector]) acc[sector] = [];
-                        acc[sector].push(alt);
-                        return acc;
-                      }, {} as Record<string, typeof allAlternatives>)
-                    ).map(([sector, alternatives]) => (
-                      <div key={sector}>
-                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50">
-                          {sector}
+              <div className="p-4 bg-success/5 border-b border-border flex flex-col">
+                <Badge className="bg-success mb-2 w-fit">Alternativa</Badge>
+                <div className="flex-1 flex items-center">
+                  <Select
+                    value={selectedAlternativeId}
+                    onValueChange={setSelectedAlternativeId}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecionar alternativa">
+                        {selectedAlternative?.name}
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="min-w-[320px]">
+                      {Object.entries(
+                        allAlternatives.reduce((acc, alt) => {
+                          const sector = sectorLabels[alt.sector] || alt.sector;
+                          if (!acc[sector]) acc[sector] = [];
+                          acc[sector].push(alt);
+                          return acc;
+                        }, {} as Record<string, typeof allAlternatives>)
+                      ).map(([sector, alternatives]) => (
+                        <div key={sector}>
+                          <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50">
+                            {sector}
+                          </div>
+                          {alternatives.map((alt) => {
+                            const reduction = ((criticalSupplier.totalEmissions - alt.totalEmissions) / criticalSupplier.totalEmissions * 100);
+                            return (
+                              <SelectItem key={alt.id} value={alt.id} className="pr-16">
+                                <span>{alt.name}</span>
+                                <Badge className="bg-success text-xs absolute right-2 top-1/2 -translate-y-1/2">
+                                  -{reduction.toFixed(0)}%
+                                </Badge>
+                              </SelectItem>
+                            );
+                          })}
                         </div>
-                        {alternatives.map((alt) => {
-                          const reduction = ((criticalSupplier.totalEmissions - alt.totalEmissions) / criticalSupplier.totalEmissions * 100);
-                          return (
-                            <SelectItem key={alt.id} value={alt.id} className="pr-16">
-                              <span>{alt.name}</span>
-                              <Badge className="bg-success text-xs absolute right-2 top-1/2 -translate-y-1/2">
-                                -{reduction.toFixed(0)}%
-                              </Badge>
-                            </SelectItem>
-                          );
-                        })}
-                      </div>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {selectedAlternative && (
-                  <p className="text-sm text-muted-foreground">
-                    {sectorLabels[selectedAlternative.sector] || selectedAlternative.sector}
-                  </p>
-                )}
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 
