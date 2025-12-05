@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { Supplier } from "@/types/supplier";
 import { getSectorName } from "@/data/sectors";
@@ -104,16 +103,19 @@ export const SupplierEmissionsChart = ({
               Emissões ({config.unit})
             </p>
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-1 bg-muted/50 p-1 rounded-lg">
             {(Object.keys(metricConfig) as MetricType[]).map((key) => (
-              <Button
+              <button
                 key={key}
-                variant={selectedMetric === key ? "default" : "outline"}
-                size="sm"
                 onClick={() => setSelectedMetric(key)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                  selectedMetric === key
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
               >
                 {metricConfig[key].label}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
