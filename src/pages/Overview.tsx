@@ -12,7 +12,6 @@ import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { RankingChart } from "@/components/dashboard/RankingChart";
 import { RadarComparison } from "@/components/dashboard/RadarComparison";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
-import { ScatterPlot } from "@/components/dashboard/ScatterPlot";
 import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissionsChart";
@@ -171,7 +170,6 @@ const Overview = () => {
             <PartnerComparison suppliers={filteredSuppliers} />
             <RankingChart suppliers={filteredSuppliers} />
             <RadarComparison suppliers={filteredSuppliers} />
-            <ScatterPlot suppliers={filteredSuppliers} />
             <AverageEmissionsChart suppliers={filteredSuppliers} />
             <BestWorstSuppliers suppliers={filteredSuppliers} />
           </TabsContent>
