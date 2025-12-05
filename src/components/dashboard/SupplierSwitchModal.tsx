@@ -26,6 +26,7 @@ import {
   BookmarkCheck,
   MessageSquare,
   RefreshCw,
+  Mail,
 } from "lucide-react";
 import { toast } from "sonner";
 import { sectorLabels } from "./SupplierLabel";
@@ -343,6 +344,20 @@ export const SupplierSwitchModal = ({
                 )}
                 {isBookmarked ? "Marcado para revisão" : "Marcar para revisão"}
               </Button>
+              {selectedAlternative && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    window.location.href = `mailto:${selectedAlternative.contact.email}?subject=Contacto%20-%20Parceria%20de%20Sustentabilidade`;
+                    toast.success("A abrir cliente de email", {
+                      description: `Contactar ${selectedAlternative.name}`,
+                    });
+                  }}
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Contactar empresa
+                </Button>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
