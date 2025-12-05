@@ -114,7 +114,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] p-0">
         <DialogHeader className="p-6 pb-4 border-b">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pr-8">
             <DialogTitle className="flex items-center gap-2 text-xl">
               <FileText className="h-5 w-5 text-primary" />
               Plano de Ação - Substituição de Fornecedores
