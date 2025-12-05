@@ -46,7 +46,7 @@ export const ComparisonChart = ({
 
   const topSuppliers = suppliers;
   const chartData = topSuppliers.map(supplier => ({
-    name: supplier.name.length > 20 ? supplier.name.substring(0, 17) + '...' : supplier.name,
+    name: supplier.name,
     ...(visibleScopes.scope1 && { 'Âmbito 1': supplier.scope1 }),
     ...(visibleScopes.scope2 && { 'Âmbito 2': supplier.scope2 }),
     ...(visibleScopes.scope3 && { 'Âmbito 3': supplier.scope3 }),
@@ -127,15 +127,16 @@ export const ComparisonChart = ({
       </div>
       <div className="flex-1" style={{ minHeight: 400 }}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} barSize={5} barGap={0} barCategoryGap={3}>
+          <BarChart data={chartData} barSize={8} barGap={0} barCategoryGap={3}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis 
               dataKey="name" 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 9 }} 
               angle={-90} 
               textAnchor="end" 
-              height={140} 
-              interval={0} 
+              height={180} 
+              interval={0}
+              tickMargin={5}
             />
             <YAxis 
               tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }} 
@@ -151,13 +152,13 @@ export const ComparisonChart = ({
               }} 
             />
             {visibleScopes.scope1 && (
-              <Bar dataKey="Âmbito 1" stackId="stack" fill={SCOPE_COLORS['Âmbito 1']} />
+              <Bar dataKey="Âmbito 1" stackId="stack" fill={SCOPE_COLORS['Âmbito 1']} radius={[4, 4, 0, 0]} />
             )}
             {visibleScopes.scope2 && (
-              <Bar dataKey="Âmbito 2" stackId="stack" fill={SCOPE_COLORS['Âmbito 2']} />
+              <Bar dataKey="Âmbito 2" stackId="stack" fill={SCOPE_COLORS['Âmbito 2']} radius={[4, 4, 0, 0]} />
             )}
             {visibleScopes.scope3 && (
-              <Bar dataKey="Âmbito 3" stackId="stack" fill={SCOPE_COLORS['Âmbito 3']} />
+              <Bar dataKey="Âmbito 3" stackId="stack" fill={SCOPE_COLORS['Âmbito 3']} radius={[4, 4, 0, 0]} />
             )}
           </BarChart>
         </ResponsiveContainer>
