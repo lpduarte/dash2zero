@@ -62,7 +62,7 @@ export const SupplierEmissionsChart = ({
   };
 
   const emissionsData = suppliers.map(s => ({
-    name: s.name.length > 28 ? s.name.substring(0, 25) + '...' : s.name,
+    name: s.name,
     fullName: s.name,
     value: getMetricValue(s),
     totalEmissions: s.totalEmissions,
@@ -131,7 +131,7 @@ export const SupplierEmissionsChart = ({
             <YAxis dataKey="name" type="category" tick={{
               fill: 'hsl(var(--muted-foreground))',
               fontSize: 10
-            }} width={220} interval={0} />
+            }} width={280} interval={0} />
             <Tooltip content={({
               active,
               payload
