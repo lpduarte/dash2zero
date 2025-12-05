@@ -4,6 +4,9 @@ import { Supplier } from "@/types/supplier";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface SectorOption {
@@ -57,41 +60,46 @@ export const ComparisonChart = ({
           <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-4 border border-border rounded-lg px-3 py-2">
-            <div className="flex items-center gap-2">
-              <Checkbox 
-                id="scope1" 
-                checked={visibleScopes.scope1} 
-                onCheckedChange={() => toggleScope('scope1')}
-              />
-              <Label htmlFor="scope1" className="text-sm cursor-pointer flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />
-                Âmbito 1
-              </Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox 
-                id="scope2" 
-                checked={visibleScopes.scope2} 
-                onCheckedChange={() => toggleScope('scope2')}
-              />
-              <Label htmlFor="scope2" className="text-sm cursor-pointer flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />
-                Âmbito 2
-              </Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox 
-                id="scope3" 
-                checked={visibleScopes.scope3} 
-                onCheckedChange={() => toggleScope('scope3')}
-              />
-              <Label htmlFor="scope3" className="text-sm cursor-pointer flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />
-                Âmbito 3
-              </Label>
-            </div>
-          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[180px] justify-between">
+                <span className="flex items-center gap-2">
+                  <span className="flex gap-1">
+                    {visibleScopes.scope1 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />}
+                    {visibleScopes.scope2 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />}
+                    {visibleScopes.scope3 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />}
+                  </span>
+                  Âmbitos
+                </span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[180px] p-2 bg-popover" align="start">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope1')}>
+                  <Checkbox id="scope1-dd" checked={visibleScopes.scope1} />
+                  <Label htmlFor="scope1-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
+                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />
+                    Âmbito 1
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope2')}>
+                  <Checkbox id="scope2-dd" checked={visibleScopes.scope2} />
+                  <Label htmlFor="scope2-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
+                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />
+                    Âmbito 2
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope3')}>
+                  <Checkbox id="scope3-dd" checked={visibleScopes.scope3} />
+                  <Label htmlFor="scope3-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
+                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />
+                    Âmbito 3
+                  </Label>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
           {sectors.length > 0 && onSectorChange && (
             <Select value={selectedSector} onValueChange={onSectorChange}>
               <SelectTrigger className="w-[280px]">
