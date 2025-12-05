@@ -103,8 +103,8 @@ export const SupplierSwitchModal = ({
 
         <div className="space-y-6 py-4">
           {/* Headers */}
-          <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-end">
-            <div className="p-4 rounded-t-lg border border-b-0 border-danger/30 bg-danger/5">
+          <div className="grid grid-cols-[1fr_auto_1fr] gap-0 items-stretch">
+            <div className="p-4 rounded-tl-lg border border-b-0 border-r-0 border-danger/30 bg-danger/5">
               <Badge className="bg-danger mb-2">Fornecedor Atual</Badge>
               <h3 className="font-semibold text-lg">{criticalSupplier.name}</h3>
               <p className="text-sm text-muted-foreground">
@@ -112,13 +112,11 @@ export const SupplierSwitchModal = ({
               </p>
             </div>
 
-            <div className="flex items-center justify-center pb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
-                <ArrowRight className="h-5 w-5 text-success" />
-              </div>
+            <div className="w-[52px] flex items-center justify-center border-t border-b-0 border-border bg-muted/10">
+              <ArrowRight className="h-4 w-4 text-muted-foreground" />
             </div>
 
-            <div className="p-4 rounded-t-lg border border-b-0 border-success/30 bg-success/5">
+            <div className="p-4 rounded-tr-lg border border-b-0 border-l-0 border-success/30 bg-success/5">
               <Badge className="bg-success mb-2">Alternativa</Badge>
               <Select
                 value={selectedAlternativeId}
@@ -150,19 +148,19 @@ export const SupplierSwitchModal = ({
 
           {/* Comparison rows */}
           {selectedAlternative && (
-            <div className="border rounded-lg overflow-hidden">
+            <div className="border-x border-b rounded-b-lg overflow-hidden -mt-px">
               {/* Emissões totais */}
               <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
-                <div className="p-3 bg-danger/5 border-r border-border">
+                <div className="p-3 bg-danger/5">
                   <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
                   <p className="font-semibold text-danger">
                     {criticalSupplier.totalEmissions.toLocaleString("pt-PT")} t CO₂e
                   </p>
                 </div>
-                <div className="p-3 flex items-center justify-center bg-muted/20">
+                <div className="p-3 flex items-center justify-center bg-muted/20 border-x border-border">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="p-3 bg-success/5 border-l border-border">
+                <div className="p-3 bg-success/5">
                   <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-success">
@@ -177,14 +175,14 @@ export const SupplierSwitchModal = ({
 
               {/* Âmbito 1 */}
               <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
-                <div className="p-3 bg-danger/5 border-r border-border">
+                <div className="p-3 bg-danger/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
                   <p className="font-medium">{criticalSupplier.scope1.toLocaleString("pt-PT")} t CO₂e</p>
                 </div>
-                <div className="p-3 flex items-center justify-center bg-muted/20">
+                <div className="p-3 flex items-center justify-center bg-muted/20 border-x border-border">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="p-3 bg-success/5 border-l border-border">
+                <div className="p-3 bg-success/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
                   <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e</p>
@@ -200,14 +198,14 @@ export const SupplierSwitchModal = ({
 
               {/* Âmbito 2 */}
               <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
-                <div className="p-3 bg-danger/5 border-r border-border">
+                <div className="p-3 bg-danger/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
                   <p className="font-medium">{criticalSupplier.scope2.toLocaleString("pt-PT")} t CO₂e</p>
                 </div>
-                <div className="p-3 flex items-center justify-center bg-muted/20">
+                <div className="p-3 flex items-center justify-center bg-muted/20 border-x border-border">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="p-3 bg-success/5 border-l border-border">
+                <div className="p-3 bg-success/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
                   <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e</p>
@@ -223,14 +221,14 @@ export const SupplierSwitchModal = ({
 
               {/* Âmbito 3 */}
               <div className="grid grid-cols-[1fr_auto_1fr] border-b border-border">
-                <div className="p-3 bg-danger/5 border-r border-border">
+                <div className="p-3 bg-danger/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
                   <p className="font-medium">{criticalSupplier.scope3.toLocaleString("pt-PT")} t CO₂e</p>
                 </div>
-                <div className="p-3 flex items-center justify-center bg-muted/20">
+                <div className="p-3 flex items-center justify-center bg-muted/20 border-x border-border">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="p-3 bg-success/5 border-l border-border">
+                <div className="p-3 bg-success/5">
                   <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
                   <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e</p>
@@ -246,14 +244,14 @@ export const SupplierSwitchModal = ({
 
               {/* FE */}
               <div className="grid grid-cols-[1fr_auto_1fr]">
-                <div className="p-3 bg-danger/5 border-r border-border">
+                <div className="p-3 bg-danger/5">
                   <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                   <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                 </div>
-                <div className="p-3 flex items-center justify-center bg-muted/20">
+                <div className="p-3 flex items-center justify-center bg-muted/20 border-x border-border">
                   <ArrowRight className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <div className="p-3 bg-success/5 border-l border-border">
+                <div className="p-3 bg-success/5">
                   <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                   <div className="flex items-center justify-between">
                     <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
