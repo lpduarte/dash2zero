@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +50,13 @@ export const SupplierSwitchModal = ({
   );
   const [notes, setNotes] = useState("");
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Sync selectedAlternativeId when modal opens or suggestedAlternative changes
+  useEffect(() => {
+    if (open && suggestedAlternative?.id) {
+      setSelectedAlternativeId(suggestedAlternative.id);
+    }
+  }, [open, suggestedAlternative?.id]);
 
   const selectedAlternative =
     allAlternatives.find((s) => s.id === selectedAlternativeId) ||
