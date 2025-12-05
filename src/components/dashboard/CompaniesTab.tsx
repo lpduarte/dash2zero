@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List, Eye } from "lucide-react";
 
 type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-asc' | 'sector-desc' | 'sector-diff-asc' | 'sector-diff-desc';
 type ViewMode = 'cards' | 'table';
@@ -45,6 +46,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
+  const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
 
   // Get unique regions and sectors with counts
   const regions = useMemo(() => {
@@ -282,8 +284,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                 <TableHead>Região</TableHead>
                 <TableHead className="text-right">Emissões totais</TableHead>
                 <TableHead className="text-right">vs Média setor</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>NIF</TableHead>
+                <TableHead className="w-[80px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -306,8 +307,17 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                         {diff > 0 ? '+' : ''}{diff.toFixed(0)}%
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{supplier.contact.email}</TableCell>
-                    <TableCell className="text-muted-foreground text-sm">{supplier.contact.nif}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedSupplier(supplier)}
+                        className="gap-1"
+                      >
+                        <Eye className="h-4 w-4" />
+                        Ver
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -321,6 +331,18 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
           <p>Nenhuma empresa encontrada com os filtros selecionados.</p>
         </div>
       )}
+
+      {/* Supplier Details Modal */}
+      <Dialog open={!!selectedSupplier} onOpenChange={(open) => !open && setSelectedSupplier(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes da Empresa</DialogTitle>
+          </DialogHeader>
+          {selectedSupplier && (
+            <SupplierCard supplier={selectedSupplier} />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
