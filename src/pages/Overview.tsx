@@ -10,12 +10,10 @@ import { CompaniesTab } from "@/components/dashboard/CompaniesTab";
 import { ComparisonChart } from "@/components/dashboard/ComparisonChart";
 import { EmissionsBreakdown } from "@/components/dashboard/EmissionsBreakdown";
 import { PerformanceHeatmap } from "@/components/dashboard/PerformanceHeatmap";
-import { AverageEmissionsChart } from "@/components/dashboard/AverageEmissionsChart";
 import { BestWorstSuppliers } from "@/components/dashboard/BestWorstSuppliers";
 import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissionsChart";
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
-import { PartnerComparison } from "@/components/dashboard/PartnerComparison";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -163,8 +161,6 @@ const Overview = () => {
           </TabsContent>
 
           <TabsContent value="comparative" className="space-y-6">
-            <PartnerComparison suppliers={filteredSuppliers} />
-            <AverageEmissionsChart suppliers={filteredSuppliers} />
             <BestWorstSuppliers suppliers={filteredSuppliers} />
           </TabsContent>
         </Tabs>
