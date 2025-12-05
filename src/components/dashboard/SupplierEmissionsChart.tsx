@@ -108,9 +108,9 @@ export const SupplierEmissionsChart = ({
               <button
                 key={key}
                 onClick={() => setSelectedMetric(key)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
                   selectedMetric === key
-                    ? 'bg-background text-foreground shadow-sm'
+                    ? 'bg-background text-primary shadow-md border border-primary/20'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
