@@ -1,6 +1,10 @@
 import { Building2, Users, Handshake, LayoutGrid, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { FilterButton } from "./FilterButton";
+import { FilterModal } from "./FilterModal";
+import { ActiveFiltersDisplay } from "./ActiveFiltersDisplay";
 
 type ClusterType = 'all' | 'fornecedor' | 'cliente' | 'parceiro';
 type ImprovementPotential = 'high' | 'medium' | 'low';
@@ -16,6 +20,9 @@ interface ClusterSelectorProps {
   onClusterChange: (cluster: ClusterType) => void;
   clusterCounts: Record<ClusterType, number>;
   clusterPotentials: Record<ClusterType, ImprovementPotential>;
+  suppliers: Supplier[];
+  universalFilters: UniversalFilterState;
+  onUniversalFiltersChange: (filters: UniversalFilterState) => void;
 }
 
 const clusterOptions: ClusterOption[] = [
@@ -46,10 +53,48 @@ const getPotentialConfig = (potential: ImprovementPotential, isSelected: boolean
   return configs[potential];
 };
 
-export function ClusterSelector({ selectedCluster, onClusterChange, clusterCounts, clusterPotentials }: ClusterSelectorProps) {
+export function ClusterSelector({ 
+  selectedCluster, 
+  onClusterChange, 
+  clusterCounts, 
+  clusterPotentials,
+  suppliers,
+  universalFilters,
+  onUniversalFiltersChange,
+}: ClusterSelectorProps) {
   const [isSticky, setIsSticky] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const stickyRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Calculate active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (universalFilters.companySize !== 'all') count++;
+    if (universalFilters.district !== 'all') count++;
+    if (universalFilters.municipality !== 'all') count++;
+    if (universalFilters.parish !== 'all') count++;
+    return count;
+  }, [universalFilters]);
+
+  // Handle removing individual filter
+  const handleRemoveFilter = (key: keyof UniversalFilterState) => {
+    const newFilters = { ...universalFilters };
+    
+    // Handle hierarchical reset
+    if (key === 'district') {
+      newFilters.district = 'all';
+      newFilters.municipality = 'all';
+      newFilters.parish = 'all';
+    } else if (key === 'municipality') {
+      newFilters.municipality = 'all';
+      newFilters.parish = 'all';
+    } else {
+      newFilters[key] = 'all';
+    }
+    
+    onUniversalFiltersChange(newFilters);
+  };
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -73,7 +118,6 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
 
   return (
     <>
-      <h3 className="text-sm font-medium text-muted-foreground mb-2">Filtrar por Cluster</h3>
       <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
       <div
         ref={stickyRef}
@@ -84,46 +128,74 @@ export function ClusterSelector({ selectedCluster, onClusterChange, clusterCount
             : "bg-transparent"
         )}
       >
-        <div className="flex flex-wrap gap-2">
-          {clusterOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onClusterChange(option.value)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                "hover:shadow-md",
-                "[&_svg]:text-current",
-                selectedCluster === option.value
-                  ? "bg-primary text-primary-foreground border-primary shadow-md"
-                  : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
-              )}
-            >
-              {option.icon}
-              <span className="font-medium">{option.label}</span>
-              <span
-                className={cn(
-                  "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
-                  selectedCluster === option.value
-                    ? "bg-primary-foreground/20 text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                )}
-              >
-                {clusterCounts[option.value]}
-              </span>
-              {(() => {
-                const potential = clusterPotentials[option.value];
-                const config = getPotentialConfig(potential, selectedCluster === option.value);
-                const PotentialIcon = config.icon;
-                return (
-                  <span className={cn("ml-1 p-1 rounded-full", config.bgColor)}>
-                    <PotentialIcon className={cn("h-3 w-3", config.color)} />
+        <div className="flex justify-between items-start gap-4">
+          {/* Left side - Cluster filters */}
+          <div className="flex-1">
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+            <div className="flex flex-wrap gap-2">
+              {clusterOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => onClusterChange(option.value)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
+                    "hover:shadow-md",
+                    "[&_svg]:text-current",
+                    selectedCluster === option.value
+                      ? "bg-primary text-primary-foreground border-primary shadow-md"
+                      : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                  )}
+                >
+                  {option.icon}
+                  <span className="font-medium">{option.label}</span>
+                  <span
+                    className={cn(
+                      "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
+                      selectedCluster === option.value
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    )}
+                  >
+                    {clusterCounts[option.value]}
                   </span>
-                );
-              })()}
-            </button>
-          ))}
+                  {(() => {
+                    const potential = clusterPotentials[option.value];
+                    const config = getPotentialConfig(potential, selectedCluster === option.value);
+                    const PotentialIcon = config.icon;
+                    return (
+                      <span className={cn("ml-1 p-1 rounded-full", config.bgColor)}>
+                        <PotentialIcon className={cn("h-3 w-3", config.color)} />
+                      </span>
+                    );
+                  })()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right side - Filter button */}
+          <div className="flex-shrink-0 pt-6">
+            <FilterButton
+              activeFiltersCount={activeFiltersCount}
+              onClick={() => setFilterModalOpen(true)}
+            />
+          </div>
         </div>
+
+        {/* Active filters chips */}
+        <ActiveFiltersDisplay
+          filters={universalFilters}
+          onRemoveFilter={handleRemoveFilter}
+        />
       </div>
+
+      <FilterModal
+        suppliers={suppliers}
+        currentFilters={universalFilters}
+        onFilterChange={onUniversalFiltersChange}
+        open={filterModalOpen}
+        onOpenChange={setFilterModalOpen}
+      />
     </>
   );
 }
