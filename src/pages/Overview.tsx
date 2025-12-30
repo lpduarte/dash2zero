@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
+import { UniversalFilters } from "@/components/dashboard/UniversalFilters";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
@@ -18,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { getSectorsWithCounts } from "@/data/sectors";
-import { Supplier } from "@/types/supplier";
+import { Supplier, UniversalFilterState } from "@/types/supplier";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
 // Usa média global (não por setor) para consistência com o KPI card
@@ -44,6 +45,12 @@ const calculateImprovementPotential = (suppliers: Supplier[]): ImprovementPotent
 const Overview = () => {
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
+  const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
+    companySize: 'all',
+    district: 'all',
+    municipality: 'all',
+    parish: 'all',
+  });
 
   // Get unique sectors with counts from centralized config
   const sectorsWithCounts = useMemo(() => getSectorsWithCounts(mockSuppliers), []);
@@ -75,13 +82,31 @@ const Overview = () => {
   };
 
   const filteredSuppliers = useMemo(() => {
-    if (selectedCluster === 'all') {
-      return mockSuppliers.sort((a, b) => a.totalEmissions - b.totalEmissions);
+    let filtered = mockSuppliers;
+    
+    // Filtro de cluster
+    if (selectedCluster !== 'all') {
+      filtered = filtered.filter(supplier => supplier.cluster === selectedCluster);
     }
-    return mockSuppliers
-      .filter(supplier => supplier.cluster === selectedCluster)
-      .sort((a, b) => a.totalEmissions - b.totalEmissions);
-  }, [selectedCluster]);
+    
+    // Filtro de dimensão
+    if (universalFilters.companySize !== 'all') {
+      filtered = filtered.filter(s => s.companySize === universalFilters.companySize);
+    }
+    
+    // Filtros de localização
+    if (universalFilters.district !== 'all') {
+      filtered = filtered.filter(s => s.district === universalFilters.district);
+    }
+    if (universalFilters.municipality !== 'all') {
+      filtered = filtered.filter(s => s.municipality === universalFilters.municipality);
+    }
+    if (universalFilters.parish !== 'all') {
+      filtered = filtered.filter(s => s.parish === universalFilters.parish);
+    }
+    
+    return filtered.sort((a, b) => a.totalEmissions - b.totalEmissions);
+  }, [selectedCluster, universalFilters]);
 
   // Suppliers filtered by both cluster and sector (for charts)
   const chartFilteredSuppliers = useMemo(() => {
@@ -105,6 +130,18 @@ const Overview = () => {
           clusterCounts={clusterCounts}
           clusterPotentials={clusterPotentials}
         />
+        
+        <div className="mt-4">
+          <UniversalFilters
+            suppliers={mockSuppliers}
+            currentFilters={universalFilters}
+            onFilterChange={setUniversalFilters}
+          />
+        </div>
+
+        <div className="mt-2 text-sm text-muted-foreground">
+          {filteredSuppliers.length.toLocaleString('pt-PT')} empresas encontradas
+        </div>
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
           <TabsList className="grid w-full grid-cols-5">

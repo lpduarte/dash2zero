@@ -27,9 +27,11 @@ import { ProvidersTable } from "@/components/clusters/ProvidersTable";
 import { EmailDialog } from "@/components/clusters/EmailDialog";
 import { ImportDialog } from "@/components/clusters/ImportDialog";
 import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
+import { UniversalFilters } from "@/components/dashboard/UniversalFilters";
 import { mockClusters, emailTemplates } from "@/data/mockClusters";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { Cluster, ClusterProvider } from "@/types/cluster";
+import { UniversalFilterState } from "@/types/supplier";
 import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, LayoutGrid, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +56,12 @@ export default function ClusterManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>(["NIF/NIPC", "Email", "Setor"]);
+  const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
+    companySize: 'all',
+    district: 'all',
+    municipality: 'all',
+    parish: 'all',
+  });
 
   // Get cluster counts
   const clusterCounts = useMemo(() => ({
@@ -66,12 +74,28 @@ export default function ClusterManagement() {
   // Get selected cluster data for email functionality
   const selectedCluster = clusters.find((c) => c.id === selectedClusterType);
 
-  // Filter suppliers by selected cluster
+  // Filter suppliers by selected cluster and universal filters
   const filteredSuppliers = useMemo(() => {
     let filtered = mockSuppliers;
     
     if (selectedClusterType !== 'all') {
       filtered = filtered.filter(s => s.cluster === selectedClusterType);
+    }
+    
+    // Filtro de dimensão
+    if (universalFilters.companySize !== 'all') {
+      filtered = filtered.filter(s => s.companySize === universalFilters.companySize);
+    }
+    
+    // Filtros de localização
+    if (universalFilters.district !== 'all') {
+      filtered = filtered.filter(s => s.district === universalFilters.district);
+    }
+    if (universalFilters.municipality !== 'all') {
+      filtered = filtered.filter(s => s.municipality === universalFilters.municipality);
+    }
+    if (universalFilters.parish !== 'all') {
+      filtered = filtered.filter(s => s.parish === universalFilters.parish);
     }
     
     if (searchQuery) {
@@ -86,7 +110,7 @@ export default function ClusterManagement() {
     }
     
     return filtered;
-  }, [selectedClusterType, searchQuery]);
+  }, [selectedClusterType, searchQuery, universalFilters]);
 
   // Get providers for selected cluster (for email functionality)
   const selectedClusterProviders = useMemo(() => {
@@ -217,12 +241,21 @@ export default function ClusterManagement() {
           </div>
         </div>
 
+        {/* Universal Filters */}
+        <div className="mb-6">
+          <UniversalFilters
+            suppliers={mockSuppliers}
+            currentFilters={universalFilters}
+            onFilterChange={setUniversalFilters}
+          />
+        </div>
+
         {/* Header with actions */}
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-semibold">{getClusterLabel()}</h2>
             <p className="text-sm text-muted-foreground">
-              {filteredSuppliers.length} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
+              {filteredSuppliers.length.toLocaleString('pt-PT')} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
             </p>
           </div>
           <div className="flex gap-2">
