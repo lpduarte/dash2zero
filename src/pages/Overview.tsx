@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
-import { UniversalFilters } from "@/components/dashboard/UniversalFilters";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
@@ -129,17 +128,12 @@ const Overview = () => {
           onClusterChange={setSelectedCluster}
           clusterCounts={clusterCounts}
           clusterPotentials={clusterPotentials}
+          suppliers={mockSuppliers}
+          universalFilters={universalFilters}
+          onUniversalFiltersChange={setUniversalFilters}
         />
-        
-        <div className="mt-4">
-          <UniversalFilters
-            suppliers={mockSuppliers}
-            currentFilters={universalFilters}
-            onFilterChange={setUniversalFilters}
-          />
-        </div>
 
-        <div className="mt-2 text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground mb-6">
           {filteredSuppliers.length.toLocaleString('pt-PT')} empresas encontradas
         </div>
         

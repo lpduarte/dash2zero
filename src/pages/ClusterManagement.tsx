@@ -27,7 +27,9 @@ import { ProvidersTable } from "@/components/clusters/ProvidersTable";
 import { EmailDialog } from "@/components/clusters/EmailDialog";
 import { ImportDialog } from "@/components/clusters/ImportDialog";
 import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
-import { UniversalFilters } from "@/components/dashboard/UniversalFilters";
+import { FilterButton } from "@/components/dashboard/FilterButton";
+import { FilterModal } from "@/components/dashboard/FilterModal";
+import { ActiveFiltersDisplay } from "@/components/dashboard/ActiveFiltersDisplay";
 import { mockClusters, emailTemplates } from "@/data/mockClusters";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { Cluster, ClusterProvider } from "@/types/cluster";
@@ -52,6 +54,7 @@ export default function ClusterManagement() {
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [createClusterDialogOpen, setCreateClusterDialogOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<ClusterProvider | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,6 +65,35 @@ export default function ClusterManagement() {
     municipality: 'all',
     parish: 'all',
   });
+
+  // Calculate active filters count
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (universalFilters.companySize !== 'all') count++;
+    if (universalFilters.district !== 'all') count++;
+    if (universalFilters.municipality !== 'all') count++;
+    if (universalFilters.parish !== 'all') count++;
+    return count;
+  }, [universalFilters]);
+
+  // Handle removing individual filter
+  const handleRemoveUniversalFilter = (key: keyof UniversalFilterState) => {
+    const newFilters = { ...universalFilters };
+    
+    // Handle hierarchical reset
+    if (key === 'district') {
+      newFilters.district = 'all';
+      newFilters.municipality = 'all';
+      newFilters.parish = 'all';
+    } else if (key === 'municipality') {
+      newFilters.municipality = 'all';
+      newFilters.parish = 'all';
+    } else {
+      newFilters[key] = 'all';
+    }
+    
+    setUniversalFilters(newFilters);
+  };
 
   // Get cluster counts
   const clusterCounts = useMemo(() => ({
@@ -192,61 +224,71 @@ export default function ClusterManagement() {
       <Header />
 
       <main className="max-w-[1400px] mx-auto px-8 py-8">
-        {/* Cluster Selector */}
+        {/* Cluster Selector with Filter Button */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
-          <div className="flex flex-wrap gap-2">
-            {clusterOptions.map((option) => {
-              const Icon = option.icon;
-              return (
+          <div className="flex justify-between items-start gap-4">
+            {/* Left side - Cluster filters */}
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+              <div className="flex flex-wrap gap-2">
+                {clusterOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setSelectedClusterType(option.value);
+                        setCurrentPage(1);
+                      }}
+                      className={cn(
+                        "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
+                        "hover:shadow-md hover:scale-[1.02]",
+                        selectedClusterType === option.value
+                          ? "bg-primary text-primary-foreground border-primary shadow-md"
+                          : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span className="font-medium">{option.label}</span>
+                      <span
+                        className={cn(
+                          "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
+                          selectedClusterType === option.value
+                            ? "bg-primary-foreground/20 text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        )}
+                      >
+                        {clusterCounts[option.value]}
+                      </span>
+                    </button>
+                  );
+                })}
                 <button
-                  key={option.value}
-                  onClick={() => {
-                    setSelectedClusterType(option.value);
-                    setCurrentPage(1);
-                  }}
+                  onClick={() => setCreateClusterDialogOpen(true)}
                   className={cn(
                     "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                    "hover:shadow-md hover:scale-[1.02]",
-                    selectedClusterType === option.value
-                      ? "bg-primary text-primary-foreground border-primary shadow-md"
-                      : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent"
+                    "border-dashed border-border hover:border-primary/50 hover:bg-accent text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium">{option.label}</span>
-                  <span
-                    className={cn(
-                      "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
-                      selectedClusterType === option.value
-                        ? "bg-primary-foreground/20 text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    )}
-                  >
-                    {clusterCounts[option.value]}
-                  </span>
+                  <Plus className="h-4 w-4" />
+                  <span className="font-medium">Novo Cluster</span>
                 </button>
-              );
-            })}
-            <button
-              onClick={() => setCreateClusterDialogOpen(true)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                "border-dashed border-border hover:border-primary/50 hover:bg-accent text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <Plus className="h-4 w-4" />
-              <span className="font-medium">Novo Cluster</span>
-            </button>
-          </div>
-        </div>
+              </div>
+            </div>
 
-        {/* Universal Filters */}
-        <div className="mb-6">
-          <UniversalFilters
-            suppliers={mockSuppliers}
-            currentFilters={universalFilters}
-            onFilterChange={setUniversalFilters}
+            {/* Right side - Filter button */}
+            <div className="flex-shrink-0 pt-6">
+              <FilterButton
+                activeFiltersCount={activeFiltersCount}
+                onClick={() => setFilterModalOpen(true)}
+              />
+            </div>
+          </div>
+
+          {/* Active filters chips */}
+          <ActiveFiltersDisplay
+            filters={universalFilters}
+            onRemoveFilter={handleRemoveUniversalFilter}
           />
         </div>
 
@@ -276,6 +318,15 @@ export default function ClusterManagement() {
             </Button>
           </div>
         </div>
+
+        {/* Filter Modal */}
+        <FilterModal
+          suppliers={mockSuppliers}
+          currentFilters={universalFilters}
+          onFilterChange={setUniversalFilters}
+          open={filterModalOpen}
+          onOpenChange={setFilterModalOpen}
+        />
 
         <Tabs defaultValue="resumo" className="space-y-6">
           <TabsList>
