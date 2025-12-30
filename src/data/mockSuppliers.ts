@@ -7,16 +7,110 @@ const generateNIF = (id: string): string => {
   return nif.toString().padStart(9, '0');
 };
 
-// Process suppliers to ensure all have NIFs
-const addNifToSupplier = (supplier: Omit<Supplier, 'contact'> & { contact: Omit<Supplier['contact'], 'nif'> & { nif?: string } }): Supplier => ({
-  ...supplier,
-  contact: {
-    ...supplier.contact,
-    nif: supplier.contact.nif || generateNIF(supplier.id),
-  },
-});
+// Helper function to calculate company size based on employees and revenue
+const calculateCompanySize = (employees: number, revenue: number): 'micro' | 'pequena' | 'media' | 'grande' => {
+  // revenue is in millions EUR
+  if (employees >= 250 || revenue > 50) return 'grande';
+  if (employees >= 50 || revenue > 10) return 'media';
+  if (employees >= 10 || revenue > 2) return 'pequena';
+  return 'micro';
+};
 
-const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['contact'], 'nif'> & { nif?: string } })[] = [
+// Location data for Portugal
+const locationData = {
+  Porto: {
+    municipalities: {
+      'Matosinhos': ['Senhora da Hora', 'Leça da Palmeira', 'São Mamede de Infesta'],
+      'Vila Nova de Gaia': ['Mafamude', 'Santa Marinha', 'Canidelo'],
+      'Maia': ['Águas Santas', 'Milheirós', 'Moreira'],
+      'Gondomar': ['São Cosme', 'Rio Tinto', 'Fânzeres'],
+    }
+  },
+  Lisboa: {
+    municipalities: {
+      'Lisboa': ['Parque das Nações', 'Lumiar', 'Benfica', 'Alvalade'],
+      'Oeiras': ['Oeiras', 'Algés', 'Carnaxide'],
+      'Sintra': ['Cacém', 'Queluz', 'Rio de Mouro'],
+      'Cascais': ['Cascais', 'Estoril', 'Carcavelos'],
+    }
+  },
+  Braga: {
+    municipalities: {
+      'Braga': ['São Victor', 'Maximinos', 'Cividade'],
+      'Guimarães': ['Oliveira do Castelo', 'São Paio', 'Creixomil'],
+      'Barcelos': ['Barcelos', 'Arcozelo', 'Vila Boa'],
+    }
+  },
+  Faro: {
+    municipalities: {
+      'Faro': ['Sé', 'São Pedro', 'Montenegro'],
+      'Portimão': ['Portimão', 'Alvor', 'Mexilhoeira Grande'],
+      'Loulé': ['Loulé', 'Quarteira', 'Almancil'],
+    }
+  },
+  Coimbra: {
+    municipalities: {
+      'Coimbra': ['Santo António dos Olivais', 'Sé Nova', 'Santa Clara'],
+      'Figueira da Foz': ['Buarcos', 'São Julião', 'Tavarede'],
+    }
+  },
+  Aveiro: {
+    municipalities: {
+      'Aveiro': ['Glória', 'Vera Cruz', 'Aradas'],
+      'Ílhavo': ['Ílhavo', 'Gafanha da Nazaré', 'Costa Nova'],
+    }
+  },
+  Setúbal: {
+    municipalities: {
+      'Setúbal': ['Setúbal', 'Azeitão', 'Praias do Sado'],
+      'Almada': ['Almada', 'Cacilhas', 'Costa da Caparica'],
+    }
+  },
+};
+
+// Get random location for a district
+const getLocation = (index: number) => {
+  // Distribution: Porto 30%, Lisboa 25%, Braga 15%, Faro 10%, Coimbra 10%, Aveiro 5%, Setúbal 5%
+  const districtDistribution = [
+    'Porto', 'Porto', 'Porto', 'Porto', 'Porto', 'Porto', // 30%
+    'Lisboa', 'Lisboa', 'Lisboa', 'Lisboa', 'Lisboa', // 25%
+    'Braga', 'Braga', 'Braga', // 15%
+    'Faro', 'Faro', // 10%
+    'Coimbra', 'Coimbra', // 10%
+    'Aveiro', // 5%
+    'Setúbal', // 5%
+  ];
+  
+  const district = districtDistribution[index % districtDistribution.length];
+  const districtData = locationData[district as keyof typeof locationData];
+  const municipalities = Object.keys(districtData.municipalities);
+  const municipality = municipalities[index % municipalities.length];
+  const municipalityData = districtData.municipalities as Record<string, string[]>;
+  const parishes = municipalityData[municipality];
+  const parish = parishes[index % parishes.length];
+  
+  return { district, municipality, parish };
+};
+
+// Process suppliers to ensure all have NIFs and location data
+const addFieldsToSupplier = (supplier: any, index: number): Supplier => {
+  const location = getLocation(index);
+  const companySize = calculateCompanySize(supplier.employees, supplier.revenue);
+  
+  return {
+    ...supplier,
+    district: location.district,
+    municipality: location.municipality,
+    parish: location.parish,
+    companySize,
+    contact: {
+      ...supplier.contact,
+      nif: supplier.contact.nif || generateNIF(supplier.id),
+    },
+  };
+};
+
+const rawSuppliers = [
   // ENERGIA (único fornecedor - para testar "sem alternativa")
   {
     id: "energia-1",
@@ -41,9 +135,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 8500 },
     ],
     contact: { email: "ambiente@powermax.pt", phone: "+351 217 000 099", website: "https://powermax.pt", nif: "501234567" },
-    rating: "D",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "D" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   // TECNOLOGIA
   {
@@ -75,9 +169,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       nif: "502345678",
     },
     sustainabilityReport: "https://ecotech.pt/sustainability-2023.pdf",
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "6",
@@ -107,9 +201,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       website: "https://digitalsol.pt",
       nif: "503456789",
     },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "10",
@@ -134,9 +228,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2300 },
     ],
     contact: { email: "info@technova.pt", phone: "+351 220 000 010", website: "https://technova.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "16",
@@ -161,9 +255,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 617 },
     ],
     contact: { email: "info@datacloud.pt", phone: "+351 217 000 016", website: "https://datacloud.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   {
     id: "24",
@@ -188,9 +282,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1900 },
     ],
     contact: { email: "info@greenenergy.pt", phone: "+351 289 000 024", website: "https://greenenergy.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // CONSTRUÇÃO
   {
@@ -220,9 +314,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       phone: "+351 239 000 002",
       website: "https://greenbuild.pt",
     },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "7",
@@ -251,9 +345,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       phone: "+351 295 000 007",
       website: "https://obrasmega.pt",
     },
-    rating: "D",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "D" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "15",
@@ -278,9 +372,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3250 },
     ],
     contact: { email: "geral@buildright.pt", phone: "+351 295 000 015", website: "https://buildright.pt" },
-    rating: "D",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "D" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   // LOGÍSTICA/TRANSPORTE
   {
@@ -310,9 +404,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       phone: "+351 289 000 003",
       website: "https://transporteverde.pt",
     },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "8",
@@ -341,9 +435,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       phone: "+351 253 000 008",
       website: "https://fleetpro.pt",
     },
-    rating: "D",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "D" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "12",
@@ -368,9 +462,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2850 },
     ],
     contact: { email: "sustentabilidade@logiexpress.pt", phone: "+351 217 000 012", website: "https://logiexpress.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   {
     id: "18",
@@ -395,9 +489,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 7460 },
     ],
     contact: { email: "sustentabilidade@marlog.pt", phone: "+351 289 000 018", website: "https://marlog.pt" },
-    rating: "C",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "C" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "29",
@@ -422,9 +516,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2365 },
     ],
     contact: { email: "info@moverapido.pt", phone: "+351 253 000 029", website: "https://moverapido.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   // QUÍMICA
   {
@@ -451,9 +545,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 5540 },
     ],
     contact: { email: "ambiente@quimiverde.pt", phone: "+351 220 000 017", website: "https://quimiverde.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "33",
@@ -479,9 +573,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 8540 },
     ],
     contact: { email: "ambiente@chempro.pt", phone: "+351 239 000 033", website: "https://chempro.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "34",
@@ -507,9 +601,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3150 },
     ],
     contact: { email: "sustentabilidade@ecoquimica.pt", phone: "+351 289 000 034", website: "https://ecoquimica.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "fornecedor" as const,
   },
   // VIDRO
   {
@@ -536,9 +630,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 4710 },
     ],
     contact: { email: "geral@vidropt.pt", phone: "+351 217 000 027", website: "https://vidropt.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "35",
@@ -564,9 +658,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3750 },
     ],
     contact: { email: "ambiente@crystalglass.pt", phone: "+351 220 000 035", website: "https://crystalglass.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "36",
@@ -592,9 +686,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2820 },
     ],
     contact: { email: "sustentabilidade@vidrosul.pt", phone: "+351 289 000 036", website: "https://vidrosul.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // METALURGIA
   {
@@ -621,9 +715,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 4230 },
     ],
     contact: { email: "geral@metalpro.pt", phone: "+351 289 000 011", website: "https://metalpro.pt" },
-    rating: "D",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "D" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "37",
@@ -649,9 +743,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3440 },
     ],
     contact: { email: "ambiente@acoverde.pt", phone: "+351 253 000 037", website: "https://acoverde.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "38",
@@ -677,9 +771,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2720 },
     ],
     contact: { email: "sustentabilidade@fundopt.pt", phone: "+351 239 000 038", website: "https://fundopt.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "fornecedor" as const,
   },
   // PLÁSTICOS
   {
@@ -706,9 +800,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2960 },
     ],
     contact: { email: "ambiente@ecoplasticos.pt", phone: "+351 253 000 013", website: "https://ecoplasticos.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "39",
@@ -734,9 +828,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 4560 },
     ],
     contact: { email: "sustentabilidade@polytech.pt", phone: "+351 239 000 039", website: "https://polytech.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "40",
@@ -762,9 +856,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1530 },
     ],
     contact: { email: "ambiente@recyplast.pt", phone: "+351 289 000 040", website: "https://recyplast.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // TÊXTIL
   {
@@ -791,9 +885,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 4960 },
     ],
     contact: { email: "sustentabilidade@textilnorte.pt", phone: "+351 253 000 020", website: "https://textilnorte.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "41",
@@ -819,9 +913,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3760 },
     ],
     contact: { email: "ambiente@fashiongreen.pt", phone: "+351 239 000 041", website: "https://fashiongreen.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "42",
@@ -847,9 +941,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2780 },
     ],
     contact: { email: "geral@confeccoessul.pt", phone: "+351 289 000 042", website: "https://confeccoessul.pt" },
-    rating: "C",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // CERÂMICA
   {
@@ -876,9 +970,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3780 },
     ],
     contact: { email: "geral@ceramicasul.pt", phone: "+351 282 000 021", website: "https://ceramicasul.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   {
     id: "43",
@@ -904,9 +998,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2950 },
     ],
     contact: { email: "ambiente@azulejopt.pt", phone: "+351 239 000 043", website: "https://azulejopt.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "44",
@@ -932,9 +1026,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2240 },
     ],
     contact: { email: "sustentabilidade@porcelanafina.pt", phone: "+351 253 000 044", website: "https://porcelanafina.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // ALIMENTAR
   {
@@ -960,9 +1054,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1390 },
     ],
     contact: { email: "sustentabilidade@agroverde.pt", phone: "+351 239 000 009", website: "https://agroverde.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "22",
@@ -987,9 +1081,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 3240 },
     ],
     contact: { email: "ambiente@foodtech.pt", phone: "+351 217 000 022", website: "https://foodtech.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "28",
@@ -1014,9 +1108,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2290 },
     ],
     contact: { email: "sustentabilidade@biofarm.pt", phone: "+351 282 000 028", website: "https://biofarm.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // AUTOMÓVEL
   {
@@ -1043,9 +1137,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 5420 },
     ],
     contact: { email: "sustentabilidade@autopecas.pt", phone: "+351 220 000 023", website: "https://autopecas.pt" },
-    rating: "C",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "C" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "45",
@@ -1071,9 +1165,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2180 },
     ],
     contact: { email: "ambiente@componentauto.pt", phone: "+351 239 000 045", website: "https://componentauto.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "46",
@@ -1099,9 +1193,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1840 },
     ],
     contact: { email: "sustentabilidade@moldauto.pt", phone: "+351 253 000 046", website: "https://moldauto.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // EMBALAGENS
   {
@@ -1128,9 +1222,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2000 },
     ],
     contact: { email: "ambiente@packpro.pt", phone: "+351 239 000 025", website: "https://packpro.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "47",
@@ -1156,9 +1250,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1420 },
     ],
     contact: { email: "sustentabilidade@ecopack.pt", phone: "+351 220 000 047", website: "https://ecopack.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "48",
@@ -1184,9 +1278,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2290 },
     ],
     contact: { email: "geral@boxmaster.pt", phone: "+351 289 000 048", website: "https://boxmaster.pt" },
-    rating: "C",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // PAPEL
   {
@@ -1213,9 +1307,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2240 },
     ],
     contact: { email: "ambiente@papeleco.pt", phone: "+351 217 000 030", website: "https://papeleco.pt" },
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "fornecedor",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "49",
@@ -1240,9 +1334,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1720 },
     ],
     contact: { email: "sustentabilidade@celuloseverde.pt", phone: "+351 253 000 049", website: "https://celuloseverde.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "50",
@@ -1267,9 +1361,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2550 },
     ],
     contact: { email: "geral@papelsul.pt", phone: "+351 289 000 050", website: "https://papelsul.pt" },
-    rating: "C",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "C" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // SERVIÇOS
   {
@@ -1300,9 +1394,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       website: "https://cleanservices.pt",
     },
     sustainabilityReport: "https://cleanservices.pt/impact-report-2023.pdf",
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   {
     id: "14",
@@ -1327,9 +1421,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 323 },
     ],
     contact: { email: "info@consultpt.pt", phone: "+351 282 000 014", website: "https://consultpt.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "19",
@@ -1354,9 +1448,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 312 },
     ],
     contact: { email: "info@smartoffice.pt", phone: "+351 239 000 019", website: "https://smartoffice.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   {
     id: "26",
@@ -1381,9 +1475,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 265 },
     ],
     contact: { email: "info@infosec.pt", phone: "+351 220 000 026", website: "https://infosec.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   {
     id: "31",
@@ -1408,9 +1502,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 985 },
     ],
     contact: { email: "sustentabilidade@hotelverde.pt", phone: "+351 295 000 031", website: "https://hotelverde.pt" },
-    rating: "B",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "B" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   {
     id: "32",
@@ -1435,9 +1529,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 695 },
     ],
     contact: { email: "ambiente@eletricaplus.pt", phone: "+351 289 000 032", website: "https://eletricaplus.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // INDÚSTRIA GERAL
   {
@@ -1468,9 +1562,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       website: "https://sustentapt.pt",
     },
     sustainabilityReport: "https://sustentapt.pt/relatorio-2023.pdf",
-    rating: "B",
-    dataSource: "formulario",
-    cluster: "parceiro",
+    rating: "B" as const,
+    dataSource: "formulario" as const,
+    cluster: "parceiro" as const,
   },
   // ALTERNATIVAS BAIXAS EMISSÕES POR SUB-TIPO
   // Química - alternativa low emissions
@@ -1498,9 +1592,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1780 },
     ],
     contact: { email: "ambiente@greenchem.pt", phone: "+351 239 000 060", website: "https://greenchem.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
   // Vidro - alternativa low emissions
   {
@@ -1527,9 +1621,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1790 },
     ],
     contact: { email: "sustentabilidade@vitroeco.pt", phone: "+351 220 000 061", website: "https://vitroeco.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // Têxtil - alternativa low emissions
   {
@@ -1556,9 +1650,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1180 },
     ],
     contact: { email: "ambiente@ecofibras.pt", phone: "+351 239 000 062", website: "https://ecofibras.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   // Cerâmica - alternativa low emissions
   {
@@ -1585,9 +1679,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1500 },
     ],
     contact: { email: "sustentabilidade@ceramicaverde.pt", phone: "+351 289 000 063", website: "https://ceramicaverde.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "cliente" as const,
   },
   // Automóvel - alternativa low emissions
   {
@@ -1614,9 +1708,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1390 },
     ],
     contact: { email: "ambiente@autogreen.pt", phone: "+351 253 000 064", website: "https://autogreen.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "fornecedor",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "fornecedor" as const,
   },
   // Fundição - alternativa low emissions  
   {
@@ -1643,9 +1737,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1950 },
     ],
     contact: { email: "sustentabilidade@fundicaoeco.pt", phone: "+351 239 000 065", website: "https://fundicaoeco.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "parceiro",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "parceiro" as const,
   },
   // Plásticos - alternativa adicional low emissions
   {
@@ -1672,9 +1766,9 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 1050 },
     ],
     contact: { email: "ambiente@bioplast.pt", phone: "+351 289 000 066", website: "https://bioplast.pt" },
-    rating: "A",
-    dataSource: "formulario",
-    cluster: "cliente",
+    rating: "A" as const,
+    dataSource: "formulario" as const,
+    cluster: "cliente" as const,
   },
   // Metalurgia - alternativa low emissions
   {
@@ -1701,11 +1795,11 @@ const rawSuppliers: (Omit<Supplier, 'contact'> & { contact: Omit<Supplier['conta
       { year: 2023, emissions: 2350 },
     ],
     contact: { email: "sustentabilidade@metalgreen.pt", phone: "+351 220 000 067", website: "https://metalgreen.pt" },
-    rating: "A",
-    dataSource: "get2zero",
-    cluster: "fornecedor",
+    rating: "A" as const,
+    dataSource: "get2zero" as const,
+    cluster: "fornecedor" as const,
   },
 ];
 
-// Export processed suppliers with NIFs
-export const mockSuppliers: Supplier[] = rawSuppliers.map(addNifToSupplier);
+// Export processed suppliers with NIFs and location data
+export const mockSuppliers: Supplier[] = rawSuppliers.map((supplier, index) => addFieldsToSupplier(supplier, index));

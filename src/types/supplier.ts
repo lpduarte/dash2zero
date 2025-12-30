@@ -4,6 +4,10 @@ export interface Supplier {
   sector: string;
   subsector?: string; // Sub-tipo para melhor matching de alternativas (química, vidro, têxtil, etc.)
   region: string;
+  district: string; // Distrito (ex: "Porto", "Lisboa", "Faro")
+  municipality: string; // Município (ex: "Portimão", "Matosinhos")
+  parish: string; // Freguesia (ex: "Praia da Rocha", "Senhora da Hora")
+  companySize: 'micro' | 'pequena' | 'media' | 'grande'; // Calculado automaticamente
   scope1: number; // tons CO2e
   scope2: number;
   scope3: number;
@@ -34,6 +38,14 @@ export interface Supplier {
 
 export type SectorFilter = 'all' | 'manufacturing' | 'technology' | 'construction' | 'transport' | 'services';
 export type RegionFilter = 'all' | 'north' | 'center' | 'south' | 'islands';
+export type CompanySizeFilter = 'all' | 'micro' | 'pequena' | 'media' | 'grande';
+
+export interface UniversalFilterState {
+  companySize: CompanySizeFilter;
+  district: string; // 'all' ou nome do distrito
+  municipality: string; // 'all' ou nome do município
+  parish: string; // 'all' ou nome da freguesia
+}
 
 export interface AdvancedFilters {
   nifGroup: string;
