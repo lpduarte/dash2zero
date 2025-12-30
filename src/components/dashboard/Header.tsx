@@ -2,10 +2,13 @@ import { Leaf, LayoutDashboard, Boxes } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { NotificationBell } from "./NotificationBell";
+import { UserTypeToggle } from "./UserTypeToggle";
+import { useUser } from "@/contexts/UserContext";
 import { mockSuppliers } from "@/data/mockSuppliers";
 
 export const Header = () => {
   const location = useLocation();
+  const { userType, setUserType } = useUser();
 
   return (
     <header className="bg-gradient-primary text-primary-foreground py-6 px-8 shadow-md">
@@ -30,7 +33,9 @@ export const Header = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <UserTypeToggle currentType={userType} onTypeChange={setUserType} />
+            
             <nav className="flex gap-2">
               <Link
                 to="/"
