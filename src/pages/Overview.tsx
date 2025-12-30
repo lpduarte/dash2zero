@@ -45,10 +45,10 @@ const Overview = () => {
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
-    companySize: 'all',
-    district: 'all',
-    municipality: 'all',
-    parish: 'all',
+    companySize: [],
+    district: [],
+    municipality: [],
+    parish: [],
   });
 
   // Get unique sectors with counts from centralized config
@@ -88,20 +88,20 @@ const Overview = () => {
       filtered = filtered.filter(supplier => supplier.cluster === selectedCluster);
     }
     
-    // Filtro de dimensão
-    if (universalFilters.companySize !== 'all') {
-      filtered = filtered.filter(s => s.companySize === universalFilters.companySize);
+    // Filtro de dimensão (multiselect)
+    if (universalFilters.companySize.length > 0) {
+      filtered = filtered.filter(s => universalFilters.companySize.includes(s.companySize));
     }
     
-    // Filtros de localização
-    if (universalFilters.district !== 'all') {
-      filtered = filtered.filter(s => s.district === universalFilters.district);
+    // Filtros de localização (multiselect)
+    if (universalFilters.district.length > 0) {
+      filtered = filtered.filter(s => universalFilters.district.includes(s.district));
     }
-    if (universalFilters.municipality !== 'all') {
-      filtered = filtered.filter(s => s.municipality === universalFilters.municipality);
+    if (universalFilters.municipality.length > 0) {
+      filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
     }
-    if (universalFilters.parish !== 'all') {
-      filtered = filtered.filter(s => s.parish === universalFilters.parish);
+    if (universalFilters.parish.length > 0) {
+      filtered = filtered.filter(s => universalFilters.parish.includes(s.parish));
     }
     
     return filtered.sort((a, b) => a.totalEmissions - b.totalEmissions);

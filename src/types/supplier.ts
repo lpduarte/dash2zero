@@ -41,10 +41,10 @@ export type RegionFilter = 'all' | 'north' | 'center' | 'south' | 'islands';
 export type CompanySizeFilter = 'all' | 'micro' | 'pequena' | 'media' | 'grande';
 
 export interface UniversalFilterState {
-  companySize: CompanySizeFilter;
-  district: string; // 'all' ou nome do distrito
-  municipality: string; // 'all' ou nome do município
-  parish: string; // 'all' ou nome da freguesia
+  companySize: string[]; // array de valores selecionados
+  district: string[]; // array de distritos selecionados
+  municipality: string[]; // array de municípios selecionados
+  parish: string[]; // array de freguesias selecionadas
 }
 
 export interface AdvancedFilters {

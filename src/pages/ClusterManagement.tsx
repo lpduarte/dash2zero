@@ -60,36 +60,41 @@ export default function ClusterManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<string[]>(["NIF/NIPC", "Email", "Setor"]);
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
-    companySize: 'all',
-    district: 'all',
-    municipality: 'all',
-    parish: 'all',
+    companySize: [],
+    district: [],
+    municipality: [],
+    parish: [],
   });
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {
-    let count = 0;
-    if (universalFilters.companySize !== 'all') count++;
-    if (universalFilters.district !== 'all') count++;
-    if (universalFilters.municipality !== 'all') count++;
-    if (universalFilters.parish !== 'all') count++;
-    return count;
+    return (
+      universalFilters.companySize.length +
+      universalFilters.district.length +
+      universalFilters.municipality.length +
+      universalFilters.parish.length
+    );
   }, [universalFilters]);
 
   // Handle removing individual filter
-  const handleRemoveUniversalFilter = (key: keyof UniversalFilterState) => {
+  const handleRemoveUniversalFilter = (key: keyof UniversalFilterState, value: string) => {
     const newFilters = { ...universalFilters };
     
-    // Handle hierarchical reset
     if (key === 'district') {
-      newFilters.district = 'all';
-      newFilters.municipality = 'all';
-      newFilters.parish = 'all';
+      newFilters.district = newFilters.district.filter(v => v !== value);
+      // Reset dependent filters if removing last district
+      if (newFilters.district.length === 0) {
+        newFilters.municipality = [];
+        newFilters.parish = [];
+      }
     } else if (key === 'municipality') {
-      newFilters.municipality = 'all';
-      newFilters.parish = 'all';
+      newFilters.municipality = newFilters.municipality.filter(v => v !== value);
+      // Reset parish if removing last municipality
+      if (newFilters.municipality.length === 0) {
+        newFilters.parish = [];
+      }
     } else {
-      newFilters[key] = 'all';
+      newFilters[key] = newFilters[key].filter(v => v !== value);
     }
     
     setUniversalFilters(newFilters);
@@ -114,20 +119,20 @@ export default function ClusterManagement() {
       filtered = filtered.filter(s => s.cluster === selectedClusterType);
     }
     
-    // Filtro de dimensão
-    if (universalFilters.companySize !== 'all') {
-      filtered = filtered.filter(s => s.companySize === universalFilters.companySize);
+    // Filtro de dimensão (multiselect)
+    if (universalFilters.companySize.length > 0) {
+      filtered = filtered.filter(s => universalFilters.companySize.includes(s.companySize));
     }
     
-    // Filtros de localização
-    if (universalFilters.district !== 'all') {
-      filtered = filtered.filter(s => s.district === universalFilters.district);
+    // Filtros de localização (multiselect)
+    if (universalFilters.district.length > 0) {
+      filtered = filtered.filter(s => universalFilters.district.includes(s.district));
     }
-    if (universalFilters.municipality !== 'all') {
-      filtered = filtered.filter(s => s.municipality === universalFilters.municipality);
+    if (universalFilters.municipality.length > 0) {
+      filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
     }
-    if (universalFilters.parish !== 'all') {
-      filtered = filtered.filter(s => s.parish === universalFilters.parish);
+    if (universalFilters.parish.length > 0) {
+      filtered = filtered.filter(s => universalFilters.parish.includes(s.parish));
     }
     
     if (searchQuery) {

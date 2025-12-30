@@ -4,48 +4,73 @@ import { UniversalFilterState } from "@/types/supplier";
 
 interface ActiveFiltersDisplayProps {
   filters: UniversalFilterState;
-  onRemoveFilter: (key: keyof UniversalFilterState) => void;
+  onRemoveFilter: (key: keyof UniversalFilterState, value: string) => void;
 }
 
-const filterLabels: Record<keyof UniversalFilterState, string> = {
-  companySize: "Dimensão",
-  district: "Distrito",
-  municipality: "Município",
-  parish: "Freguesia",
-};
-
 const companySizeLabels: Record<string, string> = {
-  micro: "Micro empresas",
-  pequena: "Pequenas empresas",
-  media: "Médias empresas",
-  grande: "Grandes empresas",
+  micro: "Micro",
+  pequena: "Pequena",
+  media: "Média",
+  grande: "Grande",
 };
 
 export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersDisplayProps) {
-  const activeFilters = Object.entries(filters).filter(
-    ([_, value]) => value !== "all"
-  ) as [keyof UniversalFilterState, string][];
+  const hasActiveFilters = 
+    filters.companySize.length > 0 ||
+    filters.district.length > 0 ||
+    filters.municipality.length > 0 ||
+    filters.parish.length > 0;
 
-  if (activeFilters.length === 0) return null;
-
-  const getDisplayValue = (key: keyof UniversalFilterState, value: string) => {
-    if (key === "companySize") {
-      return companySizeLabels[value] || value;
-    }
-    return value;
-  };
+  if (!hasActiveFilters) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-2 mt-3">
       <span className="text-sm text-muted-foreground">Filtros ativos:</span>
-      {activeFilters.map(([key, value]) => (
+      
+      {filters.companySize.map(size => (
         <Badge
-          key={key}
+          key={`size-${size}`}
           variant="secondary"
           className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
-          onClick={() => onRemoveFilter(key)}
+          onClick={() => onRemoveFilter('companySize', size)}
         >
-          {getDisplayValue(key, value)}
+          {companySizeLabels[size] || size}
+          <X className="h-3 w-3" />
+        </Badge>
+      ))}
+      
+      {filters.district.map(district => (
+        <Badge
+          key={`district-${district}`}
+          variant="secondary"
+          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          onClick={() => onRemoveFilter('district', district)}
+        >
+          {district}
+          <X className="h-3 w-3" />
+        </Badge>
+      ))}
+      
+      {filters.municipality.map(municipality => (
+        <Badge
+          key={`municipality-${municipality}`}
+          variant="secondary"
+          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          onClick={() => onRemoveFilter('municipality', municipality)}
+        >
+          {municipality}
+          <X className="h-3 w-3" />
+        </Badge>
+      ))}
+      
+      {filters.parish.map(parish => (
+        <Badge
+          key={`parish-${parish}`}
+          variant="secondary"
+          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          onClick={() => onRemoveFilter('parish', parish)}
+        >
+          {parish}
           <X className="h-3 w-3" />
         </Badge>
       ))}

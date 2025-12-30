@@ -69,28 +69,33 @@ export function ClusterSelector({
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {
-    let count = 0;
-    if (universalFilters.companySize !== 'all') count++;
-    if (universalFilters.district !== 'all') count++;
-    if (universalFilters.municipality !== 'all') count++;
-    if (universalFilters.parish !== 'all') count++;
-    return count;
+    return (
+      universalFilters.companySize.length +
+      universalFilters.district.length +
+      universalFilters.municipality.length +
+      universalFilters.parish.length
+    );
   }, [universalFilters]);
 
   // Handle removing individual filter
-  const handleRemoveFilter = (key: keyof UniversalFilterState) => {
+  const handleRemoveFilter = (key: keyof UniversalFilterState, value: string) => {
     const newFilters = { ...universalFilters };
     
-    // Handle hierarchical reset
     if (key === 'district') {
-      newFilters.district = 'all';
-      newFilters.municipality = 'all';
-      newFilters.parish = 'all';
+      newFilters.district = newFilters.district.filter(v => v !== value);
+      // Reset dependent filters if removing last district
+      if (newFilters.district.length === 0) {
+        newFilters.municipality = [];
+        newFilters.parish = [];
+      }
     } else if (key === 'municipality') {
-      newFilters.municipality = 'all';
-      newFilters.parish = 'all';
+      newFilters.municipality = newFilters.municipality.filter(v => v !== value);
+      // Reset parish if removing last municipality
+      if (newFilters.municipality.length === 0) {
+        newFilters.parish = [];
+      }
     } else {
-      newFilters[key] = 'all';
+      newFilters[key] = newFilters[key].filter(v => v !== value);
     }
     
     onUniversalFiltersChange(newFilters);
@@ -118,20 +123,25 @@ export function ClusterSelector({
 
   return (
     <>
-      <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
-      <div
-        ref={stickyRef}
-        className={cn(
-          "sticky top-4 z-50 mb-6 transition-all duration-200 -mx-8 px-8 py-4",
-          isSticky
-            ? "bg-background/95 backdrop-blur-sm shadow-lg rounded-b-lg"
-            : "bg-transparent"
-        )}
-      >
-        <div className="flex justify-between items-start gap-4">
-          {/* Left side - Cluster filters */}
-          <div className="flex-1">
-            <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+      <div className="mb-6">
+        {/* Label outside sticky container */}
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+        
+        {/* Sentinel for sticky detection */}
+        <div ref={sentinelRef} className="h-1 -mb-1" aria-hidden="true" />
+        
+        {/* Sticky container - only buttons */}
+        <div
+          ref={stickyRef}
+          className={cn(
+            "sticky top-4 z-50 transition-all duration-200 -mx-8 px-8 py-4 -mt-4",
+            isSticky
+              ? "bg-background/95 backdrop-blur-sm shadow-lg rounded-b-lg"
+              : "bg-transparent"
+          )}
+        >
+          <div className="flex justify-between items-center gap-4">
+            {/* Left side - Cluster buttons */}
             <div className="flex flex-wrap gap-2">
               {clusterOptions.map((option) => (
                 <button
@@ -171,22 +181,22 @@ export function ClusterSelector({
                 </button>
               ))}
             </div>
+
+            {/* Right side - Filter button */}
+            <div className="flex-shrink-0">
+              <FilterButton
+                activeFiltersCount={activeFiltersCount}
+                onClick={() => setFilterModalOpen(true)}
+              />
+            </div>
           </div>
 
-          {/* Right side - Filter button */}
-          <div className="flex-shrink-0 pt-6">
-            <FilterButton
-              activeFiltersCount={activeFiltersCount}
-              onClick={() => setFilterModalOpen(true)}
-            />
-          </div>
+          {/* Active filters chips */}
+          <ActiveFiltersDisplay
+            filters={universalFilters}
+            onRemoveFilter={handleRemoveFilter}
+          />
         </div>
-
-        {/* Active filters chips */}
-        <ActiveFiltersDisplay
-          filters={universalFilters}
-          onRemoveFilter={handleRemoveFilter}
-        />
       </div>
 
       <FilterModal
