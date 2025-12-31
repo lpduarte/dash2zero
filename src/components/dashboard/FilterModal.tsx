@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { Building2, MapPin, ChevronDown } from "lucide-react";
+import { Building2, MapPin, Landmark, ChevronDown } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -291,6 +291,10 @@ export function FilterModal({
             </div>
 
             {/* District */}
+            <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" />
+              Distrito
+            </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" className="w-full justify-between min-h-[44px]">
@@ -323,6 +327,10 @@ export function FilterModal({
             </Popover>
 
             {/* Municipality */}
+            <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <Landmark className="h-3.5 w-3.5" />
+              Município
+            </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button 
@@ -359,6 +367,10 @@ export function FilterModal({
             </Popover>
 
             {/* Parish */}
+            <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" />
+              Freguesia
+            </Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button 
