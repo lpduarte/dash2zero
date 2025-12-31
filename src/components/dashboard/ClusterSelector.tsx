@@ -134,10 +134,10 @@ export function ClusterSelector({
         <div
           ref={stickyRef}
           className={cn(
-            "sticky top-4 z-50 transition-all duration-200 -mx-8 px-8 py-4 -mt-4",
+            "sticky top-0 z-50 transition-all duration-200 -mx-8 px-8 py-4",
             isSticky
-              ? "bg-background/95 backdrop-blur-sm shadow-lg rounded-b-lg"
-              : "bg-transparent"
+              ? "bg-background/95 backdrop-blur-sm shadow-lg"
+              : "bg-background"
           )}
         >
           <div className="flex justify-between items-center gap-4">
@@ -149,11 +149,10 @@ export function ClusterSelector({
                   onClick={() => onClusterChange(option.value)}
                   className={cn(
                     "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                    "hover:shadow-md",
                     "[&_svg]:text-current",
                     selectedCluster === option.value
                       ? "bg-primary text-primary-foreground border-primary shadow-md"
-                      : "bg-card text-card-foreground border-border hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                      : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent hover:shadow-md hover:scale-[1.02]"
                   )}
                 >
                   {option.icon}
