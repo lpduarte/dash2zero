@@ -14,13 +14,11 @@ import { SupplierEmissionsChart } from "@/components/dashboard/SupplierEmissions
 import { SectorBenchmarking } from "@/components/dashboard/SectorBenchmarking";
 import { FinancialAnalysis } from "@/components/dashboard/FinancialAnalysis";
 import { EmissionsParetoChart } from "@/components/dashboard/EmissionsParetoChart";
-import { InfrastructureKPIs } from "@/components/dashboard/InfrastructureKPIs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { getSectorsWithCounts } from "@/data/sectors";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
-import { useUser } from "@/contexts/UserContext";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
 // Usa média global (não por setor) para consistência com o KPI card
@@ -44,7 +42,6 @@ const calculateImprovementPotential = (suppliers: Supplier[]): ImprovementPotent
 };
 
 const Overview = () => {
-  const { userType } = useUser();
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
@@ -150,13 +147,6 @@ const Overview = () => {
             <MetricsOverview suppliers={filteredSuppliers} />
             
             <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
-
-            {userType === 'municipio' && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Infraestruturas Sustentáveis</h3>
-                <InfrastructureKPIs municipalities={universalFilters.municipality} />
-              </div>
-            )}
 
             <div className="space-y-6">
               <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
