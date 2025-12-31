@@ -1,6 +1,6 @@
 import { Building2, Users, Handshake, LayoutGrid, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
 import { FilterButton } from "./FilterButton";
 import { FilterModal } from "./FilterModal";
@@ -63,6 +63,35 @@ export function ClusterSelector({
   onUniversalFiltersChange,
 }: ClusterSelectorProps) {
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [isStuck, setIsStuck] = useState(false);
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  // Detect when sticky element is stuck
+  useEffect(() => {
+    const stickyElement = stickyRef.current;
+    if (!stickyElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When the sentinel is not visible, the sticky is stuck
+        setIsStuck(!entry.isIntersecting);
+      },
+      { threshold: 1, rootMargin: "-17px 0px 0px 0px" } // 16px (top-4) + 1px buffer
+    );
+
+    // Create a sentinel element above the sticky
+    const sentinel = document.createElement('div');
+    sentinel.style.height = '1px';
+    sentinel.style.marginBottom = '-1px';
+    stickyElement.parentNode?.insertBefore(sentinel, stickyElement);
+    
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
+    };
+  }, []);
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {
@@ -104,7 +133,15 @@ export function ClusterSelector({
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
       
       {/* Sticky container - só os botões */}
-      <div className="sticky top-4 z-50 bg-background pb-4 mb-2 -mx-8 px-8 pt-2 rounded-lg shadow-sm border-b border-border/30">
+      <div 
+        ref={stickyRef}
+        className={cn(
+          "sticky top-4 z-50 pb-4 mb-2 -mx-8 px-8 pt-2 rounded-lg transition-all duration-200",
+          isStuck 
+            ? "bg-background/80 backdrop-blur-md shadow-md border-b border-border/30" 
+            : "bg-background"
+        )}
+      >
         <div className="flex justify-between items-center gap-4">
           {/* Left side - Cluster buttons */}
           <div className="flex flex-wrap gap-2">
@@ -117,7 +154,7 @@ export function ClusterSelector({
                   "[&_svg]:text-current",
                   selectedCluster === option.value
                     ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-md"
+                    : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-primary hover:text-primary-foreground hover:shadow-md"
                 )}
               >
                 {option.icon}
