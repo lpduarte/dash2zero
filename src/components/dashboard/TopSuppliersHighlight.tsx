@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useUser } from "@/contexts/UserContext";
 
 interface TopSuppliersHighlightProps {
   suppliers: Supplier[];
@@ -40,8 +41,12 @@ const getMedalBorder = (index: number) => {
 export const TopSuppliersHighlight = ({
   suppliers
 }: TopSuppliersHighlightProps) => {
+  const { userType } = useUser();
   const [selectedSector, setSelectedSector] = useState<string>("all");
   const [isOpen, setIsOpen] = useState(true);
+  
+  // Municípios monitorizam mais empresas
+  const limit = userType === 'municipio' ? 10 : 5;
 
   // Calculate sector averages
   const sectorAverages = suppliers.reduce((acc, s) => {
@@ -75,7 +80,7 @@ export const TopSuppliersHighlight = ({
     };
   };
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
-  const topSuppliers = [...filteredSuppliers].sort((a, b) => a.totalEmissions - b.totalEmissions).slice(0, 3);
+  const topSuppliers = [...filteredSuppliers].sort((a, b) => a.totalEmissions - b.totalEmissions).slice(0, limit);
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
   const sectorCounts = suppliers.reduce((acc, s) => {
     acc[s.sector] = (acc[s.sector] || 0) + 1;
@@ -87,7 +92,10 @@ export const TopSuppliersHighlight = ({
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-2xl">
             <Award className="h-6 w-6 text-success" />
-            As melhores empresas
+            {userType === 'municipio' 
+              ? 'Top 10 Empresas para Monitorização'
+              : 'Top 5 Melhores Empresas'
+            }
           </CardTitle>
           <div className="flex items-center gap-2">
             <Select value={selectedSector} onValueChange={setSelectedSector}>
