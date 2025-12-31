@@ -3,6 +3,7 @@ import { Header } from "@/components/dashboard/Header";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
+import { InfrastructureKPIs } from "@/components/dashboard/InfrastructureKPIs";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
@@ -159,6 +160,13 @@ const Overview = () => {
 
           <TabsContent value="home" className="space-y-6">
             <MetricsOverview suppliers={filteredSuppliers} />
+            
+            {isMunicipio && (
+              <div className="space-y-3">
+                <h3 className="text-lg font-semibold text-card-foreground">Infraestruturas Sustentáveis</h3>
+                <InfrastructureKPIs />
+              </div>
+            )}
             
             <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
 
