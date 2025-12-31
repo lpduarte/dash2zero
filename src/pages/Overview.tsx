@@ -5,6 +5,8 @@ import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { InfrastructureKPIs } from "@/components/dashboard/InfrastructureKPIs";
 import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
+import { Card } from "@/components/ui/card";
+import { BarChart3, Landmark } from "lucide-react";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
 import { CriticalSuppliersHighlight } from "@/components/dashboard/CriticalSuppliersHighlight";
 import { CompaniesTab } from "@/components/dashboard/CompaniesTab";
@@ -159,13 +161,31 @@ const Overview = () => {
           </TabsList>
 
           <TabsContent value="home" className="space-y-6">
-            <MetricsOverview suppliers={filteredSuppliers} />
-            
-            {isMunicipio && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-card-foreground">Infraestruturas Sustentáveis</h3>
-                <InfrastructureKPIs />
+            {/* GRUPO 1: KPIs de Emissões */}
+            <Card className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <BarChart3 className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-semibold text-card-foreground">
+                  {isMunicipio 
+                    ? 'Emissões das Empresas Monitorizadas' 
+                    : 'Visão Geral das Emissões'
+                  }
+                </h3>
               </div>
+              <MetricsOverview suppliers={filteredSuppliers} />
+            </Card>
+            
+            {/* GRUPO 2: KPIs de Infraestruturas (APENAS municípios) */}
+            {isMunicipio && (
+              <Card className="p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Landmark className="h-5 w-5 text-teal-600" />
+                  <h3 className="text-lg font-semibold text-card-foreground">
+                    Infraestruturas Sustentáveis do Município
+                  </h3>
+                </div>
+                <InfrastructureKPIs />
+              </Card>
             )}
             
             <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
