@@ -133,9 +133,6 @@ const Overview = () => {
           onUniversalFiltersChange={setUniversalFilters}
         />
 
-        <div className="text-sm text-muted-foreground mb-6">
-          {filteredSuppliers.length.toLocaleString('pt-PT')} empresas encontradas
-        </div>
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
           <TabsList className="grid w-full grid-cols-5">
