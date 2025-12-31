@@ -104,7 +104,7 @@ export function ClusterSelector({
       <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
       
       {/* Sticky container - só os botões */}
-      <div className="sticky top-0 z-50 bg-background pb-4 mb-2 -mx-8 px-8 border-b border-transparent [&:not(:first-child)]:border-border/50">
+      <div className="sticky top-4 z-50 bg-background pb-4 mb-2 -mx-8 px-8 pt-2 rounded-lg shadow-sm border-b border-border/30">
         <div className="flex justify-between items-center gap-4">
           {/* Left side - Cluster buttons */}
           <div className="flex flex-wrap gap-2">
