@@ -13,7 +13,7 @@ export function FilterButton({ activeFiltersCount, onClick }: FilterButtonProps)
       className={cn(
         "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
         "bg-card text-card-foreground border-border",
-        "hover:border-primary/50 hover:bg-accent hover:shadow-md hover:scale-[1.02]"
+        "hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-md"
       )}
     >
       <SlidersHorizontal className="h-4 w-4" />

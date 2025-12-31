@@ -247,10 +247,9 @@ export default function ClusterManagement() {
                       }}
                       className={cn(
                         "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                        "hover:shadow-md hover:scale-[1.02]",
                         selectedClusterType === option.value
                           ? "bg-primary text-primary-foreground border-primary shadow-md"
-                          : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent"
+                          : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-accent hover:text-foreground hover:shadow-md"
                       )}
                     >
                       <Icon className="h-4 w-4" />
