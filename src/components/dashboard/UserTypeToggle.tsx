@@ -1,4 +1,4 @@
-import { Building2, MapPin } from "lucide-react";
+import { Building2, Landmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserType } from "@/types/user";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -42,7 +42,7 @@ export const UserTypeToggle = ({ currentType, onTypeChange }: UserTypeToggleProp
                   : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10"
               )}
             >
-              <MapPin className="h-4 w-4" />
+              <Landmark className="h-4 w-4" />
             </button>
           </TooltipTrigger>
           <TooltipContent>

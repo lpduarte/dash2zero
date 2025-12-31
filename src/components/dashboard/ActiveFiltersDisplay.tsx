@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { X, Building2, MapPin, Landmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { UniversalFilterState } from "@/types/supplier";
 
@@ -34,6 +34,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
           className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('companySize', size)}
         >
+          <Building2 className="h-3 w-3" />
           {companySizeLabels[size] || size}
           <X className="h-3 w-3" />
         </Badge>
@@ -46,6 +47,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
           className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('district', district)}
         >
+          <MapPin className="h-3 w-3" />
           {district}
           <X className="h-3 w-3" />
         </Badge>
@@ -58,6 +60,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
           className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('municipality', municipality)}
         >
+          <Landmark className="h-3 w-3" />
           {municipality}
           <X className="h-3 w-3" />
         </Badge>
@@ -70,6 +73,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
           className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('parish', parish)}
         >
+          <MapPin className="h-3 w-3" />
           {parish}
           <X className="h-3 w-3" />
         </Badge>
