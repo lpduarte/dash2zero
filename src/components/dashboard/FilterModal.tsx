@@ -16,6 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { useUser } from "@/contexts/UserContext";
 
 interface FilterModalProps {
   suppliers: Supplier[];
@@ -39,7 +40,19 @@ export function FilterModal({
   open,
   onOpenChange,
 }: FilterModalProps) {
+  const { user, isMunicipio } = useUser();
   const [localFilters, setLocalFilters] = useState<UniversalFilterState>(currentFilters);
+
+  // Município fixo quando userType === 'municipio'
+  const fixedMunicipality = isMunicipio ? user.municipality : undefined;
+
+  // Filtrar suppliers por município fixo para utilizadores município
+  const effectiveSuppliers = useMemo(() => {
+    if (fixedMunicipality) {
+      return suppliers.filter(s => s.municipality === fixedMunicipality);
+    }
+    return suppliers;
+  }, [suppliers, fixedMunicipality]);
 
   // Reset local state when modal opens
   useEffect(() => {
@@ -50,12 +63,12 @@ export function FilterModal({
 
   // Calculate counts with applied other filters
   const countBySize = (size: string) => {
-    return suppliers.filter(s => {
+    return effectiveSuppliers.filter(s => {
       let matches = true;
-      if (localFilters.district.length > 0) {
+      if (!isMunicipio && localFilters.district.length > 0) {
         matches = matches && localFilters.district.includes(s.district);
       }
-      if (localFilters.municipality.length > 0) {
+      if (!isMunicipio && localFilters.municipality.length > 0) {
         matches = matches && localFilters.municipality.includes(s.municipality);
       }
       if (localFilters.parish.length > 0) {
@@ -66,7 +79,7 @@ export function FilterModal({
   };
 
   const countByDistrict = (district: string) => {
-    return suppliers.filter(s => {
+    return effectiveSuppliers.filter(s => {
       let matches = true;
       if (localFilters.companySize.length > 0) {
         matches = matches && localFilters.companySize.includes(s.companySize);
@@ -76,7 +89,7 @@ export function FilterModal({
   };
 
   const countByMunicipality = (municipality: string) => {
-    return suppliers.filter(s => {
+    return effectiveSuppliers.filter(s => {
       let matches = true;
       if (localFilters.companySize.length > 0) {
         matches = matches && localFilters.companySize.includes(s.companySize);
@@ -89,15 +102,15 @@ export function FilterModal({
   };
 
   const countByParish = (parish: string) => {
-    return suppliers.filter(s => {
+    return effectiveSuppliers.filter(s => {
       let matches = true;
       if (localFilters.companySize.length > 0) {
         matches = matches && localFilters.companySize.includes(s.companySize);
       }
-      if (localFilters.district.length > 0) {
+      if (!isMunicipio && localFilters.district.length > 0) {
         matches = matches && localFilters.district.includes(s.district);
       }
-      if (localFilters.municipality.length > 0) {
+      if (!isMunicipio && localFilters.municipality.length > 0) {
         matches = matches && localFilters.municipality.includes(s.municipality);
       }
       return matches && s.parish === parish;
@@ -110,41 +123,49 @@ export function FilterModal({
     { value: 'pequena', label: 'Pequenas empresas', count: countBySize('pequena') },
     { value: 'media', label: 'Médias empresas', count: countBySize('media') },
     { value: 'grande', label: 'Grandes empresas', count: countBySize('grande') },
-  ], [suppliers, localFilters.district, localFilters.municipality, localFilters.parish]);
+  ], [effectiveSuppliers, localFilters.district, localFilters.municipality, localFilters.parish, isMunicipio]);
 
-  // Get unique districts
+  // Get unique districts (apenas para empresa)
   const districtOptions = useMemo(() => {
-    const unique = [...new Set(suppliers.map((s) => s.district))].sort();
+    if (isMunicipio) return [];
+    const unique = [...new Set(effectiveSuppliers.map((s) => s.district))].sort();
     return unique.map(d => ({ value: d, label: d, count: countByDistrict(d) }));
-  }, [suppliers, localFilters.companySize]);
+  }, [effectiveSuppliers, localFilters.companySize, isMunicipio]);
 
-  // Get municipalities filtered by selected districts
+  // Get municipalities filtered by selected districts (apenas para empresa)
   const municipalityOptions = useMemo(() => {
+    if (isMunicipio) return [];
     if (localFilters.district.length === 0) return [];
-    const filtered = suppliers.filter((s) => localFilters.district.includes(s.district));
+    const filtered = effectiveSuppliers.filter((s) => localFilters.district.includes(s.district));
     const unique = [...new Set(filtered.map((s) => s.municipality))].sort();
     return unique.map(m => ({ value: m, label: m, count: countByMunicipality(m) }));
-  }, [suppliers, localFilters.district, localFilters.companySize]);
+  }, [effectiveSuppliers, localFilters.district, localFilters.companySize, isMunicipio]);
 
-  // Get parishes filtered by selected municipalities
+  // Get parishes - para município: todas as do município fixo, para empresa: filtrado
   const parishOptions = useMemo(() => {
+    if (isMunicipio) {
+      // Para município: mostrar todas as freguesias do município fixo
+      const unique = [...new Set(effectiveSuppliers.map((s) => s.parish))].sort();
+      return unique.map(p => ({ value: p, label: p, count: countByParish(p) }));
+    }
+    // Para empresa: comportamento normal
     if (localFilters.municipality.length === 0) return [];
-    const filtered = suppliers.filter((s) => localFilters.municipality.includes(s.municipality));
+    const filtered = effectiveSuppliers.filter((s) => localFilters.municipality.includes(s.municipality));
     const unique = [...new Set(filtered.map((s) => s.parish))].sort();
     return unique.map(p => ({ value: p, label: p, count: countByParish(p) }));
-  }, [suppliers, localFilters.municipality, localFilters.companySize, localFilters.district]);
+  }, [effectiveSuppliers, localFilters.municipality, localFilters.companySize, localFilters.district, isMunicipio]);
 
   // Count matching suppliers
   const matchingCount = useMemo(() => {
-    let filtered = suppliers;
+    let filtered = effectiveSuppliers;
 
     if (localFilters.companySize.length > 0) {
       filtered = filtered.filter((s) => localFilters.companySize.includes(s.companySize));
     }
-    if (localFilters.district.length > 0) {
+    if (!isMunicipio && localFilters.district.length > 0) {
       filtered = filtered.filter((s) => localFilters.district.includes(s.district));
     }
-    if (localFilters.municipality.length > 0) {
+    if (!isMunicipio && localFilters.municipality.length > 0) {
       filtered = filtered.filter((s) => localFilters.municipality.includes(s.municipality));
     }
     if (localFilters.parish.length > 0) {
@@ -152,7 +173,7 @@ export function FilterModal({
     }
 
     return filtered.length;
-  }, [suppliers, localFilters]);
+  }, [effectiveSuppliers, localFilters, isMunicipio]);
 
   const toggleSize = (value: string) => {
     setLocalFilters(prev => ({
@@ -232,7 +253,9 @@ export function FilterModal({
   };
 
   const getParishLabel = () => {
-    if (localFilters.parish.length === 0) return "Todas as freguesias";
+    if (localFilters.parish.length === 0) {
+      return isMunicipio ? `Todas em ${fixedMunicipality}` : "Todas as freguesias";
+    }
     if (localFilters.parish.length === 1) return localFilters.parish[0];
     return `${localFilters.parish.length} selecionadas`;
   };
@@ -286,87 +309,104 @@ export function FilterModal({
           {/* Location Filters */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-sm font-medium mb-3">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              Localização
+              {isMunicipio ? (
+                <>
+                  <Landmark className="h-4 w-4 text-muted-foreground" />
+                  <span>Freguesias em {fixedMunicipality}</span>
+                </>
+              ) : (
+                <>
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                  Localização
+                </>
+              )}
             </div>
 
-            {/* District */}
-            <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5" />
-              Distrito
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-between min-h-[44px]">
-                  <span>{getDistrictLabel()}</span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
-                <div className="space-y-1">
-                  {districtOptions.map(option => (
-                    <div 
-                      key={option.value}
-                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer"
-                      onClick={() => toggleDistrict(option.value)}
-                    >
-                      <Checkbox 
-                        checked={localFilters.district.includes(option.value)}
-                        onCheckedChange={() => toggleDistrict(option.value)}
-                      />
-                      <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
-                        <span>{option.label}</span>
-                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
-                          {option.count}
-                        </span>
-                      </Label>
+            {/* District - apenas para empresa */}
+            {!isMunicipio && (
+              <>
+                <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" />
+                  Distrito
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" className="w-full justify-between min-h-[44px]">
+                      <span>{getDistrictLabel()}</span>
+                      <ChevronDown className="h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
+                    <div className="space-y-1">
+                      {districtOptions.map(option => (
+                        <div 
+                          key={option.value}
+                          className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer"
+                          onClick={() => toggleDistrict(option.value)}
+                        >
+                          <Checkbox 
+                            checked={localFilters.district.includes(option.value)}
+                            onCheckedChange={() => toggleDistrict(option.value)}
+                          />
+                          <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
+                            <span>{option.label}</span>
+                            <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                              {option.count}
+                            </span>
+                          </Label>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+                  </PopoverContent>
+                </Popover>
+              </>
+            )}
 
-            {/* Municipality */}
-            <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <Landmark className="h-3.5 w-3.5" />
-              Município
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-between min-h-[44px]"
-                  disabled={localFilters.district.length === 0}
-                >
-                  <span>{getMunicipalityLabel()}</span>
-                  <ChevronDown className="h-4 w-4 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
-                <div className="space-y-1">
-                  {municipalityOptions.map(option => (
-                    <div 
-                      key={option.value}
-                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer"
-                      onClick={() => toggleMunicipality(option.value)}
+            {/* Municipality - apenas para empresa */}
+            {!isMunicipio && (
+              <>
+                <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <Landmark className="h-3.5 w-3.5" />
+                  Município
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between min-h-[44px]"
+                      disabled={localFilters.district.length === 0}
                     >
-                      <Checkbox 
-                        checked={localFilters.municipality.includes(option.value)}
-                        onCheckedChange={() => toggleMunicipality(option.value)}
-                      />
-                      <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
-                        <span>{option.label}</span>
-                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
-                          {option.count}
-                        </span>
-                      </Label>
+                      <span>{getMunicipalityLabel()}</span>
+                      <ChevronDown className="h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
+                    <div className="space-y-1">
+                      {municipalityOptions.map(option => (
+                        <div 
+                          key={option.value}
+                          className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer"
+                          onClick={() => toggleMunicipality(option.value)}
+                        >
+                          <Checkbox 
+                            checked={localFilters.municipality.includes(option.value)}
+                            onCheckedChange={() => toggleMunicipality(option.value)}
+                          />
+                          <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
+                            <span>{option.label}</span>
+                            <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                              {option.count}
+                            </span>
+                          </Label>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+                  </PopoverContent>
+                </Popover>
+              </>
+            )}
 
-            {/* Parish */}
+            {/* Parish - sempre visível */}
             <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
               <MapPin className="h-3.5 w-3.5" />
               Freguesia
@@ -376,7 +416,7 @@ export function FilterModal({
                 <Button 
                   variant="outline" 
                   className="w-full justify-between min-h-[44px]"
-                  disabled={localFilters.municipality.length === 0}
+                  disabled={!isMunicipio && localFilters.municipality.length === 0}
                 >
                   <span>{getParishLabel()}</span>
                   <ChevronDown className="h-4 w-4 opacity-50" />
