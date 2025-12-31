@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { getSectorsWithCounts } from "@/data/sectors";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { useUser } from "@/contexts/UserContext";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
 // Usa média global (não por setor) para consistência com o KPI card
@@ -42,6 +43,7 @@ const calculateImprovementPotential = (suppliers: Supplier[]): ImprovementPotent
 };
 
 const Overview = () => {
+  const { user, isMunicipio } = useUser();
   const [selectedCluster, setSelectedCluster] = useState<ClusterType>('all');
   const [selectedSector, setSelectedSector] = useState<string>('all');
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
@@ -51,26 +53,34 @@ const Overview = () => {
     parish: [],
   });
 
+  // Base suppliers - filtrados por município se userType === 'municipio'
+  const baseSuppliers = useMemo(() => {
+    if (isMunicipio && user.municipality) {
+      return mockSuppliers.filter(s => s.municipality === user.municipality);
+    }
+    return mockSuppliers;
+  }, [isMunicipio, user.municipality]);
+
   // Get unique sectors with counts from centralized config
-  const sectorsWithCounts = useMemo(() => getSectorsWithCounts(mockSuppliers), []);
+  const sectorsWithCounts = useMemo(() => getSectorsWithCounts(baseSuppliers), [baseSuppliers]);
 
   const clusterCounts = useMemo(() => {
     return {
-      all: mockSuppliers.length,
-      fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
-      cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
-      parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
+      all: baseSuppliers.length,
+      fornecedor: baseSuppliers.filter(s => s.cluster === 'fornecedor').length,
+      cliente: baseSuppliers.filter(s => s.cluster === 'cliente').length,
+      parceiro: baseSuppliers.filter(s => s.cluster === 'parceiro').length,
     };
-  }, []);
+  }, [baseSuppliers]);
 
   const clusterPotentials = useMemo((): Record<ClusterType, ImprovementPotential> => {
     return {
-      all: calculateImprovementPotential(mockSuppliers),
-      fornecedor: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'fornecedor')),
-      cliente: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'cliente')),
-      parceiro: calculateImprovementPotential(mockSuppliers.filter(s => s.cluster === 'parceiro')),
+      all: calculateImprovementPotential(baseSuppliers),
+      fornecedor: calculateImprovementPotential(baseSuppliers.filter(s => s.cluster === 'fornecedor')),
+      cliente: calculateImprovementPotential(baseSuppliers.filter(s => s.cluster === 'cliente')),
+      parceiro: calculateImprovementPotential(baseSuppliers.filter(s => s.cluster === 'parceiro')),
     };
-  }, []);
+  }, [baseSuppliers]);
 
   // Total de empresas por cluster (universo total do grupo)
   const clusterTotals: Record<ClusterType, number> = {
@@ -81,7 +91,7 @@ const Overview = () => {
   };
 
   const filteredSuppliers = useMemo(() => {
-    let filtered = mockSuppliers;
+    let filtered = baseSuppliers;
     
     // Filtro de cluster
     if (selectedCluster !== 'all') {
@@ -93,19 +103,23 @@ const Overview = () => {
       filtered = filtered.filter(s => universalFilters.companySize.includes(s.companySize));
     }
     
-    // Filtros de localização (multiselect)
-    if (universalFilters.district.length > 0) {
-      filtered = filtered.filter(s => universalFilters.district.includes(s.district));
+    // Filtros de localização - apenas para empresa
+    if (!isMunicipio) {
+      if (universalFilters.district.length > 0) {
+        filtered = filtered.filter(s => universalFilters.district.includes(s.district));
+      }
+      if (universalFilters.municipality.length > 0) {
+        filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
+      }
     }
-    if (universalFilters.municipality.length > 0) {
-      filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
-    }
+    
+    // Filtro freguesia (ambos os tipos)
     if (universalFilters.parish.length > 0) {
       filtered = filtered.filter(s => universalFilters.parish.includes(s.parish));
     }
     
     return filtered.sort((a, b) => a.totalEmissions - b.totalEmissions);
-  }, [selectedCluster, universalFilters]);
+  }, [selectedCluster, universalFilters, baseSuppliers, isMunicipio]);
 
   // Suppliers filtered by both cluster and sector (for charts)
   const chartFilteredSuppliers = useMemo(() => {
@@ -128,7 +142,7 @@ const Overview = () => {
           onClusterChange={setSelectedCluster}
           clusterCounts={clusterCounts}
           clusterPotentials={clusterPotentials}
-          suppliers={mockSuppliers}
+          suppliers={baseSuppliers}
           universalFilters={universalFilters}
           onUniversalFiltersChange={setUniversalFilters}
         />

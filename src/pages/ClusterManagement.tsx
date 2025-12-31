@@ -36,6 +36,7 @@ import { Cluster, ClusterProvider } from "@/types/cluster";
 import { UniversalFilterState } from "@/types/supplier";
 import { Mail, Upload, Download, Search, X, Building2, Users, Handshake, LayoutGrid, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/contexts/UserContext";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -49,6 +50,7 @@ const clusterOptions = [
 ];
 
 export default function ClusterManagement() {
+  const { user, isMunicipio } = useUser();
   const [clusters, setClusters] = useState<Cluster[]>(mockClusters);
   const [selectedClusterType, setSelectedClusterType] = useState<ClusterType>('all');
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
@@ -65,6 +67,14 @@ export default function ClusterManagement() {
     municipality: [],
     parish: [],
   });
+
+  // Base suppliers - filtrados por município se userType === 'municipio'
+  const baseSuppliers = useMemo(() => {
+    if (isMunicipio && user.municipality) {
+      return mockSuppliers.filter(s => s.municipality === user.municipality);
+    }
+    return mockSuppliers;
+  }, [isMunicipio, user.municipality]);
 
   // Calculate active filters count
   const activeFiltersCount = useMemo(() => {
@@ -102,18 +112,18 @@ export default function ClusterManagement() {
 
   // Get cluster counts
   const clusterCounts = useMemo(() => ({
-    all: mockSuppliers.length,
-    fornecedor: mockSuppliers.filter(s => s.cluster === 'fornecedor').length,
-    cliente: mockSuppliers.filter(s => s.cluster === 'cliente').length,
-    parceiro: mockSuppliers.filter(s => s.cluster === 'parceiro').length,
-  }), []);
+    all: baseSuppliers.length,
+    fornecedor: baseSuppliers.filter(s => s.cluster === 'fornecedor').length,
+    cliente: baseSuppliers.filter(s => s.cluster === 'cliente').length,
+    parceiro: baseSuppliers.filter(s => s.cluster === 'parceiro').length,
+  }), [baseSuppliers]);
 
   // Get selected cluster data for email functionality
   const selectedCluster = clusters.find((c) => c.id === selectedClusterType);
 
   // Filter suppliers by selected cluster and universal filters
   const filteredSuppliers = useMemo(() => {
-    let filtered = mockSuppliers;
+    let filtered = baseSuppliers;
     
     if (selectedClusterType !== 'all') {
       filtered = filtered.filter(s => s.cluster === selectedClusterType);
@@ -124,13 +134,17 @@ export default function ClusterManagement() {
       filtered = filtered.filter(s => universalFilters.companySize.includes(s.companySize));
     }
     
-    // Filtros de localização (multiselect)
-    if (universalFilters.district.length > 0) {
-      filtered = filtered.filter(s => universalFilters.district.includes(s.district));
+    // Filtros de localização - apenas para empresa
+    if (!isMunicipio) {
+      if (universalFilters.district.length > 0) {
+        filtered = filtered.filter(s => universalFilters.district.includes(s.district));
+      }
+      if (universalFilters.municipality.length > 0) {
+        filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
+      }
     }
-    if (universalFilters.municipality.length > 0) {
-      filtered = filtered.filter(s => universalFilters.municipality.includes(s.municipality));
-    }
+    
+    // Filtro freguesia (ambos os tipos)
     if (universalFilters.parish.length > 0) {
       filtered = filtered.filter(s => universalFilters.parish.includes(s.parish));
     }
@@ -147,7 +161,7 @@ export default function ClusterManagement() {
     }
     
     return filtered;
-  }, [selectedClusterType, searchQuery, universalFilters]);
+  }, [selectedClusterType, searchQuery, universalFilters, baseSuppliers, isMunicipio]);
 
   // Get providers for selected cluster (for email functionality)
   const selectedClusterProviders = useMemo(() => {
@@ -325,7 +339,7 @@ export default function ClusterManagement() {
 
         {/* Filter Modal */}
         <FilterModal
-          suppliers={mockSuppliers}
+          suppliers={baseSuppliers}
           currentFilters={universalFilters}
           onFilterChange={setUniversalFilters}
           open={filterModalOpen}
