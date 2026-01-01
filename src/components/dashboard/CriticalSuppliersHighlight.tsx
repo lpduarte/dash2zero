@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown, FileText } from "lucide-react";
+import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown, FileText, Landmark } from "lucide-react";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
@@ -10,6 +10,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SupplierSwitchModal } from "./SupplierSwitchModal";
 import { ActionPlanModal } from "./ActionPlanModal";
+import { useUser } from "@/contexts/UserContext";
+import { cn } from "@/lib/utils";
+
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
 }
@@ -17,6 +20,11 @@ interface CriticalSuppliersHighlightProps {
 export const CriticalSuppliersHighlight = ({
   suppliers
 }: CriticalSuppliersHighlightProps) => {
+  const { userType } = useUser();
+  const isMunicipio = userType === 'municipio';
+  
+  // Limite adaptado: 10 para municípios, 5 para empresas
+  const limit = isMunicipio ? 10 : 5;
   const [selectedSector, setSelectedSector] = useState<string>("all");
   const [isOpen, setIsOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,7 +38,11 @@ export const CriticalSuppliersHighlight = ({
   const allCriticalSuppliers = filteredSuppliers.filter(s => s.totalEmissions > avgEmissions * 1.2);
 
   // Depois ordenar e limitar a 5 para exibição
-  const criticalSuppliers = [...allCriticalSuppliers].sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, 5);
+  // Para município: mostrar top 10 por emissões (sem critério de "crítico")
+  // Para empresa: mostrar top 5 críticos (>20% acima da média)
+  const criticalSuppliers = isMunicipio
+    ? [...filteredSuppliers].sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, limit)
+    : [...allCriticalSuppliers].sort((a, b) => b.totalEmissions - a.totalEmissions).slice(0, limit);
 
   // Calculate sector averages for FE comparison
   const sectorAverages = suppliers.reduce((acc, s) => {
@@ -106,23 +118,45 @@ export const CriticalSuppliersHighlight = ({
   };
   const improvementPotential = getImprovementPotential();
   return <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-    <Card className="border-danger/50 bg-gradient-to-br from-danger/10 via-warning/5 to-accent/10">
+    <Card className={cn(
+      "bg-gradient-to-br",
+      isMunicipio 
+        ? "border-primary/50 from-primary/10 via-primary/5 to-accent/10" 
+        : "border-danger/50 from-danger/10 via-warning/5 to-accent/10"
+    )}>
       <CardHeader className={isOpen ? "pb-3" : "pb-6"}>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-2xl">
-            <AlertTriangle className="h-6 w-6 text-danger" />
-            Empresas críticas e alternativas 
-          </CardTitle>
+          <div>
+            <CardTitle className="flex items-center gap-2 text-2xl">
+              {isMunicipio ? (
+                <Landmark className="h-6 w-6 text-primary" />
+              ) : (
+                <AlertTriangle className="h-6 w-6 text-danger" />
+              )}
+              {isMunicipio 
+                ? 'Top 10 Empresas para Monitorização'
+                : 'Empresas críticas e alternativas'
+              }
+            </CardTitle>
+            <p className="text-sm text-muted-foreground mt-1">
+              {isMunicipio 
+                ? 'Empresas prioritárias para apoio à descarbonização e acesso a fundos'
+                : 'Parceiros com maior impacto ambiental na supply chain'
+              }
+            </p>
+          </div>
           <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="gap-2"
-              onClick={() => setActionPlanOpen(true)}
-            >
-              <FileText className="h-4 w-4" />
-              Gerar plano de ação
-            </Button>
+            {!isMunicipio && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                onClick={() => setActionPlanOpen(true)}
+              >
+                <FileText className="h-4 w-4" />
+                Gerar plano de ação
+              </Button>
+            )}
             <Select value={selectedSector} onValueChange={setSelectedSector}>
               <SelectTrigger className="w-[280px]">
                 <SelectValue placeholder="Filtrar por atividade" />
@@ -159,9 +193,17 @@ export const CriticalSuppliersHighlight = ({
           const savingsPercentage = alternative ? (emissionsSavings / supplier.totalEmissions * 100).toFixed(0) : 0;
           const sectorAvgFE = getSectorAvgFE(supplier.sector);
           const feDiff = (supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100;
-          return <div key={supplier.id} className="p-4 border border-danger/30 rounded-lg bg-card hover:bg-danger/5 transition-colors">
+          return <div key={supplier.id} className={cn(
+            "p-4 border rounded-lg bg-card transition-colors",
+            isMunicipio 
+              ? "border-primary/30 hover:bg-primary/5" 
+              : "border-danger/30 hover:bg-danger/5"
+          )}>
                 <div className="flex items-center gap-4">
-                  <Badge className="bg-danger w-8 h-8 flex items-center justify-center text-sm font-bold shrink-0">
+                  <Badge className={cn(
+                    "w-8 h-8 flex items-center justify-center text-sm font-bold shrink-0",
+                    isMunicipio ? "bg-primary" : "bg-danger"
+                  )}>
                     {index + 1}
                   </Badge>
 
@@ -177,7 +219,7 @@ export const CriticalSuppliersHighlight = ({
                         <TrendingUp className="h-3 w-3 text-muted-foreground" />
                         <span className="text-xs text-muted-foreground">Emissões</span>
                       </div>
-                      <p className="text-lg font-bold text-danger">{supplier.totalEmissions.toFixed(0)}</p>
+                      <p className={cn("text-lg font-bold", isMunicipio ? "text-primary" : "text-danger")}>{supplier.totalEmissions.toFixed(0)}</p>
                       <p className="text-xs text-muted-foreground">t CO₂e</p>
                     </div>
 
@@ -204,8 +246,8 @@ export const CriticalSuppliersHighlight = ({
                     </div>
                   </div>
 
-                  {/* Arrow separator with transition indicator */}
-                  {alternative && <>
+                  {/* Arrow separator with transition indicator - apenas para empresas */}
+                  {!isMunicipio && alternative && <>
                       <div className="flex flex-col items-center shrink-0 px-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
                           <ArrowRight className="h-4 w-4 text-success" />
@@ -232,7 +274,7 @@ export const CriticalSuppliersHighlight = ({
                       </div>
                     </>}
 
-                  {!alternative && <>
+                  {!isMunicipio && !alternative && <>
                       <div className="flex flex-col items-center shrink-0 px-3">
                         <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
                           <ArrowRight className="h-4 w-4 text-muted-foreground/50" />
@@ -269,15 +311,17 @@ export const CriticalSuppliersHighlight = ({
                       </TooltipProvider>
                     </>}
 
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="shrink-0" 
-                    onClick={() => handleOpenModal(supplier, alternative)}
-                    disabled={!alternative}
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
+                  {!isMunicipio && (
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="shrink-0" 
+                      onClick={() => handleOpenModal(supplier, alternative)}
+                      disabled={!alternative}
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </div>;
         })}
