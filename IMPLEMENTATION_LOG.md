@@ -206,12 +206,37 @@ Registo de todas as implementações por fase.
 
 ---
 
+### 2.4A - Wizard Plano de Ação (Estrutura Base)
+**Data:** Janeiro 2025
+
+**Implementado:**
+- Tipos TypeScript completos para medidas e fundos
+- Dados mock de 11 medidas de descarbonização (4 categorias: energia, mobilidade, resíduos, água)
+- Dados mock de 6 fontes de financiamento (subsídios, incentivos, linhas de crédito)
+- Funções helper: `getApplicableMeasures`, `getEligibleFunding`
+- Modal wizard fullscreen com navegação 4 steps
+- Steps indicator visual com ícones por categoria
+- Navegação Anterior/Próximo com botões disabled nos extremos
+- Placeholder temporário para conteúdo dos steps
+
+**Ficheiros criados:**
+- `src/types/actionPlan.ts` - Tipos Measure, FundingSource, ActionPlan
+- `src/data/mockMeasures.ts` - 11 medidas + função getApplicableMeasures
+- `src/data/mockFunding.ts` - 6 fundos + função getEligibleFunding
+- `src/components/dashboard/MunicipalityActionPlanModal.tsx` - Modal wizard
+
+**Ficheiros modificados:**
+- `src/components/dashboard/CriticalSuppliersHighlight.tsx` - Integração do modal
+
+---
+
 ## 🔜 Próximas Implementações
 
-### Fase 2.4 - Modal de Plano por Empresa (Planeado)
-- Modal individual por empresa
-- Plano de acção detalhado
-- Sugestões de apoio municipal
+### Fase 2.4B - Conteúdo dos Steps (Planeado)
+- Step 1: Análise detalhada da empresa
+- Step 2: Seleção de medidas aplicáveis
+- Step 3: Matching com fontes de financiamento
+- Step 4: Resumo e exportação PDF
 
 ### Fase 2.5 - Exportação Município (Planeado)
 - Relatório PDF de empresas monitorizadas
@@ -244,7 +269,7 @@ Registo de todas as implementações por fase.
 | Coluna Risco | ❌ | ✅ |
 | Sugestões Substituição | ✅ | ❌ |
 | Plano de Acção Global | ✅ | ❌ |
-| Plano de Acção Individual | ❌ | ✅ (skeleton) |
+| Plano de Acção Individual (wizard) | ❌ | ✅ |
 
 ---
 
