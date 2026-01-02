@@ -10,6 +10,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { SupplierSwitchModal } from "./SupplierSwitchModal";
 import { ActionPlanModal } from "./ActionPlanModal";
+import { MunicipalityActionPlanModal } from "./MunicipalityActionPlanModal";
 import { useUser } from "@/contexts/UserContext";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -43,6 +44,15 @@ export const CriticalSuppliersHighlight = ({
   // Estado de ordenação para municípios
   const [sortField, setSortField] = useState<SortField>('risk');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  
+  // Estado para modal de plano de ação do município
+  const [municipalityPlanOpen, setMunicipalityPlanOpen] = useState(false);
+  const [selectedMunicipalitySupplier, setSelectedMunicipalitySupplier] = useState<{
+    supplier: Supplier;
+    riskLevel: 'alto' | 'medio' | 'normal';
+    riskMultiplier: number;
+    avgSectorIntensity: number;
+  } | null>(null);
   
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
@@ -384,8 +394,13 @@ export const CriticalSuppliersHighlight = ({
                                 variant="ghost" 
                                 className="h-8 px-2 gap-1"
                                 onClick={() => {
-                                  // TODO: Abrir modal de plano (Fase 2.4)
-                                  console.log('Abrir plano para:', item.supplier.name);
+                                  setSelectedMunicipalitySupplier({
+                                    supplier: item.supplier,
+                                    riskLevel: item.riskLevel,
+                                    riskMultiplier: item.riskMultiplier,
+                                    avgSectorIntensity: item.avgSectorIntensity
+                                  });
+                                  setMunicipalityPlanOpen(true);
                                 }}
                               >
                                 <FileText className="h-3.5 w-3.5" />
@@ -401,7 +416,7 @@ export const CriticalSuppliersHighlight = ({
                   {/* Nota explicativa */}
                   <div className="bg-muted/30 rounded-lg p-3 border border-border">
                     <p className="text-xs text-muted-foreground">
-                      <span className="font-medium">💡 Nota:</span> Empresas com risco alto ({">"}1.5x média do setor) 
+                      <span className="font-medium">💡 Nota:</span> Empresas com risco alto ({">"}1.5x média do setor)
                       enfrentam custos regulatórios aumentados e restrições de financiamento. 
                       São prioritárias para programas de apoio municipal.
                     </p>
@@ -567,6 +582,16 @@ export const CriticalSuppliersHighlight = ({
         open={actionPlanOpen}
         onOpenChange={setActionPlanOpen}
         suppliers={suppliers}
+      />
+
+      {/* Modal de plano de ação para municípios */}
+      <MunicipalityActionPlanModal
+        supplier={selectedMunicipalitySupplier?.supplier || null}
+        riskLevel={selectedMunicipalitySupplier?.riskLevel || 'normal'}
+        riskMultiplier={selectedMunicipalitySupplier?.riskMultiplier || 1}
+        avgSectorIntensity={selectedMunicipalitySupplier?.avgSectorIntensity || 0}
+        open={municipalityPlanOpen}
+        onOpenChange={setMunicipalityPlanOpen}
       />
     </>
   );
