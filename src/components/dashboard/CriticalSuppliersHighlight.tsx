@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Supplier } from "@/types/supplier";
-import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown, FileText, Landmark, ArrowUpDown } from "lucide-react";
+import { AlertTriangle, ArrowRight, TrendingUp, Euro, BarChart3, Info, ChevronDown, FileText, Landmark, ArrowUpDown, Target } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplierLabel, sectorLabels } from "./SupplierLabel";
@@ -403,7 +403,7 @@ export const CriticalSuppliersHighlight = ({
                                   setMunicipalityPlanOpen(true);
                                 }}
                               >
-                                <FileText className="h-3.5 w-3.5" />
+                                <Target className="h-3.5 w-3.5" />
                                 Plano
                               </Button>
                             </TableCell>
