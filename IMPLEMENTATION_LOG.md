@@ -184,14 +184,36 @@ Registo de todas as implementações por fase.
 
 ---
 
+### 2.3 - Top 5 com Análise de Risco
+**Data:** Janeiro 2025
+
+**Implementado:**
+- Top 5 para municípios (antes era 10)
+- Vista de tabela com 8 colunas para municípios
+- Coluna Risco com cálculo vs média do setor
+- Ordenação por risco (default), emissões, nome ou setor
+- Badges coloridos: Alto (>1.5x), Médio (1.2-1.5x), Normal (<1.2x)
+- Tooltips com detalhes de risco por empresa
+- Botão "Plano" por empresa (skeleton para Fase 2.4)
+- Nota explicativa sobre riscos regulatórios
+
+**Ficheiros criados:**
+- `src/lib/riskAnalysis.ts` - Funções de cálculo de risco
+
+**Ficheiros modificados:**
+- `src/components/dashboard/CriticalSuppliersHighlight.tsx` - Vista tabela + lógica risco
+- `src/pages/Overview.tsx` - Passar `allSuppliers` prop
+
+---
+
 ## 🔜 Próximas Implementações
 
-### Fase 2.3 - Indicadores de Tendência (Planeado)
-- Setas de variação nos KPIs
-- Percentagem vs período anterior
-- Cores verde/vermelho para tendência
+### Fase 2.4 - Modal de Plano por Empresa (Planeado)
+- Modal individual por empresa
+- Plano de acção detalhado
+- Sugestões de apoio municipal
 
-### Fase 2.4 - Exportação Município (Planeado)
+### Fase 2.5 - Exportação Município (Planeado)
 - Relatório PDF de empresas monitorizadas
 - Lista para acesso a fundos
 - Resumo executivo
@@ -218,9 +240,11 @@ Registo de todas as implementações por fase.
 | Filtro Freguesia | ✅ | ✅ |
 | KPIs Infraestruturas | ❌ | ✅ |
 | Top 5 Críticos | ✅ | ❌ |
-| Top 10 Monitorização | ❌ | ✅ |
+| Top 5 Monitorização (tabela) | ❌ | ✅ |
+| Coluna Risco | ❌ | ✅ |
 | Sugestões Substituição | ✅ | ❌ |
-| Plano de Acção | ✅ | ❌ |
+| Plano de Acção Global | ✅ | ❌ |
+| Plano de Acção Individual | ❌ | ✅ (skeleton) |
 
 ---
 

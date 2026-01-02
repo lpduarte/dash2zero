@@ -191,7 +191,7 @@ const Overview = () => {
             <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
 
             <div className="space-y-6">
-              <CriticalSuppliersHighlight suppliers={filteredSuppliers} />
+              <CriticalSuppliersHighlight suppliers={filteredSuppliers} allSuppliers={baseSuppliers} />
               <TopSuppliersHighlight suppliers={filteredSuppliers} />
             </div>
           </TabsContent>
