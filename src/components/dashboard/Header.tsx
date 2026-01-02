@@ -18,7 +18,7 @@ export const Header = () => {
           <div className="flex items-center gap-4">
             {/* Logo - Cascais para município, placeholder para outros */}
             {userType === 'municipio' ? (
-              <div className="w-16 h-16 bg-primary-foreground rounded-lg flex items-center justify-center p-2">
+              <div className="w-16 h-16 bg-primary-foreground rounded-lg flex items-center justify-center p-2 text-primary">
                 <img src={logoCascais} alt="Município de Cascais" className="w-full h-full" />
               </div>
             ) : (
