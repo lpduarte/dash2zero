@@ -5,6 +5,7 @@ import { NotificationBell } from "./NotificationBell";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
 import { mockSuppliers } from "@/data/mockSuppliers";
+import logoCascais from "@/assets/logo-cascais.svg";
 
 export const Header = () => {
   const location = useLocation();
@@ -15,10 +16,16 @@ export const Header = () => {
       <div className="max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {/* Logo placeholder */}
-            <div className="w-16 h-16 bg-primary-foreground/20 rounded-lg flex items-center justify-center border-2 border-primary-foreground/30">
-              <span className="text-xs text-primary-foreground/60 font-medium">LOGO</span>
-            </div>
+            {/* Logo - Cascais para município, placeholder para outros */}
+            {userType === 'municipio' ? (
+              <div className="w-16 h-16 bg-primary-foreground rounded-lg flex items-center justify-center p-2">
+                <img src={logoCascais} alt="Município de Cascais" className="w-full h-full" />
+              </div>
+            ) : (
+              <div className="w-16 h-16 bg-primary-foreground/20 rounded-lg flex items-center justify-center border-2 border-primary-foreground/30">
+                <span className="text-xs text-primary-foreground/60 font-medium">LOGO</span>
+              </div>
+            )}
             
             <div className="flex items-center gap-3">
               <div className="bg-primary-foreground/20 p-3 rounded-lg">
