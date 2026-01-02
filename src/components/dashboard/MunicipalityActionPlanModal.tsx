@@ -88,198 +88,349 @@ export const MunicipalityActionPlanModal = ({
   // Step titles for placeholder
   const stepTitles = ['Análise', 'Medidas', 'Financiamento', 'Resumo'];
 
+  // Helper functions for Step 1 cards
+  const renderEmissoesCard = () => {
+    const scope1Pct = supplier.totalEmissions > 0 
+      ? (supplier.scope1 / supplier.totalEmissions) * 100 : 0;
+    const scope2Pct = supplier.totalEmissions > 0 
+      ? (supplier.scope2 / supplier.totalEmissions) * 100 : 0;
+    const scope3Pct = supplier.totalEmissions > 0 
+      ? (supplier.scope3 / supplier.totalEmissions) * 100 : 0;
+
+    return (
+      <Card className="p-5">
+        {/* Header: Título esquerda, KPI direita */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="font-semibold text-base">Emissões Atuais</h3>
+          </div>
+          <div className="text-right">
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-bold">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
+              <span className="text-xs text-muted-foreground">t CO₂e</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Barra Stacked Horizontal Única */}
+        <div className="space-y-3">
+          <div className="w-full h-6 rounded-full overflow-hidden flex" title="Distribuição por âmbito">
+            {/* Âmbito 1 - Roxo */}
+            <div 
+              className="h-full bg-purple-500 hover:opacity-80 transition-opacity cursor-pointer relative group"
+              style={{ width: `${scope1Pct}%` }}
+            >
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                <p className="font-medium">Âmbito 1 (Diretas)</p>
+                <p>{supplier.scope1.toLocaleString('pt-PT')} t CO₂e ({scope1Pct.toFixed(0)}%)</p>
+              </div>
+            </div>
+            
+            {/* Âmbito 2 - Azul */}
+            <div 
+              className="h-full bg-blue-500 hover:opacity-80 transition-opacity cursor-pointer relative group"
+              style={{ width: `${scope2Pct}%` }}
+            >
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                <p className="font-medium">Âmbito 2 (Energia)</p>
+                <p>{supplier.scope2.toLocaleString('pt-PT')} t CO₂e ({scope2Pct.toFixed(0)}%)</p>
+              </div>
+            </div>
+            
+            {/* Âmbito 3 - Laranja */}
+            <div 
+              className="h-full bg-orange-500 hover:opacity-80 transition-opacity cursor-pointer relative group"
+              style={{ width: `${scope3Pct}%` }}
+            >
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                <p className="font-medium">Âmbito 3 (Indiretas)</p>
+                <p>{supplier.scope3.toLocaleString('pt-PT')} t CO₂e ({scope3Pct.toFixed(0)}%)</p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Legenda mínima */}
+          <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-purple-500" />
+              <span>Âmbito 1</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <span>Âmbito 2</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-orange-500" />
+              <span>Âmbito 3</span>
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  };
+
+  const renderRiscoCard = () => {
+    // Cor do card baseada no nível de risco
+    const cardColors = {
+      alto: 'bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-900',
+      medio: 'bg-amber-50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900',
+      normal: 'bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-900'
+    };
+    
+    const badgeColors = {
+      alto: 'bg-red-500 text-white',
+      medio: 'bg-amber-500 text-white',
+      normal: 'bg-green-500 text-white'
+    };
+    
+    const riskLabels = {
+      alto: '🔴 Alto Risco',
+      medio: '🟡 Médio Risco',
+      normal: '🟢 Risco Normal'
+    };
+    
+    // Calcular larguras das barras (normalizado para visualização)
+    const currentIntensity = supplier.emissionsPerRevenue || 0;
+    const maxIntensity = Math.max(currentIntensity, avgSectorIntensity);
+    const empresaBarWidth = maxIntensity > 0 
+      ? (currentIntensity / maxIntensity) * 100 : 0;
+    const setorBarWidth = maxIntensity > 0 
+      ? (avgSectorIntensity / maxIntensity) * 100 : 0;
+
+    return (
+      <Card className={`p-5 h-full flex flex-col ${cardColors[riskLevel]}`}>
+        {/* Header: Título esquerda, Badge direita */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+            </div>
+            <h3 className="font-semibold text-base">Análise de Risco</h3>
+          </div>
+          <Badge className={`${badgeColors[riskLevel]} px-3 py-1`}>
+            {riskLabels[riskLevel]}
+          </Badge>
+        </div>
+        
+        {/* Barras Comparativas */}
+        <div className="space-y-4 flex-1">
+          {/* Barra Empresa */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Esta Empresa</span>
+              <span className="font-medium">{currentIntensity.toFixed(2)} kg CO₂e/€</span>
+            </div>
+            <div className="h-3 bg-muted/50 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-red-500 rounded-full transition-all"
+                style={{ width: `${empresaBarWidth}%` }}
+              />
+            </div>
+          </div>
+          
+          {/* Barra Média Setor */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-muted-foreground">Média do Setor</span>
+              <span className="font-medium">{avgSectorIntensity.toFixed(2)} kg CO₂e/€</span>
+            </div>
+            <div className="h-3 bg-muted/50 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-green-500 rounded-full transition-all"
+                style={{ width: `${setorBarWidth}%` }}
+              />
+            </div>
+          </div>
+          
+          {/* Multiplicador */}
+          <div className="flex items-center justify-between pt-2">
+            <span className="text-sm text-muted-foreground">Multiplicador</span>
+            <span className={`text-xl font-bold ${
+              riskLevel === 'alto' ? 'text-red-600' : 
+              riskLevel === 'medio' ? 'text-amber-600' : 'text-green-600'
+            }`}>
+              {riskMultiplier.toFixed(1)}x
+            </span>
+          </div>
+        </div>
+        
+        <Separator className="my-4" />
+        
+        {/* Contexto de Risco (integrado) */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="h-4 w-4 text-muted-foreground" />
+            <p className="text-sm font-medium text-muted-foreground">Consequências (intensidade {'>'}1.5x média)</p>
+          </div>
+          
+          <ul className="space-y-1.5 text-sm">
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground">•</span>
+              <span>Aumento de até 60% nos custos regulatórios</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground">•</span>
+              <span>Dificuldade de acesso a crédito verde</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground">•</span>
+              <span>Risco de obsolescência tecnológica</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-muted-foreground">•</span>
+              <span>Pressão de stakeholders (investidores, clientes)</span>
+            </li>
+          </ul>
+        </div>
+      </Card>
+    );
+  };
+
+  const renderPotencialCard = () => {
+    // Determinar âmbito dominante
+    const scopes = [
+      { name: 'Âmbito 1', value: supplier.scope1, pct: supplier.totalEmissions > 0 ? (supplier.scope1 / supplier.totalEmissions) * 100 : 0 },
+      { name: 'Âmbito 2', value: supplier.scope2, pct: supplier.totalEmissions > 0 ? (supplier.scope2 / supplier.totalEmissions) * 100 : 0 },
+      { name: 'Âmbito 3', value: supplier.scope3, pct: supplier.totalEmissions > 0 ? (supplier.scope3 / supplier.totalEmissions) * 100 : 0 }
+    ];
+    const dominantScope = scopes.reduce((a, b) => a.value > b.value ? a : b);
+    
+    // Sugestões por âmbito
+    const suggestions: Record<string, string[]> = {
+      'Âmbito 1': [
+        'Substituição de caldeiras por bombas de calor',
+        'Otimização de processos industriais',
+        'Eletrificação de equipamentos'
+      ],
+      'Âmbito 2': [
+        'Instalação de painéis solares',
+        'Auditoria e eficiência energética',
+        'Contratação de energia verde certificada'
+      ],
+      'Âmbito 3': [
+        'Otimização da cadeia de fornecedores',
+        'Critérios ESG na seleção de parceiros',
+        'Redução de emissões em transporte/logística'
+      ]
+    };
+    
+    // Cálculos estimados
+    const reducaoEstimada = Math.round(supplier.totalEmissions * 0.37);
+    const reducaoPct = 37;
+    const metaMultiplicador = 1.2;
+    
+    // Larguras das barras comparativas
+    const atualBarWidth = 100;
+    const metaBarWidth = (metaMultiplicador / riskMultiplier) * 100;
+
+    return (
+      <Card className="p-5 bg-success/5 border-success/20">
+        {/* Header: Título esquerda, KPI direita */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
+              <Target className="h-5 w-5 text-success" />
+            </div>
+            <h3 className="font-semibold text-base">Potencial de Melhoria</h3>
+          </div>
+          <div className="text-right">
+            <div className="flex items-baseline gap-1">
+              <span className="text-xl font-bold text-success">-{reducaoEstimada.toLocaleString('pt-PT')} t</span>
+              <span className="text-xs text-muted-foreground">(-{reducaoPct}%)</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Comparação Atual vs Meta */}
+        <div className="space-y-3 mb-4">
+          <p className="text-xs text-muted-foreground font-medium">Situação Atual vs Meta:</p>
+          
+          <div className="space-y-2">
+            {/* Barra Atual */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Atual</span>
+                <span className="font-medium">
+                  {riskMultiplier.toFixed(1)}x média{' '}
+                  <span>{riskLevel === 'alto' ? '🔴' : riskLevel === 'medio' ? '🟡' : '🟢'}</span>
+                </span>
+              </div>
+              <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-red-400 rounded-full"
+                  style={{ width: `${atualBarWidth}%` }}
+                />
+              </div>
+            </div>
+            
+            {/* Barra Meta */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Meta</span>
+                <span className="font-medium">{metaMultiplicador}x média 🟢</span>
+              </div>
+              <div className="h-2 bg-muted/50 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-green-500 rounded-full"
+                  style={{ width: `${Math.min(metaBarWidth, 100)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Esforço Estimado */}
+        <div className="space-y-2 mb-4 p-3 bg-background/50 rounded-lg">
+          <p className="text-xs text-muted-foreground font-medium">Para atingir zona segura:</p>
+          <div className="text-sm space-y-0.5">
+            <p>• Redução necessária: <span className="font-medium">{reducaoEstimada.toLocaleString('pt-PT')} t CO₂e</span></p>
+            <p>• Investimento estimado: <span className="font-medium">85.000€ - 150.000€</span></p>
+            <p>• Prazo típico: <span className="font-medium">12-24 meses</span></p>
+          </div>
+        </div>
+        
+        {/* Sugestão Prioritária baseada no Âmbito Dominante */}
+        <div className="space-y-2 p-3 bg-success/10 rounded-lg border border-success/20">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="h-4 w-4 text-success" />
+            <p className="text-xs font-medium text-success">Sugestão Prioritária</p>
+          </div>
+          
+          <p className="text-xs text-muted-foreground">
+            O {dominantScope.name} representa <span className="font-medium">{dominantScope.pct.toFixed(0)}%</span> das emissões. Recomendamos focar em:
+          </p>
+          
+          <ul className="text-sm space-y-1">
+            {suggestions[dominantScope.name].map((suggestion, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className="text-success">•</span>
+                <span>{suggestion}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Card>
+    );
+  };
+
   const renderStepContent = () => {
-    // Step 1: Análise - Layout 2x2
+    // Step 1: Análise - Layout 2 colunas (esquerda 2 cards, direita 1 card flex)
     if (currentStep === 1) {
-      // Calcular percentagens dos scopes
-      const scope1Pct = supplier.totalEmissions > 0 
-        ? (supplier.scope1 / supplier.totalEmissions) * 100 
-        : 0;
-      const scope2Pct = supplier.totalEmissions > 0 
-        ? (supplier.scope2 / supplier.totalEmissions) * 100 
-        : 0;
-      const scope3Pct = supplier.totalEmissions > 0 
-        ? (supplier.scope3 / supplier.totalEmissions) * 100 
-        : 0;
-      
-      // Calcular potencial de redução baseado no risco
-      const targetMultiplier = 1.2;
-      const currentIntensity = supplier.emissionsPerRevenue || 0;
-      const targetIntensity = avgSectorIntensity * targetMultiplier;
-      const potentialReductionPct = currentIntensity > targetIntensity 
-        ? ((currentIntensity - targetIntensity) / currentIntensity) * 100 
-        : 0;
-      const potentialReductionTons = Math.round((potentialReductionPct / 100) * supplier.totalEmissions);
-      const progressToSafe = riskMultiplier <= 1.2 ? 100 : Math.max(0, 100 - ((riskMultiplier - 1.2) / (riskMultiplier - 1) * 100));
-      
       return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
-          {/* Card 1: Emissões Atuais */}
-          <Card className="p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <BarChart3 className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-base">Emissões Atuais</h3>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Total Anual</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-bold">{supplier.totalEmissions.toLocaleString('pt-PT')}</span>
-                  <span className="text-sm text-muted-foreground">t CO₂e</span>
-                </div>
-              </div>
-              
-              <Separator />
-              
-              <div className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span className="text-muted-foreground">Scope 1 (Diretas)</span>
-                    <span className="font-medium">{supplier.scope1.toLocaleString('pt-PT')} t ({scope1Pct.toFixed(0)}%)</span>
-                  </div>
-                  <Progress value={scope1Pct} className="h-2" />
-                </div>
-                
-                <div>
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span className="text-muted-foreground">Scope 2 (Energia)</span>
-                    <span className="font-medium">{supplier.scope2.toLocaleString('pt-PT')} t ({scope2Pct.toFixed(0)}%)</span>
-                  </div>
-                  <Progress value={scope2Pct} className="h-2" />
-                </div>
-                
-                <div>
-                  <div className="flex items-center justify-between text-sm mb-1">
-                    <span className="text-muted-foreground">Scope 3 (Indiretas)</span>
-                    <span className="font-medium">{supplier.scope3.toLocaleString('pt-PT')} t ({scope3Pct.toFixed(0)}%)</span>
-                  </div>
-                  <Progress value={scope3Pct} className="h-2" />
-                </div>
-              </div>
-            </div>
-          </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-6">
+          {/* Coluna Esquerda: 2 cards empilhados */}
+          <div className="flex flex-col gap-4">
+            {renderEmissoesCard()}
+            {renderPotencialCard()}
+          </div>
           
-          {/* Card 2: Análise de Risco */}
-          <Card className="p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-warning/10 flex items-center justify-center">
-                <AlertTriangle className="h-5 w-5 text-warning" />
-              </div>
-              <h3 className="font-semibold text-base">Análise de Risco</h3>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Nível de Risco</p>
-                <Badge 
-                  variant={getRiskBadgeVariant()} 
-                  className="text-sm px-3 py-1"
-                >
-                  {riskLevel === 'alto' ? '🔴' : riskLevel === 'medio' ? '🟡' : '🟢'}{' '}
-                  {getRiskLabel()} Risco
-                </Badge>
-              </div>
-              
-              <Separator />
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Intensidade de Carbono</span>
-                  <span className="font-medium">{supplier.emissionsPerRevenue?.toFixed(2) || 'N/A'} kg CO₂e/€</span>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Média do Setor</span>
-                  <span className="font-medium">{avgSectorIntensity.toFixed(2)} kg CO₂e/€</span>
-                </div>
-                
-                <Separator />
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Multiplicador</span>
-                  <span className={`text-lg font-bold ${
-                    riskLevel === 'alto' ? 'text-destructive' : 
-                    riskLevel === 'medio' ? 'text-warning' : 'text-success'
-                  }`}>
-                    {riskMultiplier.toFixed(1)}x
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Card>
-          
-          {/* Card 3: Potencial de Melhoria */}
-          <Card className="p-5 bg-success/5 border-success/20">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
-                <Target className="h-5 w-5 text-success" />
-              </div>
-              <h3 className="font-semibold text-base">Potencial de Melhoria</h3>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Redução Recomendada</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-success">{potentialReductionTons.toLocaleString('pt-PT')} t CO₂e</span>
-                  <span className="text-sm text-muted-foreground">(-{potentialReductionPct.toFixed(0)}%)</span>
-                </div>
-              </div>
-              
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Meta</p>
-                <p className="text-sm">
-                  Atingir intensidade de 1.2x média do setor (zona segura)
-                </p>
-              </div>
-              
-              <div>
-                <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-                  <span>Progresso até zona segura</span>
-                  <span>{progressToSafe.toFixed(0)}%</span>
-                </div>
-                <Progress value={progressToSafe} className="h-2" />
-              </div>
-            </div>
-          </Card>
-          
-          {/* Card 4: Contexto de Risco */}
-          <Card className="p-5 bg-primary/5 border-primary/20">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Lightbulb className="h-5 w-5 text-primary" />
-              </div>
-              <h3 className="font-semibold text-base">Contexto de Risco</h3>
-            </div>
-            
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Empresas com intensidade {'>'}1.5x média do setor enfrentam:
-              </p>
-              
-              <ul className="space-y-2">
-                <li className="flex items-start gap-2 text-sm">
-                  <span className="text-primary">•</span>
-                  <span>Aumento de até 60% nos custos regulatórios</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm">
-                  <span className="text-primary">•</span>
-                  <span>Dificuldade de acesso a crédito verde</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm">
-                  <span className="text-primary">•</span>
-                  <span>Risco de obsolescência tecnológica</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm">
-                  <span className="text-primary">•</span>
-                  <span>Pressão de stakeholders (investidores, clientes)</span>
-                </li>
-              </ul>
-            </div>
-          </Card>
+          {/* Coluna Direita: Card Risco (flex para ocupar altura total) */}
+          <div className="flex flex-col">
+            {renderRiscoCard()}
+          </div>
         </div>
       );
     }
