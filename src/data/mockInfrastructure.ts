@@ -58,3 +58,37 @@ export const mockInfrastructure: InfrastructureData[] = [
     organicBins: 125
   }
 ];
+
+// Infraestrutura detalhada de Cascais para validação de medidas
+export const cascaisInfrastructure = {
+  // Mobilidade
+  chargingStations: 47,
+  cyclingNetworkKm: 85,
+  publicTransportCoverage: 92, // % área coberta
+  bikeShareStations: 23,
+  
+  // Energia
+  renewableEnergyAccess: true,
+  solarPotentialZones: 12,
+  greenEnergySuppliers: 3,
+  
+  // Resíduos
+  recyclingCenters: 8,
+  compostingFacilities: 3,
+  wasteCollectionCoverage: 98, // %
+  
+  // Água
+  waterReuseInfrastructure: true,
+  rainwaterHarvestingZones: 5,
+  
+  // Apoios municipais
+  activeFundingPrograms: 4,
+  totalAvailableFunding: 500000, // €
+  technicalSupportTeam: true,
+  
+  // Cobertura geográfica
+  industrialZonesCovered: 85, // %
+  commercialZonesCovered: 92, // %
+};
+
+export type InfrastructureKey = keyof typeof cascaisInfrastructure;

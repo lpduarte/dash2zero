@@ -1,156 +1,305 @@
-import type { Measure } from '@/types/actionPlan';
+import type { Measure, MeasureCategory } from '@/types/actionPlan';
 import type { Supplier } from '@/types/supplier';
+import { cascaisInfrastructure } from './mockInfrastructure';
 
 export const mockMeasures: Measure[] = [
-  // ENERGIA (4 medidas)
+  // === ÂMBITO 1 - DIRETAS ===
   {
-    id: 'energia-1',
+    id: 'measure-001',
     category: 'energia',
-    name: 'Auditoria Energética Certificada',
-    description: 'Diagnóstico completo do consumo energético com certificação',
-    emissionReduction: 150,
-    investment: 5000,
-    timeline: 3,
-    priority: 'alta',
-    annualSavings: 15000,
-    applicableTo: {
-      minEmissions: 200
-    }
-  },
-  {
-    id: 'energia-2',
-    category: 'energia',
-    name: 'Instalação Painéis Solares (100 kWp)',
-    description: 'Sistema fotovoltaico para autoconsumo com ligação à rede',
-    emissionReduction: 200,
-    investment: 80000,
-    timeline: 12,
-    priority: 'media',
-    roi: 7,
-    annualSavings: 12000,
-    applicableTo: {
-      sizes: ['media', 'grande'],
-      minEmissions: 500
-    }
-  },
-  {
-    id: 'energia-3',
-    category: 'energia',
-    name: 'Substituição de Caldeira (Bomba de Calor)',
+    scope: 1,
+    name: 'Substituição de Caldeira',
     description: 'Substituir caldeira a gás por bomba de calor de alta eficiência',
-    emissionReduction: 100,
-    investment: 45000,
-    timeline: 6,
-    priority: 'baixa',
-    roi: 8,
-    applicableTo: {
-      sectors: ['Indústria', 'Serviços']
-    }
-  },
-  {
-    id: 'energia-4',
-    category: 'energia',
-    name: 'Iluminação LED Completa',
-    description: 'Substituição total de iluminação por tecnologia LED',
-    emissionReduction: 50,
-    investment: 15000,
-    timeline: 2,
-    priority: 'alta',
-    roi: 3,
-    annualSavings: 5000,
-    applicableTo: {}
-  },
-  
-  // MOBILIDADE (3 medidas)
-  {
-    id: 'mobilidade-1',
-    category: 'mobilidade',
-    name: 'Transição Frota Elétrica (5 viaturas)',
-    description: 'Substituir 5 viaturas a combustão por veículos elétricos',
-    emissionReduction: 80,
-    investment: 150000,
-    timeline: 6,
-    priority: 'media',
-    applicableTo: {
-      sizes: ['media', 'grande']
-    }
-  },
-  {
-    id: 'mobilidade-2',
-    category: 'mobilidade',
-    name: 'Plano de Mobilidade Sustentável',
-    description: 'Incentivos bike-to-work, passes transportes públicos, carsharing',
-    emissionReduction: 40,
-    investment: 10000,
-    timeline: 3,
-    priority: 'baixa',
-    applicableTo: {
-      minEmissions: 300
-    }
-  },
-  {
-    id: 'mobilidade-3',
-    category: 'mobilidade',
-    name: 'Posto de Carregamento Elétrico',
-    description: 'Instalação de 2 postos de carregamento rápido',
-    emissionReduction: 20,
-    investment: 25000,
-    timeline: 4,
-    priority: 'media',
-    applicableTo: {}
-  },
-  
-  // RESÍDUOS (2 medidas)
-  {
-    id: 'residuos-1',
-    category: 'residuos',
-    name: 'Programa Resíduos Zero',
-    description: 'Sistema de triagem, compostagem e redução de desperdício',
-    emissionReduction: 30,
-    investment: 8000,
-    timeline: 6,
-    priority: 'baixa',
-    applicableTo: {}
-  },
-  {
-    id: 'residuos-2',
-    category: 'residuos',
-    name: 'Compostagem de Orgânicos',
-    description: 'Equipamento de compostagem para resíduos orgânicos',
-    emissionReduction: 15,
-    investment: 12000,
-    timeline: 3,
-    priority: 'baixa',
-    applicableTo: {
-      sectors: ['Retalho', 'Serviços', 'Agricultura']
-    }
-  },
-  
-  // ÁGUA (2 medidas)
-  {
-    id: 'agua-1',
-    category: 'agua',
-    name: 'Sistema de Reciclagem de Águas',
-    description: 'Tratamento e reutilização de águas cinzentas',
     emissionReduction: 25,
-    investment: 35000,
-    timeline: 8,
-    priority: 'baixa',
+    investment: 45000,
+    timeline: '6-12 meses',
+    priority: 'alta',
+    interventionLevel: 'interventiva',
+    requiredFunding: {
+      category: 'energia',
+      minimumAmount: 20000,
+      reason: 'Investimento elevado requer apoio financeiro disponível'
+    },
     applicableTo: {
-      sectors: ['Indústria'],
-      minEmissions: 500
-    }
+      sectors: ['Indústria', 'Serviços'],
+      sizes: ['media', 'grande'],
+      minEmissions: 100
+    },
+    additionalBenefits: ['Redução custos energéticos', 'Menor manutenção']
   },
   {
-    id: 'agua-2',
-    category: 'agua',
-    name: 'Dispositivos Poupadores de Água',
-    description: 'Torneiras, autoclismos e chuveiros eficientes',
+    id: 'measure-002',
+    category: 'mobilidade',
+    scope: 1,
+    name: 'Eletrificação de Frota',
+    description: 'Substituir veículos a combustão por elétricos',
+    emissionReduction: 35,
+    investment: 80000,
+    timeline: '12-18 meses',
+    priority: 'alta',
+    interventionLevel: 'interventiva',
+    requiredInfrastructure: {
+      key: 'chargingStations',
+      minimumValue: 20,
+      reason: 'Necessária rede de postos de carregamento no município'
+    },
+    requiredFunding: {
+      category: 'mobilidade',
+      minimumAmount: 30000,
+      reason: 'Investimento elevado requer incentivos disponíveis'
+    },
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande'],
+      minEmissions: 50
+    },
+    additionalBenefits: ['Incentivos fiscais', 'Menores custos combustível']
+  },
+  {
+    id: 'measure-003',
+    category: 'energia',
+    scope: 1,
+    name: 'Otimização de Processos',
+    description: 'Auditoria e otimização de processos industriais para reduzir desperdício',
+    emissionReduction: 15,
+    investment: 8000,
+    timeline: '3-6 meses',
+    priority: 'media',
+    interventionLevel: 'soft',
+    applicableTo: {
+      sectors: ['Indústria', 'Serviços'],
+      minEmissions: 30
+    },
+    additionalBenefits: ['Aumento produtividade', 'Redução custos operacionais']
+  },
+  
+  // === ÂMBITO 2 - ENERGIA ===
+  {
+    id: 'measure-004',
+    category: 'energia',
+    scope: 2,
+    name: 'Instalação de Painéis Solares',
+    description: 'Sistema fotovoltaico para autoconsumo',
+    emissionReduction: 40,
+    investment: 60000,
+    timeline: '6-9 meses',
+    priority: 'alta',
+    interventionLevel: 'interventiva',
+    requiredInfrastructure: {
+      key: 'solarPotentialZones',
+      minimumValue: 5,
+      reason: 'Localização deve estar em zona com potencial solar identificado'
+    },
+    requiredFunding: {
+      category: 'energia',
+      minimumAmount: 25000,
+      reason: 'Investimento requer apoio para viabilidade'
+    },
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande'],
+      minEmissions: 50
+    },
+    additionalBenefits: ['Independência energética', 'Proteção contra aumento tarifas']
+  },
+  {
+    id: 'measure-005',
+    category: 'energia',
+    scope: 2,
+    name: 'Contrato Energia Verde',
+    description: 'Migrar para fornecedor de energia 100% renovável',
+    emissionReduction: 30,
+    investment: 2000,
+    timeline: '1-2 meses',
+    priority: 'alta',
+    interventionLevel: 'soft',
+    requiredInfrastructure: {
+      key: 'greenEnergySuppliers',
+      minimumValue: 1,
+      reason: 'Necessário fornecedor de energia verde disponível na região'
+    },
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande']
+    },
+    additionalBenefits: ['Implementação rápida', 'Sem investimento infraestrutura']
+  },
+  {
+    id: 'measure-006',
+    category: 'energia',
+    scope: 2,
+    name: 'Auditoria Energética',
+    description: 'Diagnóstico completo de consumos e oportunidades de eficiência',
     emissionReduction: 10,
     investment: 3000,
-    timeline: 1,
+    timeline: '1-2 meses',
     priority: 'media',
-    applicableTo: {}
+    interventionLevel: 'soft',
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande']
+    },
+    additionalBenefits: ['Identificação de quick-wins', 'Base para plano de ação']
+  },
+  {
+    id: 'measure-007',
+    category: 'energia',
+    scope: 2,
+    name: 'Iluminação LED',
+    description: 'Substituição de iluminação convencional por LED',
+    emissionReduction: 8,
+    investment: 5000,
+    timeline: '1-3 meses',
+    priority: 'media',
+    interventionLevel: 'soft',
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande']
+    },
+    additionalBenefits: ['ROI rápido', 'Menor manutenção']
+  },
+  
+  // === ÂMBITO 3 - INDIRETAS ===
+  {
+    id: 'measure-008',
+    category: 'mobilidade',
+    scope: 3,
+    name: 'Otimização de Logística',
+    description: 'Consolidação de cargas e otimização de rotas de transporte',
+    emissionReduction: 20,
+    investment: 12000,
+    timeline: '3-6 meses',
+    priority: 'alta',
+    interventionLevel: 'interventiva',
+    applicableTo: {
+      sectors: ['Comércio', 'Indústria', 'Serviços'],
+      minEmissions: 40
+    },
+    additionalBenefits: ['Redução custos transporte', 'Menor tempo entrega']
+  },
+  {
+    id: 'measure-009',
+    category: 'mobilidade',
+    scope: 3,
+    name: 'Critérios ESG para Fornecedores',
+    description: 'Implementar critérios ambientais na seleção e avaliação de fornecedores',
+    emissionReduction: 25,
+    investment: 5000,
+    timeline: '3-6 meses',
+    priority: 'alta',
+    interventionLevel: 'soft',
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande']
+    },
+    additionalBenefits: ['Melhoria cadeia de valor', 'Diferenciação mercado']
+  },
+  {
+    id: 'measure-010',
+    category: 'mobilidade',
+    scope: 3,
+    name: 'Programa Mobilidade Colaboradores',
+    description: 'Incentivos para uso de transporte público e mobilidade suave',
+    emissionReduction: 12,
+    investment: 8000,
+    timeline: '2-4 meses',
+    priority: 'media',
+    interventionLevel: 'soft',
+    requiredInfrastructure: {
+      key: 'publicTransportCoverage',
+      minimumValue: 70,
+      reason: 'Necessária boa cobertura de transportes públicos na zona'
+    },
+    applicableTo: {
+      sizes: ['media', 'grande'],
+      minEmissions: 30
+    },
+    additionalBenefits: ['Bem-estar colaboradores', 'Redução custos estacionamento']
+  },
+  {
+    id: 'measure-011',
+    category: 'mobilidade',
+    scope: 3,
+    name: 'Frota de Bicicletas Partilhadas',
+    description: 'Disponibilizar bicicletas para deslocações de colaboradores',
+    emissionReduction: 5,
+    investment: 6000,
+    timeline: '1-2 meses',
+    priority: 'baixa',
+    interventionLevel: 'soft',
+    requiredInfrastructure: {
+      key: 'cyclingNetworkKm',
+      minimumValue: 50,
+      reason: 'Necessária rede de ciclovias adequada no município'
+    },
+    applicableTo: {
+      sizes: ['media', 'grande']
+    },
+    additionalBenefits: ['Saúde colaboradores', 'Imagem sustentável']
+  },
+  
+  // === RESÍDUOS (Âmbito 3) ===
+  {
+    id: 'measure-012',
+    category: 'residuos',
+    scope: 3,
+    name: 'Programa Zero Desperdício',
+    description: 'Implementar sistema de redução e triagem de resíduos',
+    emissionReduction: 8,
+    investment: 4000,
+    timeline: '2-4 meses',
+    priority: 'media',
+    interventionLevel: 'soft',
+    requiredInfrastructure: {
+      key: 'recyclingCenters',
+      minimumValue: 3,
+      reason: 'Necessários centros de reciclagem acessíveis'
+    },
+    applicableTo: {
+      sizes: ['pequena', 'media', 'grande']
+    },
+    additionalBenefits: ['Redução custos gestão resíduos', 'Compliance ambiental']
+  },
+  {
+    id: 'measure-013',
+    category: 'residuos',
+    scope: 3,
+    name: 'Compostagem Industrial',
+    description: 'Sistema de compostagem para resíduos orgânicos',
+    emissionReduction: 6,
+    investment: 10000,
+    timeline: '3-6 meses',
+    priority: 'baixa',
+    interventionLevel: 'interventiva',
+    requiredInfrastructure: {
+      key: 'compostingFacilities',
+      minimumValue: 1,
+      reason: 'Necessária infraestrutura de compostagem no município'
+    },
+    applicableTo: {
+      sectors: ['Retalho', 'Serviços'],
+      minEmissions: 20
+    },
+    additionalBenefits: ['Produção de composto', 'Redução aterro']
+  },
+  
+  // === ÁGUA (Âmbito 3) ===
+  {
+    id: 'measure-014',
+    category: 'agua',
+    scope: 3,
+    name: 'Sistema de Reutilização de Água',
+    description: 'Tratamento e reutilização de águas cinzentas',
+    emissionReduction: 4,
+    investment: 25000,
+    timeline: '6-9 meses',
+    priority: 'baixa',
+    interventionLevel: 'interventiva',
+    requiredInfrastructure: {
+      key: 'waterReuseInfrastructure',
+      minimumValue: 1,
+      reason: 'Necessária infraestrutura municipal de apoio'
+    },
+    applicableTo: {
+      sectors: ['Indústria', 'Serviços'],
+      sizes: ['media', 'grande'],
+      minEmissions: 50
+    },
+    additionalBenefits: ['Redução custos água', 'Resiliência hídrica']
   }
 ];
 
@@ -158,7 +307,7 @@ export const mockMeasures: Measure[] = [
  * Filtra medidas aplicáveis a uma empresa específica
  */
 export function getApplicableMeasures(
-  supplier: Supplier,
+  supplier: { sector: string; companySize: string; totalEmissions: number },
   allMeasures: Measure[] = mockMeasures
 ): Measure[] {
   return allMeasures.filter(measure => {
@@ -172,7 +321,7 @@ export function getApplicableMeasures(
     // Filtro por dimensão
     if (measure.applicableTo.sizes && 
         measure.applicableTo.sizes.length > 0 &&
-        !measure.applicableTo.sizes.includes(supplier.companySize)) {
+        !measure.applicableTo.sizes.includes(supplier.companySize as any)) {
       return false;
     }
     
@@ -184,4 +333,44 @@ export function getApplicableMeasures(
     
     return true;
   });
+}
+
+/**
+ * Verifica se medida é recomendada com base em infraestrutura e fundos
+ */
+export function isMeasureRecommended(
+  measure: Measure,
+  infrastructure: Record<string, any> = cascaisInfrastructure,
+  fundingByCategory: { category: string; available: number }[] = []
+): { recommended: boolean; reason?: string } {
+  // Verificar infraestrutura
+  if (measure.requiredInfrastructure) {
+    const { key, minimumValue, reason } = measure.requiredInfrastructure;
+    const currentValue = infrastructure[key];
+    
+    if (currentValue === undefined) {
+      return { recommended: false, reason: `Infraestrutura não disponível: ${key}` };
+    }
+    
+    // Para booleanos
+    if (typeof currentValue === 'boolean') {
+      if (!currentValue && minimumValue > 0) {
+        return { recommended: false, reason };
+      }
+    } else if (currentValue < minimumValue) {
+      return { recommended: false, reason };
+    }
+  }
+  
+  // Verificar fundos
+  if (measure.requiredFunding) {
+    const { category, minimumAmount, reason } = measure.requiredFunding;
+    const availableFund = fundingByCategory.find(f => f.category === category);
+    
+    if (!availableFund || availableFund.available < minimumAmount) {
+      return { recommended: false, reason };
+    }
+  }
+  
+  return { recommended: true };
 }
