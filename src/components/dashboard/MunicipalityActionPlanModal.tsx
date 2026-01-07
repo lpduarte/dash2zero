@@ -696,13 +696,11 @@ export const MunicipalityActionPlanModal = ({
           {renderScopeColumn(3)}
         </div>
         
-        <Separator />
-        
         {/* Secção de Impacto - Layout conforme mockup com 3 áreas */}
-        <div className="bg-muted/30 rounded-lg overflow-hidden">
+        <div className="rounded-lg overflow-hidden border border-border mt-6">
           
           {/* ÁREA 1: Header (Título | Medidas) */}
-          <div className="flex border-b border-border/50">
+          <div className="flex border-b border-border">
             {/* Título - Esquerda */}
             <div className="flex-1 p-5 pr-6">
               <div className="flex items-center gap-3">
@@ -714,14 +712,14 @@ export const MunicipalityActionPlanModal = ({
             </div>
             
             {/* Medidas - Direita */}
-            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border/50">
+            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border">
               <p className="text-xs text-muted-foreground">Medidas</p>
               <p className="font-semibold text-xl">{selectedMeasures.length}</p>
             </div>
           </div>
           
           {/* ÁREA 2: Conteúdo Principal (Barras | Totais) */}
-          <div className="flex border-b border-border/50">
+          <div className="flex border-b border-border">
             {/* Barras - Esquerda */}
             <div className="flex-1 p-5 pr-6">
               <div className="space-y-3">
@@ -774,7 +772,7 @@ export const MunicipalityActionPlanModal = ({
             </div>
             
             {/* Totais - Direita */}
-            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border/50">
+            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border">
               <div className="space-y-4">
                 {/* Redução Estimada */}
                 <div>
@@ -806,7 +804,7 @@ export const MunicipalityActionPlanModal = ({
             </div>
             
             {/* Estado da Meta - Direita */}
-            <div className="w-48 shrink-0 p-4 pl-6 border-l border-border/50">
+            <div className="w-48 shrink-0 p-4 pl-6 border-l border-border">
               <div className={`flex items-center gap-2 ${reachedTarget ? 'text-green-600' : 'text-muted-foreground'}`}>
                 {reachedTarget ? (
                   <>
