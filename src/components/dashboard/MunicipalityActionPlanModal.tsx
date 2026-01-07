@@ -632,106 +632,100 @@ export const MunicipalityActionPlanModal = ({
         
         {/* Secção de Impacto */}
         <div className="bg-muted/30 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingDown className="h-4 w-4 text-primary" />
-            <h4 className="font-medium">Impacto das Medidas Selecionadas</h4>
+          {/* Header com Disclaimer como subtítulo */}
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-1">
+              <TrendingDown className="h-4 w-4 text-muted-foreground" />
+              <h4 className="font-medium text-lg">Impacto das Medidas Selecionadas</h4>
+            </div>
+            <div className="flex items-center gap-1.5 ml-6">
+              <Info className="h-3.5 w-3.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">
+                Estimativas baseadas em cenários típicos. Os resultados reais podem variar conforme a implementação.
+              </p>
+            </div>
           </div>
           
-          {/* Barras de intensidade */}
-          <div className="space-y-3 mb-4">
-            {/* Barra Atual */}
-            <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Esta Empresa (atual)</span>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-red-500 rounded-full transition-all"
-                    style={{ width: `${currentBarWidth}%` }}
-                  />
+          {/* Layout: Barras (2/3) + Totais (1/3) */}
+          <div className="flex gap-6">
+            {/* Coluna Barras - 2/3 */}
+            <div className="flex-1 space-y-3">
+              {/* Barra Atual */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm w-44 shrink-0">Esta Empresa (atual)</span>
+                <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-red-400 rounded-full w-full" />
                 </div>
-                <span className="text-xs font-medium w-28 text-right shrink-0">
+                <span className="text-sm font-semibold w-36 text-right">
                   {currentIntensity.toFixed(2)} kg CO₂e/€
                 </span>
               </div>
-            </div>
-            
-            {/* Barra Com Medidas (sempre visível para evitar salto) */}
-            <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Com medidas selecionadas</span>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div 
-                    className={`h-full rounded-full transition-all ${
-                      selectedMeasures.length > 0 
-                        ? (reachedTarget ? 'bg-green-500' : 'bg-amber-500')
-                        : 'bg-gray-400'
-                    }`}
-                    style={{ width: `${selectedMeasures.length > 0 ? newBarWidth : currentBarWidth}%` }}
-                  />
+              
+              {/* Barra Com Medidas */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm w-44 shrink-0">Com medidas selecionadas</span>
+                <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
+                  {selectedMeasures.length > 0 ? (
+                    <div 
+                      className={`h-full rounded-full transition-all ${reachedTarget ? 'bg-green-500' : 'bg-amber-400'}`}
+                      style={{ width: `${currentIntensity > 0 ? (newIntensity / currentIntensity) * 100 : 0}%` }}
+                    />
+                  ) : (
+                    <div className="h-full bg-gray-300 rounded-full w-full" />
+                  )}
                 </div>
-                <span className={`text-xs font-medium w-28 text-right shrink-0 ${
-                  selectedMeasures.length === 0 ? 'text-muted-foreground' : ''
-                }`}>
+                <span className={`text-sm w-36 text-right ${selectedMeasures.length > 0 ? (reachedTarget ? 'font-semibold text-green-600' : 'font-semibold') : 'text-muted-foreground'}`}>
                   {selectedMeasures.length > 0 
                     ? `${newIntensity.toFixed(2)} kg CO₂e/€`
                     : 'Selecione medidas'
                   }
                 </span>
               </div>
-            </div>
-            
-            {/* Barra Média Setor */}
-            <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Média do Setor</span>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              
+              {/* Barra Média Setor */}
+              <div className="flex items-center gap-4">
+                <span className="text-sm w-44 shrink-0">Média do Setor</span>
+                <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-green-500 rounded-full"
-                    style={{ width: `${avgBarWidth}%` }}
+                    className="h-full bg-green-400 rounded-full"
+                    style={{ width: `${currentIntensity > 0 ? (avgSectorIntensity / currentIntensity) * 100 : 0}%` }}
                   />
                 </div>
-                <span className="text-xs font-medium w-28 text-right shrink-0">
+                <span className="text-sm font-semibold w-36 text-right">
                   {avgSectorIntensity.toFixed(2)} kg CO₂e/€
                 </span>
               </div>
             </div>
-          </div>
-          
-          {/* Disclaimer */}
-          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg mb-4">
-            <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <p className="text-xs text-amber-700 dark:text-amber-300">
-              Estes valores são estimativas baseadas em cenários típicos. Os resultados reais podem variar conforme a implementação e condições específicas da empresa.
-            </p>
-          </div>
-          
-          {/* Resumo */}
-          <div className="flex items-center justify-between p-3 bg-background rounded-lg border">
-            <div className="flex items-center gap-6">
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">Medidas</p>
-                <p className="text-lg font-semibold">{selectedMeasures.length}</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">Redução Estimada</p>
-                <p className="text-lg font-semibold text-green-600 dark:text-green-400">
-                  -{totalReduction.toLocaleString('pt-PT')}t CO₂e ({reductionPct.toFixed(0)}%)
-                </p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">Investimento Total</p>
-                <p className="text-lg font-semibold">
-                  {totalInvestment.toLocaleString('pt-PT')}€
-                </p>
+            
+            {/* Coluna Totais - auto width */}
+            <div className="w-56 shrink-0 flex flex-col justify-center p-4 bg-white dark:bg-card rounded-lg border">
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-muted-foreground">Medidas</p>
+                  <p className="font-semibold text-lg">{selectedMeasures.length}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Redução Estimada</p>
+                  <p className={`font-semibold text-lg ${totalReduction > 0 ? 'text-green-600' : ''}`}>
+                    -{totalReduction.toLocaleString('pt-PT')}t CO₂e
+                    <span className="text-sm font-normal ml-1">({reductionPct.toFixed(0)}%)</span>
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Investimento Total</p>
+                  <p className="font-semibold text-lg">
+                    {totalInvestment.toLocaleString('pt-PT')}€
+                  </p>
+                </div>
+                
+                {reachedTarget && selectedMeasures.length > 0 && (
+                  <div className="flex items-center gap-2 pt-2 border-t">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-700 dark:text-green-400">Meta atingida!</span>
+                  </div>
+                )}
               </div>
             </div>
-            
-            {reachedTarget && selectedMeasures.length > 0 && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full">
-                <Leaf className="h-4 w-4" />
-                <span className="text-sm font-medium">Meta atingida!</span>
-              </div>
-            )}
           </div>
         </div>
       </div>
