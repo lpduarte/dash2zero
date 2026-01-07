@@ -25,7 +25,8 @@ import {
   Leaf,
   Clock,
   TrendingDown,
-  Info
+  Info,
+  Sparkles
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -34,7 +35,7 @@ import type { Measure, Scope } from '@/types/actionPlan';
 import { sectorLabels } from './SupplierLabel';
 import { mockMeasures, getApplicableMeasures, isMeasureRecommended } from '@/data/mockMeasures';
 import { cascaisInfrastructure } from '@/data/mockInfrastructure';
-import { getFundingByCategory } from '@/data/mockFunding';
+import { mockFunding, getFundingByCategory } from '@/data/mockFunding';
 
 interface MunicipalityActionPlanModalProps {
   supplier: Supplier | null;
@@ -81,7 +82,65 @@ export const MunicipalityActionPlanModal = ({
     onOpenChange(false);
   };
 
-  // Dimensão label helper
+  // Função para selecionar melhores medidas automaticamente
+  const selectBestMeasures = () => {
+    // Obter medidas aplicáveis
+    const applicableMeasures = getApplicableMeasures({
+      sector: supplier.sector,
+      companySize: supplier.companySize,
+      totalEmissions: supplier.totalEmissions
+    });
+    
+    // Preparar dados de fundos para validação
+    const fundingByCat = [
+      { category: 'energia', available: mockFunding.filter(f => f.currentlyOpen && f.applicableTo.measureCategories?.includes('energia')).reduce((sum, f) => sum + f.remainingBudget, 0) },
+      { category: 'mobilidade', available: mockFunding.filter(f => f.currentlyOpen && f.applicableTo.measureCategories?.includes('mobilidade')).reduce((sum, f) => sum + f.remainingBudget, 0) },
+      { category: 'residuos', available: mockFunding.filter(f => f.currentlyOpen && f.applicableTo.measureCategories?.includes('residuos')).reduce((sum, f) => sum + f.remainingBudget, 0) },
+      { category: 'agua', available: mockFunding.filter(f => f.currentlyOpen && f.applicableTo.measureCategories?.includes('agua')).reduce((sum, f) => sum + f.remainingBudget, 0) },
+    ];
+    
+    // Filtrar só medidas recomendadas
+    const recommendedMeasures = applicableMeasures.filter(m => {
+      const { recommended } = isMeasureRecommended(m, cascaisInfrastructure, fundingByCat);
+      return recommended;
+    });
+    
+    // Ordenar: Soft primeiro, depois por ROI (redução/investimento)
+    const sortedMeasures = [...recommendedMeasures].sort((a, b) => {
+      // Primeiro critério: Soft antes de Interventiva
+      if (a.interventionLevel !== b.interventionLevel) {
+        return a.interventionLevel === 'soft' ? -1 : 1;
+      }
+      // Segundo critério: Melhor ROI (maior redução por € investido)
+      const roiA = a.investment > 0 ? a.emissionReduction / a.investment : 0;
+      const roiB = b.investment > 0 ? b.emissionReduction / b.investment : 0;
+      return roiB - roiA;
+    });
+    
+    // Selecionar medidas até atingir meta
+    const currentIntensity = supplier.emissionsPerRevenue || 0;
+    let accumulatedReduction = 0;
+    const selectedIds: string[] = [];
+    
+    for (const measure of sortedMeasures) {
+      selectedIds.push(measure.id);
+      accumulatedReduction += measure.emissionReduction;
+      
+      // Calcular nova intensidade
+      const reductionRatio = supplier.totalEmissions > 0 
+        ? accumulatedReduction / supplier.totalEmissions 
+        : 0;
+      const newIntensity = currentIntensity * (1 - reductionRatio);
+      
+      // Parar se atingiu meta
+      if (newIntensity <= avgSectorIntensity) {
+        break;
+      }
+    }
+    
+    setSelectedMeasures(selectedIds);
+  };
+
   const getDimensionLabel = (size: string) => {
     const labels: Record<string, string> = {
       'micro': 'Micro',
@@ -613,12 +672,21 @@ export const MunicipalityActionPlanModal = ({
 
     return (
       <div className="space-y-6">
-        {/* Título */}
-        <div>
-          <h3 className="text-xl font-semibold mb-1">Seleção de Medidas</h3>
-          <p className="text-sm text-muted-foreground">
-            Selecione as medidas a recomendar à empresa. As medidas estão organizadas por âmbito de emissões.
-          </p>
+        {/* Header com botão Melhores Medidas */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-semibold text-2xl mb-1">Seleção de Medidas</h3>
+            <p className="text-sm text-muted-foreground">
+              Selecione medidas até a intensidade ficar abaixo da média do setor.
+            </p>
+          </div>
+          <button
+            onClick={selectBestMeasures}
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+          >
+            <Sparkles className="h-4 w-4" />
+            Melhores medidas
+          </button>
         </div>
         
         {/* Grid 3 colunas - Âmbitos */}
@@ -633,8 +701,8 @@ export const MunicipalityActionPlanModal = ({
         {/* Secção de Impacto */}
         <div className="bg-muted/30 rounded-lg p-4">
           {/* Header com Disclaimer como subtítulo */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-1">
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-0.5">
               <TrendingDown className="h-4 w-4 text-muted-foreground" />
               <h4 className="font-medium text-lg">Impacto das Medidas Selecionadas</h4>
             </div>
@@ -646,35 +714,35 @@ export const MunicipalityActionPlanModal = ({
             </div>
           </div>
           
-          {/* Layout: Barras (2/3) + Totais (1/3) */}
-          <div className="flex gap-6">
-            {/* Coluna Barras - 2/3 */}
-            <div className="flex-1 space-y-3">
+          {/* Layout: Barras + Totais lado a lado */}
+          <div className="flex gap-4 items-start">
+            {/* Coluna Barras */}
+            <div className="flex-1 space-y-2">
               {/* Barra Atual */}
-              <div className="flex items-center gap-4">
-                <span className="text-sm w-44 shrink-0">Esta Empresa (atual)</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm w-28 shrink-0">Atual</span>
                 <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div className="h-full bg-red-400 rounded-full w-full" />
                 </div>
-                <span className="text-sm font-semibold w-36 text-right">
+                <span className="text-sm font-semibold w-32 text-right">
                   {currentIntensity.toFixed(2)} kg CO₂e/€
                 </span>
               </div>
               
               {/* Barra Com Medidas */}
-              <div className="flex items-center gap-4">
-                <span className="text-sm w-44 shrink-0">Com medidas selecionadas</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm w-28 shrink-0">Com medidas</span>
                 <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
                   {selectedMeasures.length > 0 ? (
                     <div 
                       className={`h-full rounded-full transition-all ${reachedTarget ? 'bg-green-500' : 'bg-amber-400'}`}
-                      style={{ width: `${currentIntensity > 0 ? (newIntensity / currentIntensity) * 100 : 0}%` }}
+                      style={{ width: `${Math.max((newIntensity / currentIntensity) * 100, 5)}%` }}
                     />
                   ) : (
                     <div className="h-full bg-gray-300 rounded-full w-full" />
                   )}
                 </div>
-                <span className={`text-sm w-36 text-right ${selectedMeasures.length > 0 ? (reachedTarget ? 'font-semibold text-green-600' : 'font-semibold') : 'text-muted-foreground'}`}>
+                <span className={`text-sm w-32 text-right ${selectedMeasures.length > 0 ? (reachedTarget ? 'font-semibold text-green-600' : 'font-semibold') : 'text-muted-foreground'}`}>
                   {selectedMeasures.length > 0 
                     ? `${newIntensity.toFixed(2)} kg CO₂e/€`
                     : 'Selecione medidas'
@@ -683,22 +751,22 @@ export const MunicipalityActionPlanModal = ({
               </div>
               
               {/* Barra Média Setor */}
-              <div className="flex items-center gap-4">
-                <span className="text-sm w-44 shrink-0">Média do Setor</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm w-28 shrink-0">Média do setor</span>
                 <div className="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-green-400 rounded-full"
-                    style={{ width: `${currentIntensity > 0 ? (avgSectorIntensity / currentIntensity) * 100 : 0}%` }}
+                    style={{ width: `${(avgSectorIntensity / currentIntensity) * 100}%` }}
                   />
                 </div>
-                <span className="text-sm font-semibold w-36 text-right">
+                <span className="text-sm font-semibold w-32 text-right">
                   {avgSectorIntensity.toFixed(2)} kg CO₂e/€
                 </span>
               </div>
             </div>
             
-            {/* Coluna Totais - auto width */}
-            <div className="w-56 shrink-0 flex flex-col justify-center p-4 bg-white dark:bg-card rounded-lg border">
+            {/* Coluna Totais */}
+            <div className="w-48 shrink-0 p-4 bg-background rounded-lg border">
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-muted-foreground">Medidas</p>
@@ -718,12 +786,20 @@ export const MunicipalityActionPlanModal = ({
                   </p>
                 </div>
                 
-                {reachedTarget && selectedMeasures.length > 0 && (
-                  <div className="flex items-center gap-2 pt-2 border-t">
-                    <CheckCircle className="h-4 w-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-700 dark:text-green-400">Meta atingida!</span>
-                  </div>
-                )}
+                {/* Estado da Meta - SEMPRE VISÍVEL */}
+                <div className={`flex items-center gap-2 pt-3 border-t ${reachedTarget ? 'text-green-600' : 'text-muted-foreground'}`}>
+                  {reachedTarget ? (
+                    <>
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm font-medium">Meta atingida!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Target className="h-4 w-4" />
+                      <span className="text-sm">Meta não atingida</span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
