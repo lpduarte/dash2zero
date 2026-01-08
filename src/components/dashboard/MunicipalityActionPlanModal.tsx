@@ -863,18 +863,22 @@ export const MunicipalityActionPlanModal = ({
       .filter(f => selectedFunding.includes(f.fund.id) && f.eligible)
       .map(f => f.fund);
     
-    const totalCoverage = selectedFundingData.reduce((sum, fund) => {
+    // Soma bruta dos fundos selecionados
+    const rawCoverage = selectedFundingData.reduce((sum, fund) => {
       if (fund.percentage) {
-        // Calcular baseado na percentagem do investimento total
         const maxFromPercentage = totalInvestment * (fund.percentage / 100);
         return sum + Math.min(fund.maxAmount, maxFromPercentage);
       }
       return sum + fund.maxAmount;
     }, 0);
     
-    const coveragePercentage = totalInvestment > 0 
-      ? Math.min((totalCoverage / totalInvestment) * 100, 100) 
-      : 0;
+    // Cobertura limitada ao investimento total
+    const totalCoverage = Math.min(rawCoverage, totalInvestment);
+    const coveragePercent = totalInvestment > 0 ? (totalCoverage / totalInvestment) * 100 : 0;
+    
+    // Valor a cargo da empresa
+    const remaining = Math.max(0, totalInvestment - totalCoverage);
+    const remainingPercent = totalInvestment > 0 ? (remaining / totalInvestment) * 100 : 0;
     
     // Render card de fundo
     const renderFundingCard = (item: { fund: typeof mockFunding[0]; eligible: boolean; reason?: string }) => {
@@ -1005,24 +1009,11 @@ export const MunicipalityActionPlanModal = ({
       <div className="flex flex-col h-full">
         {/* Header do step - Fixo */}
         <div className="shrink-0 p-6 pb-4">
-          <div className="flex items-start justify-between">
-            <div>
-              <h3 className="font-semibold text-2xl mb-1">Financiamento Disponível</h3>
-              <p className="text-sm text-muted-foreground">
-                Fundos sugeridos de acordo com as medidas selecionadas. Selecione os que pretende incluir no plano.
-              </p>
-            </div>
-            
-            {/* Badge de cobertura */}
-            <div className="text-right shrink-0">
-              <p className="text-xs text-muted-foreground mb-1">Cobertura possível</p>
-              <p className="font-semibold text-lg">
-                {totalCoverage.toLocaleString('pt-PT')}€
-                <span className="text-sm font-normal text-muted-foreground ml-1">
-                  de {totalInvestment.toLocaleString('pt-PT')}€ ({coveragePercentage.toFixed(0)}%)
-                </span>
-              </p>
-            </div>
+          <div>
+            <h3 className="font-semibold text-2xl mb-1">Financiamento Disponível</h3>
+            <p className="text-sm text-muted-foreground">
+              Fundos sugeridos de acordo com as medidas selecionadas. Selecione os que pretende incluir no plano.
+            </p>
           </div>
           
           {/* Aviso se não há medidas selecionadas */}
@@ -1059,14 +1050,17 @@ export const MunicipalityActionPlanModal = ({
               <p className="font-semibold text-lg text-green-600 dark:text-green-400">
                 Até {totalCoverage.toLocaleString('pt-PT')}€
                 <span className="text-sm font-normal text-muted-foreground ml-1">
-                  ({coveragePercentage.toFixed(0)}% do investimento)
+                  ({coveragePercent.toFixed(0)}%)
                 </span>
               </p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-muted-foreground mb-1">Valor a Financiar</p>
-              <p className="font-semibold text-lg">
-                {Math.max(0, totalInvestment - totalCoverage).toLocaleString('pt-PT')}€
+              <p className="text-xs text-muted-foreground mb-1">A cargo da empresa</p>
+              <p className={`font-semibold text-lg ${remaining === 0 ? 'text-green-600 dark:text-green-400' : ''}`}>
+                {remaining.toLocaleString('pt-PT')}€
+                <span className="text-sm font-normal text-muted-foreground ml-1">
+                  ({remainingPercent.toFixed(0)}%)
+                </span>
               </p>
             </div>
           </div>
