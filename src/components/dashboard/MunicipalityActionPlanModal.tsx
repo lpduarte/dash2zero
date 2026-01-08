@@ -58,6 +58,43 @@ export const MunicipalityActionPlanModal = ({
   const handlePrevious = () => {
     if (currentStep > 1) setCurrentStep(currentStep - 1 as Step);
   };
+
+  // Determinar estado de cada step
+  const getStepState = (step: number): 'current' | 'completed' | 'pending' => {
+    // Verificar se há escolhas em cada step
+    const hasSelections: Record<number, boolean> = {
+      1: false, // Análise - não tem escolhas
+      2: selectedMeasures.length > 0,
+      3: selectedFunding.length > 0,
+      4: false, // Resumo - não tem escolhas
+    };
+
+    // Step actual
+    if (step === currentStep) return 'current';
+    
+    // Step anterior ao actual (já foi ultrapassado)
+    if (step < currentStep) return 'completed';
+    
+    // Step posterior mas com escolhas feitas
+    if (hasSelections[step]) return 'completed';
+    
+    // Step posterior sem escolhas
+    return 'pending';
+  };
+
+  // Verificar se step é clicável
+  const isStepClickable = (step: number): boolean => {
+    const state = getStepState(step);
+    return state === 'current' || state === 'completed';
+  };
+
+  // Navegar para step
+  const goToStep = (step: number) => {
+    if (isStepClickable(step)) {
+      setCurrentStep(step as Step);
+    }
+  };
+
   const handleClose = () => {
     setCurrentStep(1);
     setSelectedMeasures([]);
@@ -1162,36 +1199,70 @@ export const MunicipalityActionPlanModal = ({
         
         {/* Steps Indicator */}
         <div className="px-6 py-4 bg-muted/30 border-b shrink-0">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center gap-2">
             {stepConfig.map((step, idx) => {
-            const StepIcon = step.icon;
-            const isActive = currentStep >= step.number;
-            const isCurrent = currentStep === step.number;
-            return <div key={step.number} className="flex items-center">
-                  {/* Step circle */}
-                  <div className="flex flex-col items-center">
-                    <div className={`
-                      w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all
-                      ${isCurrent ? 'bg-primary text-primary-foreground border-primary' : isActive ? 'bg-primary/20 text-primary border-primary/50' : 'bg-muted text-muted-foreground border-muted-foreground/30'}
-                    `}>
+              const StepIcon = step.icon;
+              const state = getStepState(step.number);
+              const clickable = isStepClickable(step.number);
+              
+              return (
+                <div key={step.number} className="flex items-center">
+                  {/* Linha conectora (antes de cada step excepto o primeiro) */}
+                  {idx > 0 && (
+                    <div 
+                      className={`
+                        h-0.5 w-16 mx-2 transition-colors
+                        ${step.number <= currentStep || state === 'completed'
+                          ? 'bg-primary/40' 
+                          : 'bg-border'
+                        }
+                      `} 
+                    />
+                  )}
+                  
+                  {/* Step indicator */}
+                  <button
+                    onClick={() => goToStep(step.number)}
+                    disabled={!clickable}
+                    className={`
+                      flex flex-col items-center gap-2 transition-all
+                      ${clickable ? 'cursor-pointer' : 'cursor-not-allowed'}
+                    `}
+                  >
+                    {/* Círculo com ícone */}
+                    <div 
+                      className={`
+                        w-12 h-12 rounded-full flex items-center justify-center transition-all
+                        ${state === 'current' 
+                          ? 'bg-primary text-primary-foreground' 
+                          : state === 'completed'
+                            ? 'bg-primary/20 text-primary border-2 border-primary/30'
+                            : 'bg-background text-muted-foreground border-2 border-border'
+                        }
+                        ${clickable && state !== 'current' ? 'hover:border-primary/50 hover:bg-primary/10' : ''}
+                      `}
+                    >
                       <StepIcon className="h-5 w-5" />
                     </div>
                     
-                    {/* Step label */}
-                    <div className="mt-2 text-center">
-                      <p className={`text-xs font-medium ${isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
-                        {step.title}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  {/* Connector line */}
-                  {step.number < 4 && <div className={`
-                      w-24 h-0.5 mx-2 mt-[-20px]
-                      ${currentStep > step.number ? 'bg-primary' : 'bg-muted-foreground/30'}
-                    `} />}
-                </div>;
-          })}
+                    {/* Label */}
+                    <span 
+                      className={`
+                        text-sm font-medium transition-colors
+                        ${state === 'current' 
+                          ? 'text-primary' 
+                          : state === 'completed'
+                            ? 'text-primary/70'
+                            : 'text-muted-foreground'
+                        }
+                      `}
+                    >
+                      {step.title}
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
         
