@@ -616,7 +616,7 @@ export const MunicipalityActionPlanModal = ({
               <span className={`font-medium text-sm ${colors.text}`}>{scopeNames[scope]}</span>
               <span className={`text-sm ${colors.textSecondary}`}>({scopePcts[scope].toFixed(0)}%)</span>
             </div>
-            <span className={`px-2 py-0.5 rounded-full text-white text-xs font-medium ${colors.badge}`}>
+            <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${colors.badge}`}>
               {measures.length}
             </span>
           </div>
