@@ -167,7 +167,7 @@ const Overview = () => {
                 <BarChart3 className="h-5 w-5 text-primary" />
                 <h3 className="text-lg font-semibold text-card-foreground">
                   {isMunicipio 
-                    ? 'Emissões das Empresas Monitorizadas' 
+                    ? 'Emissões das empresas do município' 
                     : 'Visão Geral das Emissões'
                   }
                 </h3>
