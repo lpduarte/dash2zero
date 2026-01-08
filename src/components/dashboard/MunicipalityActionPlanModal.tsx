@@ -1441,11 +1441,11 @@ export const MunicipalityActionPlanModal = ({
               <div>
                 <h5 className="text-sm font-medium text-muted-foreground mb-3">Dados Base</h5>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-muted/50 rounded-lg">
+                  <div className="p-3 bg-muted/50 border border-border rounded-lg text-center">
                     <p className="text-xs text-muted-foreground mb-1">Faturação</p>
                     <p className="font-semibold text-lg">{supplier.revenue.toLocaleString('pt-PT')}€</p>
                   </div>
-                  <div className="p-3 bg-muted/50 rounded-lg">
+                  <div className="p-3 bg-muted/50 border border-border rounded-lg text-center">
                     <p className="text-xs text-muted-foreground mb-1">Emissões Totais</p>
                     <p className="font-semibold text-lg">{supplier.totalEmissions.toLocaleString('pt-PT')} t CO₂e</p>
                   </div>
@@ -1457,8 +1457,8 @@ export const MunicipalityActionPlanModal = ({
                 <h5 className="text-sm font-medium text-muted-foreground mb-3">Emissões por Âmbito</h5>
                 <div className="grid grid-cols-3 gap-4">
                   {/* Âmbito 1 - Violet */}
-                  <div className="p-3 bg-violet-50 dark:bg-violet-950/30 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
+                  <div className="p-3 bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800 rounded-lg text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
                       <div className="w-2 h-2 rounded-full bg-violet-500" />
                       <p className="text-xs text-violet-600 dark:text-violet-400">Âmbito 1 - Diretas</p>
                     </div>
@@ -1474,8 +1474,8 @@ export const MunicipalityActionPlanModal = ({
                   </div>
                   
                   {/* Âmbito 2 - Blue */}
-                  <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
+                  <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
                       <div className="w-2 h-2 rounded-full bg-blue-500" />
                       <p className="text-xs text-blue-600 dark:text-blue-400">Âmbito 2 - Energia</p>
                     </div>
@@ -1491,8 +1491,8 @@ export const MunicipalityActionPlanModal = ({
                   </div>
                   
                   {/* Âmbito 3 - Orange */}
-                  <div className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-lg">
-                    <div className="flex items-center gap-2 mb-1">
+                  <div className="p-3 bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 rounded-lg text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
                       <div className="w-2 h-2 rounded-full bg-orange-500" />
                       <p className="text-xs text-orange-600 dark:text-orange-400">Âmbito 3 - Indiretas</p>
                     </div>
@@ -1515,17 +1515,17 @@ export const MunicipalityActionPlanModal = ({
               <div>
                 <h5 className="text-sm font-medium text-muted-foreground mb-3">Intensidade de Carbono</h5>
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-lg text-center">
+                  <div className="p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-lg text-center">
                     <p className="text-xs text-red-600 dark:text-red-400 mb-1">Intensidade Actual</p>
                     <p className="font-semibold text-xl text-red-700 dark:text-red-300">{currentIntensity.toFixed(2)}</p>
                     <p className="text-xs text-red-600 dark:text-red-400">kg CO₂e/€</p>
                   </div>
-                  <div className={`p-4 rounded-lg text-center ${reachedTarget ? 'bg-green-50 dark:bg-green-950/30' : 'bg-amber-50 dark:bg-amber-950/30'}`}>
+                  <div className={`p-4 rounded-lg text-center border ${reachedTarget ? 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800' : 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800'}`}>
                     <p className={`text-xs mb-1 ${reachedTarget ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>Nova Intensidade</p>
                     <p className={`font-semibold text-xl ${reachedTarget ? 'text-green-700 dark:text-green-300' : 'text-amber-700 dark:text-amber-300'}`}>{newIntensity.toFixed(2)}</p>
                     <p className={`text-xs ${reachedTarget ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>kg CO₂e/€</p>
                   </div>
-                  <div className="p-4 bg-muted rounded-lg text-center">
+                  <div className="p-4 bg-muted border border-border rounded-lg text-center">
                     <p className="text-xs text-muted-foreground mb-1">Média do Setor</p>
                     <p className="font-semibold text-xl">{avgSectorIntensity.toFixed(2)}</p>
                     <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
@@ -1534,7 +1534,7 @@ export const MunicipalityActionPlanModal = ({
               </div>
               
               {/* Estado da Meta */}
-              <div className={`flex items-center gap-2 p-3 rounded-lg ${reachedTarget ? 'bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300' : 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300'}`}>
+              <div className={`flex items-center gap-2 p-3 rounded-lg border ${reachedTarget ? 'bg-green-50 dark:bg-green-950/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800' : 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800'}`}>
                 {reachedTarget ? (
                   <>
                     <CheckCircle className="h-5 w-5" />
@@ -1554,22 +1554,22 @@ export const MunicipalityActionPlanModal = ({
               <div>
                 <h5 className="text-sm font-medium text-muted-foreground mb-3">Impacto das Medidas</h5>
                 <div className="grid grid-cols-4 gap-4">
-                  <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg text-center">
+                  <div className="p-4 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg text-center">
                     <p className="text-xs text-green-600 dark:text-green-400 mb-1">Redução</p>
                     <p className="font-semibold text-xl text-green-700 dark:text-green-300">-{totalReduction.toLocaleString('pt-PT')}t</p>
                     <p className="text-xs text-green-600 dark:text-green-400">CO₂e ({reductionPercent.toFixed(0)}%)</p>
                   </div>
-                  <div className="p-4 bg-muted rounded-lg text-center">
+                  <div className="p-4 bg-muted border border-border rounded-lg text-center">
                     <p className="text-xs text-muted-foreground mb-1">Investimento</p>
                     <p className="font-semibold text-xl">{totalInvestment.toLocaleString('pt-PT')}€</p>
                     <p className="text-xs text-muted-foreground">Total</p>
                   </div>
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg text-center">
+                  <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-center">
                     <p className="text-xs text-blue-600 dark:text-blue-400 mb-1">Comparticipação</p>
                     <p className="font-semibold text-xl text-blue-700 dark:text-blue-300">{totalCoverage.toLocaleString('pt-PT')}€</p>
                     <p className="text-xs text-blue-600 dark:text-blue-400">Até {coveragePercent.toFixed(0)}%</p>
                   </div>
-                  <div className={`p-4 rounded-lg text-center ${remaining === 0 ? 'bg-green-50 dark:bg-green-950/30' : 'bg-amber-50 dark:bg-amber-950/30'}`}>
+                  <div className={`p-4 rounded-lg text-center border ${remaining === 0 ? 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800' : 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800'}`}>
                     <p className={`text-xs mb-1 ${remaining === 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>A cargo da empresa</p>
                     <p className={`font-semibold text-xl ${remaining === 0 ? 'text-green-700 dark:text-green-300' : 'text-amber-700 dark:text-amber-300'}`}>{remaining.toLocaleString('pt-PT')}€</p>
                     <p className={`text-xs ${remaining === 0 ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`}>{(100 - coveragePercent).toFixed(0)}%</p>
@@ -1686,46 +1686,48 @@ export const MunicipalityActionPlanModal = ({
         </div>
         
         {/* Footer - Fixo (IGUAL AOS OUTROS STEPS) */}
-        <div className="shrink-0 flex items-center justify-between p-4 border-t bg-background">
-          {/* Esquerda - Botão Anterior */}
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep(3)}
-            className="gap-2"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Anterior
-          </Button>
-          
-          {/* Centro - Indicador de passo */}
-          <span className="text-sm text-muted-foreground">
-            Passo 4 de 4
-          </span>
-          
-          {/* Direita - Acções */}
-          <div className="flex items-center gap-2">
+        <div className="shrink-0 p-4 border-t bg-background">
+          <div className="relative flex items-center justify-between">
+            {/* Esquerda - Botão Anterior */}
             <Button
               variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
-              Fechar
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {/* TODO: Implementar envio email */}}
+              onClick={() => setCurrentStep(3)}
               className="gap-2"
             >
-              <Mail className="h-4 w-4" />
-              Enviar Email
+              <ChevronLeft className="h-4 w-4" />
+              Anterior
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => {/* TODO: Implementar exportação PDF */}}
-              className="gap-2"
-            >
-              <Download className="h-4 w-4" />
-              Exportar PDF
-            </Button>
+            
+            {/* Centro - Indicador de passo (posicionamento absoluto) */}
+            <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+              Passo 4 de 4
+            </span>
+            
+            {/* Direita - Acções */}
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
+                Fechar
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {/* TODO: Implementar envio email */}}
+                className="gap-2"
+              >
+                <Mail className="h-4 w-4" />
+                Enviar Email
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {/* TODO: Implementar exportação PDF */}}
+                className="gap-2"
+              >
+                <Download className="h-4 w-4" />
+                Exportar PDF
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -1875,35 +1877,36 @@ export const MunicipalityActionPlanModal = ({
         
         {/* Footer Navigation - Escondido no Step 4 (tem footer próprio) */}
         {currentStep !== 4 && (
-          <div className="p-4 border-t flex items-center justify-between shrink-0 bg-background rounded-b-lg">
-            <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1} className="gap-2">
-              <ChevronLeft className="h-4 w-4" />
-              Anterior
-            </Button>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">
-                Passo {currentStep} de 4
-              </span>
-            </div>
-            
-            <div className="relative group">
-              <Button 
-                onClick={handleNext} 
-                disabled={currentStep === 2 && selectedMeasures.length === 0} 
-                className="gap-2"
-              >
-                Próximo
-                <ChevronRight className="h-4 w-4" />
+          <div className="p-4 border-t shrink-0 bg-background rounded-b-lg">
+            <div className="relative flex items-center justify-between">
+              <Button variant="outline" onClick={handlePrevious} disabled={currentStep === 1} className="gap-2">
+                <ChevronLeft className="h-4 w-4" />
+                Anterior
               </Button>
               
-              {/* Tooltip quando disabled no Step 2 - posicionado à direita para evitar clipping */}
-              {currentStep === 2 && selectedMeasures.length === 0 && (
-                <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                  Selecione pelo menos uma medida
-                  <div className="absolute top-full right-4 border-4 border-transparent border-t-gray-900" />
-                </div>
-              )}
+              {/* Centro - Indicador de passo (posicionamento absoluto) */}
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                Passo {currentStep} de 4
+              </span>
+              
+              <div className="relative group">
+                <Button 
+                  onClick={handleNext} 
+                  disabled={currentStep === 2 && selectedMeasures.length === 0} 
+                  className="gap-2"
+                >
+                  Próximo
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+                
+                {/* Tooltip quando disabled no Step 2 - posicionado à direita para evitar clipping */}
+                {currentStep === 2 && selectedMeasures.length === 0 && (
+                  <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap z-50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Selecione pelo menos uma medida
+                    <div className="absolute top-full right-4 border-4 border-transparent border-t-gray-900" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
