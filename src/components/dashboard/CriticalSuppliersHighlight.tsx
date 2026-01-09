@@ -17,10 +17,8 @@ import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { calculateSuppliersRisk, SupplierRisk } from "@/lib/riskAnalysis";
 
-
 // Tipos para estado do plano
 type PlanStatus = 'sem_plano' | 'em_preparacao' | 'plano_pronto' | 'enviado';
-
 interface PlanData {
   selectedMeasures: string[];
   selectedFunding: string[];
@@ -49,15 +47,12 @@ const getPlanStatus = (planData: PlanData | null): PlanStatus => {
   if (!planData || !planData.selectedMeasures || planData.selectedMeasures.length === 0) {
     return 'sem_plano';
   }
-  
   if (planData.emailSent) {
     return 'enviado';
   }
-  
   if (planData.completedStep4) {
     return 'plano_pronto';
   }
-  
   return 'em_preparacao';
 };
 
@@ -69,7 +64,7 @@ const statusConfig = {
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
     icon: XCircle,
-    targetStep: 1,
+    targetStep: 1
   },
   em_preparacao: {
     label: 'Em preparação',
@@ -77,7 +72,7 @@ const statusConfig = {
     bgColor: 'bg-amber-50',
     borderColor: 'border-amber-200',
     icon: Clock,
-    targetStep: 2,
+    targetStep: 2
   },
   plano_pronto: {
     label: 'Plano pronto',
@@ -85,7 +80,7 @@ const statusConfig = {
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
     icon: CheckCircle,
-    targetStep: 4,
+    targetStep: 4
   },
   enviado: {
     label: 'Enviado',
@@ -93,60 +88,64 @@ const statusConfig = {
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-200',
     icon: Mail,
-    targetStep: 4,
-  },
+    targetStep: 4
+  }
 };
 
 // Helper unificado para risco e comparação
-const getRiskInfo = (intensity: number, avgSector: number): { 
-  level: string; 
-  color: string; 
+const getRiskInfo = (intensity: number, avgSector: number): {
+  level: string;
+  color: string;
   percentAbove: number;
   comparisonText: string;
   isAbove: boolean;
 } => {
   if (avgSector === 0) {
-    return { level: 'N/A', color: 'text-muted-foreground', percentAbove: 0, comparisonText: '', isAbove: false };
+    return {
+      level: 'N/A',
+      color: 'text-muted-foreground',
+      percentAbove: 0,
+      comparisonText: '',
+      isAbove: false
+    };
   }
-  
-  const percentAbove = ((intensity - avgSector) / avgSector) * 100;
-  
+  const percentAbove = (intensity - avgSector) / avgSector * 100;
   if (percentAbove >= 100) {
-    return { 
-      level: 'Crítico', 
-      color: 'text-red-600', 
+    return {
+      level: 'Crítico',
+      color: 'text-red-600',
       percentAbove,
       comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true,
+      isAbove: true
     };
   }
   if (percentAbove >= 50) {
-    return { 
-      level: 'Alto', 
-      color: 'text-red-600', 
+    return {
+      level: 'Alto',
+      color: 'text-red-600',
       percentAbove,
       comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true,
+      isAbove: true
     };
   }
   if (percentAbove > 0) {
-    return { 
-      level: 'Médio', 
-      color: 'text-amber-600', 
+    return {
+      level: 'Médio',
+      color: 'text-amber-600',
       percentAbove,
       comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true,
+      isAbove: true
     };
   }
-  
+
   // Abaixo da média
   const percentBelow = Math.abs(percentAbove);
-  return { 
-    level: 'Baixo', 
-    color: 'text-green-600', 
+  return {
+    level: 'Baixo',
+    color: 'text-green-600',
     percentAbove,
     comparisonText: percentBelow < 1 ? 'na média' : `${Math.round(percentBelow)}% abaixo da média`,
-    isAbove: false,
+    isAbove: false
   };
 };
 
@@ -158,61 +157,59 @@ const getActionButton = (status: PlanStatus, planData: PlanData | null) => {
         label: 'Criar plano',
         icon: Plus,
         variant: 'default' as const,
-        targetStep: 1,
+        targetStep: 1
       };
     case 'em_preparacao':
       return {
         label: 'Continuar',
         icon: ArrowRight,
         variant: 'outline' as const,
-        targetStep: planData?.lastStep || 2,
+        targetStep: planData?.lastStep || 2
       };
     case 'plano_pronto':
       return {
         label: 'Ver plano',
         icon: Eye,
         variant: 'outline' as const,
-        targetStep: 4,
+        targetStep: 4
       };
     case 'enviado':
       return {
         label: 'Ver plano',
         icon: Eye,
         variant: 'outline' as const,
-        targetStep: 4,
+        targetStep: 4
       };
   }
 };
-
 interface CriticalSuppliersHighlightProps {
   suppliers: Supplier[];
   allSuppliers?: Supplier[];
 }
-
 type SortField = 'risk' | 'emissions' | 'name' | 'sector';
 type SortOrder = 'asc' | 'desc';
-
 export const CriticalSuppliersHighlight = ({
   suppliers,
   allSuppliers
 }: CriticalSuppliersHighlightProps) => {
-  const { userType } = useUser();
+  const {
+    userType
+  } = useUser();
   const isMunicipio = userType === 'municipio';
-  
+
   // Top 5 para ambos os tipos
   const limit = 5;
-  
   const [selectedSector, setSelectedSector] = useState<string>("all");
   const [isOpen, setIsOpen] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [actionPlanOpen, setActionPlanOpen] = useState(false);
   const [selectedCriticalSupplier, setSelectedCriticalSupplier] = useState<Supplier | null>(null);
   const [selectedAlternative, setSelectedAlternative] = useState<Supplier | null>(null);
-  
+
   // Estado de ordenação para municípios
   const [sortField, setSortField] = useState<SortField>('risk');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  
+
   // Estado para modal de plano de ação do município
   const [municipalityPlanOpen, setMunicipalityPlanOpen] = useState(false);
   const [selectedMunicipalitySupplier, setSelectedMunicipalitySupplier] = useState<{
@@ -221,16 +218,15 @@ export const CriticalSuppliersHighlight = ({
     riskMultiplier: number;
     avgSectorIntensity: number;
   } | null>(null);
-  
+
   // Estado para wizard de planos em massa
   const [bulkWizardOpen, setBulkWizardOpen] = useState(false);
-  
+
   // Calcular média do setor para passar ao wizard
   const avgSectorIntensity = useMemo(() => {
     const total = suppliers.reduce((sum, s) => sum + s.emissionsPerRevenue, 0);
     return suppliers.length > 0 ? total / suppliers.length : 0;
   }, [suppliers]);
-  
   const filteredSuppliers = selectedSector === "all" ? suppliers : suppliers.filter(s => s.sector === selectedSector);
   const avgEmissions = filteredSuppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / filteredSuppliers.length;
 
@@ -247,10 +243,8 @@ export const CriticalSuppliersHighlight = ({
   // Ordenação para municípios
   const sortedMunicipioSuppliers = useMemo(() => {
     if (!isMunicipio) return [];
-    
     const sorted = [...suppliersWithRisk].sort((a, b) => {
       let comparison = 0;
-      
       switch (sortField) {
         case 'risk':
           comparison = a.riskMultiplier - b.riskMultiplier;
@@ -265,10 +259,8 @@ export const CriticalSuppliersHighlight = ({
           comparison = a.supplier.sector.localeCompare(b.supplier.sector, 'pt-PT');
           break;
       }
-      
       return sortOrder === 'desc' ? -comparison : comparison;
     });
-    
     return sorted.slice(0, limit);
   }, [suppliersWithRisk, sortField, sortOrder, limit, isMunicipio]);
 
@@ -295,18 +287,14 @@ export const CriticalSuppliersHighlight = ({
       medio: 'default',
       normal: 'secondary'
     } as const;
-    
     const labels = {
       alto: 'Alto',
       medio: 'Médio',
       normal: 'Normal'
     };
-    
-    return (
-      <Badge variant={variants[riskLevel]} className="text-xs font-semibold">
+    return <Badge variant={variants[riskLevel]} className="text-xs font-semibold">
         {multiplier.toFixed(1)}x média
-      </Badge>
-    );
+      </Badge>;
   };
 
   // Calculate sector averages for FE comparison
@@ -346,17 +334,13 @@ export const CriticalSuppliersHighlight = ({
 
   // Get all alternatives for a supplier (for manual selection in modal)
   const getAllAlternatives = (criticalSupplier: Supplier) => {
-    return suppliers
-      .filter(s => s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions)
-      .sort((a, b) => a.totalEmissions - b.totalEmissions);
+    return suppliers.filter(s => s.id !== criticalSupplier.id && s.totalEmissions < criticalSupplier.totalEmissions).sort((a, b) => a.totalEmissions - b.totalEmissions);
   };
-
   const handleOpenModal = (supplier: Supplier, alternative: Supplier | null) => {
     setSelectedCriticalSupplier(supplier);
     setSelectedAlternative(alternative);
     setModalOpen(true);
   };
-
   const uniqueSectors = [...new Set(suppliers.map(s => s.sector))];
   const sectorCounts = suppliers.reduce((acc, s) => {
     acc[s.sector] = (acc[s.sector] || 0) + 1;
@@ -373,89 +357,53 @@ export const CriticalSuppliersHighlight = ({
     };
     return labels[size] || size;
   };
-
-  return (
-    <>
+  return <>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <Card className={cn(
-          "bg-gradient-to-br",
-          isMunicipio 
-            ? "border-primary/50 from-primary/10 via-primary/5 to-accent/10" 
-            : "border-danger/50 from-danger/10 via-warning/5 to-accent/10"
-        )}>
+        <Card className={cn("bg-gradient-to-br", isMunicipio ? "border-primary/50 from-primary/10 via-primary/5 to-accent/10" : "border-danger/50 from-danger/10 via-warning/5 to-accent/10")}>
           <CardHeader className={isOpen ? "pb-3" : "pb-6"}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-muted">
-                  {isMunicipio ? (
-                    <Target className="h-5 w-5 text-muted-foreground" />
-                  ) : (
-                    <AlertTriangle className="h-5 w-5 text-danger" />
-                  )}
+                  {isMunicipio ? <Target className="h-5 w-5 text-muted-foreground" /> : <AlertTriangle className="h-5 w-5 text-danger" />}
                 </div>
                 <div>
                   <CardTitle className="flex items-center gap-2 text-lg font-semibold">
-                    {isMunicipio 
-                      ? 'Empresas a Monitorizar'
-                      : 'Empresas críticas e alternativas'
-                    }
+                    {isMunicipio ? 'Empresas a Monitorizar' : 'Empresas críticas e alternativas'}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    {isMunicipio 
-                      ? 'Acompanhamento de planos de descarbonização'
-                      : 'Parceiros com maior impacto ambiental na supply chain'
-                    }
+                    {isMunicipio ? 'Acompanhamento de planos de descarbonização' : 'Parceiros com maior impacto ambiental na supply chain'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {isMunicipio && (
-                  <>
+                {isMunicipio && <>
                     {/* Botão Reset (temporário para demos) */}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground"
-                      onClick={() => {
-                        // Encontrar todas as keys de planos no localStorage
-                        const keysToRemove: string[] = [];
-                        for (let i = 0; i < localStorage.length; i++) {
-                          const key = localStorage.key(i);
-                          if (key && key.startsWith('actionPlan_')) {
-                            keysToRemove.push(key);
-                          }
-                        }
-                        // Remover todas
-                        keysToRemove.forEach(key => localStorage.removeItem(key));
-                        // Forçar refresh
-                        window.location.reload();
-                      }}
-                      title="Limpar todos os planos"
-                    >
+                    <Button variant="ghost" size="sm" className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground" onClick={() => {
+                  // Encontrar todas as keys de planos no localStorage
+                  const keysToRemove: string[] = [];
+                  for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('actionPlan_')) {
+                      keysToRemove.push(key);
+                    }
+                  }
+                  // Remover todas
+                  keysToRemove.forEach(key => localStorage.removeItem(key));
+                  // Forçar refresh
+                  window.location.reload();
+                }} title="Limpar todos os planos">
                       <RotateCcw className="h-4 w-4" />
                     </Button>
                     
-                    <Button 
-                      size="sm" 
-                      className="gap-2"
-                      onClick={() => setBulkWizardOpen(true)}
-                    >
+                    <Button size="sm" className="gap-2" onClick={() => setBulkWizardOpen(true)}>
                       <Rocket className="h-4 w-4" />
                       Gerar planos em massa
                     </Button>
-                  </>
-                )}
-                {!isMunicipio && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="gap-2"
-                    onClick={() => setActionPlanOpen(true)}
-                  >
+                  </>}
+                {!isMunicipio && <Button variant="outline" size="sm" className="gap-2" onClick={() => setActionPlanOpen(true)}>
                     <FileText className="h-4 w-4" />
                     Gerar plano de ação
-                  </Button>
-                )}
+                  </Button>}
                 <Select value={selectedSector} onValueChange={setSelectedSector}>
                   <SelectTrigger className="w-[280px]">
                     <SelectValue placeholder="Filtrar por atividade" />
@@ -467,14 +415,12 @@ export const CriticalSuppliersHighlight = ({
                         <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                       </div>
                     </SelectItem>
-                    {uniqueSectors.map(sector => (
-                      <SelectItem key={sector} value={sector}>
+                    {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
                         <div className="flex items-center justify-between w-[230px]">
                           <span>{sectorLabels[sector] || sector}</span>
                           <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
                         </div>
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
                 </Select>
                 <CollapsibleTrigger asChild>
@@ -488,17 +434,13 @@ export const CriticalSuppliersHighlight = ({
           <CollapsibleContent>
             <CardContent>
               {/* Vista de tabela para municípios - REESTRUTURADA */}
-              {isMunicipio && (
-                <div className="space-y-4">
+              {isMunicipio && <div className="space-y-4">
                   <div className="overflow-x-auto rounded-lg border border-border">
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-muted/50">
                           <TableHead>
-                            <button 
-                              onClick={() => handleSort('name')}
-                              className="flex items-center gap-1 hover:text-primary transition-colors"
-                            >
+                            <button onClick={() => handleSort('name')} className="flex items-center gap-1 hover:text-primary transition-colors">
                               Empresa
                               <ArrowUpDown className="h-3 w-3" />
                             </button>
@@ -507,10 +449,7 @@ export const CriticalSuppliersHighlight = ({
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <button 
-                                    onClick={() => handleSort('risk')}
-                                    className="flex items-center gap-1 hover:text-primary transition-colors"
-                                  >
+                                  <button onClick={() => handleSort('risk')} className="flex items-center gap-1 hover:text-primary transition-colors">
                                     Intensidade
                                     <Info className="h-3 w-3" />
                                     <ArrowUpDown className="h-3 w-3" />
@@ -536,19 +475,17 @@ export const CriticalSuppliersHighlight = ({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {sortedMunicipioSuppliers.map((item) => {
-                          const planData = getPlanData(item.supplier.id);
-                          const status = getPlanStatus(planData);
-                          const config = statusConfig[status];
-                          const StatusIcon = config.icon;
-                          const measuresCount = planData?.selectedMeasures?.length || 0;
-                          const fundingCount = planData?.selectedFunding?.length || 0;
-                          const riskInfo = getRiskInfo(item.supplier.emissionsPerRevenue, item.avgSectorIntensity);
-                          const showTarget = status === 'plano_pronto' || status === 'enviado';
-                          const targetReached = planData?.reachedTarget;
-                          
-                          return (
-                            <TableRow key={item.supplier.id} className="hover:bg-primary/5">
+                        {sortedMunicipioSuppliers.map(item => {
+                      const planData = getPlanData(item.supplier.id);
+                      const status = getPlanStatus(planData);
+                      const config = statusConfig[status];
+                      const StatusIcon = config.icon;
+                      const measuresCount = planData?.selectedMeasures?.length || 0;
+                      const fundingCount = planData?.selectedFunding?.length || 0;
+                      const riskInfo = getRiskInfo(item.supplier.emissionsPerRevenue, item.avgSectorIntensity);
+                      const showTarget = status === 'plano_pronto' || status === 'enviado';
+                      const targetReached = planData?.reachedTarget;
+                      return <TableRow key={item.supplier.id} className="hover:bg-primary/5">
                               {/* Coluna Empresa */}
                               <TableCell className="font-medium">
                                 {item.supplier.name}
@@ -560,128 +497,89 @@ export const CriticalSuppliersHighlight = ({
                                   <div className="flex items-center gap-2">
                                     <span className="font-medium">{item.supplier.emissionsPerRevenue.toFixed(2)}</span>
                                     <span className="text-xs text-muted-foreground">kg CO₂e/€</span>
-                                    {riskInfo.isAbove ? (
-                                      <TrendingUp className="h-3 w-3 text-red-500" />
-                                    ) : (
-                                      <TrendingDown className="h-3 w-3 text-green-500" />
-                                    )}
+                                    {riskInfo.isAbove ? <TrendingUp className="h-3 w-3 text-red-500" /> : <TrendingDown className="h-3 w-3 text-green-500" />}
                                   </div>
                                   <div className="flex items-center gap-1.5 text-xs">
                                     <span className={riskInfo.color}>Risco {riskInfo.level}</span>
-                                    {riskInfo.comparisonText && (
-                                      <>
+                                    {riskInfo.comparisonText && <>
                                         <span className="text-muted-foreground">·</span>
                                         <span className={riskInfo.color}>{riskInfo.comparisonText}</span>
-                                      </>
-                                    )}
+                                      </>}
                                   </div>
                                 </div>
                               </TableCell>
                               
                               {/* Coluna Estado */}
                               <TableCell>
-                                <button
-                                  onClick={() => {
-                                    setSelectedMunicipalitySupplier({
-                                      supplier: item.supplier,
-                                      riskLevel: item.riskLevel,
-                                      riskMultiplier: item.riskMultiplier,
-                                      avgSectorIntensity: item.avgSectorIntensity
-                                    });
-                                    setMunicipalityPlanOpen(true);
-                                  }}
-                                  className={cn(
-                                    "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
-                                    config.bgColor, config.color, config.borderColor,
-                                    "border hover:opacity-80 transition-opacity cursor-pointer"
-                                  )}
-                                >
+                                <button onClick={() => {
+                            setSelectedMunicipalitySupplier({
+                              supplier: item.supplier,
+                              riskLevel: item.riskLevel,
+                              riskMultiplier: item.riskMultiplier,
+                              avgSectorIntensity: item.avgSectorIntensity
+                            });
+                            setMunicipalityPlanOpen(true);
+                          }} className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium", config.bgColor, config.color, config.borderColor, "border hover:opacity-80 transition-opacity cursor-pointer")}>
                                   <StatusIcon className="h-3 w-3" />
                                   <span>{config.label}</span>
-                                  {showTarget && (
-                                    <span className={targetReached ? 'text-green-600' : 'text-amber-600'}>
+                                  {showTarget && <span className={targetReached ? 'text-green-600' : 'text-amber-600'}>
                                       {targetReached ? '✓' : '✗'}
-                                    </span>
-                                  )}
+                                    </span>}
                                 </button>
                               </TableCell>
                               
                               {/* Coluna Medidas/Fundos */}
                               <TableCell>
-                                {measuresCount === 0 && fundingCount === 0 ? (
-                                  <span className="text-muted-foreground">—</span>
-                                ) : (
-                                  <div className="flex items-center gap-1 text-sm">
-                                    {measuresCount > 0 ? (
-                                      <span className="text-foreground">{measuresCount} medida{measuresCount !== 1 ? 's' : ''}</span>
-                                    ) : (
-                                      <span className="text-muted-foreground">—</span>
-                                    )}
+                                {measuresCount === 0 && fundingCount === 0 ? <span className="text-muted-foreground">—</span> : <div className="flex items-center gap-1 text-sm">
+                                    {measuresCount > 0 ? <span className="text-foreground">{measuresCount} medida{measuresCount !== 1 ? 's' : ''}</span> : <span className="text-muted-foreground">—</span>}
                                     <span className="text-muted-foreground">·</span>
-                                    {fundingCount > 0 ? (
-                                      <span className="text-foreground">{fundingCount} fundo{fundingCount !== 1 ? 's' : ''}</span>
-                                    ) : (
-                                      <span className="text-muted-foreground">—</span>
-                                    )}
-                                  </div>
-                                )}
+                                    {fundingCount > 0 ? <span className="text-foreground">{fundingCount} fundo{fundingCount !== 1 ? 's' : ''}</span> : <span className="text-muted-foreground">—</span>}
+                                  </div>}
                               </TableCell>
                               
                               {/* Coluna Ação */}
                               <TableCell className="text-center">
                                 {(() => {
-                                  const action = getActionButton(status, planData);
-                                  const ActionIcon = action.icon;
-                                  
-                                  return (
-                                    <Button
-                                      size="sm"
-                                      variant={action.variant}
-                                      onClick={() => {
-                                        setSelectedMunicipalitySupplier({
-                                          supplier: item.supplier,
-                                          riskLevel: item.riskLevel,
-                                          riskMultiplier: item.riskMultiplier,
-                                          avgSectorIntensity: item.avgSectorIntensity
-                                        });
-                                        setMunicipalityPlanOpen(true);
-                                      }}
-                                      className="gap-1.5"
-                                    >
+                            const action = getActionButton(status, planData);
+                            const ActionIcon = action.icon;
+                            return <Button size="sm" variant={action.variant} onClick={() => {
+                              setSelectedMunicipalitySupplier({
+                                supplier: item.supplier,
+                                riskLevel: item.riskLevel,
+                                riskMultiplier: item.riskMultiplier,
+                                avgSectorIntensity: item.avgSectorIntensity
+                              });
+                              setMunicipalityPlanOpen(true);
+                            }} className="gap-1.5">
                                       <ActionIcon className="h-4 w-4" />
                                       {action.label}
-                                    </Button>
-                                  );
-                                })()}
+                                    </Button>;
+                          })()}
                               </TableCell>
-                            </TableRow>
-                          );
-                        })}
+                            </TableRow>;
+                    })}
                       </TableBody>
                     </Table>
                   </div>
                   
-                </div>
-              )}
+                </div>}
               
               {/* Nota abaixo da tabela - mesmo estilo do card da tabela */}
               <div className="p-4 border rounded-lg mt-4">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Nota:</strong> Empresas acima da média do setor têm maior impacto nas emissões municipais e representam maior potencial de redução. Priorizá-las acelera o cumprimento das metas de descarbonização.
+                   Empresas acima da média do setor têm maior impacto nas emissões municipais e representam maior potencial de redução. Priorizá-las acelera o cumprimento das metas de descarbonização.
                 </p>
               </div>
 
               {/* Vista original para empresas */}
-              {!isMunicipio && (
-                <div className="space-y-3">
+              {!isMunicipio && <div className="space-y-3">
                   {criticalSuppliers.map((supplier, index) => {
-                    const alternative = findBestAlternative(supplier);
-                    const emissionsSavings = alternative ? supplier.totalEmissions - alternative.totalEmissions : 0;
-                    const savingsPercentage = alternative ? (emissionsSavings / supplier.totalEmissions * 100).toFixed(0) : 0;
-                    const sectorAvgFE = getSectorAvgFE(supplier.sector);
-                    const feDiff = (supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100;
-                    return (
-                      <div key={supplier.id} className="p-4 border rounded-lg bg-card border-danger/30 hover:bg-danger/5 transition-colors">
+                const alternative = findBestAlternative(supplier);
+                const emissionsSavings = alternative ? supplier.totalEmissions - alternative.totalEmissions : 0;
+                const savingsPercentage = alternative ? (emissionsSavings / supplier.totalEmissions * 100).toFixed(0) : 0;
+                const sectorAvgFE = getSectorAvgFE(supplier.sector);
+                const feDiff = (supplier.emissionsPerRevenue - sectorAvgFE) / sectorAvgFE * 100;
+                return <div key={supplier.id} className="p-4 border rounded-lg bg-card border-danger/30 hover:bg-danger/5 transition-colors">
                         <div className="flex items-center gap-4">
                           <Badge className="w-8 h-8 flex items-center justify-center text-sm font-bold shrink-0 bg-danger">
                             {index + 1}
@@ -727,8 +625,7 @@ export const CriticalSuppliersHighlight = ({
                           </div>
 
                           {/* Arrow separator with transition indicator */}
-                          {alternative && (
-                            <>
+                          {alternative && <>
                               <div className="flex flex-col items-center shrink-0 px-3">
                                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-danger/20 to-success/20 flex items-center justify-center">
                                   <ArrowRight className="h-4 w-4 text-success" />
@@ -753,11 +650,9 @@ export const CriticalSuppliersHighlight = ({
                                   </div>
                                 </div>
                               </div>
-                            </>
-                          )}
+                            </>}
 
-                          {!alternative && (
-                            <>
+                          {!alternative && <>
                               <div className="flex flex-col items-center shrink-0 px-3">
                                 <div className="w-8 h-8 rounded-full bg-muted/30 flex items-center justify-center">
                                   <ArrowRight className="h-4 w-4 text-muted-foreground/50" />
@@ -792,62 +687,28 @@ export const CriticalSuppliersHighlight = ({
                                   </TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
-                            </>
-                          )}
+                            </>}
 
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="shrink-0" 
-                            onClick={() => handleOpenModal(supplier, alternative)}
-                            disabled={!alternative}
-                          >
+                          <Button size="sm" variant="outline" className="shrink-0" onClick={() => handleOpenModal(supplier, alternative)} disabled={!alternative}>
                             <ArrowRight className="h-4 w-4" />
                           </Button>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                      </div>;
+              })}
+                </div>}
             </CardContent>
           </CollapsibleContent>
         </Card>
       </Collapsible>
 
-      {selectedCriticalSupplier && (
-        <SupplierSwitchModal
-          open={modalOpen}
-          onOpenChange={setModalOpen}
-          criticalSupplier={selectedCriticalSupplier}
-          suggestedAlternative={selectedAlternative}
-          allAlternatives={getAllAlternatives(selectedCriticalSupplier)}
-        />
-      )}
+      {selectedCriticalSupplier && <SupplierSwitchModal open={modalOpen} onOpenChange={setModalOpen} criticalSupplier={selectedCriticalSupplier} suggestedAlternative={selectedAlternative} allAlternatives={getAllAlternatives(selectedCriticalSupplier)} />}
 
-      <ActionPlanModal
-        open={actionPlanOpen}
-        onOpenChange={setActionPlanOpen}
-        suppliers={suppliers}
-      />
+      <ActionPlanModal open={actionPlanOpen} onOpenChange={setActionPlanOpen} suppliers={suppliers} />
 
       {/* Modal de plano de ação para municípios */}
-      <MunicipalityActionPlanModal
-        supplier={selectedMunicipalitySupplier?.supplier || null}
-        riskLevel={selectedMunicipalitySupplier?.riskLevel || 'normal'}
-        riskMultiplier={selectedMunicipalitySupplier?.riskMultiplier || 1}
-        avgSectorIntensity={selectedMunicipalitySupplier?.avgSectorIntensity || 0}
-        open={municipalityPlanOpen}
-        onOpenChange={setMunicipalityPlanOpen}
-      />
+      <MunicipalityActionPlanModal supplier={selectedMunicipalitySupplier?.supplier || null} riskLevel={selectedMunicipalitySupplier?.riskLevel || 'normal'} riskMultiplier={selectedMunicipalitySupplier?.riskMultiplier || 1} avgSectorIntensity={selectedMunicipalitySupplier?.avgSectorIntensity || 0} open={municipalityPlanOpen} onOpenChange={setMunicipalityPlanOpen} />
 
       {/* Wizard de planos em massa para municípios */}
-      <BulkPlanWizard
-        open={bulkWizardOpen}
-        onOpenChange={setBulkWizardOpen}
-        suppliers={suppliers}
-        avgSectorIntensity={avgSectorIntensity}
-      />
-    </>
-  );
+      <BulkPlanWizard open={bulkWizardOpen} onOpenChange={setBulkWizardOpen} suppliers={suppliers} avgSectorIntensity={avgSectorIntensity} />
+    </>;
 };
