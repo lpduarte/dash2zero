@@ -370,9 +370,7 @@ export const CriticalSuppliersHighlight = ({
                   <CardTitle className="flex items-center gap-2 text-lg font-semibold">
                     {isMunicipio ? 'Empresas do município a monitorizar' : 'Empresas críticas e alternativas'}
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    {isMunicipio ? 'Acompanhamento de planos de descarbonização' : 'Parceiros com maior impacto ambiental na supply chain'}
-                  </p>
+                  
                 </div>
               </div>
               <div className="flex items-center gap-2">
