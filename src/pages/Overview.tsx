@@ -4,7 +4,6 @@ import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ClusterType, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { InfrastructureKPIs } from "@/components/dashboard/InfrastructureKPIs";
-import { FootprintSourcesRow } from "@/components/dashboard/FootprintSourcesRow";
 import { Card } from "@/components/ui/card";
 import { BarChart3, Landmark } from "lucide-react";
 import { TopSuppliersHighlight } from "@/components/dashboard/TopSuppliersHighlight";
@@ -172,7 +171,7 @@ const Overview = () => {
                   }
                 </h3>
               </div>
-              <MetricsOverview suppliers={filteredSuppliers} />
+              <MetricsOverview suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
             </Card>
             
             {/* GRUPO 2: KPIs de Infraestruturas (APENAS municípios) */}
@@ -187,8 +186,6 @@ const Overview = () => {
                 <InfrastructureKPIs />
               </Card>
             )}
-            
-            <FootprintSourcesRow suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
 
             <div className="space-y-6">
               <CriticalSuppliersHighlight suppliers={filteredSuppliers} allSuppliers={baseSuppliers} />
