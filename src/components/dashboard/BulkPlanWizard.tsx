@@ -124,9 +124,31 @@ const getEligibleFundingForMeasures = (measures: Measure[], supplier: Supplier):
   return getEligibleFunding(measures, supplier.companySize as any, mockFunding);
 };
 
+// Calcular redução proporcional de uma medida para uma empresa específica
+// As medidas têm reduções "padrão" mas a redução real é proporcional às emissões da empresa
+const calculateProportionalReduction = (measure: Measure, supplier: Supplier): number => {
+  // A redução da medida representa uma % típica (baseada em empresa de referência com ~500t)
+  const referenceEmissions = 500;
+  const reductionPercentage = measure.emissionReduction / referenceEmissions;
+  // Aplicar essa % às emissões reais do supplier (com um máximo de 80% por medida)
+  const effectivePercentage = Math.min(reductionPercentage, 0.8);
+  return supplier.totalEmissions * effectivePercentage;
+};
+
 // Calcular nova intensidade após medidas
-const calculateNewIntensity = (supplier: Supplier, totalReduction: number): number => {
-  const newEmissions = supplier.totalEmissions - totalReduction;
+const calculateNewIntensity = (supplier: Supplier, measures: Measure[]): number => {
+  // Calcular redução total proporcional às emissões da empresa
+  let totalReductionPercentage = 0;
+  measures.forEach(m => {
+    const referenceEmissions = 500;
+    const reductionPercentage = m.emissionReduction / referenceEmissions;
+    totalReductionPercentage += reductionPercentage;
+  });
+  
+  // Limitar redução máxima a 70% (não pode eliminar todas as emissões)
+  totalReductionPercentage = Math.min(totalReductionPercentage, 0.70);
+  
+  const newEmissions = supplier.totalEmissions * (1 - totalReductionPercentage);
   return (newEmissions / supplier.revenue) * 1000; // kg CO₂e/€
 };
 
@@ -239,9 +261,19 @@ export const BulkPlanWizard = ({
     return selectedEmpresas.map(empresa => {
       const measures = getRecommendedMeasures(empresa);
       const funding = getEligibleFundingForMeasures(measures, empresa);
-      const totalReduction = measures.reduce((sum, m) => sum + m.emissionReduction, 0);
+      
+      // Calcular redução proporcional às emissões da empresa
+      let totalReductionPercentage = 0;
+      measures.forEach(m => {
+        const referenceEmissions = 500;
+        const reductionPercentage = m.emissionReduction / referenceEmissions;
+        totalReductionPercentage += reductionPercentage;
+      });
+      totalReductionPercentage = Math.min(totalReductionPercentage, 0.70);
+      const totalReduction = empresa.totalEmissions * totalReductionPercentage;
+      
       const totalInvestment = measures.reduce((sum, m) => sum + m.investment, 0);
-      const newIntensity = calculateNewIntensity(empresa, totalReduction);
+      const newIntensity = calculateNewIntensity(empresa, measures);
       const reachedTarget = newIntensity <= avgSectorIntensity;
       
       return {
