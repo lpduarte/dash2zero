@@ -95,7 +95,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
 
   return (
     <div className="space-y-6">
-      <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20">
+      <Card className="p-6 shadow-sm bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Building2 className="h-6 w-6" />
