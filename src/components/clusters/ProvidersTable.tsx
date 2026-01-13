@@ -37,7 +37,7 @@ export function ProvidersTable({ providers, onSendEmail }: ProvidersTableProps) 
   if (providers.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        Nenhum fornecedor neste cluster. Importe fornecedores para começar.
+        Nenhuma empresa neste cluster. Importe empresas para começar.
       </div>
     );
   }

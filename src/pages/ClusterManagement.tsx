@@ -26,18 +26,29 @@ import { ClusterStats } from "@/components/clusters/ClusterStats";
 import { ProvidersTable } from "@/components/clusters/ProvidersTable";
 import { EmailDialog } from "@/components/clusters/EmailDialog";
 import { ImportDialog } from "@/components/clusters/ImportDialog";
-import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
 import { FilterButton } from "@/components/dashboard/FilterButton";
 import { FilterModal } from "@/components/dashboard/FilterModal";
 import { ActiveFiltersDisplay } from "@/components/dashboard/ActiveFiltersDisplay";
-import { mockClusters, emailTemplates } from "@/data/mockClusters";
+import { emailTemplates } from "@/data/mockClusters";
 import { mockSuppliers } from "@/data/mockSuppliers";
-import { Cluster, ClusterProvider } from "@/types/cluster";
-import { UniversalFilterState } from "@/types/supplier";
-import { Mail, Upload, Download, Search, X, Plus } from "lucide-react";
+import { ClusterProvider } from "@/types/cluster";
+import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { Mail, Upload, Download, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig, ClusterType } from "@/config/clusters";
+
+// Converter Supplier para ClusterProvider
+const supplierToProvider = (supplier: Supplier): ClusterProvider => ({
+  id: supplier.id,
+  name: supplier.name,
+  nif: supplier.contact.nif,
+  email: supplier.contact.email,
+  status: supplier.rating === 'A' || supplier.rating === 'B' ? 'completed' : 
+          supplier.rating === 'C' ? 'in-progress' : 'not-registered',
+  emailsSent: Math.floor(Math.random() * 5),
+  lastContact: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
+});
 
 const ITEMS_PER_PAGE = 10;
 
@@ -45,11 +56,9 @@ export default function ClusterManagement() {
   const { user, isMunicipio, userType } = useUser();
   const clusterOptions = getClusterConfig(userType);
   
-  const [clusters, setClusters] = useState<Cluster[]>(mockClusters);
   const [selectedClusterType, setSelectedClusterType] = useState<ClusterType>('all');
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [importDialogOpen, setImportDialogOpen] = useState(false);
-  const [createClusterDialogOpen, setCreateClusterDialogOpen] = useState(false);
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<ClusterProvider | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -112,9 +121,6 @@ export default function ClusterManagement() {
     parceiro: baseSuppliers.filter(s => s.cluster === 'parceiro').length,
   }), [baseSuppliers]);
 
-  // Get selected cluster data for email functionality
-  const selectedCluster = clusters.find((c) => c.id === selectedClusterType);
-
   // Filter suppliers by selected cluster and universal filters
   const filteredSuppliers = useMemo(() => {
     let filtered = baseSuppliers;
@@ -157,13 +163,10 @@ export default function ClusterManagement() {
     return filtered;
   }, [selectedClusterType, searchQuery, universalFilters, baseSuppliers, isMunicipio]);
 
-  // Get providers for selected cluster (for email functionality)
-  const selectedClusterProviders = useMemo(() => {
-    if (selectedClusterType === 'all') {
-      return clusters.flatMap(c => c.providers);
-    }
-    return clusters.find(c => c.id === selectedClusterType)?.providers || [];
-  }, [selectedClusterType, clusters]);
+  // Converter suppliers filtrados para formato ClusterProvider
+  const clusterProviders = useMemo(() => {
+    return filteredSuppliers.map(supplierToProvider);
+  }, [filteredSuppliers]);
 
   const totalPages = Math.ceil(filteredSuppliers.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -171,7 +174,7 @@ export default function ClusterManagement() {
 
   const handleSendEmail = (providerId?: string) => {
     if (providerId) {
-      const provider = selectedClusterProviders.find((p) => p.id === providerId);
+      const provider = clusterProviders.find((p) => p.id === providerId);
       setSelectedProvider(provider);
     } else {
       setSelectedProvider(undefined);
@@ -275,19 +278,8 @@ export default function ClusterManagement() {
                     </button>
                   );
                 })}
-                <button
-                  onClick={() => setCreateClusterDialogOpen(true)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                    "border-dashed border-border hover:border-primary/50 hover:bg-accent text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  <Plus className="h-4 w-4" />
-                  <span className="font-medium">Novo Cluster</span>
-                </button>
               </div>
             </div>
-
             {/* Right side - Filter button */}
             <div className="flex-shrink-0 pt-6">
               <FilterButton
@@ -323,7 +315,7 @@ export default function ClusterManagement() {
             </Button>
             <Button
               onClick={() => handleSendEmail()}
-              disabled={selectedClusterProviders.length === 0}
+              disabled={clusterProviders.length === 0}
             >
               <Mail className="h-4 w-4 mr-2" />
               Enviar Email
@@ -347,10 +339,10 @@ export default function ClusterManagement() {
           </TabsList>
 
           <TabsContent value="resumo" className="space-y-6">
-            <ClusterStats providers={selectedClusterProviders} />
+            <ClusterStats providers={clusterProviders} />
             <Card className="p-6">
               <ProvidersTable
-                providers={selectedClusterProviders}
+                providers={clusterProviders}
                 onSendEmail={handleSendEmail}
               />
             </Card>
@@ -481,7 +473,7 @@ export default function ClusterManagement() {
         onOpenChange={setEmailDialogOpen}
         templates={emailTemplates}
         provider={selectedProvider}
-        providers={selectedProvider ? undefined : selectedClusterProviders}
+        providers={selectedProvider ? undefined : clusterProviders}
       />
 
       <ImportDialog
@@ -489,22 +481,6 @@ export default function ClusterManagement() {
         onOpenChange={setImportDialogOpen}
         clusterId={selectedClusterType}
         onImport={handleImport}
-      />
-
-      <CreateClusterDialog
-        open={createClusterDialogOpen}
-        onOpenChange={setCreateClusterDialogOpen}
-        onCreate={(name, icon) => {
-          const newCluster: Cluster = {
-            id: name.toLowerCase().replace(/\s+/g, '-'),
-            name,
-            providers: [],
-            createdAt: new Date(),
-          };
-          setClusters([...clusters, newCluster]);
-          // Icon stored for future use when rendering custom clusters
-          console.log('Created cluster with icon:', icon);
-        }}
       />
     </div>
   );
