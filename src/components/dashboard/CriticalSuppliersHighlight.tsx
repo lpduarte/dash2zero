@@ -11,7 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { SupplierSwitchModal } from "./SupplierSwitchModal";
 import { ActionPlanModal } from "./ActionPlanModal";
 import { MunicipalityActionPlanModal } from "./action-plan";
-import { BulkPlanWizard } from "./BulkPlanWizard";
+import { BulkPlanWizard } from "./bulk-wizard";
 import { useUser } from "@/contexts/UserContext";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

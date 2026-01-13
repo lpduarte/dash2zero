@@ -1,0 +1,1 @@
+export { MethodologyModal } from './MethodologyModal';
