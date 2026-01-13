@@ -16,45 +16,7 @@ import { useUser } from "@/contexts/UserContext";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { calculateSuppliersRisk, SupplierRisk } from "@/lib/riskAnalysis";
-
-// Tipos para estado do plano
-type PlanStatus = 'sem_plano' | 'em_preparacao' | 'plano_pronto' | 'enviado';
-interface PlanData {
-  selectedMeasures: string[];
-  selectedFunding: string[];
-  completedStep4?: boolean;
-  emailSent?: boolean;
-  emailSentAt?: string;
-  reachedTarget?: boolean;
-  lastStep?: number;
-}
-
-// Helper para obter dados do plano do localStorage
-const getPlanData = (supplierId: string): PlanData | null => {
-  try {
-    const stored = localStorage.getItem(`actionPlan_${supplierId}`);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch (e) {
-    console.error('Erro ao ler dados do plano:', e);
-  }
-  return null;
-};
-
-// Calcular estado do plano
-const getPlanStatus = (planData: PlanData | null): PlanStatus => {
-  if (!planData || !planData.selectedMeasures || planData.selectedMeasures.length === 0) {
-    return 'sem_plano';
-  }
-  if (planData.emailSent) {
-    return 'enviado';
-  }
-  if (planData.completedStep4) {
-    return 'plano_pronto';
-  }
-  return 'em_preparacao';
-};
+import { getPlanData, getPlanStatus, getRiskInfo, PlanData, PlanStatus } from "@/lib/planUtils";
 
 // Configuração visual dos estados
 const statusConfig = {
@@ -90,63 +52,6 @@ const statusConfig = {
     icon: Mail,
     targetStep: 4
   }
-};
-
-// Helper unificado para risco e comparação
-const getRiskInfo = (intensity: number, avgSector: number): {
-  level: string;
-  color: string;
-  percentAbove: number;
-  comparisonText: string;
-  isAbove: boolean;
-} => {
-  if (avgSector === 0) {
-    return {
-      level: 'N/A',
-      color: 'text-muted-foreground',
-      percentAbove: 0,
-      comparisonText: '',
-      isAbove: false
-    };
-  }
-  const percentAbove = (intensity - avgSector) / avgSector * 100;
-  if (percentAbove >= 100) {
-    return {
-      level: 'Crítico',
-      color: 'text-red-600',
-      percentAbove,
-      comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true
-    };
-  }
-  if (percentAbove >= 50) {
-    return {
-      level: 'Alto',
-      color: 'text-red-600',
-      percentAbove,
-      comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true
-    };
-  }
-  if (percentAbove > 0) {
-    return {
-      level: 'Médio',
-      color: 'text-amber-600',
-      percentAbove,
-      comparisonText: `${Math.round(percentAbove)}% acima da média`,
-      isAbove: true
-    };
-  }
-
-  // Abaixo da média
-  const percentBelow = Math.abs(percentAbove);
-  return {
-    level: 'Baixo',
-    color: 'text-green-600',
-    percentAbove,
-    comparisonText: percentBelow < 1 ? 'na média' : `${Math.round(percentBelow)}% abaixo da média`,
-    isAbove: false
-  };
 };
 
 // Helper para botão de ação por estado
