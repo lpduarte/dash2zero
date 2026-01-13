@@ -151,15 +151,15 @@ export const Step2Measures = ({
             <p className="text-xs text-muted-foreground mb-2">{measure.description}</p>
 
             <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
+              <span className="flex items-center gap-2 text-green-600 dark:text-green-400">
                 <TrendingDown className="h-3 w-3" />
                 -{measure.emissionReduction}t CO₂e
               </span>
-              <span className="flex items-center gap-1 text-muted-foreground">
+              <span className="flex items-center gap-2 text-muted-foreground">
                 <Euro className="h-3 w-3" />
                 {measure.investment.toLocaleString('pt-PT')}€
               </span>
-              <span className="flex items-center gap-1 text-muted-foreground">
+              <span className="flex items-center gap-2 text-muted-foreground">
                 <Clock className="h-3 w-3" />
                 {measure.timeline}
               </span>

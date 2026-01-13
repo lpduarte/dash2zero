@@ -129,7 +129,7 @@ export const TopSuppliersHighlight = ({
 
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
+                <div className="flex items-center justify-center gap-2 mb-1">
                     <TrendingDown className="h-3 w-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">Emissões</span>
                   </div>
@@ -138,7 +138,7 @@ export const TopSuppliersHighlight = ({
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
+                  <div className="flex items-center justify-center gap-2 mb-1">
                     <Euro className="h-3 w-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">FE</span>
                   </div>
@@ -147,7 +147,7 @@ export const TopSuppliersHighlight = ({
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-center gap-1 mb-1">
+                  <div className="flex items-center justify-center gap-2 mb-1">
                     <BarChart3 className="h-3 w-3 text-muted-foreground" />
                     <span className="text-xs text-muted-foreground">vs Setor</span>
                   </div>

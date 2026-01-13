@@ -164,11 +164,11 @@ export const BulkStep4Confirm = ({
                 </p>
               </div>
               {result.reachedTarget ? (
-                <span className="text-xs text-green-600 flex items-center gap-1">
+                <span className="text-xs text-green-600 flex items-center gap-2">
                   <CheckCircle className="h-3 w-3" /> Meta ✓
                 </span>
               ) : (
-                <span className="text-xs text-amber-600 flex items-center gap-1">
+                <span className="text-xs text-amber-600 flex items-center gap-2">
                   <AlertTriangle className="h-3 w-3" /> Meta ✗
                 </span>
               )}

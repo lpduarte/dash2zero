@@ -124,7 +124,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                     
                     <div className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground flex items-center gap-1">
+                        <span className="text-muted-foreground flex items-center gap-2">
                           <TrendingDown className="h-3 w-3" />
                           Total Emissões
                         </span>
@@ -132,7 +132,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground flex items-center gap-1">
+                        <span className="text-muted-foreground flex items-center gap-2">
                           <Factory className="h-3 w-3" />
                           Média/Empresa
                         </span>

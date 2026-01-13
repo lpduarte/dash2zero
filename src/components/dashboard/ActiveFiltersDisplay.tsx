@@ -31,7 +31,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
         <Badge
           key={`size-${size}`}
           variant="secondary"
-          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          className="gap-2 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('companySize', size)}
         >
           <Building2 className="h-3 w-3" />
@@ -44,7 +44,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
         <Badge
           key={`district-${district}`}
           variant="secondary"
-          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          className="gap-2 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('district', district)}
         >
           <MapPin className="h-3 w-3" />
@@ -57,7 +57,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
         <Badge
           key={`municipality-${municipality}`}
           variant="secondary"
-          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          className="gap-2 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('municipality', municipality)}
         >
           <Landmark className="h-3 w-3" />
@@ -70,7 +70,7 @@ export function ActiveFiltersDisplay({ filters, onRemoveFilter }: ActiveFiltersD
         <Badge
           key={`parish-${parish}`}
           variant="secondary"
-          className="gap-1 cursor-pointer hover:bg-secondary/80 transition-colors"
+          className="gap-2 cursor-pointer hover:bg-secondary/80 transition-colors"
           onClick={() => onRemoveFilter('parish', parish)}
         >
           <MapPin className="h-3 w-3" />

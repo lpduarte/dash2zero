@@ -24,7 +24,7 @@ export const SupplierLabel = ({ sector, cluster }: SupplierLabelProps) => {
   const ClusterIcon = clusterInfo?.icon;
   
   return (
-    <p className="text-xs text-muted-foreground flex items-center gap-1">
+    <p className="text-xs text-muted-foreground flex items-center gap-2">
       {sectorLabels[sector] || sector} • 
       {ClusterIcon && <ClusterIcon className="h-3 w-3" />}
       {clusterInfo?.label || cluster}
