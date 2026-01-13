@@ -21,19 +21,11 @@ import { mockMeasures, getApplicableMeasures } from "@/data/mockMeasures";
 import { mockFunding, getEligibleFunding } from "@/data/mockFunding";
 import { cn } from "@/lib/utils";
 import type { Measure, FundingSource } from "@/types/actionPlan";
+import { getPlanData, getPlanStatus, getRiskLevel, PlanData } from "@/lib/planUtils";
 
 // Tipos
 type SelectionMode = 'sem_plano' | 'acima_media' | 'risco_alto' | 'personalizado' | 'manual';
 type TargetHandling = 'all' | 'only_target' | 'review';
-
-interface PlanData {
-  selectedMeasures: string[];
-  selectedFunding: string[];
-  completedStep4?: boolean;
-  emailSent?: boolean;
-  reachedTarget?: boolean;
-  lastStep?: number;
-}
 
 interface BulkPlanResult {
   empresa: Supplier;
@@ -58,39 +50,6 @@ interface BulkPlanWizardProps {
   suppliers: Supplier[];
   avgSectorIntensity: number;
 }
-
-// Helper para obter dados do plano do localStorage
-const getPlanData = (supplierId: string): PlanData | null => {
-  try {
-    const stored = localStorage.getItem(`actionPlan_${supplierId}`);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch (e) {
-    console.error('Erro ao ler dados do plano:', e);
-  }
-  return null;
-};
-
-// Calcular estado do plano
-const getPlanStatus = (planData: PlanData | null): string => {
-  if (!planData || !planData.selectedMeasures || planData.selectedMeasures.length === 0) {
-    return 'sem_plano';
-  }
-  if (planData.emailSent) return 'enviado';
-  if (planData.completedStep4) return 'plano_pronto';
-  return 'em_preparacao';
-};
-
-// Helper para nível de risco
-const getRiskLevel = (intensity: number, avgSector: number): string => {
-  if (avgSector === 0) return 'N/A';
-  const percentAbove = ((intensity - avgSector) / avgSector) * 100;
-  if (percentAbove >= 100) return 'Crítico';
-  if (percentAbove >= 50) return 'Alto';
-  if (percentAbove > 0) return 'Médio';
-  return 'Baixo';
-};
 
 // Helper para âmbito dominante
 const getDominantScope = (supplier: Supplier): string => {
