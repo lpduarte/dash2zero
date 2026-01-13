@@ -246,3 +246,103 @@ export const planStatusConfig: Record<PlanStatus, PlanStatusConfig> = {
 export const getPlanStatusConfig = (status: PlanStatus): PlanStatusConfig => {
   return planStatusConfig[status];
 };
+
+// ===========================================
+// SPACING
+// ===========================================
+
+export const spacing = {
+  /** Cards principais (secções) */
+  cardPadding: 'p-6',
+  /** KPIs e mini-cards */
+  cardPaddingCompact: 'p-4',
+  /** Items dentro de cards */
+  itemPadding: 'p-3',
+  
+  /** Elementos muito próximos */
+  gapTight: 'gap-1',
+  /** Padrão para ícone + texto */
+  gapDefault: 'gap-2',
+  /** Headers, elementos maiores */
+  gapRelaxed: 'gap-3',
+  /** Entre secções */
+  gapLoose: 'gap-4',
+  
+  /** Entre items de lista */
+  spaceItems: 'space-y-2',
+  /** Entre secções dentro de card */
+  spaceSections: 'space-y-4',
+  /** Entre cards principais */
+  spaceCards: 'space-y-6',
+  
+  /** Após headers de secção */
+  sectionMargin: 'mb-4',
+} as const;
+
+// ===========================================
+// RADIUS
+// ===========================================
+
+export const radius = {
+  /** Cards, botões, inputs */
+  default: 'rounded-lg',
+  /** Badges, avatars, botões circulares */
+  full: 'rounded-full',
+  /** Elementos pequenos */
+  sm: 'rounded-md',
+} as const;
+
+// ===========================================
+// ICON SIZES
+// ===========================================
+
+export const iconSizes = {
+  /** Muito pequeno, inline */
+  xs: 'h-3 w-3',
+  /** Pequeno inline */
+  sm: 'h-3.5 w-3.5',
+  /** Padrão (botões, KPIs) */
+  default: 'h-4 w-4',
+  /** Headers de secção */
+  md: 'h-5 w-5',
+  /** Destaques */
+  lg: 'h-6 w-6',
+} as const;
+
+// ===========================================
+// ELEMENTOS COMPOSTOS
+// ===========================================
+
+export const elements = {
+  // Cards
+  /** Card principal de secção */
+  sectionCard: 'p-6 border rounded-lg shadow-sm',
+  /** Card de KPI */
+  kpiCard: 'p-4 border rounded-lg shadow-sm',
+  /** Card dentro de outro card */
+  nestedCard: 'p-3 border rounded-lg',
+  /** Card clicável */
+  clickableCard: 'cursor-pointer hover:shadow-md transition-shadow',
+  
+  // Botões
+  /** Botão só com ícone */
+  iconButton: 'p-1.5 rounded-lg hover:bg-muted transition-colors',
+  /** Botão de texto pequeno */
+  textButton: 'flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors',
+  /** Botão primário pequeno */
+  primaryButtonSm: 'px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
+  /** Botão primário */
+  primaryButton: 'px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
+  /** Botão outline pequeno */
+  outlineButtonSm: 'flex items-center gap-2 px-3 py-1.5 text-sm border rounded-lg hover:bg-muted transition-colors',
+  /** Botão outline */
+  outlineButton: 'flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-lg hover:bg-muted transition-colors',
+  /** Botão de collapse (chevron) */
+  collapseButton: 'w-9 h-9 rounded-full border border-input bg-background hover:bg-muted/50 flex items-center justify-center transition-colors shrink-0',
+  
+  // Inputs
+  /** Input de texto */
+  input: 'px-3 py-1.5 text-sm border rounded-lg bg-background',
+  /** Input pequeno (números) */
+  inputSmall: 'w-24 px-3 py-1.5 text-sm border rounded-lg bg-background',
+} as const;
