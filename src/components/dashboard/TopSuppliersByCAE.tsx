@@ -46,7 +46,7 @@ export const TopSuppliersByCAE = ({ suppliers }: TopSuppliersByCAEProps) => {
   const currentSectorData = selectedSector ? getSectorData(selectedSector) : null;
 
   return (
-    <Card className="shadow-lg">
+    <Card className="p-6 shadow-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-xl">
