@@ -379,7 +379,7 @@ export const CriticalSuppliersHighlight = ({
                           }} className={cn("inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium", config.bgColor, config.color, config.borderColor, "border hover:opacity-80 transition-opacity cursor-pointer")}>
                                   <StatusIcon className="h-3 w-3" />
                                   <span>{config.label}</span>
-                                  {showTarget && <span className={targetReached ? 'text-green-600' : 'text-amber-600'}>
+                                  {showTarget && <span className={targetReached ? 'text-success' : 'text-warning'}>
                                       {targetReached ? '✓' : '✗'}
                                     </span>}
                                 </button>

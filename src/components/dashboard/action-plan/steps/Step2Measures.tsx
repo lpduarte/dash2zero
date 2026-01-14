@@ -174,12 +174,12 @@ export const Step2Measures = ({
   const renderScopeColumn = (scope: Scope) => {
     const scopeNames = { 1: 'Âmbito 1 - Diretas', 2: 'Âmbito 2 - Energia', 3: 'Âmbito 3 - Indiretas' };
     const scopePcts = { 1: scope1Pct, 2: scope2Pct, 3: scope3Pct };
-    const scopeColors = {
+    const scopeColorMap = {
       1: { headerBg: 'bg-violet-50 dark:bg-violet-950/30', text: 'text-violet-700 dark:text-violet-300', textSecondary: 'text-violet-600 dark:text-violet-400', badge: 'bg-violet-700 dark:bg-violet-600' },
-      2: { headerBg: 'bg-blue-50 dark:bg-blue-950/30', text: 'text-blue-700 dark:text-blue-300', textSecondary: 'text-blue-600 dark:text-blue-400', badge: 'bg-blue-700 dark:bg-blue-600' },
-      3: { headerBg: 'bg-orange-50 dark:bg-orange-950/30', text: 'text-orange-700 dark:text-orange-300', textSecondary: 'text-orange-600 dark:text-orange-400', badge: 'bg-orange-700 dark:bg-orange-600' }
+      2: { headerBg: 'bg-primary/10', text: 'text-primary', textSecondary: 'text-primary/80', badge: 'bg-primary' },
+      3: { headerBg: 'bg-warning/10', text: 'text-warning', textSecondary: 'text-warning/80', badge: 'bg-warning' }
     };
-    const colors = scopeColors[scope];
+    const colors = scopeColorMap[scope];
     const measures = measuresByScope[scope];
 
     return (
