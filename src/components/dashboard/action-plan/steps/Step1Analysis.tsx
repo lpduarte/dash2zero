@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { AlertTriangle, Minus, CheckCircle, Target, Search } from 'lucide-react';
 import type { Step1Props } from '../types';
 import { riskColors, scopeColors } from '@/lib/styles';
+import { formatNumber, formatPercentage } from '@/lib/formatters';
 
 export const Step1Analysis = ({
   supplier,
@@ -77,7 +78,7 @@ export const Step1Analysis = ({
             </h3>
           </div>
           <span className={`text-xs px-3 py-1 rounded-full border ${config.tagColor}`}>
-            {riskMultiplier.toFixed(1)}x média setor
+            {formatNumber(riskMultiplier, 1)}x média setor
           </span>
         </div>
 
@@ -95,7 +96,7 @@ export const Step1Analysis = ({
                 <div className="h-full bg-danger rounded-full" style={{ width: '100%' }} />
               </div>
               <span className="text-sm font-medium w-36 text-right shrink-0">
-                {empresaIntensity.toFixed(2)} kg CO₂e/€
+                {formatNumber(empresaIntensity, 2)} kg CO₂e/€
               </span>
             </div>
 
@@ -106,7 +107,7 @@ export const Step1Analysis = ({
                 <div className="h-full bg-success rounded-full" style={{ width: `${Math.min(setorBarWidth, 100)}%` }} />
               </div>
               <span className="text-sm font-medium w-36 text-right shrink-0">
-                {avgSectorIntensity.toFixed(2)} kg CO₂e/€
+                {formatNumber(avgSectorIntensity, 2)} kg CO₂e/€
               </span>
             </div>
           </div>
@@ -181,7 +182,7 @@ export const Step1Analysis = ({
               style={{ width: `${scope1Pct}%` }}
             >
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                Âmbito 1 (Diretas): {supplier.scope1.toLocaleString('pt-PT')} t CO₂e ({scope1Pct.toFixed(0)}%)
+                Âmbito 1 (Diretas): {supplier.scope1.toLocaleString('pt-PT')} t CO₂e ({formatPercentage(scope1Pct, 0)})
               </div>
             </div>
             <div
@@ -189,7 +190,7 @@ export const Step1Analysis = ({
               style={{ width: `${scope2Pct}%` }}
             >
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                Âmbito 2 (Energia): {supplier.scope2.toLocaleString('pt-PT')} t CO₂e ({scope2Pct.toFixed(0)}%)
+                Âmbito 2 (Energia): {supplier.scope2.toLocaleString('pt-PT')} t CO₂e ({formatPercentage(scope2Pct, 0)})
               </div>
             </div>
             <div
@@ -197,7 +198,7 @@ export const Step1Analysis = ({
               style={{ width: `${scope3Pct}%` }}
             >
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                Âmbito 3 (Indiretas): {supplier.scope3.toLocaleString('pt-PT')} t CO₂e ({scope3Pct.toFixed(0)}%)
+                Âmbito 3 (Indiretas): {supplier.scope3.toLocaleString('pt-PT')} t CO₂e ({formatPercentage(scope3Pct, 0)})
               </div>
             </div>
           </div>
@@ -206,15 +207,15 @@ export const Step1Analysis = ({
           <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <div className={`w-3 h-3 rounded-full ${scopeColors[1].bg}`} />
-              <span>Âmbito 1 ({supplier.scope1.toLocaleString('pt-PT')} t CO₂e, {scope1Pct.toFixed(0)}%)</span>
+              <span>Âmbito 1 ({supplier.scope1.toLocaleString('pt-PT')} t CO₂e, {formatPercentage(scope1Pct, 0)})</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className={`w-3 h-3 rounded-full ${scopeColors[2].bg}`} />
-              <span>Âmbito 2 ({supplier.scope2.toLocaleString('pt-PT')} t CO₂e, {scope2Pct.toFixed(0)}%)</span>
+              <span>Âmbito 2 ({supplier.scope2.toLocaleString('pt-PT')} t CO₂e, {formatPercentage(scope2Pct, 0)})</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className={`w-3 h-3 rounded-full ${scopeColors[3].bg}`} />
-              <span>Âmbito 3 ({supplier.scope3.toLocaleString('pt-PT')} t CO₂e, {scope3Pct.toFixed(0)}%)</span>
+              <span>Âmbito 3 ({supplier.scope3.toLocaleString('pt-PT')} t CO₂e, {formatPercentage(scope3Pct, 0)})</span>
             </div>
           </div>
         </div>
@@ -235,7 +236,7 @@ export const Step1Analysis = ({
                   <div className="flex items-center gap-2 mb-2">
                     <div className={`w-2 h-2 rounded-full ${scopeColors[scope.id].bg}`} />
                     <span className="text-sm font-medium">
-                      {scope.name} ({scope.pct.toFixed(0)}%)
+                      {scope.name} ({formatPercentage(scope.pct, 0)})
                     </span>
                   </div>
 

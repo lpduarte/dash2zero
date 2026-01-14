@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Search, MapPin, Factory, ArrowUpDown, LayoutGrid, List, Info } from "lucide-react";
+import { formatPercentage } from "@/lib/formatters";
 
 type SortOption = 'name-asc' | 'name-desc' | 'emissions-asc' | 'emissions-desc' | 'region-asc' | 'region-desc' | 'sector-asc' | 'sector-desc' | 'sector-diff-asc' | 'sector-diff-desc';
 type ViewMode = 'cards' | 'table';
@@ -310,7 +311,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                         variant="outline" 
                         className={diff < 0 ? 'text-success border-success/50' : diff > 20 ? 'text-danger border-danger/50' : 'text-warning border-warning/50'}
                       >
-                        {diff > 0 ? '+' : ''}{diff.toFixed(0)}%
+                        {diff > 0 ? '+' : ''}{formatPercentage(diff, 0)}
                       </Badge>
                     </TableCell>
                     <TableCell>
