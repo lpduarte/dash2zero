@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -13,7 +14,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { IncentiveEmailDialog } from "./IncentiveEmailDialog";
 import { MethodologyModal } from "./methodology";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "@/components/ui/section-header";
@@ -34,7 +34,7 @@ const getPercentageColor = (percentage: number) => {
 };
 
 export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewProps) => {
-  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const navigate = useNavigate();
   const [showMethodologyModal, setShowMethodologyModal] = useState(false);
   const [isEmissionsExpanded, setIsEmissionsExpanded] = useState(true);
   const { isMunicipio } = useUser();
@@ -250,7 +250,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                         variant="outline" 
                         size="sm" 
                         className={`${percentageColors.text} border-current hover:bg-white/50 text-xs`}
-                        onClick={() => setEmailDialogOpen(true)}
+                        onClick={() => navigate('/incentivo')}
                       >
                         <Mail className="h-3 w-3 mr-1.5" />
                         Incentivar cálculo
@@ -321,11 +321,6 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
         onOpenChange={setShowMethodologyModal} 
       />
 
-      <IncentiveEmailDialog
-        open={emailDialogOpen}
-        onOpenChange={setEmailDialogOpen}
-        suppliers={suppliers}
-      />
     </TooltipProvider>
   );
 };
