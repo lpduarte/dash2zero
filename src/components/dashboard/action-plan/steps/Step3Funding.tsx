@@ -3,6 +3,7 @@ import type { Step3Props } from '../types';
 import { getApplicableMeasures } from '@/data/mockMeasures';
 import { mockFunding, getApplicableFunding } from '@/data/mockFunding';
 import { fundingColors } from '@/lib/styles';
+import { formatNumber, formatPercentage } from '@/lib/formatters';
 
 export const Step3Funding = ({
   supplier,
@@ -228,7 +229,7 @@ export const Step3Funding = ({
             <p className="font-semibold text-lg text-success">
               Até {totalCoverage.toLocaleString('pt-PT')}€
               <span className="text-sm font-normal text-muted-foreground ml-1">
-                ({coveragePercent.toFixed(0)}%)
+                ({formatPercentage(coveragePercent, 0)})
               </span>
             </p>
           </div>
@@ -237,7 +238,7 @@ export const Step3Funding = ({
             <p className={`font-semibold text-lg ${remaining === 0 ? 'text-success' : ''}`}>
               {remaining.toLocaleString('pt-PT')}€
               <span className="text-sm font-normal text-muted-foreground ml-1">
-                ({remainingPercent.toFixed(0)}%)
+                ({formatPercentage(remainingPercent, 0)})
               </span>
             </p>
           </div>

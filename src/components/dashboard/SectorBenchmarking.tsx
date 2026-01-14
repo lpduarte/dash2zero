@@ -6,6 +6,7 @@ import { Supplier } from "@/types/supplier";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { sectorLabels, getSectorsWithCounts } from "@/data/sectors";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface SectorBenchmarkingProps {
   suppliers: Supplier[];
@@ -141,16 +142,16 @@ export const SectorBenchmarking = ({
                     <div className="space-y-1 text-sm">
                       <p>
                         <span className="text-muted-foreground">Emissões: </span>
-                        <span className="font-bold">{data.emissions.toFixed(0)} t CO₂e</span>
+                        <span className="font-bold">{formatNumber(data.emissions, 0)} t CO₂e</span>
                       </p>
                       <p>
                         <span className="text-muted-foreground">Média do Setor: </span>
-                        <span className="font-bold">{data.sectorAvg.toFixed(0)} t CO₂e</span>
+                        <span className="font-bold">{formatNumber(data.sectorAvg, 0)} t CO₂e</span>
                       </p>
                       <p>
                         <span className="text-muted-foreground">Desvio: </span>
                         <span className={`font-bold ${data.deviation < 0 ? 'text-success' : 'text-danger'}`}>
-                          {data.deviation > 0 ? '+' : ''}{data.deviation.toFixed(1)}%
+                          {data.deviation > 0 ? '+' : ''}{formatPercentage(data.deviation, 1)}
                         </span>
                       </p>
                       <p>

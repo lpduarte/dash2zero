@@ -5,6 +5,7 @@ import type { Measure, Scope } from '@/types/actionPlan';
 import { getApplicableMeasures, isMeasureRecommended } from '@/data/mockMeasures';
 import { cascaisInfrastructure } from '@/data/mockInfrastructure';
 import { mockFunding, getFundingByCategory } from '@/data/mockFunding';
+import { formatNumber, formatPercentage } from '@/lib/formatters';
 
 export const Step2Measures = ({
   supplier,
@@ -187,7 +188,7 @@ export const Step2Measures = ({
         <div className={`flex items-center justify-between p-3 rounded-lg mb-3 ${colors.headerBg}`}>
           <div className="flex items-center gap-2">
             <span className={`font-medium text-sm ${colors.text}`}>{scopeNames[scope]}</span>
-            <span className={`text-sm ${colors.textSecondary}`}>({scopePcts[scope].toFixed(0)}%)</span>
+            <span className={`text-sm ${colors.textSecondary}`}>({formatPercentage(scopePcts[scope], 0)})</span>
           </div>
           <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${colors.badge}`}>
             {measures.length}
@@ -289,7 +290,7 @@ export const Step2Measures = ({
                     <div className="h-full bg-danger rounded-full w-full" />
                   </div>
                   <span className="text-sm font-semibold w-32 text-right">
-                    {currentIntensity.toFixed(2)} kg CO₂e/€
+                    {formatNumber(currentIntensity, 2)} kg CO₂e/€
                   </span>
                 </div>
 
@@ -306,7 +307,7 @@ export const Step2Measures = ({
                     )}
                   </div>
                   <span className={`text-sm w-32 text-right ${selectedMeasures.length > 0 ? reachedTarget ? 'font-semibold text-success' : 'font-semibold' : 'text-muted-foreground'}`}>
-                    {selectedMeasures.length > 0 ? `${newIntensity.toFixed(2)} kg CO₂e/€` : 'Selecione medidas'}
+                    {selectedMeasures.length > 0 ? `${formatNumber(newIntensity, 2)} kg CO₂e/€` : 'Selecione medidas'}
                   </span>
                 </div>
 
@@ -316,7 +317,7 @@ export const Step2Measures = ({
                     <div className="h-full bg-success rounded-full" style={{ width: `${avgSectorIntensity / currentIntensity * 100}%` }} />
                   </div>
                   <span className="text-sm font-semibold w-32 text-right">
-                    {avgSectorIntensity.toFixed(2)} kg CO₂e/€
+                    {formatNumber(avgSectorIntensity, 2)} kg CO₂e/€
                   </span>
                 </div>
               </div>
@@ -328,7 +329,7 @@ export const Step2Measures = ({
                   <p className="text-xs text-muted-foreground">Redução Estimada</p>
                   <p className={`font-semibold text-lg ${totalReduction > 0 ? 'text-success' : ''}`}>
                     -{totalReduction.toLocaleString('pt-PT')}t CO₂e
-                    <span className="text-sm font-normal ml-1">({reductionPct.toFixed(0)}%)</span>
+                    <span className="text-sm font-normal ml-1">({formatPercentage(reductionPct, 0)})</span>
                   </p>
                 </div>
                 <div>

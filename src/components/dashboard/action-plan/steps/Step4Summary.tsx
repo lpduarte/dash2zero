@@ -28,6 +28,7 @@ import { mockMeasures } from '@/data/mockMeasures';
 import { mockFunding } from '@/data/mockFunding';
 import { cascaisInfrastructure } from '@/data/mockInfrastructure';
 import { elements, riskColors, scopeColors } from '@/lib/styles';
+import { formatNumber, formatPercentage } from '@/lib/formatters';
 
 export const Step4Summary = ({
   supplier,
@@ -248,7 +249,7 @@ export const Step4Summary = ({
                   </p>
                   <p className={`text-xs ${scopeColors[1].textLight}`}>
                     {supplier.totalEmissions > 0
-                      ? `${((supplier.scope1 || 0) / supplier.totalEmissions * 100).toFixed(0)}%`
+                      ? formatPercentage((supplier.scope1 || 0) / supplier.totalEmissions * 100, 0)
                       : '0%'
                     }
                   </p>
@@ -263,7 +264,7 @@ export const Step4Summary = ({
                   </p>
                   <p className={`text-xs ${scopeColors[2].textLight}`}>
                     {supplier.totalEmissions > 0
-                      ? `${((supplier.scope2 || 0) / supplier.totalEmissions * 100).toFixed(0)}%`
+                      ? formatPercentage((supplier.scope2 || 0) / supplier.totalEmissions * 100, 0)
                       : '0%'
                     }
                   </p>
@@ -278,7 +279,7 @@ export const Step4Summary = ({
                   </p>
                   <p className={`text-xs ${scopeColors[3].textLight}`}>
                     {supplier.totalEmissions > 0
-                      ? `${((supplier.scope3 || 0) / supplier.totalEmissions * 100).toFixed(0)}%`
+                      ? formatPercentage((supplier.scope3 || 0) / supplier.totalEmissions * 100, 0)
                       : '0%'
                     }
                   </p>
@@ -294,19 +295,19 @@ export const Step4Summary = ({
               <div className="grid grid-cols-3 gap-4">
                 <div className={`p-4 ${riskColors.alto.bg} ${riskColors.alto.bgDark} border ${riskColors.alto.border} rounded-lg text-center`}>
                   <p className="text-xs text-danger mb-1">Intensidade Actual</p>
-                  <p className="font-semibold text-xl text-danger">{currentIntensity.toFixed(2)}</p>
+                  <p className="font-semibold text-xl text-danger">{formatNumber(currentIntensity, 2)}</p>
                   <p className="text-xs text-danger">kg CO₂e/€</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center border ${reachedTarget 
                   ? `${riskColors.baixo.bg} ${riskColors.baixo.bgDark} ${riskColors.baixo.border}` 
                   : `${riskColors.medio.bg} ${riskColors.medio.bgDark} ${riskColors.medio.border}`}`}>
                   <p className={`text-xs mb-1 ${reachedTarget ? 'text-success' : 'text-warning'}`}>Nova Intensidade</p>
-                  <p className={`font-semibold text-xl ${reachedTarget ? 'text-success' : 'text-warning'}`}>{newIntensity.toFixed(2)}</p>
+                  <p className={`font-semibold text-xl ${reachedTarget ? 'text-success' : 'text-warning'}`}>{formatNumber(newIntensity, 2)}</p>
                   <p className={`text-xs ${reachedTarget ? 'text-success' : 'text-warning'}`}>kg CO₂e/€</p>
                 </div>
                 <div className="p-4 bg-muted border border-border rounded-lg text-center">
                   <p className="text-xs text-muted-foreground mb-1">Média do Setor</p>
-                  <p className="font-semibold text-xl">{avgSectorIntensity.toFixed(2)}</p>
+                  <p className="font-semibold text-xl">{formatNumber(avgSectorIntensity, 2)}</p>
                   <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
                 </div>
               </div>
@@ -338,7 +339,7 @@ export const Step4Summary = ({
                 <div className={`p-4 ${riskColors.baixo.bg} ${riskColors.baixo.bgDark} border ${riskColors.baixo.border} rounded-lg text-center`}>
                   <p className="text-xs text-success mb-1">Redução</p>
                   <p className="font-semibold text-xl text-success">-{totalReduction.toLocaleString('pt-PT')}t</p>
-                  <p className="text-xs text-success">CO₂e ({reductionPercent.toFixed(0)}%)</p>
+                  <p className="text-xs text-success">CO₂e ({formatPercentage(reductionPercent, 0)})</p>
                 </div>
                 <div className="p-4 bg-muted border border-border rounded-lg text-center">
                   <p className="text-xs text-muted-foreground mb-1">Investimento</p>
@@ -348,14 +349,14 @@ export const Step4Summary = ({
                 <div className={`p-4 ${scopeColors[2].bgLight} border ${scopeColors[2].border} rounded-lg text-center`}>
                   <p className={`text-xs ${scopeColors[2].textLight} mb-1`}>Comparticipação</p>
                   <p className={`font-semibold text-xl ${scopeColors[2].text}`}>{totalCoverage.toLocaleString('pt-PT')}€</p>
-                  <p className={`text-xs ${scopeColors[2].textLight}`}>Até {coveragePercent.toFixed(0)}%</p>
+                  <p className={`text-xs ${scopeColors[2].textLight}`}>Até {formatPercentage(coveragePercent, 0)}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center border ${remaining === 0 
                   ? `${riskColors.baixo.bg} ${riskColors.baixo.bgDark} ${riskColors.baixo.border}` 
                   : `${riskColors.medio.bg} ${riskColors.medio.bgDark} ${riskColors.medio.border}`}`}>
                   <p className={`text-xs mb-1 ${remaining === 0 ? 'text-success' : 'text-warning'}`}>A cargo da empresa</p>
                   <p className={`font-semibold text-xl ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{remaining.toLocaleString('pt-PT')}€</p>
-                  <p className={`text-xs ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{(100 - coveragePercent).toFixed(0)}%</p>
+                  <p className={`text-xs ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{formatPercentage(100 - coveragePercent, 0)}</p>
                 </div>
               </div>
             </div>
