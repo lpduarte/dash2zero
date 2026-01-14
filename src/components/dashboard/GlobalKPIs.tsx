@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import { TrendingDown, Factory, Award, Users, DollarSign, Zap } from "lucide-react";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface GlobalKPIsProps {
   suppliers: Supplier[];
@@ -20,15 +21,15 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
     {
       icon: TrendingDown,
       label: "Emissões Totais do Grupo",
-      value: totalEmissions.toFixed(0),
+      value: formatNumber(totalEmissions, 0),
       unit: "t CO₂e",
       color: "primary",
-      trend: `-${((1 - totalEmissions / (totalEmissions * 1.15)) * 100).toFixed(1)}% vs 2022`,
+      trend: `-${formatNumber((1 - totalEmissions / (totalEmissions * 1.15)) * 100, 1)}% vs 2022`,
     },
     {
       icon: Zap,
       label: "Emissões Médias por Funcionário",
-      value: avgEmissionsPerEmployee.toFixed(2),
+      value: formatNumber(avgEmissionsPerEmployee, 2),
       unit: "t CO₂e/func",
       color: "warning",
       trend: "Média do grupo",
@@ -44,7 +45,7 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
     {
       icon: DollarSign,
       label: "Volume de Negócios Total",
-      value: totalRevenue.toFixed(1),
+      value: formatNumber(totalRevenue, 1),
       unit: "M€",
       color: "warning",
       trend: "Grupo consolidado",
@@ -60,7 +61,7 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
     {
       icon: Factory,
       label: "Taxa de Compliance",
-      value: ((companiesWithSBTi / suppliers.length) * 100).toFixed(0),
+      value: formatNumber((companiesWithSBTi / suppliers.length) * 100, 0),
       unit: "%",
       color: "accent",
       progress: (companiesWithSBTi / suppliers.length) * 100,

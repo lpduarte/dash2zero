@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Supplier } from "@/types/supplier";
 import { TrendingDown, TrendingUp, Award, AlertTriangle } from "lucide-react";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface BestWorstSuppliersProps {
   suppliers: Supplier[];
@@ -39,12 +40,12 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div>
                 <p className="text-xs text-muted-foreground">Emissões Totais</p>
-                <p className="text-2xl font-bold text-success">{best.totalEmissions.toFixed(0)}</p>
+                <p className="text-2xl font-bold text-success">{formatNumber(best.totalEmissions, 0)}</p>
                 <p className="text-xs text-muted-foreground">t CO₂e</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Por Funcionário</p>
-                <p className="text-2xl font-bold text-success">{best.emissionsPerEmployee.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-success">{formatNumber(best.emissionsPerEmployee, 2)}</p>
                 <p className="text-xs text-muted-foreground">t CO₂e/func</p>
               </div>
             </div>
@@ -86,12 +87,12 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div>
                 <p className="text-xs text-muted-foreground">Emissões Totais</p>
-                <p className="text-2xl font-bold text-danger">{worst.totalEmissions.toFixed(0)}</p>
+                <p className="text-2xl font-bold text-danger">{formatNumber(worst.totalEmissions, 0)}</p>
                 <p className="text-xs text-muted-foreground">t CO₂e</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Por Funcionário</p>
-                <p className="text-2xl font-bold text-danger">{worst.emissionsPerEmployee.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-danger">{formatNumber(worst.emissionsPerEmployee, 2)}</p>
                 <p className="text-xs text-muted-foreground">t CO₂e/func</p>
               </div>
             </div>
@@ -113,7 +114,7 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
 
             <div className="pt-2 border-t border-danger/20 bg-danger/10 rounded-md p-2 -mx-2">
               <p className="text-xs font-medium text-danger">
-                {((worst.totalEmissions / avgEmissions - 1) * 100).toFixed(0)}% acima da média do grupo
+                {formatPercentage((worst.totalEmissions / avgEmissions - 1) * 100, 0)} acima da média do grupo
               </p>
             </div>
           </div>

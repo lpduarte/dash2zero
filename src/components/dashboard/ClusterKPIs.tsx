@@ -8,6 +8,7 @@ import { useUser } from "@/contexts/UserContext";
 import { getClusterInfo, clusterIcons, clusterLabels } from "@/config/clusters";
 import { getClustersByOwnerType } from "@/data/clusters";
 import { SectionHeader } from "@/components/ui/section-header";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface ClusterKPIsProps {
   suppliers: Supplier[];
@@ -113,7 +114,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <TrendingDown className="h-3 w-3" />
                           Total Emissões
                         </span>
-                        <span className="font-semibold">{totalEmissions.toFixed(0)} t</span>
+                        <span className="font-semibold">{formatNumber(totalEmissions, 0)} t</span>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
@@ -121,7 +122,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <Factory className="h-3 w-3" />
                           Média/Empresa
                         </span>
-                        <span className="font-semibold">{avgEmissions.toFixed(0)} t</span>
+                        <span className="font-semibold">{formatNumber(avgEmissions, 0)} t</span>
                       </div>
                     </div>
                   </CardContent>
@@ -164,7 +165,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           </div>
                           <span className="text-sm text-muted-foreground">Emissões Totais</span>
                         </div>
-                        <p className="text-3xl font-bold text-primary">{data.totalEmissions.toFixed(0)}</p>
+                        <p className="text-3xl font-bold text-primary">{formatNumber(data.totalEmissions, 0)}</p>
                         <p className="text-xs text-muted-foreground mt-1">t CO₂e</p>
                       </CardContent>
                     </Card>
@@ -177,7 +178,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           </div>
                           <span className="text-sm text-muted-foreground">Emissões/Funcionário</span>
                         </div>
-                        <p className="text-3xl font-bold text-warning">{data.avgEmissionsPerEmployee.toFixed(1)}</p>
+                        <p className="text-3xl font-bold text-warning">{formatNumber(data.avgEmissionsPerEmployee, 1)}</p>
                         <p className="text-xs text-muted-foreground mt-1">t CO₂e média</p>
                       </CardContent>
                     </Card>
@@ -193,7 +194,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground">Certificações Médias</span>
-                          <Badge variant="outline">{data.avgCertifications.toFixed(1)}</Badge>
+                          <Badge variant="outline">{formatNumber(data.avgCertifications, 1)}</Badge>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground">Taxa de Resposta</span>
@@ -208,7 +209,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                         <div>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-muted-foreground">Média de Emissões</span>
-                            <span className="font-medium">{data.avgEmissions.toFixed(0)} t CO₂e</span>
+                            <span className="font-medium">{formatNumber(data.avgEmissions, 0)} t CO₂e</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2">
                             <div 

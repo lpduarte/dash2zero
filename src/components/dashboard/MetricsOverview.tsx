@@ -21,6 +21,7 @@ import { KPICard } from "@/components/ui/kpi-card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { useUser } from "@/contexts/UserContext";
 import { getPercentageColors } from "@/lib/styles";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface MetricsOverviewProps {
   suppliers: Supplier[];
@@ -105,7 +106,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
     {
       title: "Potencial de melhoria",
       value: improvementPotential.level,
-      unit: `${percentageCritical.toFixed(0)}% das empresas`,
+      unit: `${formatPercentage(percentageCritical, 0)} das empresas`,
       icon: improvementPotential.icon,
       iconColor: improvementPotential.color,
       iconBgColor: improvementPotential.bgColor,
@@ -114,7 +115,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
     },
     {
       title: "Média por faturação",
-      value: avgEmissionsPerRevenue.toFixed(1),
+      value: formatNumber(avgEmissionsPerRevenue, 1),
       unit: "t CO₂e/€",
       icon: Euro,
       iconColor: "text-primary",
@@ -122,7 +123,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
     },
     {
       title: "Média por colaborador",
-      value: avgEmissionsPerEmployee.toFixed(2),
+      value: formatNumber(avgEmissionsPerEmployee, 2),
       unit: "t CO₂e/colab",
       icon: Users,
       iconColor: "text-primary",
@@ -130,7 +131,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
     },
     {
       title: "Média por área",
-      value: avgEmissionsPerArea.toFixed(3),
+      value: formatNumber(avgEmissionsPerArea, 3),
       unit: "t CO₂e/m²",
       icon: Maximize2,
       iconColor: "text-primary",
@@ -214,7 +215,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                           <div className="pt-2 border-t border-border">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-medium">Redução</span>
-                              <span className="text-sm font-bold text-success">-{savingsPercentage.toFixed(1)}%</span>
+                              <span className="text-sm font-bold text-success">-{formatPercentage(savingsPercentage, 1)}</span>
                             </div>
                           </div>
                         </div>

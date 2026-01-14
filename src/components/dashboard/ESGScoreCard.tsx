@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Supplier } from "@/types/supplier";
 import { Leaf, Users, Building } from "lucide-react";
+import { formatNumber, formatPercentage } from "@/lib/formatters";
 
 interface ESGScoreCardProps {
   suppliers: Supplier[];
@@ -44,7 +45,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
       <CardContent className="space-y-6">
         <div className="text-center">
           <div className={`text-6xl font-bold ${getScoreColor(overallScore)}`}>
-            {overallScore.toFixed(0)}
+            {formatNumber(overallScore, 0)}
           </div>
           <div className="text-sm text-muted-foreground mt-2">Score ESG Global</div>
           <div className="mt-2">{getScoreBadge(overallScore)}</div>
@@ -58,7 +59,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
                 <span className="text-sm font-medium">Ambiental (E)</span>
               </div>
               <span className={`font-bold ${getScoreColor(environmentalScore)}`}>
-                {environmentalScore.toFixed(0)}
+                {formatNumber(environmentalScore, 0)}
               </span>
             </div>
             <Progress value={environmentalScore} className="h-2" />
@@ -84,7 +85,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
                 <span className="text-sm font-medium">Governança (G)</span>
               </div>
               <span className={`font-bold ${getScoreColor(governanceScore)}`}>
-                {governanceScore.toFixed(0)}
+                {formatNumber(governanceScore, 0)}
               </span>
             </div>
             <Progress value={governanceScore} className="h-2" />
@@ -94,12 +95,12 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
         <div className="pt-4 border-t space-y-2">
           <div className="flex justify-between text-sm">
             <span>Fornecedores com SBTi</span>
-            <span className="font-medium">{sbtiPercentage.toFixed(0)}%</span>
+            <span className="font-medium">{formatPercentage(sbtiPercentage, 0)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Com Certificações</span>
             <span className="font-medium">
-              {((suppliers.filter(s => s.certifications.length > 0).length / suppliers.length) * 100).toFixed(0)}%
+              {formatPercentage((suppliers.filter(s => s.certifications.length > 0).length / suppliers.length) * 100, 0)}
             </span>
           </div>
         </div>
