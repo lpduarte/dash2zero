@@ -136,6 +136,22 @@ const FunnelStage = ({
   </div>
 );
 
+// Next action helper based on onboarding status
+const getNextAction = (status: string): string => {
+  const actions: Record<string, string> = {
+    por_contactar: 'Enviar convite',
+    sem_interacao: 'Enviar lembrete',
+    interessada: 'Oferecer ajuda',
+    interessada_simple: 'Oferecer ajuda',
+    interessada_formulario: 'Oferecer ajuda',
+    registada_simple: 'Incentivar início',
+    em_progresso_simple: 'Dar suporte',
+    em_progresso_formulario: 'Dar suporte',
+    completo: 'Concluído',
+  };
+  return actions[status] || '';
+};
+
 const Incentive = () => {
   const { isMunicipio } = useUser();
   const { toast } = useToast();
@@ -653,55 +669,59 @@ const Incentive = () => {
                             <div className="flex-1 min-w-0 cursor-pointer" onClick={() => handleSelectCompany(company.id)}>
                               <p className="font-medium truncate">{company.name}</p>
                               <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Badge className={`text-xs py-0 shrink-0 ${onboardingStatusConfig[company.onboardingStatus]?.color || 'bg-muted text-muted-foreground'}`}>
-                                        {onboardingStatusConfig[company.onboardingStatus]?.label || company.onboardingStatus}
-                                      </Badge>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      {onboardingStatusConfig[company.onboardingStatus]?.tooltip || ''}
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                                <Badge variant="outline" className="text-xs py-0 shrink-0 truncate max-w-[200px]">{company.contact.email}</Badge>
                                 <Badge variant="outline" className="text-xs py-0 shrink-0">{company.contact.nif}</Badge>
                                 <Badge variant="outline" className="text-xs py-0 shrink-0">{getSectorName(company.sector)}</Badge>
                               </div>
                             </div>
                             
-                            {/* Histórico expandível com ícone de aviso */}
+                            {/* Status + próxima acção + histórico */}
                             <div className="flex items-center gap-2">
-                              {company.emailsSent >= 3 && (
+                              {/* Badge de status */}
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Badge className={`text-xs py-0 shrink-0 ${onboardingStatusConfig[company.onboardingStatus]?.color || 'bg-muted text-muted-foreground'}`}>
+                                      {onboardingStatusConfig[company.onboardingStatus]?.label || company.onboardingStatus}
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    {onboardingStatusConfig[company.onboardingStatus]?.tooltip || ''}
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                              
+                              {/* Próxima acção sugerida */}
+                              <span className="text-xs text-muted-foreground hidden lg:inline">
+                                → {getNextAction(company.onboardingStatus)}
+                              </span>
+                              
+                              {/* Contador de emails com hover de saturação */}
+                              {company.emailHistory.length > 0 ? (
                                 <TooltipProvider>
                                   <Tooltip>
                                     <TooltipTrigger asChild>
-                                      <div className="flex items-center justify-center h-8 w-8 rounded-md bg-warning/20">
-                                        <AlertTriangle className="h-4 w-4 text-warning" />
-                                      </div>
+                                      <CollapsibleTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          className={`gap-1 ${getEmailCountColor(company.emailsSent)}`}
+                                          onClick={() => toggleExpandCompany(company.id)}
+                                        >
+                                          <Mail className="h-3 w-3" />
+                                          {company.emailsSent}
+                                          {expandedCompany === company.id ? (
+                                            <ChevronDown className="h-3 w-3" />
+                                          ) : (
+                                            <ChevronRight className="h-3 w-3" />
+                                          )}
+                                        </Button>
+                                      </CollapsibleTrigger>
                                     </TooltipTrigger>
-                                    <TooltipContent>Risco de saturação</TooltipContent>
+                                    {company.emailsSent >= 3 && (
+                                      <TooltipContent>Risco de saturação - considere parar de contactar</TooltipContent>
+                                    )}
                                   </Tooltip>
                                 </TooltipProvider>
-                              )}
-                              {company.emailHistory.length > 0 ? (
-                                <CollapsibleTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className={`gap-1 ${getEmailCountColor(company.emailsSent)}`}
-                                    onClick={() => toggleExpandCompany(company.id)}
-                                  >
-                                    <Mail className="h-3 w-3" />
-                                    {company.emailsSent}
-                                    {expandedCompany === company.id ? (
-                                      <ChevronDown className="h-3 w-3" />
-                                    ) : (
-                                      <ChevronRight className="h-3 w-3" />
-                                    )}
-                                  </Button>
-                                </CollapsibleTrigger>
                               ) : (
                                 <Badge variant="outline" className="text-muted-foreground">
                                   0 emails
