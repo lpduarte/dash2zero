@@ -857,15 +857,17 @@ const Incentive = () => {
                             <p className="font-medium truncate">{company.name}</p>
                             <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
                           </div>
+                          {company.lastContactDate && (
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              Concluído em {format(new Date(company.lastContactDate), "d MMM yyyy", { locale: pt })}
+                            </p>
+                          )}
                         </div>
                         
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-success border-success/30 bg-success/10">
                             <Calculator className="h-3 w-3 mr-1" />
                             Pegada calculada
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            Completo
                           </Badge>
                         </div>
                       </div>
