@@ -14,9 +14,10 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { Filter, X } from "lucide-react";
-import { getSectorsWithCounts, SectorWithCount } from "@/data/sectors";
+import { getSectorsWithCounts } from "@/data/sectors";
 
 export interface IncentiveFilters {
+  onboardingStatus: string[];
   emailCount: "all" | "0" | "1" | "2" | "3+";
   sectors: string[];
   companySize: string[];
@@ -26,8 +27,20 @@ export interface IncentiveFilters {
 interface IncentiveFiltersDialogProps {
   filters: IncentiveFilters;
   onFiltersChange: (filters: IncentiveFilters) => void;
-  companies: { sector: string; companySize?: string; region?: string }[];
+  companies: { sector: string; companySize?: string; region?: string; onboardingStatus?: string }[];
 }
+
+const onboardingStatusOptions = [
+  { value: "por_contactar", label: "Por contactar" },
+  { value: "sem_interacao", label: "Sem interação" },
+  { value: "interessada", label: "Interessada" },
+  { value: "interessada_simple", label: "Interessada / Simple" },
+  { value: "interessada_formulario", label: "Interessada / Formulário" },
+  { value: "registada_simple", label: "Registada" },
+  { value: "em_progresso_simple", label: "Em progresso / Simple" },
+  { value: "em_progresso_formulario", label: "Em progresso / Formulário" },
+  { value: "completo", label: "Completo" },
+];
 
 const emailCountOptions = [
   { value: "all", label: "Todos" },
@@ -38,10 +51,10 @@ const emailCountOptions = [
 ];
 
 const companySizeOptions = [
-  { value: "Micro", label: "Micro" },
-  { value: "Pequena", label: "Pequena" },
-  { value: "Média", label: "Média" },
-  { value: "Grande", label: "Grande" },
+  { value: "micro", label: "Micro" },
+  { value: "pequena", label: "Pequena" },
+  { value: "media", label: "Média" },
+  { value: "grande", label: "Grande" },
 ];
 
 export const IncentiveFiltersDialog = ({
@@ -51,6 +64,20 @@ export const IncentiveFiltersDialog = ({
 }: IncentiveFiltersDialogProps) => {
   const [open, setOpen] = useState(false);
   const [localFilters, setLocalFilters] = useState<IncentiveFilters>(filters);
+
+  // Calculate onboarding status counts
+  const onboardingStatusWithCounts = useMemo(() => {
+    const statusCounts = companies.reduce((acc, c) => {
+      const status = c.onboardingStatus || "por_contactar";
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return onboardingStatusOptions.map(opt => ({
+      ...opt,
+      count: statusCounts[opt.value] || 0,
+    })).filter(opt => opt.count > 0);
+  }, [companies]);
 
   // Calculate sectors with counts
   const sectorsWithCounts = useMemo(() => {
@@ -87,12 +114,22 @@ export const IncentiveFiltersDialog = ({
   // Count active filters
   const activeFiltersCount = useMemo(() => {
     let count = 0;
+    if (filters.onboardingStatus.length > 0) count++;
     if (filters.emailCount !== "all") count++;
     if (filters.sectors.length > 0) count++;
     if (filters.companySize.length > 0) count++;
     if (filters.regions.length > 0) count++;
     return count;
   }, [filters]);
+
+  const handleOnboardingStatusToggle = (status: string) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      onboardingStatus: prev.onboardingStatus.includes(status)
+        ? prev.onboardingStatus.filter(s => s !== status)
+        : [...prev.onboardingStatus, status],
+    }));
+  };
 
   const handleEmailCountChange = (value: string) => {
     setLocalFilters(prev => ({
@@ -135,6 +172,7 @@ export const IncentiveFiltersDialog = ({
 
   const handleReset = () => {
     const resetFilters: IncentiveFilters = {
+      onboardingStatus: [],
       emailCount: "all",
       sectors: [],
       companySize: [],
@@ -174,6 +212,28 @@ export const IncentiveFiltersDialog = ({
 
         <ScrollArea className="flex-1 -mx-6 px-6">
           <div className="space-y-6 py-4">
+            {/* Onboarding Status Filter */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Status de onboarding</Label>
+              <div className="space-y-2">
+                {onboardingStatusWithCounts.map(({ value, label, count }) => (
+                  <label
+                    key={value}
+                    className="flex items-center gap-3 cursor-pointer"
+                  >
+                    <Checkbox
+                      checked={localFilters.onboardingStatus.includes(value)}
+                      onCheckedChange={() => handleOnboardingStatusToggle(value)}
+                    />
+                    <span className="text-sm flex-1">{label}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {count}
+                    </Badge>
+                  </label>
+                ))}
+              </div>
+            </div>
+
             {/* Email Count Filter */}
             <div className="space-y-3">
               <Label className="text-sm font-medium">Nº de emails enviados</Label>
