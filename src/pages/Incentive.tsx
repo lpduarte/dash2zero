@@ -30,7 +30,8 @@ import {
   Clock,
   Star,
   Users,
-  UserX
+  UserX,
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
@@ -99,6 +100,19 @@ const onboardingStatusConfig: Record<string, { label: string; color: string; too
     color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', 
     tooltip: 'Pegada calculada com sucesso' 
   },
+};
+
+// Template suggestions based on onboarding status
+const templateSuggestions: Record<string, string> = {
+  por_contactar: 'convite',
+  sem_interacao: 'lembrete', 
+  interessada: 'ajuda',
+  interessada_simple: 'ajuda',
+  interessada_formulario: 'ajuda',
+  registada_simple: 'incentivo',
+  em_progresso_simple: 'suporte',
+  em_progresso_formulario: 'suporte',
+  completo: 'parabens',
 };
 
 const Incentive = () => {
@@ -332,6 +346,20 @@ const Incentive = () => {
     return companiesWithoutFootprint.find(c => c.id === selectedCompanies[0]) ||
            companiesWithFootprint.find(c => c.id === selectedCompanies[0]) as any;
   }, [selectedCompanies, companiesWithoutFootprint, companiesWithFootprint]);
+  
+  // Suggested template based on first selected company's status
+  const suggestedTemplate = useMemo(() => {
+    if (!firstSelectedCompany) return null;
+    const status = firstSelectedCompany.onboardingStatus;
+    if (!status) return null;
+    return templateSuggestions[status] || null;
+  }, [firstSelectedCompany]);
+  
+  const suggestedTemplateName = useMemo(() => {
+    if (!suggestedTemplate) return null;
+    const template = emailTemplates.find(t => t.id === suggestedTemplate);
+    return template?.name || null;
+  }, [suggestedTemplate]);
   
   const previewSubject = useMemo(() => {
     if (!firstSelectedCompany) return subject;
@@ -710,6 +738,29 @@ const Incentive = () => {
                         ))}
                       </SelectContent>
                     </Select>
+                    {suggestedTemplate && selectedTemplate !== suggestedTemplate && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2 p-2 bg-warning/10 rounded-md border border-warning/20">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Lightbulb className="h-4 w-4 text-warning shrink-0" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              Baseado no status de onboarding desta empresa, recomendamos este template para maior eficácia
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <span className="flex-1">Sugestão: usar template "<strong>{suggestedTemplateName}</strong>"</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => handleTemplateChange(suggestedTemplate)}
+                        >
+                          Aplicar
+                        </Button>
+                      </div>
+                    )}
                   </div>
                   
                   <div>
