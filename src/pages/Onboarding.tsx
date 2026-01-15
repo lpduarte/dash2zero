@@ -3,26 +3,23 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-
 const Onboarding = () => {
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSimpleClick = () => {
     toast({
       title: "Redirecionar para Simple",
-      description: "A abrir plataforma de cálculo guiado...",
+      description: "A abrir plataforma de cálculo guiado..."
     });
   };
-
   const handleFormClick = () => {
     toast({
       title: "Formulário de Totais",
-      description: "A abrir formulário de submissão...",
+      description: "A abrir formulário de submissão..."
     });
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 flex flex-col">
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent [background-size:24px_24px] pointer-events-none" />
       
@@ -34,7 +31,7 @@ const Onboarding = () => {
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Leaf className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-xl font-semibold">Get2Zero</span>
+              <span className="text-xl font-semibold">Dash2Zero</span>
             </div>
             
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
@@ -91,11 +88,7 @@ const Onboarding = () => {
                 </ul>
               </div>
               
-              <Button 
-                size="lg" 
-                className="w-full"
-                onClick={handleSimpleClick}
-              >
+              <Button size="lg" className="w-full" onClick={handleSimpleClick}>
                 Começar
               </Button>
             </Card>
@@ -137,12 +130,7 @@ const Onboarding = () => {
                 </ul>
               </div>
               
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="w-full"
-                onClick={handleFormClick}
-              >
+              <Button size="lg" variant="outline" className="w-full" onClick={handleFormClick}>
                 Avançar
               </Button>
             </Card>
@@ -154,18 +142,16 @@ const Onboarding = () => {
               Mais de <span className="font-semibold text-foreground">500 empresas</span> já calcularam a sua pegada
             </p>
             
-            <button 
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-              onClick={() => toast({ title: "Contacto", description: "suporte@get2zero.pt" })}
-            >
+            <button className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors" onClick={() => toast({
+            title: "Contacto",
+            description: "suporte@get2zero.pt"
+          })}>
               <HelpCircle className="h-4 w-4" />
               Tem dúvidas? Contacte-nos
             </button>
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Onboarding;
