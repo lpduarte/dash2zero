@@ -115,6 +115,27 @@ const templateSuggestions: Record<string, string> = {
   completo: 'parabens',
 };
 
+// Funnel stage component for visual representation
+const FunnelStage = ({ 
+  label, 
+  value, 
+  percentage, 
+  color,
+}: { 
+  label: string; 
+  value: number; 
+  percentage: number; 
+  color: string;
+}) => (
+  <div className="flex flex-col items-center min-w-0 flex-1">
+    <div className={cn("w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold", color)}>
+      {value}
+    </div>
+    <p className="text-xs text-muted-foreground mt-1 text-center truncate max-w-[70px]">{label}</p>
+    <p className="text-xs font-medium">{percentage}%</p>
+  </div>
+);
+
 const Incentive = () => {
   const { isMunicipio } = useUser();
   const { toast } = useToast();
@@ -264,6 +285,13 @@ const Incentive = () => {
     const emFunil = semInteracao + interessada + registada + emProgresso;
     const conversionRate = total > 0 ? Math.round((completo / total) * 100) : 0;
     
+    // Percentages for funnel visualization
+    const porContactarPerc = total > 0 ? Math.round((porContactar / total) * 100) : 0;
+    const semInteracaoPerc = total > 0 ? Math.round((semInteracao / total) * 100) : 0;
+    const interessadaPerc = total > 0 ? Math.round((interessada / total) * 100) : 0;
+    const emProgressoPerc = total > 0 ? Math.round((emProgresso / total) * 100) : 0;
+    const completoPerc = total > 0 ? Math.round((completo / total) * 100) : 0;
+    
     // Mock data for time to value, bottleneck and best template
     const avgDaysToConversion = 12;
     const bottleneck = "Sem interação → Interessada";
@@ -273,6 +301,13 @@ const Incentive = () => {
     return {
       conversionRate,
       porContactar,
+      porContactarPerc,
+      semInteracao,
+      semInteracaoPerc,
+      interessada,
+      interessadaPerc,
+      emProgresso,
+      emProgressoPerc,
       emFunil,
       avgDaysToConversion,
       bottleneck,
@@ -280,6 +315,7 @@ const Incentive = () => {
       bestTemplateRate,
       total,
       completo,
+      completoPerc,
     };
   }, [companiesWithoutFootprint]);
   
@@ -467,8 +503,45 @@ const Incentive = () => {
                       valueColor="text-warning"
                     />
                   </div>
-                  {/* Placeholder para funil visual - próximo prompt */}
-                  <div className="col-span-3">
+                  {/* Funnel visual */}
+                  <div className="col-span-3 border rounded-lg p-4 bg-card shadow-sm">
+                    <p className="text-xs font-medium text-muted-foreground mb-3">Progressão do Funil</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <FunnelStage 
+                        label="Por contactar" 
+                        value={funnelMetrics.porContactar} 
+                        percentage={funnelMetrics.porContactarPerc} 
+                        color="bg-muted-foreground" 
+                      />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <FunnelStage 
+                        label="Sem interação" 
+                        value={funnelMetrics.semInteracao} 
+                        percentage={funnelMetrics.semInteracaoPerc} 
+                        color="bg-primary" 
+                      />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <FunnelStage 
+                        label="Interessada" 
+                        value={funnelMetrics.interessada} 
+                        percentage={funnelMetrics.interessadaPerc} 
+                        color="bg-warning" 
+                      />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <FunnelStage 
+                        label="Em progresso" 
+                        value={funnelMetrics.emProgresso} 
+                        percentage={funnelMetrics.emProgressoPerc} 
+                        color="bg-orange-500" 
+                      />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <FunnelStage 
+                        label="Completo" 
+                        value={funnelMetrics.completo} 
+                        percentage={funnelMetrics.completoPerc} 
+                        color="bg-success" 
+                      />
+                    </div>
                   </div>
                 </div>
               </CardContent>
