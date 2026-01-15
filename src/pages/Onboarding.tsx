@@ -203,7 +203,7 @@ const Onboarding = () => {
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
               Porquê calcular a pegada de carbono?
             </h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Entenda o impacto da sua empresa e descubra oportunidades de melhoria
             </p>
           </div>
