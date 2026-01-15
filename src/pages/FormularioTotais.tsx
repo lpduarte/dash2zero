@@ -16,7 +16,9 @@ import {
   AlertCircle,
   ExternalLink,
   User,
-  Flame
+  Flame,
+  Sparkles,
+  X
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,38 +67,38 @@ interface ScopeBreakdown {
 
 // ============ Mock Data ============
 const mockNifData: Record<string, CompanyData> = {
-  "509876543": {
-    name: "Indústrias Verdes Lda",
-    cae: "25610 - Tratamento e revestimento de metais",
-    address: "Zona Industrial de Ovar, Lote 45",
-    postalCode: "3880-102",
-    freguesia: "Ovar",
-    concelho: "Ovar",
-    distrito: "Aveiro",
-  },
-  "501234567": {
-    name: "EcoTech Solutions SA",
-    cae: "72190 - Investigação e desenvolvimento",
-    address: "Av. da República, 123",
-    postalCode: "1050-186",
-    freguesia: "Avenidas Novas",
+  "500745898": {
+    name: "Caixa Geral de Depósitos SA",
+    cae: "64190 - Outra intermediação monetária",
+    address: "Av. João XXI, 63",
+    postalCode: "1000-300",
+    freguesia: "Alvalade",
     concelho: "Lisboa",
     distrito: "Lisboa",
   },
-  "506789012": {
-    name: "Transportes Sustentáveis Lda",
-    cae: "49410 - Transportes rodoviários de mercadorias",
-    address: "Rua Industrial, 789",
-    postalCode: "4400-321",
-    freguesia: "Vila Nova de Gaia",
-    concelho: "Vila Nova de Gaia",
+  "500100144": {
+    name: "EDP - Energias de Portugal SA",
+    cae: "35140 - Comércio de eletricidade",
+    address: "Av. 24 de Julho, 12",
+    postalCode: "1249-300",
+    freguesia: "Estrela",
+    concelho: "Lisboa",
+    distrito: "Lisboa",
+  },
+  "502011475": {
+    name: "Sonae SGPS SA",
+    cae: "64202 - Atividades das sociedades gestoras de participações sociais",
+    address: "Lugar do Espido, Via Norte",
+    postalCode: "4471-909",
+    freguesia: "Maia",
+    concelho: "Maia",
     distrito: "Porto",
   },
 };
 
 const mockImportedData = {
-  nif: "509876543",
-  companyName: "Indústrias Verdes Lda",
+  nif: "502011475",
+  companyName: "Sonae SGPS SA",
   year: "2024",
   scope1: "45.2",
   scope2: "78.9",
@@ -482,7 +484,7 @@ const FormularioTotais = () => {
   const [importMode, setImportMode] = useState<"manual" | "import" | null>(null);
   
   // Step 1: Identification - Pre-filled NIF for demo
-  const [nif, setNif] = useState("509876543");
+  const [nif, setNif] = useState("502011475");
   const [isLoadingNif, setIsLoadingNif] = useState(false);
   const [nifError, setNifError] = useState("");
   const [nifValid, setNifValid] = useState(false);
@@ -498,7 +500,7 @@ const FormularioTotais = () => {
   const [scope1Breakdown, setScope1Breakdown] = useState<ScopeBreakdown>({});
   const [scope2Breakdown, setScope2Breakdown] = useState<ScopeBreakdown>({});
   const [scope3Breakdown, setScope3Breakdown] = useState<ScopeBreakdown>({});
-  const [source, setSource] = useState("");
+  const [sourceFile, setSourceFile] = useState<File | null>(null);
   
   // Step 3: Confirmation
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -596,15 +598,134 @@ const FormularioTotais = () => {
     return acceptTerms;
   }, [step, nifValid, employees, revenue, scope1Total, scope2Total, acceptTerms]);
   
-  // Calculate intensity
+  // Calculate intensity (kg CO₂e / €)
   const intensity = useMemo(() => {
     const totalEmissions = (parseFloat(scope1Total) || 0) + (parseFloat(scope2Total) || 0);
     const revenueNum = parseFloat(revenue) || 0;
     if (revenueNum === 0) return 0;
-    return (totalEmissions / revenueNum) * 1000000;
+    // Emissões em t CO₂e, converter para kg (x1000), dividir por faturação
+    return (totalEmissions * 1000) / revenueNum;
   }, [scope1Total, scope2Total, revenue]);
 
   // ============ Render ============
+  
+  // Pre-form selection screen (no stepper)
+  if (step === 1 && importMode === null) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+        <div className="max-w-[800px] mx-auto px-6 py-12">
+          {/* Logo */}
+          <div className="text-center mb-4">
+            <div className="inline-flex items-center gap-2 mb-4">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Leaf className="h-6 w-6 text-primary" />
+              </div>
+              <span className="text-xl font-semibold">Dash2Zero</span>
+            </div>
+          </div>
+          
+          {/* Title */}
+          <div className="text-center mb-12">
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              Submissão de Pegada de Carbono
+            </h1>
+            <p className="text-muted-foreground">
+              Escolha como pretende submeter os seus dados
+            </p>
+          </div>
+
+          {/* Choice Cards - NO stepper */}
+          <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <Card 
+              className="p-8 cursor-pointer hover:border-primary hover:shadow-md transition-all"
+              onClick={() => setImportMode("manual")}
+            >
+              <Edit3 className="h-10 w-10 text-primary mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Preencher manualmente</h3>
+              <p className="text-sm text-muted-foreground">
+                Introduza os dados da sua pegada de carbono passo a passo
+              </p>
+            </Card>
+            
+            <Card 
+              className="p-8 cursor-pointer hover:border-primary hover:shadow-md transition-all"
+              onClick={() => setShowImportDialog(true)}
+            >
+              <Upload className="h-10 w-10 text-primary mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Importar relatório</h3>
+              <p className="text-sm text-muted-foreground">
+                Carregue um PDF ou Excel com os dados de emissões
+              </p>
+            </Card>
+          </div>
+          
+          {/* Back to onboarding link */}
+          <div className="text-center mt-12">
+            <Button variant="link" onClick={() => navigate("/onboarding")}>
+              ← Voltar ao início
+            </Button>
+          </div>
+        </div>
+        
+        {/* Import Dialog */}
+        <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Importar relatório de emissões</DialogTitle>
+              <DialogDescription>
+                Carregue o ficheiro PDF ou Excel com os dados da pegada de carbono
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-6">
+              {!isProcessing && !importComplete && (
+                <div 
+                  className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-colors"
+                  onClick={handleImport}
+                >
+                  <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
+                  <p className="font-medium mb-1">Arraste o ficheiro ou clique para selecionar</p>
+                  <p className="text-sm text-muted-foreground">PDF, XLSX, XLS ou CSV</p>
+                </div>
+              )}
+              
+              {isProcessing && (
+                <div className="text-center py-4">
+                  <FileText className="h-10 w-10 mx-auto mb-4 text-primary animate-pulse" />
+                  <p className="font-medium mb-4">A analisar documento...</p>
+                  <Progress value={importProgress} className="w-full" />
+                </div>
+              )}
+              
+              {importComplete && (
+                <div className="text-center py-4">
+                  <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="h-6 w-6 text-success" />
+                  </div>
+                  <p className="font-medium mb-2">Dados extraídos com sucesso</p>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Verifique os valores no formulário
+                  </p>
+                  <Button 
+                    className="w-full"
+                    onClick={() => {
+                      setShowImportDialog(false);
+                      setImportMode("import");
+                      setImportComplete(false);
+                      setImportProgress(0);
+                    }}
+                  >
+                    Continuar
+                  </Button>
+                </div>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       <div className="max-w-[800px] mx-auto px-6 py-12">
@@ -641,47 +762,6 @@ const FormularioTotais = () => {
         
         {/* Stepper */}
         <Stepper currentStep={step} />
-        
-        {/* Import Mode Selection (before step 1) */}
-        {step === 1 && importMode === null && (
-          <div className="space-y-6 mb-8">
-            <p className="text-center text-muted-foreground">
-              Como pretende introduzir os dados?
-            </p>
-            
-            <div className="grid md:grid-cols-2 gap-4">
-              <Card 
-                className="p-6 cursor-pointer hover:border-primary transition-colors"
-                onClick={() => setImportMode("manual")}
-              >
-                <div className="text-center">
-                  <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                    <Edit3 className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Preencher manualmente</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Introduza os dados da sua pegada de carbono
-                  </p>
-                </div>
-              </Card>
-              
-              <Card 
-                className="p-6 cursor-pointer hover:border-primary transition-colors"
-                onClick={() => setShowImportDialog(true)}
-              >
-                <div className="text-center">
-                  <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center mx-auto mb-4">
-                    <Upload className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <h3 className="font-semibold mb-2">Importar relatório</h3>
-                  <p className="text-sm text-muted-foreground">
-                    PDF ou Excel com dados de emissões
-                  </p>
-                </div>
-              </Card>
-            </div>
-          </div>
-        )}
         
         {/* Step 1: Identification */}
         {step === 1 && importMode !== null && (
@@ -767,7 +847,8 @@ const FormularioTotais = () => {
                     id="employees"
                     type="number"
                     min="1"
-                    placeholder="Ex: 50"
+                    placeholder="50"
+                    className="placeholder:text-muted-foreground/50"
                     value={employees}
                     onChange={(e) => setEmployees(e.target.value)}
                   />
@@ -778,7 +859,8 @@ const FormularioTotais = () => {
                     id="revenue"
                     type="number"
                     min="0"
-                    placeholder="Ex: 1000000"
+                    placeholder="1000000"
+                    className="placeholder:text-muted-foreground/50"
                     value={revenue}
                     onChange={(e) => setRevenue(e.target.value)}
                   />
@@ -845,15 +927,31 @@ const FormularioTotais = () => {
             
             <Card className="p-6">
               <div className="space-y-2">
-                <Label htmlFor="source">Fonte da informação (opcional)</Label>
-                <Input
-                  id="source"
-                  placeholder="Ex: Relatório de sustentabilidade 2024"
-                  value={source}
-                  onChange={(e) => setSource(e.target.value)}
-                />
+                <Label>Fonte da informação (opcional)</Label>
+                <div className="flex items-center gap-4">
+                  <Input
+                    type="file"
+                    accept=".pdf,.xlsx,.xls,.doc,.docx"
+                    className="placeholder:text-muted-foreground/50"
+                    onChange={(e) => setSourceFile(e.target.files?.[0] || null)}
+                  />
+                  {sourceFile && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <FileText className="h-4 w-4" />
+                      <span className="truncate max-w-[200px]">{sourceFile.name}</span>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 w-6 p-0"
+                        onClick={() => setSourceFile(null)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  Para garantir a rastreabilidade dos dados, pode indicar a origem da informação
+                  Anexe o relatório ou certificado de onde provêm os dados
                 </p>
               </div>
             </Card>
@@ -908,35 +1006,81 @@ const FormularioTotais = () => {
                   <div className="text-center p-4 bg-muted/50 rounded-lg">
                     <p className="text-sm text-muted-foreground mb-1">Intensidade carbónica</p>
                     <p className="text-3xl font-bold text-primary">
-                      {formatNumber(intensity, 2)}
+                      {formatNumber(intensity, 4)}
                     </p>
-                    <p className="text-xs text-muted-foreground">kg CO₂e / € faturação</p>
+                    <p className="text-sm text-muted-foreground">kg CO₂e / €</p>
                   </div>
                 </>
               )}
             </Card>
             
-            <Card className="p-6">
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  id="terms"
-                  checked={acceptTerms}
-                  onCheckedChange={(checked) => setAcceptTerms(checked === true)}
-                />
-                <div className="space-y-1">
-                  <Label htmlFor="terms" className="cursor-pointer">
-                    Aceito partilhar estes dados no âmbito da plataforma ZeroLink
-                  </Label>
-                  <p className="text-xs text-muted-foreground">
-                    Conforme detalhado nos{" "}
-                    <a href="#" className="text-primary underline inline-flex items-center gap-1">
-                      Termos, Condições e Políticas
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+            {/* Simple Preview Card */}
+            <Card className="p-6 border-primary/20 bg-primary/5">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-primary/10">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">
+                    Descubra mais com o Dash2Zero Simple
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Com os dados que submeteu, poderia obter análises mais detalhadas:
                   </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="p-3 bg-background rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Comparação sectorial</p>
+                      <p className="font-semibold text-primary">
+                        {intensity > 0.5 ? "Acima" : "Abaixo"} da média
+                      </p>
+                    </div>
+                    <div className="p-3 bg-background rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Potencial de redução</p>
+                      <p className="font-semibold text-primary">
+                        Até 30% identificado
+                      </p>
+                    </div>
+                    <div className="p-3 bg-background rounded-lg border">
+                      <p className="text-xs text-muted-foreground">Medidas sugeridas</p>
+                      <p className="font-semibold text-primary">
+                        12 oportunidades
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={() => navigate("/onboarding")}
+                  >
+                    Experimentar o Simple
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </Card>
+            
+            <div className="flex items-start gap-3 p-4 border rounded-lg">
+              <Checkbox 
+                id="terms" 
+                checked={acceptTerms}
+                onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+                className="mt-0.5"
+              />
+              <div className="space-y-1">
+                <Label htmlFor="terms" className="cursor-pointer leading-relaxed">
+                  Aceito partilhar estes dados no âmbito da plataforma Dash2Zero
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Conforme detalhado nos{" "}
+                  <a href="#" className="text-primary underline hover:no-underline">
+                    Termos, Condições e Políticas
+                  </a>
+                </p>
+              </div>
+            </div>
             
             <Button 
               size="lg" 
@@ -992,62 +1136,6 @@ const FormularioTotais = () => {
           </Button>
         </div>
       </div>
-      
-      {/* Import Dialog */}
-      <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Importar relatório de emissões</DialogTitle>
-            <DialogDescription>
-              Carregue o ficheiro PDF ou Excel com os dados da pegada de carbono
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="py-6">
-            {!isProcessing && !importComplete && (
-              <div 
-                className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-colors"
-                onClick={handleImport}
-              >
-                <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
-                <p className="font-medium mb-1">Arraste o ficheiro ou clique para selecionar</p>
-                <p className="text-sm text-muted-foreground">PDF, XLSX, XLS ou CSV</p>
-              </div>
-            )}
-            
-            {isProcessing && (
-              <div className="text-center py-4">
-                <FileText className="h-10 w-10 mx-auto mb-4 text-primary animate-pulse" />
-                <p className="font-medium mb-4">A analisar documento...</p>
-                <Progress value={importProgress} className="w-full" />
-              </div>
-            )}
-            
-            {importComplete && (
-              <div className="text-center py-4">
-                <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="h-6 w-6 text-success" />
-                </div>
-                <p className="font-medium mb-2">Dados extraídos com sucesso</p>
-                <p className="text-sm text-muted-foreground mb-6">
-                  Verifique os valores no formulário
-                </p>
-                <Button 
-                  className="w-full"
-                  onClick={() => {
-                    setShowImportDialog(false);
-                    setImportMode("import");
-                    setImportComplete(false);
-                    setImportProgress(0);
-                  }}
-                >
-                  Continuar
-                </Button>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
