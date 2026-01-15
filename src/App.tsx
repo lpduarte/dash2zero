@@ -7,6 +7,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import Overview from "./pages/Overview";
 import ClusterManagement from "./pages/ClusterManagement";
 import Incentive from "./pages/Incentive";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="/analise" element={<Navigate to="/" replace />} />
             <Route path="/clusters" element={<ClusterManagement />} />
             <Route path="/incentivo" element={<Incentive />} />
+            <Route path="/onboarding" element={<Onboarding />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
