@@ -11,6 +11,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 28, area: 800, revenue: 2.1,
     contact: { email: 'geral@plasticosinovacao.pt', phone: '+351 253 000 001', website: 'https://plasticosinovacao.pt', nif: '504234001' },
     emailsSent: 2, lastContactDate: '2024-11-15',
+    onboardingStatus: 'interessada_simple',
   },
   {
     id: 'emp-sup-np-002', name: 'Embalagens Express', clusterId: 'emp-cluster-fornecedores',
@@ -19,6 +20,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 8, area: 250, revenue: 0.65,
     contact: { email: 'info@embalagensexpress.pt', phone: '+351 234 000 002', website: 'https://embalagensexpress.pt', nif: '504234002' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-sup-np-003', name: 'Componentes Técnicos SA', clusterId: 'emp-cluster-fornecedores',
@@ -27,6 +29,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'media', employees: 75, area: 1800, revenue: 6.8,
     contact: { email: 'comercial@componentestecnicos.pt', phone: '+351 224 000 003', website: 'https://componentestecnicos.pt', nif: '504234003' },
     emailsSent: 3, lastContactDate: '2024-12-01',
+    onboardingStatus: 'em_progresso_formulario',
   },
   {
     id: 'emp-sup-np-004', name: 'Ferramentas Pro', clusterId: 'emp-cluster-fornecedores',
@@ -35,6 +38,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 18, area: 400, revenue: 1.2,
     contact: { email: 'vendas@ferramentaspro.pt', phone: '+351 244 000 004', website: 'https://ferramentaspro.pt', nif: '504234004' },
     emailsSent: 1, lastContactDate: '2024-10-20',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-sup-np-005', name: 'MatériasBase Lda', clusterId: 'emp-cluster-fornecedores',
@@ -43,6 +47,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 22, area: 550, revenue: 1.8,
     contact: { email: 'geral@materiasbase.pt', phone: '+351 229 100 005', website: 'https://materiasbase.pt', nif: '504234005' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
 
   // ===== CLIENTES SEM PEGADA (15) =====
@@ -53,6 +58,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 320, revenue: 1.5,
     contact: { email: 'info@comerciolocalplus.pt', phone: '+351 219 000 001', website: 'https://comerciolocalplus.pt', nif: '505234001' },
     emailsSent: 1, lastContactDate: '2024-11-28',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-cli-np-002', name: 'Serviços Digitais Norte', clusterId: 'emp-cluster-clientes',
@@ -61,6 +67,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 6, area: 80, revenue: 0.45,
     contact: { email: 'geral@servicosdigitaisnorte.pt', phone: '+351 222 000 002', website: 'https://servicosdigitaisnorte.pt', nif: '505234002' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-cli-np-003', name: 'Restauração Moderna', clusterId: 'emp-cluster-clientes',
@@ -69,6 +76,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 25, area: 180, revenue: 1.2,
     contact: { email: 'reservas@restauracaomoderna.pt', phone: '+351 217 100 003', website: 'https://restauracaomoderna.pt', nif: '505234003' },
     emailsSent: 2, lastContactDate: '2024-12-10',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-cli-np-004', name: 'Clínica Saúde Total', clusterId: 'emp-cluster-clientes',
@@ -77,6 +85,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 32, area: 450, revenue: 2.8,
     contact: { email: 'geral@clinicasaudetotal.pt', phone: '+351 253 100 004', website: 'https://clinicasaudetotal.pt', nif: '505234004' },
     emailsSent: 1, lastContactDate: '2024-11-05',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-cli-np-005', name: 'Imobiliária Central', clusterId: 'emp-cluster-clientes',
@@ -85,6 +94,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 18, area: 200, revenue: 3.5,
     contact: { email: 'comercial@imobiliariacentral.pt', phone: '+351 214 200 005', website: 'https://imobiliariacentral.pt', nif: '505234005' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-cli-np-006', name: 'Academia Fitness Pro', clusterId: 'emp-cluster-clientes',
@@ -93,6 +103,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 20, area: 850, revenue: 0.95,
     contact: { email: 'info@fitnesspro.pt', phone: '+351 214 300 006', website: 'https://fitnesspro.pt', nif: '505234006' },
     emailsSent: 3, lastContactDate: '2024-12-15',
+    onboardingStatus: 'registada_simple',
   },
   {
     id: 'emp-cli-np-007', name: 'Escritório Advocacia Silva', clusterId: 'emp-cluster-clientes',
@@ -101,6 +112,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 8, area: 120, revenue: 1.8,
     contact: { email: 'geral@advocaciasilva.pt', phone: '+351 217 200 007', website: 'https://advocaciasilva.pt', nif: '505234007' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-cli-np-008', name: 'Hotel Estrela do Mar', clusterId: 'emp-cluster-clientes',
@@ -109,6 +121,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'media', employees: 65, area: 3500, revenue: 5.2,
     contact: { email: 'reservas@estreladomar.pt', phone: '+351 289 100 008', website: 'https://estreladomar.pt', nif: '505234008' },
     emailsSent: 2, lastContactDate: '2024-11-22',
+    onboardingStatus: 'interessada_formulario',
   },
   {
     id: 'emp-cli-np-009', name: 'Supermercado Família', clusterId: 'emp-cluster-clientes',
@@ -117,6 +130,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 28, area: 600, revenue: 2.2,
     contact: { email: 'geral@supermercadofamilia.pt', phone: '+351 223 200 009', website: 'https://supermercadofamilia.pt', nif: '505234009' },
     emailsSent: 1, lastContactDate: '2024-10-30',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-cli-np-010', name: 'Escola Condução Segura', clusterId: 'emp-cluster-clientes',
@@ -125,6 +139,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 10, area: 150, revenue: 0.55,
     contact: { email: 'info@conducaosegura.pt', phone: '+351 239 100 010', website: 'https://conducaosegura.pt', nif: '505234010' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-cli-np-011', name: 'Agência Viagens Mundo', clusterId: 'emp-cluster-clientes',
@@ -133,6 +148,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 12, area: 100, revenue: 1.8,
     contact: { email: 'reservas@viagensmundo.pt', phone: '+351 218 100 011', website: 'https://viagensmundo.pt', nif: '505234011' },
     emailsSent: 2, lastContactDate: '2024-12-05',
+    onboardingStatus: 'em_progresso_simple',
   },
   {
     id: 'emp-cli-np-012', name: 'Oficina Auto Premium', clusterId: 'emp-cluster-clientes',
@@ -141,6 +157,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 400, revenue: 0.85,
     contact: { email: 'marcacoes@autopremium.pt', phone: '+351 229 300 012', website: 'https://autopremium.pt', nif: '505234012' },
     emailsSent: 1, lastContactDate: '2024-11-18',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-cli-np-013', name: 'Centro Veterinário Amigo', clusterId: 'emp-cluster-clientes',
@@ -149,6 +166,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 8, area: 120, revenue: 0.65,
     contact: { email: 'contacto@vetamigo.pt', phone: '+351 214 400 013', website: 'https://vetamigo.pt', nif: '505234013' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-cli-np-014', name: 'Lavandaria Express', clusterId: 'emp-cluster-clientes',
@@ -157,6 +175,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 5, area: 80, revenue: 0.25,
     contact: { email: 'geral@lavandariaexpress.pt', phone: '+351 212 100 014', website: '', nif: '505234014' },
     emailsSent: 3, lastContactDate: '2024-12-18',
+    onboardingStatus: 'completo',
   },
   {
     id: 'emp-cli-np-015', name: 'Padaria Tradição', clusterId: 'emp-cluster-clientes',
@@ -165,6 +184,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 6, area: 90, revenue: 0.35,
     contact: { email: 'encomendas@padariatradicao.pt', phone: '+351 253 200 015', website: '', nif: '505234015' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
 
   // ===== PARCEIROS SEM PEGADA (20) =====
@@ -175,6 +195,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 25, area: 600, revenue: 2.2,
     contact: { email: 'geral@transportesrapidos.pt', phone: '+351 253 500 001', website: 'https://transportesrapidos.pt', nif: '506234001' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-002', name: 'Marketing Digital 360', clusterId: 'emp-cluster-parceiros',
@@ -183,6 +204,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 8, area: 100, revenue: 0.85,
     contact: { email: 'info@marketing360.pt', phone: '+351 217 600 002', website: 'https://marketing360.pt', nif: '506234002' },
     emailsSent: 1, lastContactDate: '2024-11-25',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-par-np-003', name: 'Contabilidade Confiança', clusterId: 'emp-cluster-parceiros',
@@ -191,6 +213,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 180, revenue: 1.2,
     contact: { email: 'geral@contabilidadeconfianca.pt', phone: '+351 222 500 003', website: 'https://contabilidadeconfianca.pt', nif: '506234003' },
     emailsSent: 2, lastContactDate: '2024-12-08',
+    onboardingStatus: 'interessada_simple',
   },
   {
     id: 'emp-par-np-004', name: 'Design Criativo Lda', clusterId: 'emp-cluster-parceiros',
@@ -199,6 +222,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 5, area: 60, revenue: 0.35,
     contact: { email: 'projetos@designcriativo.pt', phone: '+351 218 200 004', website: 'https://designcriativo.pt', nif: '506234004' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-005', name: 'Segurança Total SA', clusterId: 'emp-cluster-parceiros',
@@ -207,6 +231,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'media', employees: 120, area: 500, revenue: 8.5,
     contact: { email: 'comercial@segurancatotal.pt', phone: '+351 219 600 005', website: 'https://segurancatotal.pt', nif: '506234005' },
     emailsSent: 1, lastContactDate: '2024-10-15',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-par-np-006', name: 'IT Solutions Porto', clusterId: 'emp-cluster-parceiros',
@@ -215,6 +240,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 22, area: 250, revenue: 2.5,
     contact: { email: 'suporte@itsolutionsporto.pt', phone: '+351 229 400 006', website: 'https://itsolutionsporto.pt', nif: '506234006' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-007', name: 'Limpezas Industriais Pro', clusterId: 'emp-cluster-parceiros',
@@ -223,6 +249,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 45, area: 200, revenue: 1.8,
     contact: { email: 'orcamentos@limpezaspro.pt', phone: '+351 265 100 007', website: 'https://limpezaspro.pt', nif: '506234007' },
     emailsSent: 3, lastContactDate: '2024-12-20',
+    onboardingStatus: 'em_progresso_simple',
   },
   {
     id: 'emp-par-np-008', name: 'Formação Executiva', clusterId: 'emp-cluster-parceiros',
@@ -231,6 +258,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 12, area: 300, revenue: 1.5,
     contact: { email: 'cursos@formacaoexecutiva.pt', phone: '+351 217 700 008', website: 'https://formacaoexecutiva.pt', nif: '506234008' },
     emailsSent: 1, lastContactDate: '2024-11-30',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-par-np-009', name: 'Traduções Globais', clusterId: 'emp-cluster-parceiros',
@@ -239,6 +267,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 6, area: 70, revenue: 0.45,
     contact: { email: 'traducoes@globais.pt', phone: '+351 226 100 009', website: 'https://traducoesglobais.pt', nif: '506234009' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-010', name: 'Arquitetura Sustentável', clusterId: 'emp-cluster-parceiros',
@@ -247,6 +276,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 10, area: 150, revenue: 1.2,
     contact: { email: 'projetos@arquiteturasustentavel.pt', phone: '+351 214 500 010', website: 'https://arquiteturasustentavel.pt', nif: '506234010' },
     emailsSent: 2, lastContactDate: '2024-12-12',
+    onboardingStatus: 'registada_simple',
   },
   {
     id: 'emp-par-np-011', name: 'Recursos Humanos 2000', clusterId: 'emp-cluster-parceiros',
@@ -255,6 +285,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 18, area: 200, revenue: 2.8,
     contact: { email: 'recrutamento@rh2000.pt', phone: '+351 213 100 011', website: 'https://rh2000.pt', nif: '506234011' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-012', name: 'Eventos Corporativos Plus', clusterId: 'emp-cluster-parceiros',
@@ -263,6 +294,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 14, area: 120, revenue: 1.5,
     contact: { email: 'eventos@corporativosplus.pt', phone: '+351 214 600 012', website: 'https://eventoscorporativos.pt', nif: '506234012' },
     emailsSent: 1, lastContactDate: '2024-11-08',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-par-np-013', name: 'Impressão Digital Express', clusterId: 'emp-cluster-parceiros',
@@ -271,6 +303,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 8, area: 180, revenue: 0.55,
     contact: { email: 'orcamentos@impressaoexpress.pt', phone: '+351 223 300 013', website: 'https://impressaoexpress.pt', nif: '506234013' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-014', name: 'Fotografia Profissional', clusterId: 'emp-cluster-parceiros',
@@ -279,6 +312,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 4, area: 80, revenue: 0.28,
     contact: { email: 'estudio@fotografiapro.pt', phone: '+351 213 200 014', website: 'https://fotografiapro.pt', nif: '506234014' },
     emailsSent: 2, lastContactDate: '2024-12-01',
+    onboardingStatus: 'interessada_formulario',
   },
   {
     id: 'emp-par-np-015', name: 'Catering Gourmet', clusterId: 'emp-cluster-parceiros',
@@ -287,6 +321,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 22, area: 350, revenue: 1.8,
     contact: { email: 'eventos@cateringgourmet.pt', phone: '+351 219 200 015', website: 'https://cateringgourmet.pt', nif: '506234015' },
     emailsSent: 1, lastContactDate: '2024-10-25',
+    onboardingStatus: 'sem_interacao',
   },
   {
     id: 'emp-par-np-016', name: 'Eletricidade Residencial', clusterId: 'emp-cluster-parceiros',
@@ -295,6 +330,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 6, area: 50, revenue: 0.32,
     contact: { email: 'servicos@eletricidaderesidencial.pt', phone: '+351 253 600 016', website: '', nif: '506234016' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-017', name: 'Jardinagem Verde', clusterId: 'emp-cluster-parceiros',
@@ -303,6 +339,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 100, revenue: 0.65,
     contact: { email: 'orcamentos@jardinagemverde.pt', phone: '+351 214 700 017', website: 'https://jardinagemverde.pt', nif: '506234017' },
     emailsSent: 3, lastContactDate: '2024-12-22',
+    onboardingStatus: 'completo',
   },
   {
     id: 'emp-par-np-018', name: 'Manutenção Industrial', clusterId: 'emp-cluster-parceiros',
@@ -311,6 +348,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 28, area: 400, revenue: 2.2,
     contact: { email: 'servicos@manutencaoindustrial.pt', phone: '+351 212 200 018', website: 'https://manutencaoindustrial.pt', nif: '506234018' },
     emailsSent: 1, lastContactDate: '2024-11-12',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-par-np-019', name: 'Armazenagem Central', clusterId: 'emp-cluster-parceiros',
@@ -319,6 +357,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'media', employees: 55, area: 5000, revenue: 4.5,
     contact: { email: 'comercial@armazenagemcentral.pt', phone: '+351 219 700 019', website: 'https://armazenagemcentral.pt', nif: '506234019' },
     emailsSent: 0,
+    onboardingStatus: 'por_contactar',
   },
   {
     id: 'emp-par-np-020', name: 'Software Personalizado', clusterId: 'emp-cluster-parceiros',
@@ -327,6 +366,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 18, area: 200, revenue: 2.2,
     contact: { email: 'projetos@softwarepersonalizado.pt', phone: '+351 226 200 020', website: 'https://softwarepersonalizado.pt', nif: '506234020' },
     emailsSent: 2, lastContactDate: '2024-12-15',
+    onboardingStatus: 'em_progresso_formulario',
   },
 ];
 
