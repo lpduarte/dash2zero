@@ -107,6 +107,7 @@ const Incentive = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCluster, setSelectedCluster] = useState("all");
   const [advancedFilters, setAdvancedFilters] = useState<IncentiveFilters>({
+    onboardingStatus: [],
     emailCount: "all",
     sectors: [],
     companySize: [],
@@ -191,6 +192,11 @@ const Incentive = () => {
     // Advanced filters - regions
     if (advancedFilters.regions.length > 0) {
       filtered = filtered.filter(c => advancedFilters.regions.includes(c.region || ""));
+    }
+    
+    // Advanced filters - onboarding status
+    if (advancedFilters.onboardingStatus.length > 0) {
+      filtered = filtered.filter(c => advancedFilters.onboardingStatus.includes(c.onboardingStatus));
     }
     
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
