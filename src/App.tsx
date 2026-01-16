@@ -10,6 +10,7 @@ import Incentive from "./pages/Incentive";
 import Onboarding from "./pages/Onboarding";
 import FormularioTotais from "./pages/FormularioTotais";
 import EmailTemplate from "./pages/EmailTemplate";
+import StyleGuide from "./pages/StyleGuide";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/formulario-totais" element={<FormularioTotais />} />
             <Route path="/email-template" element={<EmailTemplate />} />
+            <Route path="/style-guide" element={<StyleGuide />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
