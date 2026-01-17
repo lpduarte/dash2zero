@@ -28,7 +28,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --primary-dark: 175 70% 28%;
 
     /* Status colors */
-    --success: 160 65% 40%;
     --warning: 42 90% 50%;
     --warning-foreground: 0 0% 10%;
     --danger: 0 70% 55%;
@@ -73,7 +72,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --primary-dark: 175 65% 35%;
 
     /* Status colors */
-    --success: 160 60% 45%;
     --warning: 42 85% 55%;
     --warning-foreground: 0 0% 10%;
     --danger: 0 65% 58%;

@@ -97,7 +97,7 @@ export default {
           foreground: "hsl(var(--foreground))", // alias to foreground
         },
         success: {
-          DEFAULT: "hsl(var(--success))",
+          DEFAULT: "hsl(var(--primary))", // consolidated with primary
           foreground: "hsl(var(--card))", // white = card
         },
         warning: {

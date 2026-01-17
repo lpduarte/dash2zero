@@ -14,9 +14,10 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 2,
+  patch: 3,
   date: "2026-01-17",
   changelog: [
+    "Auto-update via commit",
     "Auto-update via commit",
     "Auto-update via commit",
     "Sistema de cores simplificado: 20 variáveis CSS (vs 35+), aliases Tailwind preservados",
@@ -120,13 +121,12 @@ const allColors = {
   ],
   // Brand/Primary colors (3 CSS variables)
   brand: [
-    { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: '#219F94', note: 'Cor principal da marca' },
+    { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: '#219F94', note: 'Cor principal da marca (= success)' },
     { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Primary mais claro' },
     { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: '#157068', note: 'Primary mais escuro (= accent, secondary)' },
   ],
-  // Status colors (4 CSS variables)
+  // Status colors (3 CSS variables)
   status: [
-    { name: '--success', tailwind: 'bg-success', hsl: '160 65% 40%', hex: '#24A66B', note: 'Sucesso / Baixo Risco' },
     { name: '--warning', tailwind: 'bg-warning', hsl: '42 90% 50%', hex: '#F2A91E', note: 'Atenção / Médio Risco' },
     { name: '--warning-foreground', tailwind: 'text-warning-foreground', hsl: '0 0% 10%', hex: '#1A1A1A', note: 'Texto sobre warning (escuro)' },
     { name: '--danger', tailwind: 'bg-danger', hsl: '0 70% 55%', hex: '#DF4545', note: 'Erro / Alto Risco (= destructive)' },
@@ -142,6 +142,34 @@ const allColors = {
     { name: '--medal-gold', tailwind: 'bg-medal-gold', hsl: '51 100% 50%', hex: '#FFD700', note: 'Ouro - 1º lugar' },
     { name: '--medal-silver', tailwind: 'bg-medal-silver', hsl: '0 0% 75%', hex: '#C0C0C0', note: 'Prata - 2º lugar' },
     { name: '--medal-bronze', tailwind: 'bg-medal-bronze', hsl: '30 59% 50%', hex: '#CD7F32', note: 'Bronze - 3º lugar' },
+  ],
+};
+
+// Cores Tailwind hardcoded encontradas no código (para análise)
+const hardcodedTailwindColors = {
+  funnel: [
+    { tailwind: 'bg-slate-400', usage: 'Por contactar', hsl: '215 16% 65%', hex: '#94A3B8' },
+    { tailwind: 'bg-blue-100', usage: 'Contactada', hsl: '214 95% 93%', hex: '#DBEAFE' },
+    { tailwind: 'bg-yellow-100', usage: 'Interessada / Em Negociação', hsl: '55 97% 88%', hex: '#FEF9C3' },
+    { tailwind: 'bg-amber-500', usage: 'Interessada (funil)', hsl: '38 92% 50%', hex: '#F59E0B' },
+    { tailwind: 'bg-orange-100', usage: 'Documentação Pendente', hsl: '34 100% 92%', hex: '#FFEDD5' },
+    { tailwind: 'bg-orange-600', usage: 'Em progresso (funil)', hsl: '21 90% 48%', hex: '#EA580C' },
+    { tailwind: 'bg-green-100', usage: 'Concluído', hsl: '138 76% 93%', hex: '#DCFCE7' },
+    { tailwind: 'bg-teal-600', usage: 'Completo (funil)', hsl: '175 84% 32%', hex: '#0D9488' },
+  ],
+  scopes: [
+    { tailwind: 'bg-violet-50', usage: 'Âmbito 1', hsl: '250 100% 98%', hex: '#F5F3FF' },
+    { tailwind: 'bg-blue-50', usage: 'Âmbito 2', hsl: '214 100% 97%', hex: '#EFF6FF' },
+    { tailwind: 'bg-orange-50', usage: 'Âmbito 3', hsl: '33 100% 96%', hex: '#FFF7ED' },
+  ],
+  infrastructure: [
+    { tailwind: 'bg-teal-500', usage: 'Ícones de infraestrutura', hsl: '173 80% 40%', hex: '#14B8A6' },
+  ],
+  funding: [
+    { tailwind: 'bg-purple-100', usage: 'Financiamento', hsl: '270 100% 95%', hex: '#F3E8FF' },
+  ],
+  other: [
+    { tailwind: 'bg-slate-100', usage: 'Elementos neutros', hsl: '210 40% 96%', hex: '#F1F5F9' },
   ],
 };
 
@@ -467,7 +495,7 @@ const StyleGuide = () => {
           id="stack"
           title="Stack Tecnológico"
           icon={Code}
-          description="As tecnologias e ferramentas que compõem este design system"
+          description="As tecnologias e ferramentas que compõem este sistema"
         />
 
         <div className="space-y-6">
@@ -538,15 +566,15 @@ const StyleGuide = () => {
           id="cores"
           title="Cores"
           icon={Palette}
-          description="Todas as cores CSS do design system"
+          description="Todas as cores CSS do sistema"
         />
 
         <div className="space-y-8">
           {/* Base */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Base (6 variáveis CSS)</h3>
+            <h3 className="text-lg font-semibold mb-2">Base</h3>
             <p className="text-sm text-muted-foreground mb-4">Fundos, texto e bordas da aplicação</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {allColors.base.map((c) => (
                 <ColorSwatch
                   key={c.name}
@@ -562,8 +590,8 @@ const StyleGuide = () => {
 
           {/* Brand/Primary */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Marca / Primary (3 variáveis CSS)</h3>
-            <p className="text-sm text-muted-foreground mb-4">Cor principal da marca #219F94 e variações</p>
+            <h3 className="text-lg font-semibold mb-2">Marca / Primary</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cor principal da marca e variações</p>
             <div className="grid grid-cols-3 gap-3">
               {allColors.brand.map((c) => (
                 <ColorSwatch
@@ -580,9 +608,9 @@ const StyleGuide = () => {
 
           {/* Status/Semantic */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Status (4 variáveis CSS)</h3>
+            <h3 className="text-lg font-semibold mb-2">Status</h3>
             <p className="text-sm text-muted-foreground mb-4">Cores para feedback e estados</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {allColors.status.map((c) => (
                 <ColorSwatch
                   key={c.name}
@@ -598,7 +626,7 @@ const StyleGuide = () => {
 
           {/* Cores de Scope */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Âmbitos / Scopes</h3>
+            <h3 className="text-lg font-semibold mb-2">Âmbitos</h3>
             <p className="text-sm text-muted-foreground mb-4">Cores para gráficos de emissões por âmbito</p>
             <div className="grid grid-cols-3 gap-3">
               {allColors.scope.map((c) => (
@@ -616,7 +644,7 @@ const StyleGuide = () => {
 
           {/* Cores de Medalhas */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Medalhas / Rankings</h3>
+            <h3 className="text-lg font-semibold mb-2">Rankings</h3>
             <p className="text-sm text-muted-foreground mb-4">Cores para destaques de ranking</p>
             <div className="grid grid-cols-3 gap-3">
               {allColors.medals.map((c) => (
@@ -632,6 +660,100 @@ const StyleGuide = () => {
             </div>
           </div>
 
+          {/* Cores Hardcoded - Para Análise */}
+          <Card className="p-6 border-dashed border-warning/50 bg-warning/5">
+            <div className="flex items-center gap-2 mb-4">
+              <AlertTriangle className="h-5 w-5 text-warning" />
+              <h3 className="text-lg font-semibold">Cores Tailwind Hardcoded (Análise)</h3>
+            </div>
+            <p className="text-sm text-muted-foreground mb-6">
+              Cores encontradas no código que não fazem parte do design system. Precisam de decisão: criar variáveis CSS ou substituir por cores existentes.
+            </p>
+
+            <div className="space-y-6">
+              {/* Funil de Contacto */}
+              <div>
+                <h4 className="font-medium mb-3 text-sm">Estados do Funil (Incentive.tsx)</h4>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                  {hardcodedTailwindColors.funnel.map((c, i) => (
+                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
+                      <div className={`h-16 ${c.tailwind}`} />
+                      <div className="p-3">
+                        <p className="text-xs font-medium truncate">{c.usage}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hsl}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hex}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Âmbitos alternativos */}
+              <div>
+                <h4 className="font-medium mb-3 text-sm">Âmbitos (FormularioTotais.tsx) - Diferente de --scope-*</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {hardcodedTailwindColors.scopes.map((c, i) => (
+                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
+                      <div className={`h-16 ${c.tailwind}`} />
+                      <div className="p-3">
+                        <p className="text-xs font-medium">{c.usage}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hsl}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hex}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Outras */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <h4 className="font-medium mb-3 text-sm">Infraestrutura</h4>
+                  {hardcodedTailwindColors.infrastructure.map((c, i) => (
+                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
+                      <div className={`h-16 ${c.tailwind}`} />
+                      <div className="p-3">
+                        <p className="text-xs font-medium">{c.usage}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hsl}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hex}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <h4 className="font-medium mb-3 text-sm">Financiamento</h4>
+                  {hardcodedTailwindColors.funding.map((c, i) => (
+                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
+                      <div className={`h-16 ${c.tailwind}`} />
+                      <div className="p-3">
+                        <p className="text-xs font-medium">{c.usage}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hsl}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hex}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <h4 className="font-medium mb-3 text-sm">Outros</h4>
+                  {hardcodedTailwindColors.other.map((c, i) => (
+                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
+                      <div className={`h-16 ${c.tailwind}`} />
+                      <div className="p-3">
+                        <p className="text-xs font-medium">{c.usage}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hsl}</p>
+                        <p className="text-[10px] text-muted-foreground/60 font-mono">{c.hex}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Card>
 
           {/* Gradientes */}
           <div>
@@ -661,7 +783,6 @@ const StyleGuide = () => {
                       { color: 'bg-primary', label: 'Primary' },
                       { color: 'bg-primary-light', label: 'Primary Light' },
                       { color: 'bg-primary-dark', label: 'Primary Dark' },
-                      { color: 'bg-success', label: 'Success' },
                       { color: 'bg-warning', label: 'Warning' },
                       { color: 'bg-danger', label: 'Danger' },
                       { color: 'bg-muted', label: 'Muted' },
