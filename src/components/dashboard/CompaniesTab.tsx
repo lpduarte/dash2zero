@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Supplier } from "@/types/supplier";
 import { SupplierCard } from "./SupplierCard";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -48,6 +48,12 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
   const [sortBy, setSortBy] = useState<SortOption>('name-asc');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
+  const [visibleCount, setVisibleCount] = useState(12);
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(12);
+  }, [selectedRegion, selectedSector, searchTerm, sortBy, suppliers]);
 
   // Get unique regions and sectors with counts
   const regions = useMemo(() => {
@@ -267,11 +273,28 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
 
       {/* Card View */}
       {viewMode === 'cards' && (
-        <div className="grid gap-6 md:grid-cols-2">
-          {filteredSuppliers.map((supplier) => (
-            <SupplierCard key={supplier.id} supplier={supplier} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-6 md:grid-cols-2">
+            {filteredSuppliers.slice(0, visibleCount).map((supplier) => (
+              <SupplierCard
+                key={supplier.id}
+                supplier={supplier}
+                sectorAverage={sectorAverages[supplier.sector]}
+              />
+            ))}
+          </div>
+          {visibleCount < filteredSuppliers.length && (
+            <div className="flex justify-center pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setVisibleCount(prev => prev + 12)}
+                className="px-8"
+              >
+                Mostrar mais ({filteredSuppliers.length - visibleCount} restantes)
+              </Button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Table View */}
@@ -345,7 +368,10 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
       <Dialog open={!!selectedSupplier} onOpenChange={(open) => !open && setSelectedSupplier(null)}>
         <DialogContent className="max-w-2xl p-0 border-0 bg-transparent shadow-none [&>button]:top-4 [&>button]:right-4 [&>button]:z-10">
           {selectedSupplier && (
-            <SupplierCard supplier={selectedSupplier} />
+            <SupplierCard
+              supplier={selectedSupplier}
+              sectorAverage={sectorAverages[selectedSupplier.sector]}
+            />
           )}
         </DialogContent>
       </Dialog>

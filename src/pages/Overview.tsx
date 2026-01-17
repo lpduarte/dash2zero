@@ -172,10 +172,10 @@ const Overview = () => {
             <TabsTrigger value="financial">Análise por faturação</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="home" className="space-y-6">
+          <TabsContent value="home" className="space-y-6" forceMount={false}>
             {/* GRUPO 1: KPIs de Emissões */}
             <MetricsOverview suppliers={filteredSuppliers} totalCompanies={clusterTotals[selectedCluster]} />
-            
+
             {/* GRUPO 2: KPIs de Infraestruturas (APENAS municípios) */}
             {isMunicipio && <InfrastructureKPIs />}
 
@@ -185,18 +185,18 @@ const Overview = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="companies" className="space-y-6">
+          <TabsContent value="companies" className="space-y-6" forceMount={false}>
             <CompaniesTab suppliers={filteredSuppliers} />
           </TabsContent>
 
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-6" forceMount={false}>
             <div className="grid grid-cols-4 gap-6 items-stretch">
               <div className="col-span-1 flex flex-col">
                 <EmissionsBreakdown suppliers={chartFilteredSuppliers} />
               </div>
               <div className="col-span-3 flex flex-col">
-                <ComparisonChart 
-                  suppliers={chartFilteredSuppliers} 
+                <ComparisonChart
+                  suppliers={chartFilteredSuppliers}
                   sectors={sectorsWithCounts}
                   selectedSector={selectedSector}
                   onSectorChange={setSelectedSector}
@@ -207,12 +207,12 @@ const Overview = () => {
             <SupplierEmissionsChart suppliers={chartFilteredSuppliers} />
           </TabsContent>
 
-          <TabsContent value="environmental" className="space-y-6">
+          <TabsContent value="environmental" className="space-y-6" forceMount={false}>
             <PerformanceHeatmap suppliers={filteredSuppliers} />
             <SectorBenchmarking suppliers={filteredSuppliers} />
           </TabsContent>
 
-          <TabsContent value="financial" className="space-y-6">
+          <TabsContent value="financial" className="space-y-6" forceMount={false}>
             <FinancialAnalysis suppliers={filteredSuppliers} />
             <EmissionsParetoChart suppliers={filteredSuppliers} />
           </TabsContent>

@@ -12,14 +12,14 @@ export function FilterButton({ activeFiltersCount, onClick }: FilterButtonProps)
       onClick={onClick}
       className={cn(
         "flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-        "bg-card text-card-foreground border-border",
-        "hover:border-primary/50 hover:bg-primary hover:text-primary-foreground hover:shadow-md"
+        "[&_svg]:text-current",
+        "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-primary hover:text-primary-foreground hover:shadow-md"
       )}
     >
       <SlidersHorizontal className="h-4 w-4" />
       <span className="font-medium">Filtros</span>
       {activeFiltersCount > 0 && (
-        <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-primary text-primary-foreground">
+        <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
           {activeFiltersCount}
         </span>
       )}

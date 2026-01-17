@@ -1,12 +1,14 @@
+import { memo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
 import { Mail, ExternalLink, FileText, Building2, Users, Handshake, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getSectorName } from "@/data/sectors";
-import { allEmpresaSuppliers } from "@/data/suppliers";
+
 interface SupplierCardProps {
   supplier: Supplier;
+  sectorAverage?: number;
 }
 const getRegionLabel = (region: string) => {
   const labels: Record<string, string> = {
@@ -40,18 +42,18 @@ const getClusterInfo = (cluster: string) => {
     icon: Building2
   };
 };
-export const SupplierCard = ({
-  supplier
+export const SupplierCard = memo(({
+  supplier,
+  sectorAverage
 }: SupplierCardProps) => {
   const clusterInfo = getClusterInfo((supplier as any).clusterId || supplier.cluster);
   const ClusterIcon = clusterInfo.icon;
 
-  // Calculate sector average using suppliers with footprint
-  const sectorSuppliers = allEmpresaSuppliers.filter(s => 'totalEmissions' in s && s.sector === supplier.sector);
-  const sectorAvgEmissions = sectorSuppliers.length > 0 
-    ? sectorSuppliers.reduce((sum, s) => sum + (s as any).totalEmissions, 0) / sectorSuppliers.length 
-    : supplier.totalEmissions;
-  const vsAverage = (supplier.totalEmissions - sectorAvgEmissions) / sectorAvgEmissions * 100;
+  // Use provided sector average or fallback to supplier's own emissions
+  const sectorAvgEmissions = sectorAverage ?? supplier.totalEmissions;
+  const vsAverage = sectorAvgEmissions > 0
+    ? (supplier.totalEmissions - sectorAvgEmissions) / sectorAvgEmissions * 100
+    : 0;
   const isAboveAverage = vsAverage > 0;
   return <Card className="border border-border bg-card hover:shadow-lg transition-all">
       <CardHeader className="pb-3">
@@ -168,4 +170,4 @@ export const SupplierCard = ({
         </div>
       </CardContent>
     </Card>;
-};
+});
