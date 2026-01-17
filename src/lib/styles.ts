@@ -164,13 +164,13 @@ export const getPercentageColors = (percentage: number) => {
 
 export const cardStyles = {
   /** Card de KPI pequeno */
-  kpi: 'p-4 border rounded-lg shadow-sm',
+  kpi: 'p-4 border rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/30',
   /** Card de secção principal */
-  section: 'p-6 border rounded-lg shadow-md',
+  section: 'p-6 border rounded-lg shadow-md transition-all duration-200 hover:shadow-lg',
   /** Card dentro de outro card (sem shadow) */
-  nested: 'p-4 border rounded-lg',
+  nested: 'p-4 border rounded-lg transition-all duration-200 hover:bg-muted/30',
   /** Card clicável */
-  clickable: 'cursor-pointer hover:bg-muted/50 transition-colors',
+  clickable: 'cursor-pointer hover:bg-muted/50 hover:shadow-md transition-all duration-200',
   /** Card seleccionado */
   selected: 'border-primary bg-primary/5 border-2',
 } as const;

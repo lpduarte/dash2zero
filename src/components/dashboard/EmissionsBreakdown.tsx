@@ -12,9 +12,9 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
   const totalScope3 = suppliers.reduce((sum, s) => sum + s.scope3, 0);
 
   const data = [
-    { name: "Âmbito 1", value: totalScope1, color: "hsl(220 70% 55%)" },
-    { name: "Âmbito 2", value: totalScope2, color: "hsl(280 60% 60%)" },
-    { name: "Âmbito 3", value: totalScope3, color: "hsl(25 85% 55%)" },
+    { name: "Âmbito 1", value: totalScope1, color: "hsl(var(--scope-1))" },
+    { name: "Âmbito 2", value: totalScope2, color: "hsl(var(--scope-2))" },
+    { name: "Âmbito 3", value: totalScope3, color: "hsl(var(--scope-3))" },
   ];
 
   return (
@@ -32,7 +32,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
                 cy="50%"
                 labelLine={false}
                 outerRadius={100}
-                fill="#8884d8"
+                fill="hsl(var(--scope-1))"
                 dataKey="value"
               >
                 {data.map((entry, index) => (

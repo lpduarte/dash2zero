@@ -210,8 +210,8 @@ export const Step2Measures = ({
     <div className="flex flex-col h-full">
       <style>{`
         @keyframes shadow-pulse {
-          0%, 100% { box-shadow: 0 0 10px 2px rgba(16, 185, 129, 0.3); }
-          50% { box-shadow: 0 0 25px 5px rgba(16, 185, 129, 0.5); }
+          0%, 100% { box-shadow: 0 0 10px 2px hsl(var(--success) / 0.3); }
+          50% { box-shadow: 0 0 25px 5px hsl(var(--success) / 0.5); }
         }
         .animate-shadow-pulse {
           animation: shadow-pulse 2s ease-in-out infinite;

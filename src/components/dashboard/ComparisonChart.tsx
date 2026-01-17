@@ -23,9 +23,9 @@ interface ComparisonChartProps {
 }
 
 const SCOPE_COLORS = {
-  'Âmbito 1': 'hsl(220 70% 55%)',
-  'Âmbito 2': 'hsl(280 60% 60%)',
-  'Âmbito 3': 'hsl(25 85% 55%)',
+  'Âmbito 1': 'hsl(var(--scope-1))',
+  'Âmbito 2': 'hsl(var(--scope-2))',
+  'Âmbito 3': 'hsl(var(--scope-3))',
 };
 
 export const ComparisonChart = ({

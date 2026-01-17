@@ -132,17 +132,17 @@ export const SupplierCard = ({
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">Emissões por Âmbito</p>
           <div className="grid grid-cols-3 gap-2">
-            <div className="p-2 rounded border border-[hsl(220_70%_55%/0.3)] bg-[hsl(220_70%_55%/0.1)]">
+            <div className="p-2 rounded border border-scope-1/30 bg-scope-1/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 1</p>
-              <p className="text-sm font-semibold text-[hsl(220_70%_55%)]">{supplier.scope1.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-semibold text-scope-1">{supplier.scope1.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
-            <div className="p-2 rounded border border-[hsl(280_60%_60%/0.3)] bg-[hsl(280_60%_60%/0.1)]">
+            <div className="p-2 rounded border border-scope-2/30 bg-scope-2/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 2</p>
-              <p className="text-sm font-semibold text-[hsl(280_60%_60%)]">{supplier.scope2.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-semibold text-scope-2">{supplier.scope2.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
-            <div className="p-2 rounded border border-[hsl(25_85%_55%/0.3)] bg-[hsl(25_85%_55%/0.1)]">
+            <div className="p-2 rounded border border-scope-3/30 bg-scope-3/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 3</p>
-              <p className="text-sm font-semibold text-[hsl(25_85%_55%)]">{supplier.scope3.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-semibold text-scope-3">{supplier.scope3.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
           </div>
         </div>

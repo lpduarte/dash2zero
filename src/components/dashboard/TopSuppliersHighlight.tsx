@@ -16,11 +16,11 @@ interface TopSuppliersHighlightProps {
 const getMedalColor = (index: number) => {
   switch (index) {
     case 0:
-      return "bg-[#FFD700] text-black";
+      return "bg-medal-gold text-black";
     case 1:
-      return "bg-[#C0C0C0] text-black";
+      return "bg-medal-silver text-black";
     case 2:
-      return "bg-[#CD7F32] text-white";
+      return "bg-medal-bronze text-white";
     default:
       return "bg-muted text-muted-foreground";
   }
@@ -29,11 +29,11 @@ const getMedalColor = (index: number) => {
 const getMedalBorder = (index: number) => {
   switch (index) {
     case 0:
-      return "border-[#FFD700]/50 bg-[#FFD700]/5";
+      return "border-medal-gold/50 bg-medal-gold/5";
     case 1:
-      return "border-[#C0C0C0]/50 bg-[#C0C0C0]/5";
+      return "border-medal-silver/50 bg-medal-silver/5";
     case 2:
-      return "border-[#CD7F32]/50 bg-[#CD7F32]/5";
+      return "border-medal-bronze/50 bg-medal-bronze/5";
     default:
       return "border-border bg-card";
   }

@@ -1,12 +1,36 @@
 import { useState, useEffect } from "react";
-import { 
-  Palette, Type, Square, Layers, MousePointerClick, Tag, LayoutGrid, 
-  FormInput, ListFilter, BarChart3, AlertCircle, Activity, Columns, 
-  Table2, PieChart, Star, Hash, Ban, Moon, Sun, Factory, Building2, 
-  Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings, 
-  Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight, 
-  Eye, Mail, Users, Leaf, Copy
+import {
+  Palette, Type, Square, Layers, MousePointerClick, Tag, LayoutGrid,
+  FormInput, ListFilter, BarChart3, AlertCircle, Activity, Columns,
+  Table2, PieChart, Star, Hash, Ban, Moon, Sun, Factory, Building2,
+  Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
+  Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
+  Eye, Mail, Users, Leaf, Copy, Monitor, Code
 } from "lucide-react";
+
+// ============================================
+// VERSIONING - Update this when making changes
+// ============================================
+const STYLE_GUIDE_VERSION = {
+  major: 1,
+  minor: 4,
+  patch: 0,
+  date: "2026-01-17",
+  changelog: [
+    "Sistema de cores simplificado: 20 variáveis CSS (vs 35+), aliases Tailwind preservados",
+    "Adicionadas cores de Scope, Medalhas e Gráficos; Análise de cores hardcoded; Ícones oficiais das tecnologias",
+    "Automatismo de changelog implementado",
+    "Header com fundo animado pulsante",
+    "Animação text reveal no título",
+    "Sistema de versionamento"
+  ]
+};
+
+const getVersionString = () => `v${STYLE_GUIDE_VERSION.major}.${STYLE_GUIDE_VERSION.minor}.${STYLE_GUIDE_VERSION.patch}`;
+const getVersionDate = () => {
+  const date = new Date(STYLE_GUIDE_VERSION.date);
+  return date.toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
+};
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -27,15 +51,43 @@ import {
   formatCurrency, formatRevenue 
 } from "@/lib/formatters";
 import { riskColors, scopeColors, cardStyles, textStyles, spacing, iconSizes } from "@/lib/styles";
-import { 
-  BarChart, Bar, XAxis, YAxis, Tooltip as RechartsTooltip, 
-  ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell 
-} from "recharts";
+// Tremor charts
+import {
+  AreaChart as TremorAreaChart,
+  DonutChart as TremorDonutChart
+} from "@tremor/react";
+
+// Technology brand icons (official SVG paths)
+const ReactIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12 10.11c1.03 0 1.87.84 1.87 1.89 0 1-.84 1.85-1.87 1.85S10.13 13 10.13 12c0-1.05.84-1.89 1.87-1.89M7.37 20c.63.38 2.01-.2 3.6-1.7-.52-.59-1.03-1.23-1.51-1.9a22.7 22.7 0 0 1-2.4-.36c-.51 2.14-.32 3.61.31 3.96m.71-5.74-.29-.51c-.11.29-.22.58-.29.86.27.06.57.11.88.16l-.3-.51m6.54-.76.81-1.5-.81-1.5c-.3-.53-.62-1-.91-1.47C13.17 9 12.6 9 12 9s-1.17 0-1.71.03c-.29.47-.61.94-.91 1.47L8.57 12l.81 1.5c.3.53.62 1 .91 1.47.54.03 1.11.03 1.71.03s1.17 0 1.71-.03c.29-.47.61-.94.91-1.47M12 6.78c-.19.22-.39.45-.59.72h1.18c-.2-.27-.4-.5-.59-.72m0 10.44c.19-.22.39-.45.59-.72h-1.18c.2.27.4.5.59.72M16.62 4c-.62-.38-2 .2-3.59 1.7.52.59 1.03 1.23 1.51 1.9.82.08 1.63.2 2.4.36.51-2.14.32-3.61-.32-3.96m-.7 5.74.29.51c.11-.29.22-.58.29-.86-.27-.06-.57-.11-.88-.16l.3.51m1.45-7.05c1.47.84 1.63 3.05 1.01 5.63 2.54.75 4.37 1.99 4.37 3.68s-1.83 2.93-4.37 3.68c.62 2.58.46 4.79-1.01 5.63-1.46.84-3.45-.12-5.37-1.95-1.92 1.83-3.91 2.79-5.38 1.95-1.46-.84-1.62-3.05-1-5.63-2.54-.75-4.37-1.99-4.37-3.68s1.83-2.93 4.37-3.68c-.62-2.58-.46-4.79 1-5.63 1.47-.84 3.46.12 5.38 1.95 1.92-1.83 3.91-2.79 5.37-1.95M17.08 12c.34.75.64 1.5.89 2.26 2.1-.63 3.28-1.53 3.28-2.26s-1.18-1.63-3.28-2.26c-.25.76-.55 1.51-.89 2.26M6.92 12c-.34-.75-.64-1.5-.89-2.26-2.1.63-3.28 1.53-3.28 2.26s1.18 1.63 3.28 2.26c.25-.76.55-1.51.89-2.26m9 2.26-.3.51c.31-.05.61-.1.88-.16-.07-.28-.18-.57-.29-.86l-.29.51m-9.82-.26c.11.29.22.58.29.86.27-.06.57-.11.88-.16l-.29-.51-.88-.19m9.53-4.51c-.11-.29-.22-.58-.29-.86-.27.06-.57.11-.88.16l.29.51.88.19" />
+  </svg>
+);
+
+const TypeScriptIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M3 3h18v18H3V3m10.71 14.86c.5.98 1.51 1.73 3.09 1.73 1.6 0 2.8-.83 2.8-2.36 0-1.41-.81-2.04-2.25-2.66l-.42-.18c-.73-.31-1.04-.52-1.04-1.02 0-.41.31-.73.81-.73.48 0 .8.21 1.09.73l1.31-.87c-.55-.96-1.33-1.33-2.4-1.33-1.51 0-2.48.96-2.48 2.23 0 1.38.81 2.03 2.03 2.55l.42.18c.78.34 1.24.55 1.24 1.13 0 .48-.45.83-1.15.83-.83 0-1.31-.43-1.67-1.03l-1.38.8M13 11.25H8v1.5h1.5V20h1.75v-7.25H13v-1.5" />
+  </svg>
+);
+
+const TailwindIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M12 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.31.74 1.91 1.35.98 1 2.09 2.15 4.59 2.15 2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.3-.74-1.91-1.35C15.61 7.15 14.5 6 12 6m-5 6c-2.67 0-4.33 1.33-5 4 1-1.33 2.17-1.83 3.5-1.5.76.19 1.3.74 1.91 1.35C8.39 16.85 9.5 18 12 18c2.67 0 4.33-1.33 5-4-1 1.33-2.17 1.83-3.5 1.5-.76-.19-1.3-.74-1.91-1.35C10.61 13.15 9.5 12 7 12z" />
+  </svg>
+);
+
+const ShadcnIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M12 3L3 21h18L12 3z" />
+  </svg>
+);
 
 const sections = [
+  { id: 'stack', label: 'Stack', icon: Code },
   { id: 'cores', label: 'Cores', icon: Palette },
   { id: 'tipografia', label: 'Tipografia', icon: Type },
   { id: 'espacamento', label: 'Espaçamento', icon: Square },
+  { id: 'responsividade', label: 'Responsividade', icon: Monitor },
   { id: 'sombras', label: 'Sombras', icon: Layers },
   { id: 'botoes', label: 'Botões', icon: MousePointerClick },
   { id: 'badges', label: 'Badges', icon: Tag },
@@ -53,29 +105,85 @@ const sections = [
   { id: 'anti-padroes', label: 'Anti-padrões', icon: Ban },
 ];
 
-const primaryColors = [
-  { name: '--background', tailwind: 'bg-background', hsl: '170 15% 97%' },
-  { name: '--foreground', tailwind: 'text-foreground', hsl: '175 25% 12%' },
-  { name: '--card', tailwind: 'bg-card', hsl: '0 0% 100%' },
-  { name: '--card-foreground', tailwind: 'text-card-foreground', hsl: '175 25% 12%' },
-  { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%' },
-  { name: '--primary-foreground', tailwind: 'text-primary-foreground', hsl: '0 0% 100%' },
-  { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%' },
-  { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%' },
-  { name: '--secondary', tailwind: 'bg-secondary', hsl: '185 50% 25%' },
-  { name: '--muted', tailwind: 'bg-muted', hsl: '170 15% 94%' },
-  { name: '--muted-foreground', tailwind: 'text-muted-foreground', hsl: '175 15% 40%' },
-  { name: '--accent', tailwind: 'bg-accent', hsl: '175 70% 28%' },
-  { name: '--border', tailwind: 'border-border', hsl: '175 20% 88%' },
-  { name: '--input', tailwind: 'border-input', hsl: '175 20% 88%' },
-  { name: '--ring', tailwind: 'ring-ring', hsl: '175 66% 38%' },
+// SIMPLIFIED COLOR SYSTEM - CSS variables reduced, Tailwind classes preserved via aliases
+const allColors = {
+  // Base colors (6 CSS variables)
+  base: [
+    { name: '--background', tailwind: 'bg-background', hsl: '170 15% 97%', hex: '#F5F8F7', note: 'Fundo principal da aplicação' },
+    { name: '--foreground', tailwind: 'text-foreground', hsl: '175 25% 12%', hex: '#172423', note: 'Texto principal' },
+    { name: '--card', tailwind: 'bg-card', hsl: '0 0% 100%', hex: '#FFFFFF', note: 'Branco - cards, popovers, texto sobre cores' },
+    { name: '--muted', tailwind: 'bg-muted', hsl: '170 15% 94%', hex: '#EEF2F1', note: 'Fundo subtil' },
+    { name: '--muted-foreground', tailwind: 'text-muted-foreground', hsl: '175 15% 40%', hex: '#57726D', note: 'Texto secundário' },
+    { name: '--border', tailwind: 'border-border', hsl: '175 20% 88%', hex: '#D6E3E0', note: 'Bordas, inputs, grelhas' },
+  ],
+  // Brand/Primary colors (3 CSS variables)
+  brand: [
+    { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: '#219F94', note: 'Cor principal da marca' },
+    { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Primary mais claro' },
+    { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: '#157068', note: 'Primary mais escuro (= accent)' },
+  ],
+  // Secondary (1 CSS variable)
+  secondary: [
+    { name: '--secondary', tailwind: 'bg-secondary', hsl: '185 50% 25%', hex: '#1F4D53', note: 'Cor secundária (teal profundo)' },
+  ],
+  // Status colors (4 CSS variables)
+  status: [
+    { name: '--success', tailwind: 'bg-success', hsl: '160 65% 40%', hex: '#24A66B', note: 'Sucesso / Baixo Risco' },
+    { name: '--warning', tailwind: 'bg-warning', hsl: '42 90% 50%', hex: '#F2A91E', note: 'Atenção / Médio Risco' },
+    { name: '--warning-foreground', tailwind: 'text-warning-foreground', hsl: '0 0% 10%', hex: '#1A1A1A', note: 'Texto sobre warning (escuro)' },
+    { name: '--danger', tailwind: 'bg-danger', hsl: '0 70% 55%', hex: '#DF4545', note: 'Erro / Alto Risco (= destructive)' },
+  ],
+  // Scope/Âmbito colors for emissions charts (3 CSS variables)
+  scope: [
+    { name: '--scope-1', tailwind: 'bg-scope-1', hsl: '220 70% 55%', hex: '#4A7FE0', note: 'Âmbito 1 - Emissões Diretas' },
+    { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '280 60% 60%', hex: '#A366CC', note: 'Âmbito 2 - Energia' },
+    { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '25 85% 55%', hex: '#E87A30', note: 'Âmbito 3 - Cadeia de Valor' },
+  ],
+  // Medal/Ranking colors (3 CSS variables)
+  medals: [
+    { name: '--medal-gold', tailwind: 'bg-medal-gold', hsl: '51 100% 50%', hex: '#FFD700', note: 'Ouro - 1º lugar' },
+    { name: '--medal-silver', tailwind: 'bg-medal-silver', hsl: '0 0% 75%', hex: '#C0C0C0', note: 'Prata - 2º lugar' },
+    { name: '--medal-bronze', tailwind: 'bg-medal-bronze', hsl: '30 59% 50%', hex: '#CD7F32', note: 'Bronze - 3º lugar' },
+  ],
+};
+
+// Tailwind aliases (no CSS variable, mapped in tailwind.config.ts)
+const tailwindAliases = [
+  { tailwind: 'bg-popover / text-popover-foreground', mapsTo: 'card / foreground' },
+  { tailwind: 'text-card-foreground', mapsTo: 'foreground' },
+  { tailwind: 'border-input', mapsTo: 'border' },
+  { tailwind: 'ring-ring', mapsTo: 'primary' },
+  { tailwind: 'bg-accent / text-accent-foreground', mapsTo: 'primary-dark / card' },
+  { tailwind: 'bg-destructive / text-destructive-foreground', mapsTo: 'danger / card' },
+  { tailwind: '*-foreground (primary, secondary, success, danger)', mapsTo: 'card (white)' },
+  { tailwind: 'chart-grid / chart-text', mapsTo: 'border / muted-foreground' },
 ];
 
-const semanticColors = [
-  { name: '--success', tailwind: 'text-success', hsl: '160 65% 40%', label: 'Sucesso / Baixo Risco' },
-  { name: '--warning', tailwind: 'text-warning', hsl: '42 90% 50%', label: 'Atenção / Médio Risco' },
-  { name: '--danger', tailwind: 'text-danger', hsl: '0 70% 55%', label: 'Erro / Alto Risco' },
+// Hardcoded colors found in codebase - TO BE FIXED
+const hardcodedColorsReport = [
+  {
+    file: 'EmailTemplate.tsx',
+    severity: 'high',
+    colors: ['#ffffff', '#1a1a1a', '#4a4a4a', '#6a6a6a', '#8a8a8a', '#f5f5f5', '#e5e5e5', 'hsl(168 71% 31%)'],
+    note: 'Template de email com cor da marca ERRADA (168° vs 175°) e muitos cinzas hardcoded',
+  },
+  // TopSuppliersHighlight.tsx - CORRIGIDO: usa --medal-gold/silver/bronze
+  // ComparisonChart.tsx - CORRIGIDO: usa --scope-1/2/3
+  // SupplierCard.tsx - CORRIGIDO: usa --scope-1/2/3
+  // EmissionsBreakdown.tsx - CORRIGIDO: usa --scope-1/2/3
+  // Step2Measures.tsx - CORRIGIDO: usa --success
 ];
+
+// Computed arrays for display
+const primaryColors = [
+  ...allColors.base,
+  ...allColors.brand,
+  ...allColors.secondary,
+];
+
+const semanticColors = allColors.status.filter(c =>
+  ['--success', '--warning', '--danger'].includes(c.name)
+).map(c => ({ ...c, label: c.note }));
 
 const commonIcons = [
   { icon: Factory, name: "Factory" },
@@ -105,57 +213,140 @@ const chartData = [
   { name: 'Abr', value: 450 },
 ];
 
-const scopeChartData = [
-  { name: 'Âmbito 1', value: 27, fill: 'hsl(263 70% 50%)' },
-  { name: 'Âmbito 2', value: 18, fill: 'hsl(175 66% 38%)' },
-  { name: 'Âmbito 3', value: 55, fill: 'hsl(25 85% 55%)' },
-];
+// scopeChartData removed - Tremor donut uses inline data
 
-const ColorSwatch = ({ 
-  color, 
-  label, 
-  hsl, 
-  tailwind 
-}: { 
-  color: string; 
-  label: string; 
-  hsl: string; 
+const ColorSwatch = ({
+  color,
+  label,
+  hsl,
+  tailwind,
+  hex,
+  note,
+  isRedundant
+}: {
+  color: string;
+  label: string;
+  hsl: string;
   tailwind: string;
+  hex?: string;
+  note?: string;
+  isRedundant?: boolean;
 }) => (
-  <div className="flex items-center gap-3 p-3 border rounded-lg bg-card">
-    <div className={`w-12 h-12 rounded-lg border ${color}`} />
+  <div className={`flex items-center gap-3 p-3 border rounded-lg bg-card ${isRedundant ? 'opacity-60 border-dashed border-warning/50' : ''}`}>
+    <div className={`w-12 h-12 rounded-lg border shrink-0 ${color}`} />
     <div className="flex-1 min-w-0">
-      <p className="font-mono text-xs text-muted-foreground truncate">{label}</p>
+      <div className="flex items-center gap-2">
+        <p className="font-mono text-xs font-medium truncate">{label}</p>
+        {isRedundant && <Badge variant="outline" className="text-[10px] px-1 py-0 text-warning border-warning/50">redundante</Badge>}
+      </div>
       <p className="font-mono text-xs text-muted-foreground/70 truncate">{tailwind}</p>
-      <p className="font-mono text-xs text-muted-foreground/50 truncate">{hsl}</p>
+      <div className="flex gap-2">
+        <p className="font-mono text-xs text-muted-foreground/50">{hsl}</p>
+        {hex && <p className="font-mono text-xs text-muted-foreground/50">{hex}</p>}
+      </div>
+      {note && <p className="text-xs text-muted-foreground/60 mt-1 truncate">{note}</p>}
     </div>
   </div>
 );
 
-const SectionHeader = ({ 
-  title, 
-  id, 
-  description 
-}: { 
-  title: string; 
-  id: string; 
+const SectionHeader = ({
+  title,
+  id,
+  icon: Icon,
+  description,
+}: {
+  title: string;
+  id: string;
+  icon?: React.ElementType;
   description?: string;
 }) => (
-  <div id={id} className="scroll-mt-6 mb-6 pt-8 border-t first:border-t-0 first:pt-0">
-    <h2 className="text-2xl font-bold mb-2">{title}</h2>
-    {description && <p className="text-muted-foreground">{description}</p>}
+  <div id={id} className="scroll-mt-6 mb-8 mt-16 pt-8 border-t border-border/50 first:border-t-0 first:pt-0 first:mt-0">
+    <div className="flex items-center gap-3 mb-2">
+      {Icon && (
+        <div className="p-2.5 rounded-xl bg-primary/10 shadow-sm">
+          <Icon className="h-5 w-5 text-primary" />
+        </div>
+      )}
+      <h2 className="text-2xl font-bold">{title}</h2>
+    </div>
+    {description && <p className="text-muted-foreground mt-1">{description}</p>}
   </div>
 );
 
-const CodeBlock = ({ children }: { children: string }) => (
-  <pre className="p-3 bg-muted rounded-lg text-xs font-mono overflow-x-auto">
-    <code>{children}</code>
-  </pre>
-);
+const CodeBlock = ({ children }: { children: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(children);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="relative group mt-3">
+      <pre className="p-4 pr-12 bg-muted rounded-lg text-xs font-mono overflow-x-auto">
+        <code>{children}</code>
+      </pre>
+      <button
+        onClick={handleCopy}
+        className="absolute top-2 right-2 p-2 rounded-md bg-background/80 border opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
+        title="Copiar código"
+      >
+        {copied ? (
+          <CheckCircle className="h-4 w-4 text-success" />
+        ) : (
+          <Copy className="h-4 w-4 text-muted-foreground" />
+        )}
+      </button>
+    </div>
+  );
+};
+
+const TextReveal = ({ children, className = "" }: { children: string; className?: string }) => {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    // Small delay to ensure the component is mounted before starting animation
+    const timer = setTimeout(() => setIsActive(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const characters = children.split('');
+  let charIndex = 0;
+
+  return (
+    <span className={`inline-flex flex-wrap ${className}`}>
+      {characters.map((char, index) => {
+        if (char === ' ') {
+          return <span key={index} className="inline-block">&nbsp;</span>;
+        }
+        const delay = 0.05 + charIndex * 0.05; // 50ms between each character
+        charIndex++;
+        return (
+          <span
+            key={index}
+            className={`inline-block transition-all duration-500 ${
+              isActive
+                ? 'opacity-100 blur-0 scale-100'
+                : 'opacity-0 blur-sm scale-110'
+            }`}
+            style={{
+              transitionDelay: `${delay}s`,
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+          >
+            {char}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
 
 const StyleGuide = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const [activeSection, setActiveSection] = useState('cores');
+  const [activeSection, setActiveSection] = useState('stack');
+  const [previewColor, setPreviewColor] = useState('bg-primary');
 
   useEffect(() => {
     if (darkMode) {
@@ -164,6 +355,7 @@ const StyleGuide = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [darkMode]);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -204,8 +396,8 @@ const StyleGuide = () => {
                 <Leaf className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h1 className="font-bold">Dash2Zero</h1>
-                <p className="text-xs text-muted-foreground">Design System</p>
+                <h1 className="font-bold">Get2C</h1>
+                <p className="text-xs text-muted-foreground">Product Design System</p>
               </div>
             </div>
 
@@ -228,14 +420,16 @@ const StyleGuide = () => {
                     key={section.id}
                     onClick={() => scrollToSection(section.id)}
                     className={`
-                      w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors
-                      ${isActive 
-                        ? 'bg-primary/10 text-primary font-medium' 
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200
+                      ${isActive
+                        ? 'bg-primary/10 text-primary font-medium shadow-sm'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
                       }
                     `}
                   >
-                    <Icon className="h-4 w-4" />
+                    <div className={`p-1.5 rounded-md transition-colors ${isActive ? 'bg-primary/20' : 'bg-muted'}`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
                     {section.label}
                   </button>
                 );
@@ -244,7 +438,7 @@ const StyleGuide = () => {
 
             <div className="mt-8 p-3 border rounded-lg bg-muted/30">
               <p className="text-xs text-muted-foreground">
-                v1.0 · Janeiro 2026
+                {getVersionString()} · {getVersionDate()}
               </p>
             </div>
           </div>
@@ -252,55 +446,314 @@ const StyleGuide = () => {
       </aside>
 
       {/* Conteúdo principal */}
-      <main className="flex-1 ml-64 p-8 max-w-5xl">
-        {/* Header da página */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-2">Dash2Zero Design System</h1>
-          <p className="text-lg text-muted-foreground">
-            Guia visual de componentes e padrões
-          </p>
+      <main className="flex-1 ml-64">
+        {/* Header da página - vai até aos limites */}
+        <header className="relative bg-background overflow-hidden border-b">
+          {/* Animated pulsing background elements - mostly right, some left for balance */}
+          <div className="absolute inset-0 overflow-visible">
+            {/* RIGHT SIDE (main concentration) */}
+            {/* Pulse 1 - top right corner */}
+            <div className="absolute top-0 right-0 w-72 h-72 bg-primary/50 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(20%, -30%)' }} />
+            {/* Pulse 2 - right side upper */}
+            <div className="absolute top-1/4 right-10 w-56 h-56 bg-primary/40 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '1s' }} />
+            {/* Pulse 3 - center right */}
+            <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-primary/35 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s', transform: 'translateY(-50%)' }} />
+            {/* Pulse 4 - bottom right */}
+            <div className="absolute bottom-0 right-20 w-48 h-48 bg-accent/45 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '0.5s', transform: 'translateY(30%)' }} />
+            {/* Pulse 5 - far right */}
+            <div className="absolute top-1/3 right-0 w-60 h-60 bg-primary/40 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1.5s', transform: 'translateX(30%)' }} />
+
+            {/* LEFT SIDE (subtle, for balance) */}
+            {/* Pulse 6 - top left corner (smaller, more transparent) */}
+            <div className="absolute top-0 left-0 w-40 h-40 bg-primary/25 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '2s', transform: 'translate(-30%, -30%)' }} />
+            {/* Pulse 7 - bottom left (subtle) */}
+            <div className="absolute bottom-0 left-10 w-36 h-36 bg-white/30 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '3.5s', transform: 'translateY(40%)' }} />
+            {/* Pulse 8 - left middle (very subtle) */}
+            <div className="absolute top-1/2 left-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '1.2s', transform: 'translate(-40%, -50%)' }} />
+          </div>
+
+          <div className="relative p-8 max-w-5xl">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 rounded-lg bg-primary/20">
+                <Leaf className="h-6 w-6 text-primary" />
+              </div>
+              <Badge variant="outline" className="text-primary border-primary/30 cursor-help" title={`Última atualização: ${STYLE_GUIDE_VERSION.date}\n\nAlterações:\n${STYLE_GUIDE_VERSION.changelog.map(c => `• ${c}`).join('\n')}`}>
+                {getVersionString()}
+              </Badge>
+            </div>
+
+            <h1 className="text-4xl font-bold mb-4">
+              <TextReveal>Get2C Product Design System</TextReveal>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-4xl">
+              O guia de referência visual para todas as plataformas Get2C.<br />
+              Componentes, cores, tipografia e padrões que definem a linguagem visual.<br />
+              Para a equipa e sistemas de IA.
+            </p>
+          </div>
+        </header>
+
+        {/* Conteúdo das secções */}
+        <div className="p-8 max-w-5xl">
+
+        {/* === SECÇÃO: STACK TECNOLÓGICO === */}
+        <SectionHeader
+          id="stack"
+          title="Stack Tecnológico"
+          icon={Code}
+          description="As tecnologias e ferramentas que compõem este design system"
+        />
+
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className={cardStyles.kpi}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-[#61DAFB]/10">
+                  <ReactIcon className="h-5 w-5 text-[#61DAFB]" />
+                </div>
+                <span className="font-semibold">React 18</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Biblioteca principal para construção de interfaces
+              </p>
+            </Card>
+            <Card className={cardStyles.kpi}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-[#3178C6]/10">
+                  <TypeScriptIcon className="h-5 w-5 text-[#3178C6]" />
+                </div>
+                <span className="font-semibold">TypeScript</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Tipagem estática para código mais robusto
+              </p>
+            </Card>
+            <Card className={cardStyles.kpi}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-[#06B6D4]/10">
+                  <TailwindIcon className="h-5 w-5 text-[#06B6D4]" />
+                </div>
+                <span className="font-semibold">Tailwind CSS</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Framework de utility classes para estilos
+              </p>
+            </Card>
+            <Card className={cardStyles.kpi}>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-2 rounded-lg bg-foreground/10">
+                  <ShadcnIcon className="h-5 w-5" />
+                </div>
+                <span className="font-semibold">shadcn/ui</span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Componentes base acessíveis e customizáveis
+              </p>
+            </Card>
+          </div>
+
+          <Card className={cardStyles.nested}>
+            <h4 className="font-semibold mb-3">Outras dependências relevantes</h4>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline">Tremor</Badge>
+              <Badge variant="outline">Lucide React</Badge>
+              <Badge variant="outline">Radix UI</Badge>
+              <Badge variant="outline">React Router</Badge>
+              <Badge variant="outline">TanStack Query</Badge>
+              <Badge variant="outline">React Hook Form</Badge>
+              <Badge variant="outline">Zod</Badge>
+              <Badge variant="outline">Vite</Badge>
+            </div>
+          </Card>
         </div>
 
         {/* === SECÇÃO: CORES === */}
-        <SectionHeader 
-          id="cores" 
-          title="Cores" 
-          description="Paleta de cores do design system baseada em HSL"
+        <SectionHeader
+          id="cores"
+          title="Cores"
+          icon={Palette}
+          description="Todas as cores CSS do design system - análise de redundâncias"
         />
 
         <div className="space-y-8">
-          {/* Cores Primárias */}
+          {/* Alert de Redundâncias */}
+          <Alert className="border-warning/50 bg-warning/5">
+            <AlertTriangle className="h-4 w-4 text-warning" />
+            <AlertTitle>Análise de Redundâncias</AlertTitle>
+            <AlertDescription className="text-sm">
+              Cores marcadas com <Badge variant="outline" className="text-[10px] px-1 py-0 text-warning border-warning/50 mx-1">redundante</Badge>
+              são idênticas ou muito similares a outras e podem ser consolidadas.
+            </AlertDescription>
+          </Alert>
+
+          {/* Base */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Cores Primárias</h3>
+            <h3 className="text-lg font-semibold mb-2">Base (6 variáveis CSS)</h3>
+            <p className="text-sm text-muted-foreground mb-4">Fundos, texto e bordas da aplicação</p>
             <div className="grid grid-cols-2 gap-3">
-              {primaryColors.map((c) => (
+              {allColors.base.map((c) => (
                 <ColorSwatch
                   key={c.name}
                   color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
                 />
               ))}
             </div>
           </div>
 
-          {/* Cores Semânticas */}
+          {/* Brand/Primary */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Cores Semânticas</h3>
+            <h3 className="text-lg font-semibold mb-2">Marca / Primary (3 variáveis CSS)</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cor principal da marca #219F94 e variações</p>
             <div className="grid grid-cols-3 gap-3">
-              {semanticColors.map((c) => (
-                <div key={c.name} className="p-4 border rounded-lg bg-card">
-                  <div className={`w-full h-16 rounded-lg mb-3 ${c.tailwind.replace('text-', 'bg-')}`} />
-                  <p className="font-medium text-sm">{c.label}</p>
-                  <p className="font-mono text-xs text-muted-foreground">{c.name}</p>
-                  <p className="font-mono text-xs text-muted-foreground/70">{c.tailwind}</p>
-                </div>
+              {allColors.brand.map((c) => (
+                <ColorSwatch
+                  key={c.name}
+                  color={c.tailwind}
+                  label={c.name}
+                  hsl={c.hsl}
+                  tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
+                />
               ))}
             </div>
           </div>
 
-          {/* Cores de Âmbito */}
+          {/* Secondary */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Secundária (1 variável CSS)</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cor complementar teal profundo</p>
+            <div className="grid grid-cols-3 gap-3">
+              {allColors.secondary.map((c) => (
+                <ColorSwatch
+                  key={c.name}
+                  color={c.tailwind}
+                  label={c.name}
+                  hsl={c.hsl}
+                  tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Status/Semantic */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Status (4 variáveis CSS)</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cores para feedback e estados</p>
+            <div className="grid grid-cols-2 gap-3">
+              {allColors.status.map((c) => (
+                <ColorSwatch
+                  key={c.name}
+                  color={c.tailwind}
+                  label={c.name}
+                  hsl={c.hsl}
+                  tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Tailwind Aliases */}
+          <Card className="p-4 border-dashed border-primary/30 bg-primary/5">
+            <h4 className="font-semibold mb-3 flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-primary" />
+              Aliases Tailwind (sem variável CSS própria)
+            </h4>
+            <p className="text-sm text-muted-foreground mb-3">
+              Classes Tailwind preservadas para compatibilidade, mas mapeadas para variáveis base:
+            </p>
+            <ul className="text-sm space-y-2 text-muted-foreground font-mono">
+              {tailwindAliases.map((alias, i) => (
+                <li key={i}>
+                  <code className="text-xs bg-muted px-1 rounded">{alias.tailwind}</code>
+                  {' → '}
+                  <code className="text-xs bg-primary/10 text-primary px-1 rounded">{alias.mapsTo}</code>
+                </li>
+              ))}
+            </ul>
+          </Card>
+
+          {/* Cores de Scope */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Âmbitos / Scopes</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cores para gráficos de emissões por âmbito</p>
+            <div className="grid grid-cols-3 gap-3">
+              {allColors.scope.map((c) => (
+                <ColorSwatch
+                  key={c.name}
+                  color={c.tailwind}
+                  label={c.name}
+                  hsl={c.hsl}
+                  tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Cores de Medalhas */}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Medalhas / Rankings</h3>
+            <p className="text-sm text-muted-foreground mb-4">Cores para destaques de ranking</p>
+            <div className="grid grid-cols-3 gap-3">
+              {allColors.medals.map((c) => (
+                <ColorSwatch
+                  key={c.name}
+                  color={c.tailwind}
+                  label={c.name}
+                  hsl={c.hsl}
+                  tailwind={c.tailwind}
+                  hex={c.hex}
+                  note={c.note}
+                />
+              ))}
+            </div>
+          </div>
+
+
+          {/* Cores Hardcoded - PROBLEMAS */}
+          <Card className="p-4 border-dashed border-danger/50 bg-danger/5">
+            <h4 className="font-semibold mb-3 flex items-center gap-2">
+              <XCircle className="h-4 w-4 text-danger" />
+              Cores Hardcoded Encontradas (A CORRIGIR)
+            </h4>
+            <div className="space-y-4">
+              {hardcodedColorsReport.map((report) => (
+                <div key={report.file} className={`p-3 rounded-lg border ${
+                  report.severity === 'high' ? 'border-danger/30 bg-danger/5' :
+                  report.severity === 'medium' ? 'border-warning/30 bg-warning/5' :
+                  'border-muted bg-muted/30'
+                }`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant={report.severity === 'high' ? 'destructive' : report.severity === 'medium' ? 'outline' : 'secondary'} className="text-xs">
+                      {report.severity === 'high' ? 'CRÍTICO' : report.severity === 'medium' ? 'MÉDIO' : 'BAIXO'}
+                    </Badge>
+                    <code className="text-xs font-mono bg-muted px-2 py-0.5 rounded">{report.file}</code>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-2">{report.note}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {report.colors.map((color) => (
+                      <code key={color} className="text-[10px] font-mono bg-background px-1.5 py-0.5 rounded border">
+                        {color}
+                      </code>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          {/* Cores de Âmbito - LEGACY (usar scopeColors de lib/styles) */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Cores de Âmbito (Scopes)</h3>
             <div className="grid grid-cols-3 gap-4">
@@ -324,24 +777,137 @@ const StyleGuide = () => {
             <div className="space-y-3">
               <div className="h-12 rounded-lg bg-gradient-primary" />
               <p className="font-mono text-xs text-muted-foreground">--gradient-primary · bg-gradient-primary</p>
-              
+
               <div className="h-12 rounded-lg bg-gradient-secondary" />
               <p className="font-mono text-xs text-muted-foreground">--gradient-secondary · bg-gradient-secondary</p>
-              
+
               <div className="h-12 rounded-lg bg-gradient-accent" />
               <p className="font-mono text-xs text-muted-foreground">--gradient-accent · bg-gradient-accent</p>
             </div>
           </div>
+
+          {/* Playground de Cores */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Playground de Cores</h3>
+            <Card className={cardStyles.section}>
+              <p className="text-sm text-muted-foreground mb-4">
+                Clica numa cor para ver como fica aplicada no preview
+              </p>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Seletor de cores */}
+                <div className="space-y-3">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Selecciona uma cor</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[
+                      { color: 'bg-primary', label: 'Primary' },
+                      { color: 'bg-primary-light', label: 'Primary Light' },
+                      { color: 'bg-primary-dark', label: 'Primary Dark' },
+                      { color: 'bg-secondary', label: 'Secondary' },
+                      { color: 'bg-success', label: 'Success' },
+                      { color: 'bg-warning', label: 'Warning' },
+                      { color: 'bg-danger', label: 'Danger' },
+                      { color: 'bg-muted', label: 'Muted' },
+                    ].map((item) => (
+                      <button
+                        key={item.color}
+                        onClick={() => setPreviewColor(item.color)}
+                        className={`h-12 rounded-lg transition-all ${item.color} ${
+                          previewColor === item.color
+                            ? 'ring-2 ring-offset-2 ring-foreground scale-105'
+                            : 'hover:scale-105'
+                        }`}
+                        title={item.label}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Preview */}
+                <div className="space-y-3">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Preview</p>
+                  <div className="p-4 border rounded-lg bg-card">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`p-2 rounded-lg ${previewColor}/20`}>
+                        <Factory className={`h-5 w-5 ${previewColor.replace('bg-', 'text-')}`} />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Card de Exemplo</p>
+                        <p className="text-xs text-muted-foreground">Com a cor seleccionada</p>
+                      </div>
+                    </div>
+                    <div className={`h-2 rounded-full ${previewColor} mb-3`} />
+                    <div className="flex gap-2">
+                      <Badge className={`${previewColor}/10 ${previewColor.replace('bg-', 'text-')} border-current/30`}>
+                        Badge
+                      </Badge>
+                      <Button size="sm" className={previewColor}>
+                        Botão
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
 
         {/* === SECÇÃO: TIPOGRAFIA === */}
-        <SectionHeader 
-          id="tipografia" 
-          title="Tipografia" 
+        <SectionHeader
+          id="tipografia"
+          title="Tipografia"
+          icon={Type}
           description="Escala de tamanhos e pesos tipográficos"
         />
 
         <div className="space-y-8">
+          {/* Tipo de Letra */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Tipo de Letra</h3>
+            <Card className={cardStyles.section}>
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Type className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-xl font-semibold mb-1">Plus Jakarta Sans</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Font principal para toda a interface
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Geométrica com personalidade</strong> — moderna sem ser genérica</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Optimizada para ecrãs</strong> — excelente legibilidade em interfaces digitais</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Versátil</strong> — funciona bem de 12px a 48px</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Suporte completo</strong> — acentos, caracteres especiais e múltiplos pesos</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Open source</strong> — disponível gratuitamente via Google Fonts</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                      <span><strong>Profissional</strong> — transmite confiança sem ser corporativa</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+            <CodeBlock>{`/* Definida em src/index.css */
+body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}`}</CodeBlock>
+          </div>
+
           {/* Escala de Tamanhos */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Escala de Tamanhos</h3>
@@ -429,9 +995,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: ESPAÇAMENTO === */}
-        <SectionHeader 
-          id="espacamento" 
-          title="Espaçamento" 
+        <SectionHeader
+          id="espacamento"
+          title="Espaçamento"
+          icon={Square}
           description="Escala de padding, margin e gap"
         />
 
@@ -475,10 +1042,245 @@ const StyleGuide = () => {
           </div>
         </div>
 
+        {/* === SECÇÃO: RESPONSIVIDADE === */}
+        <SectionHeader
+          id="responsividade"
+          title="Responsividade"
+          icon={Monitor}
+          description="Breakpoints e padrões de layout adaptativo"
+        />
+
+        <div className="space-y-8">
+          {/* Breakpoints */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Breakpoints (Tailwind padrão)</h3>
+            <div className="border rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Prefixo</TableHead>
+                    <TableHead>Min-width</TableHead>
+                    <TableHead>Dispositivo típico</TableHead>
+                    <TableHead>Exemplo</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">(default)</TableCell>
+                    <TableCell>0px</TableCell>
+                    <TableCell>Mobile</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">grid-cols-1</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">sm:</TableCell>
+                    <TableCell>640px</TableCell>
+                    <TableCell>Mobile landscape</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">sm:grid-cols-2</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">md:</TableCell>
+                    <TableCell>768px</TableCell>
+                    <TableCell>Tablet</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">md:grid-cols-2</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">lg:</TableCell>
+                    <TableCell>1024px</TableCell>
+                    <TableCell>Desktop</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">lg:grid-cols-4</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">xl:</TableCell>
+                    <TableCell>1280px</TableCell>
+                    <TableCell>Desktop grande</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">xl:grid-cols-5</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-mono text-sm">2xl:</TableCell>
+                    <TableCell>1400px</TableCell>
+                    <TableCell>Container max</TableCell>
+                    <TableCell className="font-mono text-xs text-muted-foreground">2xl:grid-cols-6</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+
+          {/* Grids de KPIs */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Padrão: Grid de KPIs</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Padrão recomendado: <code className="bg-muted px-1.5 py-0.5 rounded text-xs">grid-cols-1 sm:grid-cols-2 lg:grid-cols-4</code>
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <KPICard
+                title="KPI 1"
+                value="1.234"
+                unit="unid"
+                icon={Factory}
+                iconColor="text-primary"
+                iconBgColor="bg-primary/10"
+              />
+              <KPICard
+                title="KPI 2"
+                value="567"
+                unit="unid"
+                icon={Building2}
+                iconColor="text-primary"
+                iconBgColor="bg-primary/10"
+              />
+              <KPICard
+                title="KPI 3"
+                value="89%"
+                icon={TrendingUp}
+                iconColor="text-success"
+                iconBgColor="bg-success/10"
+              />
+              <KPICard
+                title="KPI 4"
+                value="12"
+                inlineSubtitle="items"
+                icon={Zap}
+                iconColor="text-warning"
+                iconBgColor="bg-warning/10"
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">
+              Redimensiona a janela para ver a adaptação: 4 → 2 → 1 colunas
+            </p>
+          </div>
+
+          {/* Grid de Cards */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Padrão: Grid de Cards</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Padrão recomendado: <code className="bg-muted px-1.5 py-0.5 rounded text-xs">grid-cols-1 md:grid-cols-2 xl:grid-cols-3</code>
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className={cardStyles.section}>
+                  <h4 className="font-semibold mb-2">Card {i}</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Conteúdo de exemplo para demonstrar o comportamento responsivo dos cards de secção.
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Layout Sidebar + Content */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Padrão: Sidebar + Conteúdo</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Padrão recomendado: <code className="bg-muted px-1.5 py-0.5 rounded text-xs">flex flex-col lg:flex-row</code>
+            </p>
+            <div className="flex flex-col lg:flex-row gap-4 border rounded-lg p-4 bg-muted/30">
+              <div className="lg:w-64 shrink-0 p-4 border rounded-lg bg-card">
+                <p className="font-medium text-sm">Sidebar</p>
+                <p className="text-xs text-muted-foreground mt-1">Fixa em lg+, full-width em mobile</p>
+              </div>
+              <div className="flex-1 p-4 border rounded-lg bg-card">
+                <p className="font-medium text-sm">Conteúdo principal</p>
+                <p className="text-xs text-muted-foreground mt-1">Expande para preencher o espaço disponível</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Visibilidade Condicional */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Visibilidade Condicional</h3>
+            <div className="space-y-3">
+              <div className="p-4 border rounded-lg bg-card">
+                <div className="hidden sm:block">
+                  <Badge variant="outline" className="mb-2">Visível em sm+</Badge>
+                  <p className="text-sm text-muted-foreground">
+                    Este conteúdo usa <code className="bg-muted px-1.5 py-0.5 rounded text-xs">hidden sm:block</code>
+                  </p>
+                </div>
+                <div className="sm:hidden">
+                  <Badge variant="outline" className="mb-2">Só mobile</Badge>
+                  <p className="text-sm text-muted-foreground">
+                    Este conteúdo usa <code className="bg-muted px-1.5 py-0.5 rounded text-xs">sm:hidden</code>
+                  </p>
+                </div>
+              </div>
+              
+              <div className="p-4 border rounded-lg bg-card">
+                <div className="hidden lg:block">
+                  <Badge variant="outline" className="mb-2">Visível em lg+</Badge>
+                  <p className="text-sm text-muted-foreground">
+                    Desktop only: <code className="bg-muted px-1.5 py-0.5 rounded text-xs">hidden lg:block</code>
+                  </p>
+                </div>
+                <div className="lg:hidden">
+                  <Badge variant="outline" className="mb-2">Mobile/Tablet</Badge>
+                  <p className="text-sm text-muted-foreground">
+                    Esconde em desktop: <code className="bg-muted px-1.5 py-0.5 rounded text-xs">lg:hidden</code>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Padrões Comuns */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Padrões Comuns</h3>
+            <div className="border rounded-lg overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Uso</TableHead>
+                    <TableHead>Classes</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Grid de KPIs (4 cols)</TableCell>
+                    <TableCell className="font-mono text-xs">grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Grid de Cards (3 cols)</TableCell>
+                    <TableCell className="font-mono text-xs">grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Grid de Cards (2 cols)</TableCell>
+                    <TableCell className="font-mono text-xs">grid-cols-1 lg:grid-cols-2 gap-4</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Sidebar + Content</TableCell>
+                    <TableCell className="font-mono text-xs">flex flex-col lg:flex-row gap-4</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Stack → Row</TableCell>
+                    <TableCell className="font-mono text-xs">flex flex-col sm:flex-row gap-2</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Texto responsivo</TableCell>
+                    <TableCell className="font-mono text-xs">text-sm md:text-base lg:text-lg</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Padding responsivo</TableCell>
+                    <TableCell className="font-mono text-xs">p-4 md:p-6 lg:p-8</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Esconder em mobile</TableCell>
+                    <TableCell className="font-mono text-xs">hidden sm:block</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Só em mobile</TableCell>
+                    <TableCell className="font-mono text-xs">sm:hidden</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+
         {/* === SECÇÃO: SOMBRAS === */}
-        <SectionHeader 
-          id="sombras" 
-          title="Sombras & Elevação" 
+        <SectionHeader
+          id="sombras"
+          title="Sombras & Elevação"
+          icon={Layers}
           description="Níveis de profundidade e arredondamento"
         />
 
@@ -535,9 +1337,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: BOTÕES === */}
-        <SectionHeader 
-          id="botoes" 
-          title="Botões" 
+        <SectionHeader
+          id="botoes"
+          title="Botões"
+          icon={MousePointerClick}
           description="Variantes, tamanhos e estados"
         />
 
@@ -597,9 +1400,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: BADGES === */}
-        <SectionHeader 
-          id="badges" 
-          title="Badges" 
+        <SectionHeader
+          id="badges"
+          title="Badges"
+          icon={Tag}
           description="Etiquetas e indicadores visuais"
         />
 
@@ -646,9 +1450,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: CARDS === */}
-        <SectionHeader 
-          id="cards" 
-          title="Cards" 
+        <SectionHeader
+          id="cards"
+          title="Cards"
+          icon={LayoutGrid}
           description="Estilos de contentor"
         />
 
@@ -687,9 +1492,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: INPUTS === */}
-        <SectionHeader 
-          id="inputs" 
-          title="Inputs" 
+        <SectionHeader
+          id="inputs"
+          title="Inputs"
+          icon={FormInput}
           description="Campos de entrada de dados"
         />
 
@@ -721,9 +1527,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: SELECT === */}
-        <SectionHeader 
-          id="select" 
-          title="Select" 
+        <SectionHeader
+          id="select"
+          title="Select"
+          icon={ListFilter}
           description="Seletores dropdown"
         />
 
@@ -741,9 +1548,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: KPI CARDS === */}
-        <SectionHeader 
-          id="kpi-cards" 
-          title="KPI Cards" 
+        <SectionHeader
+          id="kpi-cards"
+          title="KPI Cards"
+          icon={BarChart3}
           description="Cards de métricas padronizados"
         />
 
@@ -792,12 +1600,69 @@ const StyleGuide = () => {
   iconBgColor="bg-primary/10"
 />`}
           </CodeBlock>
+
+          {/* Exemplo Real: Mini Dashboard */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Exemplo Real: Mini Dashboard</h3>
+            <Card className="p-6 bg-muted/30 border-dashed">
+              <div className="space-y-4">
+                {/* Header do mini dashboard */}
+                <div className="flex items-center justify-between pb-4 border-b">
+                  <div>
+                    <h4 className="font-semibold">Empresa ABC, Lda.</h4>
+                    <p className="text-sm text-muted-foreground">Resumo de emissões 2025</p>
+                  </div>
+                  <Badge className={scopeColors[1].badge}>Indústria</Badge>
+                </div>
+
+                {/* KPIs em grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="p-3 bg-card rounded-lg border">
+                    <p className="text-xs text-muted-foreground">Total</p>
+                    <p className="text-xl font-bold">8.245</p>
+                    <p className="text-xs text-muted-foreground">t CO₂e</p>
+                  </div>
+                  <div className="p-3 bg-card rounded-lg border">
+                    <p className="text-xs text-muted-foreground">Âmbito 1</p>
+                    <p className="text-xl font-bold text-violet-600">2.156</p>
+                    <p className="text-xs text-muted-foreground">t CO₂e (26%)</p>
+                  </div>
+                  <div className="p-3 bg-card rounded-lg border">
+                    <p className="text-xs text-muted-foreground">Âmbito 2</p>
+                    <p className="text-xl font-bold text-primary">1.489</p>
+                    <p className="text-xs text-muted-foreground">t CO₂e (18%)</p>
+                  </div>
+                  <div className="p-3 bg-card rounded-lg border">
+                    <p className="text-xs text-muted-foreground">Âmbito 3</p>
+                    <p className="text-xl font-bold text-orange-600">4.600</p>
+                    <p className="text-xs text-muted-foreground">t CO₂e (56%)</p>
+                  </div>
+                </div>
+
+                {/* Mini gráfico de barras */}
+                <div className="flex items-end gap-1 h-16">
+                  {[40, 65, 45, 80, 55, 70, 90, 60, 75, 50, 85, 95].map((h, i) => (
+                    <div
+                      key={i}
+                      className="flex-1 bg-primary/60 hover:bg-primary transition-colors rounded-t"
+                      style={{ height: `${h}%` }}
+                    />
+                  ))}
+                </div>
+                <p className="text-xs text-center text-muted-foreground">Emissões mensais (Jan-Dez)</p>
+              </div>
+            </Card>
+            <p className="text-xs text-muted-foreground mt-2 text-center">
+              Este exemplo mostra como combinar KPIs, badges e elementos visuais num layout coeso
+            </p>
+          </div>
         </div>
 
         {/* === SECÇÃO: ALERTS === */}
-        <SectionHeader 
-          id="alerts" 
-          title="Alerts" 
+        <SectionHeader
+          id="alerts"
+          title="Alerts"
+          icon={AlertCircle}
           description="Mensagens de feedback"
         />
 
@@ -825,9 +1690,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: PROGRESS === */}
-        <SectionHeader 
-          id="progress" 
-          title="Progress" 
+        <SectionHeader
+          id="progress"
+          title="Progress"
+          icon={Activity}
           description="Indicadores de progresso"
         />
 
@@ -859,9 +1725,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: TABS === */}
-        <SectionHeader 
-          id="tabs" 
-          title="Tabs" 
+        <SectionHeader
+          id="tabs"
+          title="Tabs"
+          icon={Columns}
           description="Navegação por separadores"
         />
 
@@ -885,9 +1752,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: TABELAS === */}
-        <SectionHeader 
-          id="tabelas" 
-          title="Tabelas" 
+        <SectionHeader
+          id="tabelas"
+          title="Tabelas"
+          icon={Table2}
           description="Apresentação de dados tabulares"
         />
 
@@ -925,65 +1793,72 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: GRÁFICOS === */}
-        <SectionHeader 
-          id="graficos" 
-          title="Gráficos" 
-          description="Visualizações de dados com Recharts"
+        <SectionHeader
+          id="graficos"
+          title="Gráficos"
+          icon={PieChart}
+          description="Tremor - biblioteca moderna de visualização de dados"
         />
 
         <div className="grid grid-cols-2 gap-6">
-          {/* Bar Chart */}
+          {/* Area Chart */}
           <Card className="p-4">
-            <h4 className="font-semibold mb-4">Bar Chart</h4>
+            <h3 className="text-lg font-semibold mb-4">Area Chart</h3>
             <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData}>
-                  <XAxis dataKey="name" fontSize={12} />
-                  <YAxis fontSize={12} />
-                  <RechartsTooltip />
-                  <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <TremorAreaChart
+                data={chartData}
+                index="name"
+                categories={["value"]}
+                colors={["teal"]}
+                showAnimation={true}
+                showLegend={false}
+                showGradient={true}
+                className="h-full"
+              />
             </div>
           </Card>
 
-          {/* Pie Chart */}
+          {/* Donut Chart */}
           <Card className="p-4">
-            <h4 className="font-semibold mb-4">Pie Chart (Âmbitos)</h4>
-            <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <RechartsPieChart>
-                  <Pie
-                    data={scopeChartData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={40}
-                    outerRadius={70}
-                    dataKey="value"
-                  >
-                    {scopeChartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <RechartsTooltip />
-                </RechartsPieChart>
-              </ResponsiveContainer>
+            <h3 className="text-lg font-semibold mb-4">Donut Chart</h3>
+            <div className="h-48 flex items-center justify-center">
+              <TremorDonutChart
+                data={[
+                  { name: 'Âmbito 1', value: 27 },
+                  { name: 'Âmbito 2', value: 18 },
+                  { name: 'Âmbito 3', value: 55 },
+                ]}
+                index="name"
+                category="value"
+                variant="donut"
+                colors={["violet", "teal", "amber"]}
+                showAnimation={true}
+                showLabel={false}
+                className="h-44 w-44"
+              />
             </div>
             <div className="flex justify-center gap-4 mt-2">
-              {scopeChartData.map((entry) => (
-                <div key={entry.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded" style={{ backgroundColor: entry.fill }} />
-                  <span className="text-xs">{entry.name}</span>
-                </div>
-              ))}
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded bg-violet-500" />
+                <span className="text-xs">Âmbito 1</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded bg-teal-500" />
+                <span className="text-xs">Âmbito 2</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded bg-amber-500" />
+                <span className="text-xs">Âmbito 3</span>
+              </div>
             </div>
           </Card>
         </div>
 
         {/* === SECÇÃO: ÍCONES === */}
-        <SectionHeader 
-          id="icones" 
-          title="Ícones" 
+        <SectionHeader
+          id="icones"
+          title="Ícones"
+          icon={Star}
           description="Biblioteca de ícones Lucide React"
         />
 
@@ -1017,9 +1892,10 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: FORMATAÇÃO === */}
-        <SectionHeader 
-          id="formatacao" 
-          title="Formatação de Dados" 
+        <SectionHeader
+          id="formatacao"
+          title="Formatação de Dados"
+          icon={Hash}
           description="Funções de formatação em lib/formatters.ts"
         />
 
@@ -1073,88 +1949,190 @@ const StyleGuide = () => {
         </div>
 
         {/* === SECÇÃO: ANTI-PADRÕES === */}
-        <SectionHeader 
-          id="anti-padroes" 
-          title="Anti-padrões" 
+        <SectionHeader
+          id="anti-padroes"
+          title="Anti-padrões"
+          icon={Ban}
           description="O que NÃO fazer vs o que fazer"
         />
 
-        <div className="space-y-6">
-          {/* Cores */}
-          <Card className="p-4">
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <Palette className="h-4 w-4" />
+        <div className="space-y-8">
+          {/* Cores - Visual */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Palette className="h-5 w-5 text-muted-foreground" />
               Cores
-            </h4>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex gap-4">
-                <span className="text-danger w-48">❌ text-green-600</span>
-                <span className="text-success">✅ text-success</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-48">❌ bg-red-100</span>
-                <span className="text-success">✅ bg-danger/10</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-48">❌ text-blue-500</span>
-                <span className="text-success">✅ text-primary</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-48">❌ bg-yellow-50</span>
-                <span className="text-success">✅ bg-warning/10</span>
-              </div>
-            </div>
-          </Card>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Don't */}
+              <Card className="p-4 border-danger/30 bg-danger/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <XCircle className="h-5 w-5 text-danger" />
+                  <span className="font-semibold text-danger">Não fazer</span>
+                </div>
+                <div className="p-3 border rounded-lg bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-4 h-4 rounded bg-green-600" />
+                    <span className="text-green-600 font-medium">Sucesso</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded bg-red-500" />
+                    <span className="text-red-500 font-medium">Erro</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  text-green-600, bg-red-500
+                </p>
+              </Card>
 
-          {/* Formatação */}
-          <Card className="p-4">
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <Hash className="h-4 w-4" />
-              Formatação
-            </h4>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ value.toFixed(2)</span>
-                <span className="text-success">✅ formatNumber(value, 2)</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ value.toLocaleString()</span>
-                <span className="text-success">✅ formatEmissions(value)</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ `${'{'}value{'}'}%`</span>
-                <span className="text-success">✅ formatPercentage(value)</span>
-              </div>
+              {/* Do */}
+              <Card className="p-4 border-success/30 bg-success/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-5 w-5 text-success" />
+                  <span className="font-semibold text-success">Fazer</span>
+                </div>
+                <div className="p-3 border rounded-lg bg-card">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-4 h-4 rounded bg-success" />
+                    <span className="text-success font-medium">Sucesso</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 rounded bg-danger" />
+                    <span className="text-danger font-medium">Erro</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  text-success, bg-danger
+                </p>
+              </Card>
             </div>
-          </Card>
+          </div>
 
-          {/* Componentes */}
-          <Card className="p-4">
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              <LayoutGrid className="h-4 w-4" />
-              Componentes
-            </h4>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ &lt;div className="..."&gt;</span>
-                <span className="text-success">✅ &lt;Card className={'{'}cardStyles.kpi{'}'}&gt;</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ criar input custom</span>
-                <span className="text-success">✅ &lt;Input /&gt; de shadcn/ui</span>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-danger w-64">❌ badge custom</span>
-                <span className="text-success">✅ &lt;Badge className={'{'}riskColors.alto.badge{'}'}&gt;</span>
-              </div>
+          {/* Badges - Visual */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Tag className="h-5 w-5 text-muted-foreground" />
+              Badges
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Don't */}
+              <Card className="p-4 border-danger/30 bg-danger/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <XCircle className="h-5 w-5 text-danger" />
+                  <span className="font-semibold text-danger">Não fazer</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Baixo</span>
+                  <span className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-800">Médio</span>
+                  <span className="px-2 py-1 text-xs rounded bg-red-100 text-red-800">Alto</span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Cores hardcoded, inconsistentes
+                </p>
+              </Card>
+
+              {/* Do */}
+              <Card className="p-4 border-success/30 bg-success/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-5 w-5 text-success" />
+                  <span className="font-semibold text-success">Fazer</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Badge className={riskColors.baixo.badge}>Baixo</Badge>
+                  <Badge className={riskColors.medio.badge}>Médio</Badge>
+                  <Badge className={riskColors.alto.badge}>Alto</Badge>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  riskColors.baixo.badge
+                </p>
+              </Card>
             </div>
-          </Card>
+          </div>
+
+          {/* Números - Visual */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Hash className="h-5 w-5 text-muted-foreground" />
+              Formatação de Números
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Don't */}
+              <Card className="p-4 border-danger/30 bg-danger/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <XCircle className="h-5 w-5 text-danger" />
+                  <span className="font-semibold text-danger">Não fazer</span>
+                </div>
+                <div className="p-3 border rounded-lg bg-card">
+                  <p className="text-2xl font-bold">15749.5</p>
+                  <p className="text-sm text-muted-foreground">t CO2e</p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  value.toString()
+                </p>
+              </Card>
+
+              {/* Do */}
+              <Card className="p-4 border-success/30 bg-success/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-5 w-5 text-success" />
+                  <span className="font-semibold text-success">Fazer</span>
+                </div>
+                <div className="p-3 border rounded-lg bg-card">
+                  <p className="text-2xl font-bold">{formatNumber(15749.5, 0)}</p>
+                  <p className="text-sm text-muted-foreground">t CO₂e</p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  formatNumber(value, 0)
+                </p>
+              </Card>
+            </div>
+          </div>
+
+          {/* Cards - Visual */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <LayoutGrid className="h-5 w-5 text-muted-foreground" />
+              Cards
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Don't */}
+              <Card className="p-4 border-danger/30 bg-danger/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <XCircle className="h-5 w-5 text-danger" />
+                  <span className="font-semibold text-danger">Não fazer</span>
+                </div>
+                <div className="p-4 bg-white border border-gray-200 rounded-md shadow">
+                  <p className="font-medium">Card custom</p>
+                  <p className="text-sm text-gray-500">Estilos inline</p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  div com classes custom
+                </p>
+              </Card>
+
+              {/* Do */}
+              <Card className="p-4 border-success/30 bg-success/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <CheckCircle className="h-5 w-5 text-success" />
+                  <span className="font-semibold text-success">Fazer</span>
+                </div>
+                <Card className={cardStyles.kpi}>
+                  <p className="font-medium">Card padronizado</p>
+                  <p className="text-sm text-muted-foreground">Design system</p>
+                </Card>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  Card + cardStyles.kpi
+                </p>
+              </Card>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
         <div className="mt-16 pt-8 border-t text-center text-muted-foreground text-sm">
-          <p>Dash2Zero Design System v1.0 · Janeiro 2026</p>
+          <p>Get2C Product Design System {getVersionString()} · {getVersionDate()}</p>
           <p className="mt-1">Desenvolvido com React, TypeScript, Tailwind CSS e shadcn/ui</p>
+        </div>
         </div>
       </main>
     </div>
