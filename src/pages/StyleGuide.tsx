@@ -14,9 +14,10 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 5,
+  patch: 6,
   date: "2026-01-17",
   changelog: [
+    "Auto-update via commit",
     "Auto-update via commit",
     "Auto-update via commit",
     "Auto-update via commit",
@@ -25,8 +26,7 @@ const STYLE_GUIDE_VERSION = {
     "Sistema de cores simplificado: 20 variáveis CSS (vs 35+), aliases Tailwind preservados",
     "Adicionadas cores de Scope, Medalhas e Gráficos; Ícones oficiais das tecnologias",
     "Automatismo de changelog implementado",
-    "Header com fundo animado pulsante",
-    "Animação text reveal no título"
+    "Header com fundo animado pulsante"
   ]
 };
 
@@ -49,6 +49,7 @@ import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { KPICard } from "@/components/ui/kpi-card";
 import { 
   formatNumber, formatEmissions, formatPercentage, formatIntensity, 
@@ -678,48 +679,47 @@ const StyleGuide = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Tipo de Letra</h3>
             <Card className={cardStyles.section}>
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary/10">
-                  <Type className="h-6 w-6 text-primary" />
+              <h4 className="text-xl font-semibold mb-1">Plus Jakarta Sans</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Font principal para toda a interface
+              </p>
+              <div className="text-2xl tracking-wide text-foreground/80 mb-2">
+                Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm
+              </div>
+              <div className="text-2xl tracking-wide text-foreground/80 mb-2">
+                Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz
+              </div>
+              <div className="text-lg tracking-wide text-muted-foreground mb-4">
+                0 1 2 3 4 5 6 7 8 9 á é í ó ú ã õ ç € % @
+              </div>
+              <Separator className="my-4" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Geométrica com personalidade</strong> — moderna sem ser genérica</span>
                 </div>
-                <div className="flex-1">
-                  <h4 className="text-xl font-semibold mb-1">Plus Jakarta Sans</h4>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Font principal para toda a interface
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Geométrica com personalidade</strong> — moderna sem ser genérica</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Optimizada para ecrãs</strong> — excelente legibilidade em interfaces digitais</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Versátil</strong> — funciona bem de 12px a 48px</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Suporte completo</strong> — acentos, caracteres especiais e múltiplos pesos</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Open source</strong> — disponível gratuitamente via Google Fonts</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
-                      <span><strong>Profissional</strong> — transmite confiança sem ser corporativa</span>
-                    </div>
-                  </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Optimizada para ecrãs</strong> — excelente legibilidade</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Versátil</strong> — funciona bem de 12px a 48px</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Suporte completo</strong> — acentos e caracteres especiais</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Open source</strong> — disponível gratuitamente via Google Fonts</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                  <span><strong>Profissional</strong> — transmite confiança sem ser corporativa</span>
                 </div>
               </div>
             </Card>
-            <CodeBlock>{`/* Definida em src/index.css */
-body {
-  font-family: "Plus Jakarta Sans", sans-serif;
-}`}</CodeBlock>
           </div>
 
           {/* Escala de Tamanhos */}
