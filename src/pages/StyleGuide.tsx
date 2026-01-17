@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Palette, Type, Square, Layers, MousePointerClick, Tag, LayoutGrid,
   FormInput, ListFilter, BarChart3, AlertCircle, Activity, Columns,
-  Table2, PieChart, Star, Hash, Ban, Moon, Sun, Factory, Building2,
+  Table2, PieChart, Star, Hash, Moon, Sun, Factory, Building2,
   Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
   Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
   Eye, Mail, Users, Leaf, Copy, Monitor, Code
@@ -14,9 +14,10 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 4,
+  patch: 5,
   date: "2026-01-17",
   changelog: [
+    "Auto-update via commit",
     "Auto-update via commit",
     "Auto-update via commit",
     "Auto-update via commit",
@@ -25,8 +26,7 @@ const STYLE_GUIDE_VERSION = {
     "Adicionadas cores de Scope, Medalhas e Gráficos; Ícones oficiais das tecnologias",
     "Automatismo de changelog implementado",
     "Header com fundo animado pulsante",
-    "Animação text reveal no título",
-    "Sistema de versionamento"
+    "Animação text reveal no título"
   ]
 };
 
@@ -106,7 +106,6 @@ const sections = [
   { id: 'graficos', label: 'Gráficos', icon: PieChart },
   { id: 'icones', label: 'Ícones', icon: Star },
   { id: 'formatacao', label: 'Formatação', icon: Hash },
-  { id: 'anti-padroes', label: 'Anti-padrões', icon: Ban },
 ];
 
 // SIMPLIFIED COLOR SYSTEM - CSS variables reduced, Tailwind classes preserved via aliases
@@ -150,22 +149,6 @@ const allColors = {
     { name: '--medal-gold', tailwind: 'bg-medal-gold', hsl: '51 100% 50%', hex: '#FFD700', note: 'Ouro - 1º lugar' },
     { name: '--medal-silver', tailwind: 'bg-medal-silver', hsl: '0 0% 75%', hex: '#C0C0C0', note: 'Prata - 2º lugar' },
     { name: '--medal-bronze', tailwind: 'bg-medal-bronze', hsl: '30 59% 50%', hex: '#CD7F32', note: 'Bronze - 3º lugar' },
-  ],
-};
-
-// Cores Tailwind hardcoded encontradas no código (para análise)
-const hardcodedTailwindColors = {
-  // Cores dos badges de estado (ainda hardcoded nos configs de status)
-  badges: [
-    { tailwind: 'bg-blue-100', usage: 'Sem interação (badge)', hsl: '214 95% 93%', hex: '#DBEAFE' },
-    { tailwind: 'bg-yellow-100', usage: 'Interessada (badge)', hsl: '55 97% 88%', hex: '#FEF9C3' },
-    { tailwind: 'bg-orange-100', usage: 'Registada / Em progresso (badge)', hsl: '34 100% 92%', hex: '#FFEDD5' },
-  ],
-  funding: [
-    { tailwind: 'bg-purple-100', usage: 'Financiamento', hsl: '270 100% 95%', hex: '#F3E8FF' },
-  ],
-  other: [
-    { tailwind: 'bg-slate-100', usage: 'Elementos neutros', hsl: '210 40% 96%', hex: '#F1F5F9' },
   ],
 };
 
@@ -650,6 +633,16 @@ const StyleGuide = () => {
                 />
               ))}
             </div>
+
+            {/* Badge Examples */}
+            <h4 className="text-sm font-medium mt-6 mb-3">Badges de Status</h4>
+            <div className="flex flex-wrap gap-2">
+              <span className="px-2 py-1 text-xs rounded-md bg-status-pending/15 text-status-pending border border-status-pending/30">Por contactar</span>
+              <span className="px-2 py-1 text-xs rounded-md bg-status-contacted/15 text-status-contacted border border-status-contacted/30">Sem interação</span>
+              <span className="px-2 py-1 text-xs rounded-md bg-status-interested/15 text-status-interested border border-status-interested/30">Interessada</span>
+              <span className="px-2 py-1 text-xs rounded-md bg-status-progress/15 text-status-progress border border-status-progress/30">Em progresso</span>
+              <span className="px-2 py-1 text-xs rounded-md bg-status-complete/15 text-status-complete border border-status-complete/30">Completo</span>
+            </div>
           </div>
 
           {/* Cores de Medalhas */}
@@ -667,89 +660,6 @@ const StyleGuide = () => {
                   note={c.note}
                 />
               ))}
-            </div>
-          </div>
-
-          {/* Cores Hardcoded - Para Análise */}
-          <Card className="p-6 border-dashed border-warning/50 bg-warning/5">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="h-5 w-5 text-warning" />
-              <h3 className="text-lg font-semibold">Cores Tailwind Hardcoded (Análise)</h3>
-            </div>
-            <p className="text-sm text-muted-foreground mb-6">
-              Cores encontradas no código que não fazem parte do design system. Precisam de decisão: criar variáveis CSS ou substituir por cores existentes.
-            </p>
-
-            <div className="space-y-6">
-              {/* Badges de Estado */}
-              <div>
-                <h4 className="font-medium mb-3 text-sm">Badges de Estado</h4>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                  {hardcodedTailwindColors.badges.map((c, i) => (
-                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
-                      <div className={`h-16 ${c.tailwind}`} />
-                      <div className="p-3">
-                        <p className="text-xs font-medium truncate">{c.usage}</p>
-                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
-                        <p className="text-[10px] text-muted-foreground/60 font-mono truncate">{c.hsl} · {c.hex}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Outras */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-medium mb-3 text-sm">Financiamento</h4>
-                  {hardcodedTailwindColors.funding.map((c, i) => (
-                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
-                      <div className={`h-16 ${c.tailwind}`} />
-                      <div className="p-3">
-                        <p className="text-xs font-medium">{c.usage}</p>
-                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
-                        <p className="text-[10px] text-muted-foreground/60 font-mono truncate">{c.hsl} · {c.hex}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <h4 className="font-medium mb-3 text-sm">Outros</h4>
-                  {hardcodedTailwindColors.other.map((c, i) => (
-                    <div key={i} className="border rounded-lg bg-card overflow-hidden">
-                      <div className={`h-16 ${c.tailwind}`} />
-                      <div className="p-3">
-                        <p className="text-xs font-medium">{c.usage}</p>
-                        <p className="text-[10px] text-muted-foreground font-mono">{c.tailwind}</p>
-                        <p className="text-[10px] text-muted-foreground/60 font-mono truncate">{c.hsl} · {c.hex}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Gradientes */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Gradientes</h3>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-              <div className="border rounded-lg bg-card overflow-hidden">
-                <div className="h-16 bg-gradient-primary" />
-                <div className="p-3">
-                  <p className="text-xs font-medium">Gradiente Principal</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">bg-gradient-primary</p>
-                  <p className="text-[10px] text-muted-foreground/60 font-mono truncate">--gradient-primary</p>
-                </div>
-              </div>
-              <div className="border rounded-lg bg-card overflow-hidden">
-                <div className="h-16 bg-gradient-accent" />
-                <div className="p-3">
-                  <p className="text-xs font-medium">Gradiente Accent</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">bg-gradient-accent</p>
-                  <p className="text-[10px] text-muted-foreground/60 font-mono truncate">--gradient-accent</p>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -1538,7 +1448,7 @@ body {
                   </div>
                   <div className="p-3 bg-card rounded-lg border">
                     <p className="text-xs text-muted-foreground">Âmbito 3</p>
-                    <p className="text-xl font-bold text-orange-600">4.600</p>
+                    <p className="text-xl font-bold text-scope-3">4.600</p>
                     <p className="text-xs text-muted-foreground">t CO₂e (56%)</p>
                   </div>
                 </div>
@@ -1852,185 +1762,6 @@ body {
           </Table>
         </div>
 
-        {/* === SECÇÃO: ANTI-PADRÕES === */}
-        <SectionHeader
-          id="anti-padroes"
-          title="Anti-padrões"
-          icon={Ban}
-          description="O que NÃO fazer vs o que fazer"
-        />
-
-        <div className="space-y-8">
-          {/* Cores - Visual */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Palette className="h-5 w-5 text-muted-foreground" />
-              Cores
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Don't */}
-              <Card className="p-4 border-danger/30 bg-danger/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <XCircle className="h-5 w-5 text-danger" />
-                  <span className="font-semibold text-danger">Não fazer</span>
-                </div>
-                <div className="p-3 border rounded-lg bg-card">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-4 h-4 rounded bg-green-600" />
-                    <span className="text-green-600 font-medium">Sucesso</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-red-500" />
-                    <span className="text-red-500 font-medium">Erro</span>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  text-green-600, bg-red-500
-                </p>
-              </Card>
-
-              {/* Do */}
-              <Card className="p-4 border-success/30 bg-success/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle className="h-5 w-5 text-success" />
-                  <span className="font-semibold text-success">Fazer</span>
-                </div>
-                <div className="p-3 border rounded-lg bg-card">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-4 h-4 rounded bg-success" />
-                    <span className="text-success font-medium">Sucesso</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded bg-danger" />
-                    <span className="text-danger font-medium">Erro</span>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  text-success, bg-danger
-                </p>
-              </Card>
-            </div>
-          </div>
-
-          {/* Badges - Visual */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Tag className="h-5 w-5 text-muted-foreground" />
-              Badges
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Don't */}
-              <Card className="p-4 border-danger/30 bg-danger/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <XCircle className="h-5 w-5 text-danger" />
-                  <span className="font-semibold text-danger">Não fazer</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2 py-1 text-xs rounded bg-green-100 text-green-800">Baixo</span>
-                  <span className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-800">Médio</span>
-                  <span className="px-2 py-1 text-xs rounded bg-red-100 text-red-800">Alto</span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Cores hardcoded, inconsistentes
-                </p>
-              </Card>
-
-              {/* Do */}
-              <Card className="p-4 border-success/30 bg-success/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle className="h-5 w-5 text-success" />
-                  <span className="font-semibold text-success">Fazer</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Badge className={riskColors.baixo.badge}>Baixo</Badge>
-                  <Badge className={riskColors.medio.badge}>Médio</Badge>
-                  <Badge className={riskColors.alto.badge}>Alto</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  riskColors.baixo.badge
-                </p>
-              </Card>
-            </div>
-          </div>
-
-          {/* Números - Visual */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Hash className="h-5 w-5 text-muted-foreground" />
-              Formatação de Números
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Don't */}
-              <Card className="p-4 border-danger/30 bg-danger/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <XCircle className="h-5 w-5 text-danger" />
-                  <span className="font-semibold text-danger">Não fazer</span>
-                </div>
-                <div className="p-3 border rounded-lg bg-card">
-                  <p className="text-2xl font-bold">15749.5</p>
-                  <p className="text-sm text-muted-foreground">t CO2e</p>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  value.toString()
-                </p>
-              </Card>
-
-              {/* Do */}
-              <Card className="p-4 border-success/30 bg-success/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle className="h-5 w-5 text-success" />
-                  <span className="font-semibold text-success">Fazer</span>
-                </div>
-                <div className="p-3 border rounded-lg bg-card">
-                  <p className="text-2xl font-bold">{formatNumber(15749.5, 0)}</p>
-                  <p className="text-sm text-muted-foreground">t CO₂e</p>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  formatNumber(value, 0)
-                </p>
-              </Card>
-            </div>
-          </div>
-
-          {/* Cards - Visual */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <LayoutGrid className="h-5 w-5 text-muted-foreground" />
-              Cards
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Don't */}
-              <Card className="p-4 border-danger/30 bg-danger/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <XCircle className="h-5 w-5 text-danger" />
-                  <span className="font-semibold text-danger">Não fazer</span>
-                </div>
-                <div className="p-4 bg-white border border-gray-200 rounded-md shadow">
-                  <p className="font-medium">Card custom</p>
-                  <p className="text-sm text-gray-500">Estilos inline</p>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  div com classes custom
-                </p>
-              </Card>
-
-              {/* Do */}
-              <Card className="p-4 border-success/30 bg-success/5">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle className="h-5 w-5 text-success" />
-                  <span className="font-semibold text-success">Fazer</span>
-                </div>
-                <Card className={cardStyles.kpi}>
-                  <p className="font-medium">Card padronizado</p>
-                  <p className="text-sm text-muted-foreground">Design system</p>
-                </Card>
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  Card + cardStyles.kpi
-                </p>
-              </Card>
-            </div>
-          </div>
-        </div>
 
         </div>
       </main>

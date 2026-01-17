@@ -123,8 +123,8 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="p-2 rounded-lg bg-slate-100">
-                        <FileText className="h-4 w-4 text-slate-600" />
+                      <div className="p-2 rounded-lg bg-muted">
+                        <FileText className="h-4 w-4 text-muted-foreground" />
                       </div>
                       <div>
                         <p className="font-medium text-sm">Formulário</p>

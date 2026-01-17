@@ -43,12 +43,7 @@ export const BulkStep3Funding = () => {
             <div key={fund.id} className="p-3 border rounded-lg">
               <div className="flex items-center justify-between">
                 <p className="font-medium text-sm">{fund.name}</p>
-                <span className={cn(
-                  "text-xs px-2 py-0.5 rounded-full",
-                  fund.type === 'subsidio' ? 'bg-success/20 text-success' :
-                  fund.type === 'incentivo' ? 'bg-primary/20 text-primary' :
-                  'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'
-                )}>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">
                   {fund.type === 'subsidio' ? 'Subsídio' : 
                    fund.type === 'incentivo' ? 'Incentivo' : 'Financiamento'}
                 </span>

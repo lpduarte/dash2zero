@@ -6,7 +6,6 @@ import { NotificationBell } from "./NotificationBell";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
 import { allEmpresaSuppliers, allMunicipioSuppliers } from "@/data/suppliers";
-import logoCascais from "@/assets/logo-cascais.svg";
 
 export const Header = () => {
   const location = useLocation();
@@ -37,25 +36,11 @@ export const Header = () => {
         {/* Content - above everything */}
         <div className="relative max-w-[1400px] mx-auto" style={{ zIndex: 2 }}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {userType === 'municipio' ? (
-                <div className="w-16 h-16 flex items-center justify-center">
-                  <img src={logoCascais} alt="Município de Cascais" className="w-full h-full" />
-                </div>
-              ) : (
-                <div className="w-16 h-16 bg-primary/20 rounded-lg flex items-center justify-center border-2 border-primary/30">
-                  <span className="text-xs text-primary/60 font-medium">LOGO</span>
-                </div>
-              )}
-
-              <div className="flex items-center gap-3">
-                <div className="bg-primary/20 p-3 rounded-lg">
-                  <Leaf className="h-8 w-8 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-foreground">dash2zero</h1>
-                  <p className="text-muted-foreground text-sm">Dashboard de Sustentabilidade</p>
-                </div>
+            <div className="flex items-center gap-3">
+              <Leaf className="h-14 w-14 text-primary" />
+              <div>
+                <h1 className="text-3xl font-bold text-foreground">dash2zero</h1>
+                <p className="text-muted-foreground text-sm">Dashboard de Sustentabilidade</p>
               </div>
             </div>
 

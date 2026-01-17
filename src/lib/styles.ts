@@ -104,27 +104,42 @@ export type Scope = keyof typeof scopeColors;
 export const onboardingStatusColors = {
   pending: {
     bg: 'bg-status-pending',
+    bgLight: 'bg-status-pending/15',
     text: 'text-status-pending',
+    border: 'border-status-pending/30',
+    badge: 'bg-status-pending/15 text-status-pending border-status-pending/30',
     label: 'Por contactar',
   },
   contacted: {
     bg: 'bg-status-contacted',
+    bgLight: 'bg-status-contacted/15',
     text: 'text-status-contacted',
+    border: 'border-status-contacted/30',
+    badge: 'bg-status-contacted/15 text-status-contacted border-status-contacted/30',
     label: 'Sem interação',
   },
   interested: {
     bg: 'bg-status-interested',
+    bgLight: 'bg-status-interested/15',
     text: 'text-status-interested',
+    border: 'border-status-interested/30',
+    badge: 'bg-status-interested/15 text-status-interested border-status-interested/30',
     label: 'Interessada',
   },
   progress: {
     bg: 'bg-status-progress',
+    bgLight: 'bg-status-progress/15',
     text: 'text-status-progress',
+    border: 'border-status-progress/30',
+    badge: 'bg-status-progress/15 text-status-progress border-status-progress/30',
     label: 'Em progresso',
   },
   complete: {
     bg: 'bg-status-complete',
+    bgLight: 'bg-status-complete/15',
     text: 'text-status-complete',
+    border: 'border-status-complete/30',
+    badge: 'bg-status-complete/15 text-status-complete border-status-complete/30',
     label: 'Completo',
   },
 } as const;
@@ -137,10 +152,10 @@ export type OnboardingStatus = keyof typeof onboardingStatusColors;
 
 export const fundingColors = {
   subsidio: {
-    text: 'text-success',
-    bg: 'bg-success/20',
-    bgLight: 'bg-success/10',
-    border: 'border-success/30',
+    text: 'text-primary',
+    bg: 'bg-primary/20',
+    bgLight: 'bg-primary/10',
+    border: 'border-primary/30',
     label: 'Subsídio',
   },
   incentivo: {
@@ -151,10 +166,10 @@ export const fundingColors = {
     label: 'Incentivo',
   },
   financiamento: {
-    text: 'text-purple-700 dark:text-purple-400',
-    bg: 'bg-purple-100 dark:bg-purple-900/30',
-    bgLight: 'bg-purple-50 dark:bg-purple-950/30',
-    border: 'border-purple-200 dark:border-purple-800',
+    text: 'text-primary',
+    bg: 'bg-primary/20',
+    bgLight: 'bg-primary/10',
+    border: 'border-primary/30',
     label: 'Financiamento',
   },
 } as const;

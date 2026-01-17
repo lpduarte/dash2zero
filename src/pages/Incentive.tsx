@@ -56,49 +56,49 @@ interface CompanyWithTracking extends SupplierWithoutFootprint {
 }
 
 const onboardingStatusConfig: Record<string, { label: string; color: string; tooltip: string }> = {
-  por_contactar: { 
-    label: 'Por contactar', 
-    color: 'bg-muted text-muted-foreground hover:bg-muted/80', 
-    tooltip: 'Ainda não recebeu nenhum email' 
+  por_contactar: {
+    label: 'Por contactar',
+    color: 'bg-status-pending/15 text-status-pending border border-status-pending/30',
+    tooltip: 'Ainda não recebeu nenhum email'
   },
-  sem_interacao: { 
-    label: 'Sem interação', 
-    color: 'bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50', 
-    tooltip: 'Recebeu email mas não clicou no link' 
+  sem_interacao: {
+    label: 'Sem interação',
+    color: 'bg-status-contacted/15 text-status-contacted border border-status-contacted/30',
+    tooltip: 'Recebeu email mas não clicou no link'
   },
-  interessada: { 
-    label: 'Interessada', 
-    color: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:hover:bg-yellow-900/50', 
-    tooltip: 'Clicou no link do email' 
+  interessada: {
+    label: 'Interessada',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    tooltip: 'Clicou no link do email'
   },
-  interessada_simple: { 
-    label: 'Interessada / Simple', 
-    color: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:hover:bg-yellow-900/50', 
-    tooltip: 'Escolheu o caminho Simple na landing page' 
+  interessada_simple: {
+    label: 'Interessada / Simple',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    tooltip: 'Escolheu o caminho Simple na landing page'
   },
-  interessada_formulario: { 
-    label: 'Interessada / Formulário', 
-    color: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:hover:bg-yellow-900/50', 
-    tooltip: 'Escolheu o caminho Formulário na landing page' 
+  interessada_formulario: {
+    label: 'Interessada / Formulário',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    tooltip: 'Escolheu o caminho Formulário na landing page'
   },
-  registada_simple: { 
-    label: 'Registada', 
-    color: 'bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50', 
-    tooltip: 'Criou conta no Simple' 
+  registada_simple: {
+    label: 'Registada',
+    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    tooltip: 'Criou conta no Simple'
   },
-  em_progresso_simple: { 
-    label: 'Em progresso / Simple', 
-    color: 'bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50', 
-    tooltip: 'Iniciou o cálculo da pegada no Simple' 
+  em_progresso_simple: {
+    label: 'Em progresso / Simple',
+    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    tooltip: 'Iniciou o cálculo da pegada no Simple'
   },
-  em_progresso_formulario: { 
-    label: 'Em progresso / Formulário', 
-    color: 'bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-300 dark:hover:bg-orange-900/50', 
-    tooltip: 'Iniciou o preenchimento do formulário' 
+  em_progresso_formulario: {
+    label: 'Em progresso / Formulário',
+    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    tooltip: 'Iniciou o preenchimento do formulário'
   },
   completo: {
     label: 'Completo',
-    color: 'bg-success/10 text-success hover:bg-success/20',
+    color: 'bg-status-complete/15 text-status-complete border border-status-complete/30',
     tooltip: 'Pegada calculada com sucesso'
   },
 };

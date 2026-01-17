@@ -298,9 +298,9 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                       <span className="font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{get2zeroCount}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded">{formularioCount}</span>
+                      <span className="font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{formularioCount}</span>
                       <span className="text-muted-foreground">Formulário</span>
-                      <FileText className="h-3.5 w-3.5 text-slate-500" />
+                      <FileText className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>
                   </div>
                 </div>

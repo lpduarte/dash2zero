@@ -1,4 +1,4 @@
-import { AlertTriangle, Check, Euro, Calendar, Wallet, FileCheck } from 'lucide-react';
+import { AlertTriangle, Check, Euro, Calendar, Wallet, FileCheck, Gift, BadgePercent, Landmark } from 'lucide-react';
 import type { Step3Props } from '../types';
 import { getApplicableMeasures } from '@/data/mockMeasures';
 import { mockFunding, getApplicableFunding } from '@/data/mockFunding';
@@ -43,10 +43,10 @@ export const Step3Funding = ({
     financiamento: 'Financiamento',
   };
 
-  const typeColors = {
-    subsidio: { headerBg: fundingColors.subsidio.bgLight, text: fundingColors.subsidio.text, badge: 'bg-success' },
-    incentivo: { headerBg: fundingColors.incentivo.bgLight, text: fundingColors.incentivo.text, badge: 'bg-primary' },
-    financiamento: { headerBg: fundingColors.financiamento.bgLight, text: fundingColors.financiamento.text, badge: 'bg-purple-600 dark:bg-purple-500' },
+  const typeConfig = {
+    subsidio: { headerBg: fundingColors.subsidio.bgLight, text: fundingColors.subsidio.text, badge: 'bg-primary', icon: Gift },
+    incentivo: { headerBg: fundingColors.incentivo.bgLight, text: fundingColors.incentivo.text, badge: 'bg-primary', icon: BadgePercent },
+    financiamento: { headerBg: fundingColors.financiamento.bgLight, text: fundingColors.financiamento.text, badge: 'bg-primary', icon: Landmark },
   };
 
   const toggleFunding = (fundingId: string) => {
@@ -163,13 +163,17 @@ export const Step3Funding = ({
   // Render coluna por tipo
   const renderTypeColumn = (type: 'subsidio' | 'incentivo' | 'financiamento') => {
     const funds = fundingByType[type];
-    const colors = typeColors[type];
+    const config = typeConfig[type];
+    const Icon = config.icon;
 
     return (
       <div className="space-y-3">
-        <div className={`flex items-center justify-between p-3 rounded-lg mb-3 ${colors.headerBg}`}>
-          <span className={`font-medium text-sm ${colors.text}`}>{typeLabels[type]}</span>
-          <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${colors.badge}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg mb-3 ${config.headerBg}`}>
+          <div className="flex items-center gap-2">
+            <Icon className={`h-4 w-4 ${config.text}`} />
+            <span className={`font-medium text-sm ${config.text}`}>{typeLabels[type]}</span>
+          </div>
+          <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${config.badge}`}>
             {funds.length}
           </span>
         </div>

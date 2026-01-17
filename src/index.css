@@ -50,10 +50,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --medal-silver: 0 0% 75%;
     --medal-bronze: 30 59% 50%;
 
-    /* Gradients with brand colors */
-    --gradient-primary: linear-gradient(135deg, hsl(175 66% 38%) 0%, hsl(175 55% 48%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(175 70% 28%) 0%, hsl(175 66% 38%) 100%);
-
     /* Shadows with brand tint */
     --shadow-sm: 0 1px 2px 0 hsla(175, 30%, 20%, 0.05);
     --shadow-md: 0 4px 6px -1px hsla(175, 30%, 20%, 0.1);
@@ -97,10 +93,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --medal-gold: 51 100% 50%;
     --medal-silver: 0 0% 75%;
     --medal-bronze: 30 59% 50%;
-
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(175 60% 45%) 0%, hsl(175 55% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(175 65% 35%) 0%, hsl(175 60% 45%) 100%);
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
