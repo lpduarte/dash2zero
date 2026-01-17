@@ -14,9 +14,10 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 1,
+  patch: 2,
   date: "2026-01-17",
   changelog: [
+    "Auto-update via commit",
     "Auto-update via commit",
     "Sistema de cores simplificado: 20 variáveis CSS (vs 35+), aliases Tailwind preservados",
     "Adicionadas cores de Scope, Medalhas e Gráficos; Ícones oficiais das tecnologias",
@@ -121,11 +122,7 @@ const allColors = {
   brand: [
     { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: '#219F94', note: 'Cor principal da marca' },
     { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Primary mais claro' },
-    { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: '#157068', note: 'Primary mais escuro (= accent)' },
-  ],
-  // Secondary (1 CSS variable)
-  secondary: [
-    { name: '--secondary', tailwind: 'bg-secondary', hsl: '185 50% 25%', hex: '#1F4D53', note: 'Cor secundária (teal profundo)' },
+    { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: '#157068', note: 'Primary mais escuro (= accent, secondary)' },
   ],
   // Status colors (4 CSS variables)
   status: [
@@ -152,7 +149,6 @@ const allColors = {
 const primaryColors = [
   ...allColors.base,
   ...allColors.brand,
-  ...allColors.secondary,
 ];
 
 const semanticColors = allColors.status.filter(c =>
@@ -582,24 +578,6 @@ const StyleGuide = () => {
             </div>
           </div>
 
-          {/* Secondary */}
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Secundária (1 variável CSS)</h3>
-            <p className="text-sm text-muted-foreground mb-4">Cor complementar teal profundo</p>
-            <div className="grid grid-cols-3 gap-3">
-              {allColors.secondary.map((c) => (
-                <ColorSwatch
-                  key={c.name}
-                  label={c.name}
-                  hsl={c.hsl}
-                  tailwind={c.tailwind}
-                  hex={c.hex}
-                  note={c.note}
-                />
-              ))}
-            </div>
-          </div>
-
           {/* Status/Semantic */}
           <div>
             <h3 className="text-lg font-semibold mb-2">Status (4 variáveis CSS)</h3>
@@ -662,9 +640,6 @@ const StyleGuide = () => {
               <div className="h-12 rounded-lg bg-gradient-primary" />
               <p className="font-mono text-xs text-muted-foreground">--gradient-primary · bg-gradient-primary</p>
 
-              <div className="h-12 rounded-lg bg-gradient-secondary" />
-              <p className="font-mono text-xs text-muted-foreground">--gradient-secondary · bg-gradient-secondary</p>
-
               <div className="h-12 rounded-lg bg-gradient-accent" />
               <p className="font-mono text-xs text-muted-foreground">--gradient-accent · bg-gradient-accent</p>
             </div>
@@ -686,7 +661,6 @@ const StyleGuide = () => {
                       { color: 'bg-primary', label: 'Primary' },
                       { color: 'bg-primary-light', label: 'Primary Light' },
                       { color: 'bg-primary-dark', label: 'Primary Dark' },
-                      { color: 'bg-secondary', label: 'Secondary' },
                       { color: 'bg-success', label: 'Success' },
                       { color: 'bg-warning', label: 'Warning' },
                       { color: 'bg-danger', label: 'Danger' },

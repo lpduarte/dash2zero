@@ -73,7 +73,7 @@ export default {
           dark: "hsl(var(--primary-dark))",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "hsl(var(--primary-dark))", // consolidated with primary-dark
           foreground: "hsl(var(--card))", // white = card
         },
         destructive: {
@@ -187,7 +187,6 @@ export default {
       },
       backgroundImage: {
         'gradient-primary': 'var(--gradient-primary)',
-        'gradient-secondary': 'var(--gradient-secondary)',
         'gradient-accent': 'var(--gradient-accent)',
       },
       boxShadow: {

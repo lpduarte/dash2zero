@@ -27,9 +27,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --primary-light: 175 55% 48%;
     --primary-dark: 175 70% 28%;
 
-    /* Secondary: Deep teal for depth */
-    --secondary: 185 50% 25%;
-
     /* Status colors */
     --success: 160 65% 40%;
     --warning: 42 90% 50%;
@@ -50,7 +47,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
 
     /* Gradients with brand colors */
     --gradient-primary: linear-gradient(135deg, hsl(175 66% 38%) 0%, hsl(175 55% 48%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(185 50% 25%) 0%, hsl(175 66% 38%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(175 70% 28%) 0%, hsl(175 66% 38%) 100%);
 
     /* Shadows with brand tint */
@@ -76,9 +72,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --primary-light: 175 55% 55%;
     --primary-dark: 175 65% 35%;
 
-    /* Secondary */
-    --secondary: 185 45% 35%;
-
     /* Status colors */
     --success: 160 60% 45%;
     --warning: 42 85% 55%;
@@ -97,7 +90,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(175 60% 45%) 0%, hsl(175 55% 55%) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(185 45% 35%) 0%, hsl(175 60% 45%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(175 65% 35%) 0%, hsl(175 60% 45%) 100%);
 
     /* Shadows */
@@ -157,6 +149,10 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
   overflow: hidden;
 }
 
+.dark .footer-gradient {
+  background: hsl(175 25% 8%);
+}
+
 /* Base gradient layer */
 .footer-gradient::before {
   content: "";
@@ -178,6 +174,21 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
   transform-origin: center bottom;
 }
 
+.dark .footer-gradient::before {
+  background:
+    radial-gradient(
+      ellipse 85% 75% at 50% 110%,
+      hsl(175 50% 70%) 0%,
+      hsl(175 45% 55%) 15%,
+      hsl(175 40% 42%) 28%,
+      hsl(175 35% 32%) 42%,
+      hsl(175 30% 22%) 55%,
+      hsl(175 28% 16%) 70%,
+      hsl(175 25% 12%) 85%,
+      hsl(175 25% 8%) 100%
+    );
+}
+
 /* Secondary pulsing layer */
 .footer-gradient::after {
   content: "";
@@ -194,6 +205,18 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     );
   animation: pulse-gradient-2 5s ease-in-out infinite;
   transform-origin: center bottom;
+}
+
+.dark .footer-gradient::after {
+  background:
+    radial-gradient(
+      ellipse 65% 60% at 50% 115%,
+      hsl(175 55% 65% / 0.9) 0%,
+      hsl(175 45% 50% / 0.7) 25%,
+      hsl(175 40% 38% / 0.5) 50%,
+      hsl(175 35% 28% / 0.25) 70%,
+      transparent 90%
+    );
 }
 
 /* Grain overlay - applied via extra element in HTML */
