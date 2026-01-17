@@ -141,7 +141,7 @@ const EmailTemplate = () => {
                     width: "64px",
                     height: "64px",
                     borderRadius: "50%",
-                    backgroundColor: "hsl(168 71% 31%)",
+                    backgroundColor: "hsl(175 66% 38%)",
                     marginBottom: "16px"
                   }}
                 >
@@ -155,7 +155,7 @@ const EmailTemplate = () => {
                   style={{ 
                     fontSize: "14px",
                     fontWeight: 600,
-                    color: "hsl(168 71% 31%)",
+                    color: "hsl(175 66% 38%)",
                     letterSpacing: "0.05em",
                     textTransform: "uppercase" as const
                   }}
@@ -185,10 +185,10 @@ const EmailTemplate = () => {
                 {/* Benefits list */}
                 <div style={{ marginBottom: "24px" }}>
                   {[
-                    { icon: <Leaf className="h-5 w-5" style={{ color: "hsl(168 71% 31%)" }} />, text: "Calcular a pegada de carbono da sua empresa" },
-                    { icon: <TrendingDown className="h-5 w-5" style={{ color: "hsl(168 71% 31%)" }} />, text: "Identificar onde pode poupar energia e reduzir custos" },
-                    { icon: <BarChart3 className="h-5 w-5" style={{ color: "hsl(168 71% 31%)" }} />, text: "Comparar o seu desempenho com empresas do mesmo sector" },
-                    { icon: <Euro className="h-5 w-5" style={{ color: "hsl(168 71% 31%)" }} />, text: "Descobrir oportunidades de financiamento para melhorias" },
+                    { icon: <Leaf className="h-5 w-5" style={{ color: "hsl(175 66% 38%)" }} />, text: "Calcular a pegada de carbono da sua empresa" },
+                    { icon: <TrendingDown className="h-5 w-5" style={{ color: "hsl(175 66% 38%)" }} />, text: "Identificar onde pode poupar energia e reduzir custos" },
+                    { icon: <BarChart3 className="h-5 w-5" style={{ color: "hsl(175 66% 38%)" }} />, text: "Comparar o seu desempenho com empresas do mesmo sector" },
+                    { icon: <Euro className="h-5 w-5" style={{ color: "hsl(175 66% 38%)" }} />, text: "Descobrir oportunidades de financiamento para melhorias" },
                   ].map((item, i) => (
                     <div 
                       key={i}
@@ -225,7 +225,7 @@ const EmailTemplate = () => {
                 <div 
                   style={{ 
                     backgroundColor: "hsl(168 71% 31% / 0.08)",
-                    borderLeft: "4px solid hsl(168 71% 31%)",
+                    borderLeft: "4px solid hsl(175 66% 38%)",
                     padding: "16px",
                     borderRadius: "0 8px 8px 0",
                     marginBottom: "24px"
@@ -250,7 +250,7 @@ const EmailTemplate = () => {
                     href="https://dash2zero.lovable.app/onboarding"
                     style={{
                       display: "inline-block",
-                      backgroundColor: "hsl(168 71% 31%)",
+                      backgroundColor: "hsl(175 66% 38%)",
                       color: "#ffffff",
                       fontSize: "16px",
                       fontWeight: 600,
@@ -316,7 +316,7 @@ const EmailTemplate = () => {
                         justifyContent: "center"
                       }}
                     >
-                      <Leaf style={{ width: "12px", height: "12px", color: "hsl(168 71% 31%)" }} />
+                      <Leaf style={{ width: "12px", height: "12px", color: "hsl(175 66% 38%)" }} />
                     </div>
                     <span style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>
                       Dash2Zero

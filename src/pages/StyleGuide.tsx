@@ -14,11 +14,12 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 0,
+  patch: 1,
   date: "2026-01-17",
   changelog: [
+    "Auto-update via commit",
     "Sistema de cores simplificado: 20 variáveis CSS (vs 35+), aliases Tailwind preservados",
-    "Adicionadas cores de Scope, Medalhas e Gráficos; Análise de cores hardcoded; Ícones oficiais das tecnologias",
+    "Adicionadas cores de Scope, Medalhas e Gráficos; Ícones oficiais das tecnologias",
     "Automatismo de changelog implementado",
     "Header com fundo animado pulsante",
     "Animação text reveal no título",
@@ -147,33 +148,6 @@ const allColors = {
   ],
 };
 
-// Tailwind aliases (no CSS variable, mapped in tailwind.config.ts)
-const tailwindAliases = [
-  { tailwind: 'bg-popover / text-popover-foreground', mapsTo: 'card / foreground' },
-  { tailwind: 'text-card-foreground', mapsTo: 'foreground' },
-  { tailwind: 'border-input', mapsTo: 'border' },
-  { tailwind: 'ring-ring', mapsTo: 'primary' },
-  { tailwind: 'bg-accent / text-accent-foreground', mapsTo: 'primary-dark / card' },
-  { tailwind: 'bg-destructive / text-destructive-foreground', mapsTo: 'danger / card' },
-  { tailwind: '*-foreground (primary, secondary, success, danger)', mapsTo: 'card (white)' },
-  { tailwind: 'chart-grid / chart-text', mapsTo: 'border / muted-foreground' },
-];
-
-// Hardcoded colors found in codebase - TO BE FIXED
-const hardcodedColorsReport = [
-  {
-    file: 'EmailTemplate.tsx',
-    severity: 'high',
-    colors: ['#ffffff', '#1a1a1a', '#4a4a4a', '#6a6a6a', '#8a8a8a', '#f5f5f5', '#e5e5e5', 'hsl(168 71% 31%)'],
-    note: 'Template de email com cor da marca ERRADA (168° vs 175°) e muitos cinzas hardcoded',
-  },
-  // TopSuppliersHighlight.tsx - CORRIGIDO: usa --medal-gold/silver/bronze
-  // ComparisonChart.tsx - CORRIGIDO: usa --scope-1/2/3
-  // SupplierCard.tsx - CORRIGIDO: usa --scope-1/2/3
-  // EmissionsBreakdown.tsx - CORRIGIDO: usa --scope-1/2/3
-  // Step2Measures.tsx - CORRIGIDO: usa --success
-];
-
 // Computed arrays for display
 const primaryColors = [
   ...allColors.base,
@@ -216,29 +190,25 @@ const chartData = [
 // scopeChartData removed - Tremor donut uses inline data
 
 const ColorSwatch = ({
-  color,
   label,
   hsl,
   tailwind,
   hex,
-  note,
-  isRedundant
+  note
 }: {
-  color: string;
   label: string;
   hsl: string;
   tailwind: string;
   hex?: string;
   note?: string;
-  isRedundant?: boolean;
 }) => (
-  <div className={`flex items-center gap-3 p-3 border rounded-lg bg-card ${isRedundant ? 'opacity-60 border-dashed border-warning/50' : ''}`}>
-    <div className={`w-12 h-12 rounded-lg border shrink-0 ${color}`} />
+  <div className="flex items-center gap-3 p-3 border rounded-lg bg-card">
+    <div
+      className="w-12 h-12 rounded-lg border shrink-0"
+      style={{ backgroundColor: `hsl(${hsl})` }}
+    />
     <div className="flex-1 min-w-0">
-      <div className="flex items-center gap-2">
-        <p className="font-mono text-xs font-medium truncate">{label}</p>
-        {isRedundant && <Badge variant="outline" className="text-[10px] px-1 py-0 text-warning border-warning/50">redundante</Badge>}
-      </div>
+      <p className="font-mono text-xs font-medium truncate">{label}</p>
       <p className="font-mono text-xs text-muted-foreground/70 truncate">{tailwind}</p>
       <div className="flex gap-2">
         <p className="font-mono text-xs text-muted-foreground/50">{hsl}</p>
@@ -385,7 +355,7 @@ const StyleGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="min-h-screen bg-background">
       {/* Sidebar de navegação */}
       <aside className="w-64 border-r bg-card fixed h-screen overflow-hidden">
         <ScrollArea className="h-full">
@@ -446,7 +416,7 @@ const StyleGuide = () => {
       </aside>
 
       {/* Conteúdo principal */}
-      <main className="flex-1 ml-64">
+      <main className="ml-64">
         {/* Header da página - vai até aos limites */}
         <header className="relative bg-background overflow-hidden border-b">
           {/* Animated pulsing background elements - mostly right, some left for balance */}
@@ -572,20 +542,10 @@ const StyleGuide = () => {
           id="cores"
           title="Cores"
           icon={Palette}
-          description="Todas as cores CSS do design system - análise de redundâncias"
+          description="Todas as cores CSS do design system"
         />
 
         <div className="space-y-8">
-          {/* Alert de Redundâncias */}
-          <Alert className="border-warning/50 bg-warning/5">
-            <AlertTriangle className="h-4 w-4 text-warning" />
-            <AlertTitle>Análise de Redundâncias</AlertTitle>
-            <AlertDescription className="text-sm">
-              Cores marcadas com <Badge variant="outline" className="text-[10px] px-1 py-0 text-warning border-warning/50 mx-1">redundante</Badge>
-              são idênticas ou muito similares a outras e podem ser consolidadas.
-            </AlertDescription>
-          </Alert>
-
           {/* Base */}
           <div>
             <h3 className="text-lg font-semibold mb-2">Base (6 variáveis CSS)</h3>
@@ -594,7 +554,6 @@ const StyleGuide = () => {
               {allColors.base.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -613,7 +572,6 @@ const StyleGuide = () => {
               {allColors.brand.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -632,7 +590,6 @@ const StyleGuide = () => {
               {allColors.secondary.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -651,7 +608,6 @@ const StyleGuide = () => {
               {allColors.status.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -662,26 +618,6 @@ const StyleGuide = () => {
             </div>
           </div>
 
-          {/* Tailwind Aliases */}
-          <Card className="p-4 border-dashed border-primary/30 bg-primary/5">
-            <h4 className="font-semibold mb-3 flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-primary" />
-              Aliases Tailwind (sem variável CSS própria)
-            </h4>
-            <p className="text-sm text-muted-foreground mb-3">
-              Classes Tailwind preservadas para compatibilidade, mas mapeadas para variáveis base:
-            </p>
-            <ul className="text-sm space-y-2 text-muted-foreground font-mono">
-              {tailwindAliases.map((alias, i) => (
-                <li key={i}>
-                  <code className="text-xs bg-muted px-1 rounded">{alias.tailwind}</code>
-                  {' → '}
-                  <code className="text-xs bg-primary/10 text-primary px-1 rounded">{alias.mapsTo}</code>
-                </li>
-              ))}
-            </ul>
-          </Card>
-
           {/* Cores de Scope */}
           <div>
             <h3 className="text-lg font-semibold mb-2">Âmbitos / Scopes</h3>
@@ -690,7 +626,6 @@ const StyleGuide = () => {
               {allColors.scope.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -709,7 +644,6 @@ const StyleGuide = () => {
               {allColors.medals.map((c) => (
                 <ColorSwatch
                   key={c.name}
-                  color={c.tailwind}
                   label={c.name}
                   hsl={c.hsl}
                   tailwind={c.tailwind}
@@ -720,56 +654,6 @@ const StyleGuide = () => {
             </div>
           </div>
 
-
-          {/* Cores Hardcoded - PROBLEMAS */}
-          <Card className="p-4 border-dashed border-danger/50 bg-danger/5">
-            <h4 className="font-semibold mb-3 flex items-center gap-2">
-              <XCircle className="h-4 w-4 text-danger" />
-              Cores Hardcoded Encontradas (A CORRIGIR)
-            </h4>
-            <div className="space-y-4">
-              {hardcodedColorsReport.map((report) => (
-                <div key={report.file} className={`p-3 rounded-lg border ${
-                  report.severity === 'high' ? 'border-danger/30 bg-danger/5' :
-                  report.severity === 'medium' ? 'border-warning/30 bg-warning/5' :
-                  'border-muted bg-muted/30'
-                }`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Badge variant={report.severity === 'high' ? 'destructive' : report.severity === 'medium' ? 'outline' : 'secondary'} className="text-xs">
-                      {report.severity === 'high' ? 'CRÍTICO' : report.severity === 'medium' ? 'MÉDIO' : 'BAIXO'}
-                    </Badge>
-                    <code className="text-xs font-mono bg-muted px-2 py-0.5 rounded">{report.file}</code>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-2">{report.note}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {report.colors.map((color) => (
-                      <code key={color} className="text-[10px] font-mono bg-background px-1.5 py-0.5 rounded border">
-                        {color}
-                      </code>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          {/* Cores de Âmbito - LEGACY (usar scopeColors de lib/styles) */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Cores de Âmbito (Scopes)</h3>
-            <div className="grid grid-cols-3 gap-4">
-              {([1, 2, 3] as const).map((scope) => (
-                <div key={scope} className={`p-4 rounded-lg border ${scopeColors[scope].bgLight} ${scopeColors[scope].border}`}>
-                  <Badge className={scopeColors[scope].badge}>Âmbito {scope}</Badge>
-                  <p className={`mt-3 font-semibold ${scopeColors[scope].text}`}>
-                    Texto de exemplo
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {scopeColors[scope].label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
 
           {/* Gradientes */}
           <div>
@@ -2128,13 +2012,19 @@ body {
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-16 pt-8 border-t text-center text-muted-foreground text-sm">
-          <p>Get2C Product Design System {getVersionString()} · {getVersionDate()}</p>
-          <p className="mt-1">Desenvolvido com React, TypeScript, Tailwind CSS e shadcn/ui</p>
-        </div>
         </div>
       </main>
+
+      {/* Footer with gradient */}
+      <footer className="footer-gradient ml-64 border-t">
+        <div className="footer-gradient-grain" />
+        <div className="relative z-10 max-w-5xl px-8 pt-16 pb-[40rem]">
+          <div className="text-muted-foreground text-sm">
+            <p className="text-foreground font-medium">Get2C Product Design System {getVersionString()} · {getVersionDate()}</p>
+            <p className="mt-2">Desenvolvido com React, TypeScript, Tailwind CSS e shadcn/ui</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
