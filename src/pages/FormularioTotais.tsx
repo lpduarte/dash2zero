@@ -220,7 +220,7 @@ const Stepper = ({ currentStep }: { currentStep: number }) => {
 
               <span
                 className={`
-                  text-sm font-medium transition-colors
+                  text-sm font-normal transition-colors
                   ${state === "current"
                     ? "text-primary"
                     : state === "completed"
@@ -300,7 +300,7 @@ const GroupedBreakdown = ({
     <div className="space-y-6">
       {Object.entries(groups).map(([key, group]) => (
         <div key={key} className="space-y-3">
-          <h4 className="text-sm font-medium text-muted-foreground">{group.label}</h4>
+          <h4 className="text-sm font-normal text-muted-foreground">{group.label}</h4>
           <div className="space-y-2">
             {group.categories.map(cat => (
               <div key={cat.key} className="flex items-center gap-3">
@@ -410,7 +410,7 @@ const ScopeCard = ({
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold">{title}</h3>
+            <h3 className="font-bold">{title}</h3>
             {optional && (
               <Badge variant="outline" className="text-xs">Opcional</Badge>
             )}
@@ -693,31 +693,31 @@ const FormularioTotais = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="p-4 bg-background rounded-xl border text-center">
+              <div className="p-4 bg-background rounded-lg border text-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
                   <BarChart3 className="h-5 w-5 text-primary" />
                 </div>
-                <p className="font-medium mb-1">Comparação sectorial</p>
+                <p className="font-normal mb-1">Comparação sectorial</p>
                 <p className="text-sm text-muted-foreground">
                   Veja como se posiciona face à média do seu sector
                 </p>
               </div>
               
-              <div className="p-4 bg-background rounded-xl border text-center">
+              <div className="p-4 bg-background rounded-lg border text-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
                   <TrendingDown className="h-5 w-5 text-primary" />
                 </div>
-                <p className="font-medium mb-1">Potencial de redução</p>
+                <p className="font-normal mb-1">Potencial de redução</p>
                 <p className="text-sm text-muted-foreground">
                   Identifique onde pode reduzir até 30% das emissões
                 </p>
               </div>
               
-              <div className="p-4 bg-background rounded-xl border text-center">
+              <div className="p-4 bg-background rounded-lg border text-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
                   <Lightbulb className="h-5 w-5 text-primary" />
                 </div>
-                <p className="font-medium mb-1">Medidas concretas</p>
+                <p className="font-normal mb-1">Medidas concretas</p>
                 <p className="text-sm text-muted-foreground">
                   Receba sugestões personalizadas de acções
                 </p>
@@ -760,10 +760,10 @@ const FormularioTotais = () => {
           {/* Logo */}
           <div className="text-center mb-4">
             <div className="inline-flex items-center gap-2 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Leaf className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-xl font-semibold">Dash2Zero</span>
+              <span className="text-xl font-bold">Dash2Zero</span>
             </div>
           </div>
           
@@ -784,7 +784,7 @@ const FormularioTotais = () => {
               onClick={() => setImportMode("manual")}
             >
               <Edit3 className="h-10 w-10 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Preencher manualmente</h3>
+              <h3 className="text-xl font-bold mb-2">Preencher manualmente</h3>
               <p className="text-sm text-muted-foreground">
                 Introduza os dados da sua pegada de carbono passo a passo
               </p>
@@ -795,7 +795,7 @@ const FormularioTotais = () => {
               onClick={() => setShowImportDialog(true)}
             >
               <Upload className="h-10 w-10 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Importar relatório</h3>
+              <h3 className="text-xl font-bold mb-2">Importar relatório</h3>
               <p className="text-sm text-muted-foreground">
                 Carregue um PDF ou Excel com os dados de emissões
               </p>
@@ -823,11 +823,11 @@ const FormularioTotais = () => {
             <div className="py-6">
               {!isProcessing && !importComplete && (
                 <div 
-                  className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-primary transition-colors"
+                  className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
                   onClick={handleImport}
                 >
                   <Upload className="h-10 w-10 mx-auto mb-4 text-muted-foreground" />
-                  <p className="font-medium mb-1">Arraste o ficheiro ou clique para selecionar</p>
+                  <p className="font-normal mb-1">Arraste o ficheiro ou clique para selecionar</p>
                   <p className="text-sm text-muted-foreground">PDF, XLSX, XLS ou CSV</p>
                 </div>
               )}
@@ -835,7 +835,7 @@ const FormularioTotais = () => {
               {isProcessing && (
                 <div className="text-center py-4">
                   <FileText className="h-10 w-10 mx-auto mb-4 text-primary animate-pulse" />
-                  <p className="font-medium mb-4">A analisar documento...</p>
+                  <p className="font-normal mb-4">A analisar documento...</p>
                   <Progress value={importProgress} className="w-full" />
                 </div>
               )}
@@ -845,7 +845,7 @@ const FormularioTotais = () => {
                   <div className="h-12 w-12 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
                     <CheckCircle className="h-6 w-6 text-success" />
                   </div>
-                  <p className="font-medium mb-2">Dados extraídos com sucesso</p>
+                  <p className="font-normal mb-2">Dados extraídos com sucesso</p>
                   <p className="text-sm text-muted-foreground mb-6">
                     Verifique os valores no formulário
                   </p>
@@ -875,10 +875,10 @@ const FormularioTotais = () => {
         {/* Logo */}
         <div className="text-center mb-4">
           <div className="inline-flex items-center gap-2 mb-4">
-            <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <Leaf className="h-6 w-6 text-primary" />
             </div>
-            <span className="text-xl font-semibold">Dash2Zero</span>
+            <span className="text-xl font-bold">Dash2Zero</span>
           </div>
         </div>
         
@@ -1105,24 +1105,24 @@ const FormularioTotais = () => {
         {step === 3 && (
           <div className="space-y-6">
             <Card className="p-6 md:p-8">
-              <h2 className="text-xl font-semibold mb-6">Resumo da submissão</h2>
+              <h2 className="text-xl font-bold mb-6">Resumo da submissão</h2>
               
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Empresa</p>
-                  <p className="font-medium">{companyData?.name}</p>
+                  <p className="font-normal">{companyData?.name}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">NIF</p>
-                  <p className="font-medium">{nif}</p>
+                  <p className="font-normal">{nif}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Ano de referência</p>
-                  <p className="font-medium">{year}</p>
+                  <p className="font-normal">{year}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">Localização</p>
-                  <p className="font-medium">{companyData?.concelho}, {companyData?.distrito}</p>
+                  <p className="font-normal">{companyData?.concelho}, {companyData?.distrito}</p>
                 </div>
               </div>
               

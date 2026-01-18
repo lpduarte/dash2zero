@@ -48,10 +48,10 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <Card className="p-4 shadow-sm hover:shadow-md transition-shadow">
+        <Card className="p-4 shadow-md hover:shadow-md transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">Faturação Média</p>
+              <p className="text-xs font-normal text-muted-foreground">Faturação Média</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <TrendingUp className="h-4 w-4" />
               </div>
@@ -63,10 +63,10 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
           </div>
         </Card>
 
-        <Card className="p-4 shadow-sm hover:shadow-md transition-shadow">
+        <Card className="p-4 shadow-md hover:shadow-md transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">Faturação por Colaborador</p>
+              <p className="text-xs font-normal text-muted-foreground">Faturação por Colaborador</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <Users className="h-4 w-4" />
               </div>
@@ -78,10 +78,10 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
           </div>
         </Card>
 
-        <Card className="p-4 shadow-sm hover:shadow-md transition-shadow">
+        <Card className="p-4 shadow-md hover:shadow-md transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-muted-foreground">Intensidade Carbónica Média</p>
+              <p className="text-xs font-normal text-muted-foreground">Intensidade Carbónica Média</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <Target className="h-4 w-4" />
               </div>
@@ -96,7 +96,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         </Card>
       </div>
 
-      <Card className="p-6 shadow-sm">
+      <Card className="p-6 shadow-md">
         <CardHeader>
           <CardTitle>Intensidade de Emissões vs Volume de Negócios</CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -129,7 +129,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
                   const data = payload[0].payload;
                   return (
                     <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                      <p className="font-semibold mb-2">{data.name}</p>
+                      <p className="font-bold mb-2">{data.name}</p>
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-muted-foreground">Volume Negócios: </span>

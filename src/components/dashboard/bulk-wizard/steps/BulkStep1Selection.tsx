@@ -36,7 +36,7 @@ export const BulkStep1Selection = ({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold mb-1">Selecionar Empresas</h3>
+        <h3 className="text-xl font-bold mb-1">Selecionar Empresas</h3>
         <p className="text-sm text-muted-foreground">
           Escolha as empresas que receberão planos de descarbonização automáticos.
         </p>
@@ -44,7 +44,7 @@ export const BulkStep1Selection = ({
 
       {/* Filtros Rápidos */}
       <div className="space-y-3">
-        <p className="text-sm font-medium text-muted-foreground">Filtros rápidos:</p>
+        <p className="text-sm font-normal text-muted-foreground">Filtros rápidos:</p>
         
         <label className="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
           <input
@@ -106,7 +106,7 @@ export const BulkStep1Selection = ({
           <div className="ml-6 p-4 bg-muted/30 rounded-lg space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium">Risco</label>
+                <label className="text-sm font-normal">Risco</label>
                 <Select 
                   value={customFilters.risco} 
                   onValueChange={(v) => onCustomFiltersChange({ ...customFilters, risco: v })}
@@ -123,7 +123,7 @@ export const BulkStep1Selection = ({
               </div>
               
               <div>
-                <label className="text-sm font-medium">Estado</label>
+                <label className="text-sm font-normal">Estado</label>
                 <Select 
                   value={customFilters.estado} 
                   onValueChange={(v) => onCustomFiltersChange({ ...customFilters, estado: v })}
@@ -140,7 +140,7 @@ export const BulkStep1Selection = ({
               </div>
               
               <div>
-                <label className="text-sm font-medium">Cluster</label>
+                <label className="text-sm font-normal">Cluster</label>
                 <Select 
                   value={customFilters.cluster} 
                   onValueChange={(v) => onCustomFiltersChange({ ...customFilters, cluster: v })}
@@ -158,7 +158,7 @@ export const BulkStep1Selection = ({
               </div>
               
               <div>
-                <label className="text-sm font-medium">Setor</label>
+                <label className="text-sm font-normal">Setor</label>
                 <Select 
                   value={customFilters.setor} 
                   onValueChange={(v) => onCustomFiltersChange({ ...customFilters, setor: v })}
@@ -175,7 +175,7 @@ export const BulkStep1Selection = ({
               </div>
               
               <div className="col-span-2">
-                <label className="text-sm font-medium">Âmbito dominante</label>
+                <label className="text-sm font-normal">Âmbito dominante</label>
                 <Select 
                   value={customFilters.ambitoDominante} 
                   onValueChange={(v) => onCustomFiltersChange({ ...customFilters, ambitoDominante: v })}
@@ -235,7 +235,7 @@ export const BulkStep1Selection = ({
       <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-lg">
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-primary" />
-          <span className="font-medium">Empresas selecionadas: {selectedEmpresas.length}</span>
+          <span className="font-normal">Empresas selecionadas: {selectedEmpresas.length}</span>
         </div>
       </div>
     </div>

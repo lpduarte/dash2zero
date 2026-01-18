@@ -53,10 +53,10 @@ export const ComparisonChart = ({
   }));
 
   return (
-    <Card className="p-6 shadow-sm h-full flex flex-col">
+    <Card className="p-6 shadow-md h-full flex flex-col">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-xl font-semibold">Comparação de emissões por âmbito</h2>
+          <h2 className="text-xl font-bold">Comparação de emissões por âmbito</h2>
           <p className="text-sm text-muted-foreground">Emissões (t CO₂e)</p>
         </div>
         <div className="flex items-center gap-4">
@@ -65,9 +65,9 @@ export const ComparisonChart = ({
               <Button variant="outline" className="w-[180px] justify-between">
                 <span className="flex items-center gap-2">
                   <span className="flex gap-1">
-                    {visibleScopes.scope1 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />}
-                    {visibleScopes.scope2 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />}
-                    {visibleScopes.scope3 && <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />}
+                    {visibleScopes.scope1 && <span className="w-2.5 h-2.5 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />}
+                    {visibleScopes.scope2 && <span className="w-2.5 h-2.5 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />}
+                    {visibleScopes.scope3 && <span className="w-2.5 h-2.5 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />}
                   </span>
                   Âmbitos
                 </span>
@@ -79,21 +79,21 @@ export const ComparisonChart = ({
                 <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope1')}>
                   <Checkbox id="scope1-dd" checked={visibleScopes.scope1} />
                   <Label htmlFor="scope1-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
-                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />
+                    <span className="w-3 h-3 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 1'] }} />
                     Âmbito 1
                   </Label>
                 </div>
                 <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope2')}>
                   <Checkbox id="scope2-dd" checked={visibleScopes.scope2} />
                   <Label htmlFor="scope2-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
-                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />
+                    <span className="w-3 h-3 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 2'] }} />
                     Âmbito 2
                   </Label>
                 </div>
                 <div className="flex items-center gap-2 px-2 py-1.5 hover:bg-muted rounded-md cursor-pointer" onClick={() => toggleScope('scope3')}>
                   <Checkbox id="scope3-dd" checked={visibleScopes.scope3} />
                   <Label htmlFor="scope3-dd" className="text-sm cursor-pointer flex items-center gap-1.5 flex-1">
-                    <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />
+                    <span className="w-3 h-3 rounded-md" style={{ backgroundColor: SCOPE_COLORS['Âmbito 3'] }} />
                     Âmbito 3
                   </Label>
                 </div>
@@ -109,14 +109,14 @@ export const ComparisonChart = ({
                 <SelectItem value="all">
                   <div className="flex items-center justify-between w-[230px]">
                     <span>Todas as atividades</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                   </div>
                 </SelectItem>
                 {sectors.map(s => (
                   <SelectItem key={s.sector} value={s.sector}>
                     <div className="flex items-center justify-between w-[230px]">
                       <span>{s.name}</span>
-                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
+                      <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
                     </div>
                   </SelectItem>
                 ))}

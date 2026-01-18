@@ -15,7 +15,7 @@ export const BulkStep2Measures = ({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold mb-1">Definir Medidas</h3>
+        <h3 className="text-xl font-bold mb-1">Definir Medidas</h3>
         <p className="text-sm text-muted-foreground">
           O sistema irá selecionar automaticamente as melhores medidas para cada empresa
           com base no seu perfil de emissões.
@@ -28,7 +28,7 @@ export const BulkStep2Measures = ({
             <Sparkles className="h-6 w-6 text-success" />
           </div>
           <div className="space-y-2">
-            <h4 className="font-medium text-success">Recomendações automáticas</h4>
+            <h4 className="font-normal text-success">Recomendações automáticas</h4>
             <p className="text-sm text-success">
               Para cada empresa, o sistema irá:
             </p>
@@ -44,14 +44,14 @@ export const BulkStep2Measures = ({
 
       {/* Preview */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-muted-foreground">
+        <h4 className="text-sm font-normal text-muted-foreground">
           Pré-visualização ({selectedEmpresas.length} empresas):
         </h4>
         <div className="border rounded-lg divide-y max-h-64 overflow-y-auto">
           {planResults.slice(0, 5).map(result => (
             <div key={result.empresa.id} className="p-3 flex items-center justify-between">
               <div>
-                <p className="font-medium">{result.empresa.name}</p>
+                <p className="font-normal">{result.empresa.name}</p>
                 <p className="text-xs text-muted-foreground">
                   Âmbito dominante: {getDominantScope(result.empresa)}
                 </p>

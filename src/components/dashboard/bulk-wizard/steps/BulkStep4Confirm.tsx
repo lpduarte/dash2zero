@@ -39,7 +39,7 @@ export const BulkStep4Confirm = ({
           <CheckCircle className="h-8 w-8 text-success" />
         </div>
         <div>
-          <h3 className="text-xl font-semibold mb-2">Planos gerados com sucesso!</h3>
+          <h3 className="text-xl font-bold mb-2">Planos gerados com sucesso!</h3>
           <p className="text-muted-foreground">
             {targetHandling === 'only_target' ? withTarget.length : 
              targetHandling === 'review' ? selectedForGeneration.length : 
@@ -56,7 +56,7 @@ export const BulkStep4Confirm = ({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-xl font-semibold mb-1">Resumo e Confirmação</h3>
+        <h3 className="text-xl font-bold mb-1">Resumo e Confirmação</h3>
         <p className="text-sm text-muted-foreground">
           Reveja os planos antes de gerar.
         </p>
@@ -82,7 +82,7 @@ export const BulkStep4Confirm = ({
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 text-warning mt-0.5" />
             <div>
-              <p className="font-medium text-warning">
+              <p className="font-normal text-warning">
                 {withoutTarget.length} empresas não atingem meta com estas medidas.
               </p>
               <p className="text-sm text-warning mt-1">
@@ -158,7 +158,7 @@ export const BulkStep4Confirm = ({
                 }}
               />
               <div className="flex-1">
-                <p className="font-medium">{result.empresa.name}</p>
+                <p className="font-normal">{result.empresa.name}</p>
                 <p className="text-xs text-muted-foreground">
                   {result.measures.length} medidas · -{result.totalReduction.toLocaleString('pt-PT')}t CO₂e
                 </p>

@@ -44,7 +44,7 @@ export const KPICard = ({
   return (
     <Component
       className={cn(
-        "p-4 border rounded-lg shadow-sm text-left relative",
+        "p-4 border rounded-lg shadow-md bg-card text-left relative",
         onClick && "cursor-pointer hover:bg-muted/50 transition-colors",
         className
       )}
@@ -52,7 +52,7 @@ export const KPICard = ({
     >
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground">{title}</p>
+          <p className="text-xs font-normal text-muted-foreground">{title}</p>
           <div className={cn("p-1.5 rounded", iconBgColor)}>
             <Icon className={cn("h-4 w-4", iconColor)} />
           </div>

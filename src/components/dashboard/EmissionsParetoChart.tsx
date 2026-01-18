@@ -55,7 +55,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
 
   return (
     <div className="space-y-6">
-      <Card className="p-6 shadow-sm">
+      <Card className="p-6 shadow-md">
         <CardHeader>
           <CardTitle>Gráfico de Pareto: Fator de Emissões vs Investimento</CardTitle>
           <p className="text-sm text-muted-foreground">
@@ -92,7 +92,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
                   const data = payload[0].payload;
                   return (
                     <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                      <p className="font-semibold mb-2">{data.fullName}</p>
+                      <p className="font-bold mb-2">{data.fullName}</p>
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-muted-foreground">Emissões Totais: </span>
@@ -135,7 +135,7 @@ export const EmissionsParetoChart = ({ suppliers }: EmissionsParetoChartProps) =
           </ResponsiveContainer>
 
           <div className="mt-4 p-4 bg-accent/5 border border-accent/30 rounded-lg">
-            <h4 className="font-semibold mb-2 flex items-center gap-2">
+            <h4 className="font-bold mb-2 flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-danger" />
               Análise de Pareto - Princípio 80/20
             </h4>

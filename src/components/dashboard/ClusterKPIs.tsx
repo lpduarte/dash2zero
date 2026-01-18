@@ -83,7 +83,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
 
   return (
     <div className="space-y-6">
-      <Card className="p-6 shadow-sm bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20">
+      <Card className="p-6 shadow-md bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/20">
         <CardHeader className="pb-3">
           <SectionHeader
             icon={Building2}
@@ -114,7 +114,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <TrendingDown className="h-3 w-3" />
                           Total Emissões
                         </span>
-                        <span className="font-semibold">{formatNumber(totalEmissions, 0)} t</span>
+                        <span className="font-bold">{formatNumber(totalEmissions, 0)} t</span>
                       </div>
                       
                       <div className="flex items-center justify-between text-sm">
@@ -122,7 +122,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                           <Factory className="h-3 w-3" />
                           Média/Empresa
                         </span>
-                        <span className="font-semibold">{formatNumber(avgEmissions, 0)} t</span>
+                        <span className="font-bold">{formatNumber(avgEmissions, 0)} t</span>
                       </div>
                     </div>
                   </CardContent>
@@ -186,7 +186,7 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
 
                   <div className="grid gap-4 md:grid-cols-2 mt-6">
                     <div className="p-4 border border-border rounded-lg bg-card">
-                      <h4 className="font-semibold mb-3">Compliance & Certificações</h4>
+                      <h4 className="font-bold mb-3">Compliance & Certificações</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-muted-foreground">Empresas com SBTi</span>
@@ -204,12 +204,12 @@ export const ClusterKPIs = ({ suppliers, totalCompaniesInGroup = 15000 }: Cluste
                     </div>
 
                     <div className="p-4 border border-border rounded-lg bg-card">
-                      <h4 className="font-semibold mb-3">Performance do Cluster</h4>
+                      <h4 className="font-bold mb-3">Performance do Cluster</h4>
                       <div className="space-y-3">
                         <div>
                           <div className="flex justify-between text-sm mb-1">
                             <span className="text-muted-foreground">Média de Emissões</span>
-                            <span className="font-medium">{formatNumber(data.avgEmissions, 0)} t CO₂e</span>
+                            <span className="font-normal">{formatNumber(data.avgEmissions, 0)} t CO₂e</span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-2">
                             <div 

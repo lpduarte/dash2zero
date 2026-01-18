@@ -18,12 +18,12 @@ export const GroupCounter = ({
     <Card className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-2 border-primary/30">
       <CardContent className="pt-6">
         <div className="flex items-start gap-6">
-          <div className="bg-primary/10 p-4 rounded-xl">
+          <div className="bg-primary/10 p-4 rounded-lg">
             <Building2 className="h-8 w-8 text-primary" />
           </div>
           
           <div className="flex-1">
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">
+            <h3 className="text-sm font-normal text-muted-foreground mb-2">
               Empresas do Banco Montepio/Município
             </h3>
             
@@ -32,7 +32,7 @@ export const GroupCounter = ({
                 {respondedCount.toLocaleString('pt-PT')}
               </span>
               <span className="text-2xl text-muted-foreground">/</span>
-              <span className="text-4xl font-semibold text-muted-foreground">
+              <span className="text-4xl font-bold text-muted-foreground">
                 {totalCompaniesInGroup.toLocaleString('pt-PT')}
               </span>
             </div>
@@ -43,7 +43,7 @@ export const GroupCounter = ({
 
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="font-medium">Taxa de resposta</span>
+                <span className="font-normal">Taxa de resposta</span>
                 <span className="font-bold text-primary">{responseRate}%</span>
               </div>
               <div className="w-full bg-muted rounded-full h-3 overflow-hidden shadow-inner">

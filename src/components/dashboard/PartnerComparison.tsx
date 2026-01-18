@@ -118,7 +118,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                   const data = payload[0].payload;
                   return (
                     <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                      <p className="font-semibold mb-2">{data.fullName}</p>
+                      <p className="font-bold mb-2">{data.fullName}</p>
                       <div className="space-y-1 text-sm">
                         <p>
                           <span className="text-danger">A1 (Diretas): </span>
@@ -159,7 +159,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
         <CardContent>
           <div className="space-y-4">
             <div className="p-4 bg-card border border-border rounded-lg">
-              <h4 className="font-semibold mb-3">
+              <h4 className="font-bold mb-3">
                 Cenário: "Se mudar 100% do negócio para o melhor parceiro"
               </h4>
               
@@ -185,7 +185,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
             </div>
 
             <div className="p-4 bg-card border border-border rounded-lg">
-              <h4 className="font-semibold mb-3">
+              <h4 className="font-bold mb-3">
                 Gráfico de Pareto: Priorizar onde focar esforços
               </h4>
               <p className="text-sm text-muted-foreground mb-3">
@@ -199,7 +199,7 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                       <Badge variant="outline" className="w-8 h-8 flex items-center justify-center">
                         {index + 1}
                       </Badge>
-                      <span className="font-medium">{supplier.name}</span>
+                      <span className="font-normal">{supplier.name}</span>
                     </div>
                     <div className="flex items-center gap-4">
                       <span className="text-sm text-muted-foreground">

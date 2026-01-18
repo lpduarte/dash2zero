@@ -288,7 +288,7 @@ export const BulkPlanWizard = ({
           {[1, 2, 3, 4].map((step) => (
             <div key={step} className="flex items-center">
               <div className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors",
+                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-normal transition-colors",
                 currentStep === step ? "bg-primary text-primary-foreground" :
                 currentStep > step ? "bg-success/20 text-success" :
                 "bg-muted text-muted-foreground"

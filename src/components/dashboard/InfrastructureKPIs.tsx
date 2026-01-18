@@ -92,7 +92,7 @@ export const InfrastructureKPIs = () => {
   return (
     <>
       <Collapsible open={isInfrastructureExpanded} onOpenChange={setIsInfrastructureExpanded}>
-        <Card className="shadow-sm">
+        <Card className="shadow-md">
           <CardHeader className={cn("transition-all duration-[400ms]", isInfrastructureExpanded ? "pb-3" : "pb-6")}>
             <SectionHeader
               icon={Building}

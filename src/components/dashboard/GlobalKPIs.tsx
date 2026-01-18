@@ -112,7 +112,7 @@ export const GlobalKPIs = ({ suppliers }: GlobalKPIsProps) => {
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground font-medium">
+                    <p className="text-sm text-muted-foreground font-normal">
                       {kpi.label}
                     </p>
                     

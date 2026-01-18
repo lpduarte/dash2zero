@@ -17,9 +17,9 @@ export function FilterButton({ activeFiltersCount, onClick }: FilterButtonProps)
       )}
     >
       <SlidersHorizontal className="h-4 w-4" />
-      <span className="font-medium">Filtros</span>
+      <span className="font-normal">Filtros</span>
       {activeFiltersCount > 0 && (
-        <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
+        <span className="ml-1 px-2 py-0.5 rounded-full text-xs font-bold bg-muted text-muted-foreground">
           {activeFiltersCount}
         </span>
       )}

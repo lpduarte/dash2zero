@@ -108,7 +108,7 @@ export const Step3Funding = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="font-medium text-sm">{fund.name}</span>
+              <span className="font-normal text-sm">{fund.name}</span>
             </div>
 
             <p className="text-xs text-muted-foreground mb-2">{fund.provider}</p>
@@ -171,9 +171,9 @@ export const Step3Funding = ({
         <div className={`flex items-center justify-between p-3 rounded-lg mb-3 ${config.headerBg}`}>
           <div className="flex items-center gap-2">
             <Icon className={`h-4 w-4 ${config.text}`} />
-            <span className={`font-medium text-sm ${config.text}`}>{typeLabels[type]}</span>
+            <span className={`font-normal text-sm ${config.text}`}>{typeLabels[type]}</span>
           </div>
-          <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${config.badge}`}>
+          <span className={`w-6 h-6 rounded-full text-white text-xs font-normal flex items-center justify-center ${config.badge}`}>
             {funds.length}
           </span>
         </div>
@@ -194,7 +194,7 @@ export const Step3Funding = ({
       {/* Header do step - Fixo */}
       <div className="shrink-0 p-6 pb-4 border-b border-border/50">
         <div>
-          <h3 className="font-semibold text-2xl mb-1">Financiamento Disponível</h3>
+          <h3 className="font-bold text-2xl mb-1">Financiamento Disponível</h3>
           <p className="text-sm text-muted-foreground">
             Fundos sugeridos de acordo com as medidas selecionadas. Selecione os que pretende incluir no plano.
           </p>
@@ -226,11 +226,11 @@ export const Step3Funding = ({
         <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border">
           <div className="text-center">
             <p className="text-xs text-muted-foreground mb-1">Fundos Selecionados</p>
-            <p className="font-semibold text-xl">{selectedFunding.length}</p>
+            <p className="font-bold text-xl">{selectedFunding.length}</p>
           </div>
           <div className="text-center">
             <p className="text-xs text-muted-foreground mb-1">Comparticipação Possível</p>
-            <p className="font-semibold text-xl text-success">
+            <p className="font-bold text-xl text-success">
               Até {totalCoverage.toLocaleString('pt-PT')}€
               <span className="text-sm font-normal text-muted-foreground ml-1">
                 ({formatPercentage(coveragePercent, 0)})
@@ -239,7 +239,7 @@ export const Step3Funding = ({
           </div>
           <div className="text-center">
             <p className="text-xs text-muted-foreground mb-1">A cargo da empresa</p>
-            <p className={`font-semibold text-xl ${remaining === 0 ? 'text-success' : ''}`}>
+            <p className={`font-bold text-xl ${remaining === 0 ? 'text-success' : ''}`}>
               {remaining.toLocaleString('pt-PT')}€
               <span className="text-sm font-normal text-muted-foreground ml-1">
                 ({formatPercentage(remainingPercent, 0)})

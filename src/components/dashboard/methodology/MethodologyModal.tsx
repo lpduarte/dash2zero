@@ -55,7 +55,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
               <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                 <Database className="h-5 w-5 text-primary" />
               </div>
-              <p className="font-medium text-sm">1. Recolha</p>
+              <p className="font-normal text-sm">1. Recolha</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Dados das empresas do concelho
               </p>
@@ -71,7 +71,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
               <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                 <Calculator className="h-5 w-5 text-primary" />
               </div>
-              <p className="font-medium text-sm">2. Cálculo</p>
+              <p className="font-normal text-sm">2. Cálculo</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Protocolo GHG (Âmbitos 1, 2, 3)
               </p>
@@ -87,7 +87,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
               <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-2">
                 <Target className="h-5 w-5 text-primary" />
               </div>
-              <p className="font-medium text-sm">3. Análise</p>
+              <p className="font-normal text-sm">3. Análise</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Comparação com média do setor
               </p>
@@ -102,7 +102,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                 <CollapsibleTrigger className="flex items-center justify-between w-full p-3 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-2">
                     <Database className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-sm">De onde vêm os dados?</span>
+                    <span className="font-normal text-sm">De onde vêm os dados?</span>
                   </div>
                   <ChevronDown className={cn(
                     "h-4 w-4 text-muted-foreground transition-transform duration-[400ms]",
@@ -116,7 +116,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                         <Leaf className="h-4 w-4 text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">Get2Zero Simple</p>
+                        <p className="font-normal text-sm">Get2Zero Simple</p>
                         <p className="text-xs text-muted-foreground">
                           Ferramenta online de cálculo simplificado de pegada de carbono, preenchida pelas empresas.
                         </p>
@@ -127,7 +127,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                         <FileText className="h-4 w-4 text-muted-foreground" />
                       </div>
                       <div>
-                        <p className="font-medium text-sm">Formulário</p>
+                        <p className="font-normal text-sm">Formulário</p>
                         <p className="text-xs text-muted-foreground">
                           Dados recolhidos directamente junto das empresas através de questionário estruturado.
                         </p>
@@ -144,7 +144,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                 <CollapsibleTrigger className="flex items-center justify-between w-full p-3 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-2">
                     <Layers className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-sm">Como são calculadas as emissões?</span>
+                    <span className="font-normal text-sm">Como são calculadas as emissões?</span>
                   </div>
                   <ChevronDown className={cn(
                     "h-4 w-4 text-muted-foreground transition-transform duration-[400ms]",
@@ -159,33 +159,33 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-medium flex-shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal flex-shrink-0">
                           1
                         </div>
                         <div>
-                          <p className="font-medium text-sm">Âmbito 1 — Emissões directas</p>
+                          <p className="font-normal text-sm">Âmbito 1 — Emissões directas</p>
                           <p className="text-xs text-muted-foreground">
                             Combustíveis, frota própria, processos industriais
                           </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-medium flex-shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal flex-shrink-0">
                           2
                         </div>
                         <div>
-                          <p className="font-medium text-sm">Âmbito 2 — Energia</p>
+                          <p className="font-normal text-sm">Âmbito 2 — Energia</p>
                           <p className="text-xs text-muted-foreground">
                             Electricidade e calor adquiridos
                           </p>
                         </div>
                       </div>
                       <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-medium flex-shrink-0">
+                        <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal flex-shrink-0">
                           3
                         </div>
                         <div>
-                          <p className="font-medium text-sm">Âmbito 3 — Cadeia de valor</p>
+                          <p className="font-normal text-sm">Âmbito 3 — Cadeia de valor</p>
                           <p className="text-xs text-muted-foreground">
                             Deslocações, fornecedores, resíduos, logística
                           </p>
@@ -203,7 +203,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                 <CollapsibleTrigger className="flex items-center justify-between w-full p-3 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-2">
                     <BarChart3 className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-sm">O que significa cada métrica?</span>
+                    <span className="font-normal text-sm">O que significa cada métrica?</span>
                   </div>
                   <ChevronDown className={cn(
                     "h-4 w-4 text-muted-foreground transition-transform duration-[400ms]",
@@ -215,7 +215,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="flex items-start gap-3">
                       <Factory className="h-4 w-4 text-primary mt-0.5" />
                       <div>
-                        <p className="font-medium text-sm">Emissões totais</p>
+                        <p className="font-normal text-sm">Emissões totais</p>
                         <p className="text-xs text-muted-foreground">
                           Soma de todas as emissões das empresas do concelho, em toneladas de CO₂ equivalente.
                         </p>
@@ -224,7 +224,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="flex items-start gap-3">
                       <TrendingDown className="h-4 w-4 text-primary mt-0.5" />
                       <div>
-                        <p className="font-medium text-sm">Potencial de melhoria</p>
+                        <p className="font-normal text-sm">Potencial de melhoria</p>
                         <p className="text-xs text-muted-foreground">
                           Percentagem de empresas com intensidade acima da média do setor — quanto maior, mais oportunidades de intervenção.
                         </p>
@@ -233,7 +233,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="flex items-start gap-3">
                       <Euro className="h-4 w-4 text-primary mt-0.5" />
                       <div>
-                        <p className="font-medium text-sm">Média por faturação</p>
+                        <p className="font-normal text-sm">Média por faturação</p>
                         <p className="text-xs text-muted-foreground">
                           Emissões por euro de faturação. Permite comparar empresas de diferentes dimensões.
                         </p>
@@ -242,7 +242,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="flex items-start gap-3">
                       <Users className="h-4 w-4 text-primary mt-0.5" />
                       <div>
-                        <p className="font-medium text-sm">Média por colaborador</p>
+                        <p className="font-normal text-sm">Média por colaborador</p>
                         <p className="text-xs text-muted-foreground">
                           Emissões por colaborador. Útil para setores intensivos em mão-de-obra.
                         </p>
@@ -251,7 +251,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="flex items-start gap-3">
                       <Maximize2 className="h-4 w-4 text-primary mt-0.5" />
                       <div>
-                        <p className="font-medium text-sm">Média por área</p>
+                        <p className="font-normal text-sm">Média por área</p>
                         <p className="text-xs text-muted-foreground">
                           Emissões por metro quadrado de instalações. Relevante para comércio e serviços.
                         </p>
@@ -268,7 +268,7 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                 <CollapsibleTrigger className="flex items-center justify-between w-full p-3 hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-2">
                     <Target className="h-4 w-4 text-primary" />
-                    <span className="font-medium text-sm">Como funciona a análise de risco?</span>
+                    <span className="font-normal text-sm">Como funciona a análise de risco?</span>
                   </div>
                   <ChevronDown className={cn(
                     "h-4 w-4 text-muted-foreground transition-transform duration-[400ms]",
@@ -283,22 +283,22 @@ export const MethodologyModal = ({ open, onOpenChange }: MethodologyModalProps) 
                     <div className="grid grid-cols-4 gap-2">
                       <div className={`text-center p-2 rounded-lg ${riskColors.baixo.bg} border ${riskColors.baixo.border}`}>
                         <div className="w-3 h-3 rounded-full bg-success mx-auto mb-1" />
-                        <p className={`text-xs font-medium ${riskColors.baixo.text}`}>Baixo</p>
+                        <p className={`text-xs font-normal ${riskColors.baixo.text}`}>Baixo</p>
                         <p className={`text-[12px] ${riskColors.baixo.text}`}>Abaixo da média</p>
                       </div>
                       <div className={`text-center p-2 rounded-lg ${riskColors.medio.bg} border ${riskColors.medio.border}`}>
                         <div className="w-3 h-3 rounded-full bg-warning mx-auto mb-1" />
-                        <p className={`text-xs font-medium ${riskColors.medio.text}`}>Médio</p>
+                        <p className={`text-xs font-normal ${riskColors.medio.text}`}>Médio</p>
                         <p className={`text-[12px] ${riskColors.medio.text}`}>1-50% acima</p>
                       </div>
                       <div className={`text-center p-2 rounded-lg ${riskColors.alto.bg} border ${riskColors.alto.border}`}>
                         <div className="w-3 h-3 rounded-full bg-danger mx-auto mb-1" />
-                        <p className={`text-xs font-medium ${riskColors.alto.text}`}>Alto</p>
+                        <p className={`text-xs font-normal ${riskColors.alto.text}`}>Alto</p>
                         <p className={`text-[12px] ${riskColors.alto.text}`}>50-100% acima</p>
                       </div>
                       <div className={`text-center p-2 rounded-lg ${riskColors.critico.bg} border ${riskColors.critico.border}`}>
                         <div className="w-3 h-3 rounded-full bg-danger mx-auto mb-1" />
-                        <p className={`text-xs font-medium ${riskColors.critico.text}`}>Crítico</p>
+                        <p className={`text-xs font-normal ${riskColors.critico.text}`}>Crítico</p>
                         <p className={`text-[12px] ${riskColors.critico.text}`}>+100% acima</p>
                       </div>
                     </div>

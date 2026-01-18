@@ -56,7 +56,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Leaf className="h-4 w-4 text-success" />
-                <span className="text-sm font-medium">Ambiental (E)</span>
+                <span className="text-sm font-normal">Ambiental (E)</span>
               </div>
               <span className={`font-bold ${getScoreColor(environmentalScore)}`}>
                 {formatNumber(environmentalScore, 0)}
@@ -69,7 +69,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-secondary" />
-                <span className="text-sm font-medium">Social (S)</span>
+                <span className="text-sm font-normal">Social (S)</span>
               </div>
               <span className={`font-bold ${getScoreColor(socialScore)}`}>
                 {socialScore}
@@ -82,7 +82,7 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Building className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium">Governança (G)</span>
+                <span className="text-sm font-normal">Governança (G)</span>
               </div>
               <span className={`font-bold ${getScoreColor(governanceScore)}`}>
                 {formatNumber(governanceScore, 0)}
@@ -95,11 +95,11 @@ export const ESGScoreCard = ({ suppliers }: ESGScoreCardProps) => {
         <div className="pt-4 border-t space-y-2">
           <div className="flex justify-between text-sm">
             <span>Fornecedores com SBTi</span>
-            <span className="font-medium">{formatPercentage(sbtiPercentage, 0)}</span>
+            <span className="font-normal">{formatPercentage(sbtiPercentage, 0)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Com Certificações</span>
-            <span className="font-medium">
+            <span className="font-normal">
               {formatPercentage((suppliers.filter(s => s.certifications.length > 0).length / suppliers.length) * 100, 0)}
             </span>
           </div>

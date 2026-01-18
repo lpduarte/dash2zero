@@ -13,7 +13,7 @@ import type { PlanStatus } from './planUtils';
 
 export const shadows = {
   /** Cards pequenos (KPIs, items de lista) */
-  sm: 'shadow-sm',
+  sm: 'shadow-md',
   /** Cards principais (secções) */
   md: 'shadow-md',
   /** Modais e elementos elevados */
@@ -31,7 +31,7 @@ export const riskColors = {
     bg: 'bg-danger/10',
     bgDark: 'dark:bg-danger/20',
     border: 'border-danger/30',
-    badge: 'bg-danger/10 text-danger border-danger/30',
+    badge: 'bg-destructive text-destructive-foreground border-transparent hover:bg-destructive/80 transition-colors',
   },
   alto: {
     text: 'text-danger',
@@ -39,7 +39,7 @@ export const riskColors = {
     bg: 'bg-danger/10',
     bgDark: 'dark:bg-danger/20',
     border: 'border-danger/30',
-    badge: 'bg-danger/10 text-danger border-danger/30',
+    badge: 'bg-danger/10 text-danger border-danger/30 hover:bg-danger/20 transition-colors',
   },
   medio: {
     text: 'text-warning',
@@ -47,7 +47,7 @@ export const riskColors = {
     bg: 'bg-warning/10',
     bgDark: 'dark:bg-warning/20',
     border: 'border-warning/30',
-    badge: 'bg-warning/10 text-warning border-warning/30',
+    badge: 'bg-warning/15 text-amber-700 dark:text-warning dark:bg-warning/20 border-warning/30 hover:bg-warning/25 transition-colors',
   },
   baixo: {
     text: 'text-success',
@@ -55,7 +55,7 @@ export const riskColors = {
     bg: 'bg-success/10',
     bgDark: 'dark:bg-success/20',
     border: 'border-success/30',
-    badge: 'bg-success/10 text-success border-success/30',
+    badge: 'bg-success/10 text-success border-success/30 hover:bg-success/20 transition-colors',
   },
 } as const;
 
@@ -72,7 +72,7 @@ export const scopeColors = {
     bg: 'bg-scope-1',
     bgLight: 'bg-scope-1/10',
     border: 'border-scope-1/30',
-    badge: 'bg-scope-1/10 text-scope-1 border-scope-1/30',
+    badge: 'bg-scope-1/15 text-orange-700 dark:text-scope-1 dark:bg-scope-1/20 border-scope-1/30 hover:bg-scope-1/25 transition-colors',
     label: 'Âmbito 1 - Emissões Diretas (Coral)',
   },
   2: {
@@ -81,7 +81,7 @@ export const scopeColors = {
     bg: 'bg-scope-2',
     bgLight: 'bg-scope-2/10',
     border: 'border-scope-2/30',
-    badge: 'bg-scope-2/10 text-scope-2 border-scope-2/30',
+    badge: 'bg-scope-2/15 text-amber-700 dark:text-scope-2 dark:bg-scope-2/20 border-scope-2/30 hover:bg-scope-2/25 transition-colors',
     label: 'Âmbito 2 - Energia (Âmbar)',
   },
   3: {
@@ -90,7 +90,7 @@ export const scopeColors = {
     bg: 'bg-scope-3',
     bgLight: 'bg-scope-3/10',
     border: 'border-scope-3/30',
-    badge: 'bg-scope-3/10 text-scope-3 border-scope-3/30',
+    badge: 'bg-scope-3/15 text-cyan-700 dark:text-scope-3 dark:bg-scope-3/20 border-scope-3/30 hover:bg-scope-3/25 transition-colors',
     label: 'Âmbito 3 - Cadeia de Valor (Petróleo)',
   },
 } as const;
@@ -213,7 +213,7 @@ export const getPercentageColors = (percentage: number) => {
 
 export const cardStyles = {
   /** Card de KPI pequeno */
-  kpi: 'p-4 border rounded-lg shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/30',
+  kpi: 'p-4 border rounded-lg shadow-md transition-all duration-200 hover:shadow-md hover:border-primary/30',
   /** Card de secção principal */
   section: 'p-6 border rounded-lg shadow-md transition-all duration-200 hover:shadow-lg',
   /** Card dentro de outro card (sem shadow) */
@@ -249,7 +249,7 @@ export const textStyles = {
   /** Unidade/subtítulo de KPI */
   kpiUnit: 'text-xs text-muted-foreground',
   /** Título de secção */
-  sectionTitle: 'font-semibold text-xl',
+  sectionTitle: 'font-bold text-xl',
 } as const;
 
 // ===========================================
@@ -376,9 +376,9 @@ export const iconSizes = {
 export const elements = {
   // Cards
   /** Card principal de secção */
-  sectionCard: 'p-6 border rounded-lg shadow-sm',
+  sectionCard: 'p-6 border rounded-lg shadow-md',
   /** Card de KPI */
-  kpiCard: 'p-4 border rounded-lg shadow-sm',
+  kpiCard: 'p-4 border rounded-lg shadow-md',
   /** Card dentro de outro card */
   nestedCard: 'p-3 border rounded-lg',
   /** Card clicável */
@@ -390,13 +390,13 @@ export const elements = {
   /** Botão de texto pequeno */
   textButton: 'flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors',
   /** Botão primário pequeno */
-  primaryButtonSm: 'px-3 py-1.5 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
+  primaryButtonSm: 'px-3 py-1.5 text-sm font-normal bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
   /** Botão primário */
-  primaryButton: 'px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
+  primaryButton: 'px-4 py-2 text-sm font-normal bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors',
   /** Botão outline pequeno */
   outlineButtonSm: 'flex items-center gap-2 px-3 py-1.5 text-sm border rounded-lg hover:bg-muted transition-colors',
   /** Botão outline */
-  outlineButton: 'flex items-center gap-2 px-4 py-2 text-sm font-medium border rounded-lg hover:bg-muted transition-colors',
+  outlineButton: 'flex items-center gap-2 px-4 py-2 text-sm font-normal border rounded-lg hover:bg-muted transition-colors',
   /** Botão de collapse (chevron) */
   collapseButton: 'w-9 h-9 rounded-full border border-input bg-background hover:bg-muted/50 flex items-center justify-center transition-colors shrink-0',
   

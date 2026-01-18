@@ -42,28 +42,28 @@ export const PerformanceHeatmap = ({
     if (normalized < 0.8) return 'bg-danger/70';
     return 'bg-danger';
   };
-  return <Card className="p-6 shadow-sm">
+  return <Card className="p-6 shadow-md">
       <CardHeader>
-        <h2 className="text-xl font-semibold">Desempenho por região</h2>
+        <h2 className="text-xl font-bold">Desempenho por região</h2>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse table-fixed">
             <thead>
               <tr>
-                <th className="border p-2 text-left font-medium w-[140px]">​</th>
-                {regions.map(region => <th key={region} className="border p-2 text-center font-medium w-[100px]">
+                <th className="border p-2 text-left font-normal w-[140px]">​</th>
+                {regions.map(region => <th key={region} className="border p-2 text-center font-normal w-[100px]">
                     {getRegionLabel(region)}
                   </th>)}
               </tr>
             </thead>
             <tbody>
               {sectors.map(sector => <tr key={sector} className="h-16">
-                  <td className="border p-4 font-medium h-16">{getSectorLabel(sector)}</td>
+                  <td className="border p-4 font-normal h-16">{getSectorLabel(sector)}</td>
                   {regions.map(region => {
                 const avgEmissions = getAverageEmissions(region, sector);
                 return <td key={`${sector}-${region}`} className={`border p-4 text-center h-16 ${getColor(avgEmissions)}`}>
-                        {avgEmissions ? <div className="text-sm font-medium">
+                        {avgEmissions ? <div className="text-sm font-normal">
                             {formatNumber(avgEmissions, 0)}
                             <div className="text-xs opacity-80">t CO₂e</div>
                           </div> : <span className="text-xs text-muted-foreground">N/A</span>}

@@ -58,10 +58,10 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
             <TableBody>
               {suppliers.map((supplier) => (
                 <TableRow key={supplier.id}>
-                  <TableCell className="font-medium">{supplier.name}</TableCell>
+                  <TableCell className="font-normal">{supplier.name}</TableCell>
                   <TableCell>
                     <div className="flex flex-col">
-                      <span className="font-medium">{supplier.totalEmissions.toFixed(0)} ton</span>
+                      <span className="font-normal">{supplier.totalEmissions.toFixed(0)} ton</span>
                       <span className="text-xs text-muted-foreground">
                         {supplier.emissionsPerEmployee.toFixed(2)} ton/emp
                       </span>

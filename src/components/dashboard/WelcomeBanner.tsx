@@ -13,7 +13,7 @@ export const WelcomeBanner = () => {
     : "Visualize as métricas de sustentabilidade do seu grupo de empresas. Utilize o seletor de clusters para filtrar por tipo de relação comercial e acompanhe a evolução das emissões de carbono.";
 
   return (
-    <div className="mb-6 p-6 bg-primary/10 text-foreground rounded-lg shadow-sm border border-primary/20 relative">
+    <div className="mb-6 p-6 bg-primary/10 text-foreground rounded-lg shadow-md border border-primary/20 relative">
       <button
         onClick={() => setIsVisible(false)}
         className="absolute top-3 right-3 p-1 rounded-md hover:bg-primary/10 transition-colors"

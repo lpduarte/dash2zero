@@ -127,7 +127,7 @@ export const Step2Measures = ({
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
-              <span className="font-medium text-sm">{measure.name}</span>
+              <span className="font-normal text-sm">{measure.name}</span>
 
               {!recommended && (
                 <TooltipProvider>
@@ -187,10 +187,10 @@ export const Step2Measures = ({
       <div className="flex flex-col">
         <div className={`flex items-center justify-between p-3 rounded-lg mb-3 ${colors.headerBg}`}>
           <div className="flex items-center gap-2">
-            <span className={`font-medium text-sm ${colors.text}`}>{scopeNames[scope]}</span>
+            <span className={`font-normal text-sm ${colors.text}`}>{scopeNames[scope]}</span>
             <span className={`text-sm ${colors.textSecondary}`}>({formatPercentage(scopePcts[scope], 0)})</span>
           </div>
-          <span className={`w-6 h-6 rounded-full text-white text-xs font-medium flex items-center justify-center ${colors.badge}`}>
+          <span className={`w-6 h-6 rounded-full text-white text-xs font-normal flex items-center justify-center ${colors.badge}`}>
             {measures.length}
           </span>
         </div>
@@ -222,7 +222,7 @@ export const Step2Measures = ({
       <div className="shrink-0 p-6 pb-4 border-b border-border/50">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-semibold text-2xl mb-1">Seleção de Medidas</h3>
+            <h3 className="font-bold text-2xl mb-1">Seleção de Medidas</h3>
             <p className="text-sm text-muted-foreground">
               Selecione medidas até a intensidade ficar abaixo da média do setor.
             </p>
@@ -230,7 +230,7 @@ export const Step2Measures = ({
           <button
             onClick={selectBestMeasures}
             className={`
-              flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all shrink-0
+              flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-normal transition-all shrink-0
               ${recommendedApplied
                 ? 'bg-white border border-border text-muted-foreground hover:bg-muted/50'
                 : 'bg-primary text-primary-foreground hover:bg-primary/90 animate-shadow-pulse'
@@ -266,30 +266,30 @@ export const Step2Measures = ({
         <div className="rounded-lg overflow-hidden border border-border">
           {/* ÁREA 1: Header */}
           <div className="flex border-b border-border">
-            <div className="flex-1 p-5 pr-6">
+            <div className="flex-1 p-4 pr-6">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-muted">
                   <TrendingDown className="h-4 w-4 text-muted-foreground" />
                 </div>
-                <h4 className="font-medium text-xl">Impacto das Medidas Selecionadas</h4>
+                <h4 className="font-normal text-xl">Impacto das Medidas Selecionadas</h4>
               </div>
             </div>
-            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border">
+            <div className="w-48 shrink-0 p-4 pl-6 border-l border-border">
               <p className="text-xs text-muted-foreground">Medidas</p>
-              <p className="font-semibold text-xl">{selectedMeasures.length}</p>
+              <p className="font-bold text-xl">{selectedMeasures.length}</p>
             </div>
           </div>
 
           {/* ÁREA 2: Barras e Totais */}
           <div className="flex border-b border-border">
-            <div className="flex-1 p-5 pr-6">
+            <div className="flex-1 p-4 pr-6">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <span className="text-sm w-32 shrink-0">Intensidade atual</span>
                   <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-danger rounded-full w-full" />
                   </div>
-                  <span className="text-sm font-semibold w-32 text-right">
+                  <span className="text-sm font-bold w-32 text-right">
                     {formatNumber(currentIntensity, 2)} kg CO₂e/€
                   </span>
                 </div>
@@ -306,7 +306,7 @@ export const Step2Measures = ({
                       <div className="h-full bg-muted-foreground/30 rounded-full w-full" />
                     )}
                   </div>
-                  <span className={`text-sm w-32 text-right ${selectedMeasures.length > 0 ? reachedTarget ? 'font-semibold text-success' : 'font-semibold' : 'text-muted-foreground'}`}>
+                  <span className={`text-sm w-32 text-right ${selectedMeasures.length > 0 ? reachedTarget ? 'font-bold text-success' : 'font-bold' : 'text-muted-foreground'}`}>
                     {selectedMeasures.length > 0 ? `${formatNumber(newIntensity, 2)} kg CO₂e/€` : 'Selecione medidas'}
                   </span>
                 </div>
@@ -316,25 +316,25 @@ export const Step2Measures = ({
                   <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-success rounded-full" style={{ width: `${avgSectorIntensity / currentIntensity * 100}%` }} />
                   </div>
-                  <span className="text-sm font-semibold w-32 text-right">
+                  <span className="text-sm font-bold w-32 text-right">
                     {formatNumber(avgSectorIntensity, 2)} kg CO₂e/€
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="w-48 shrink-0 p-5 pl-6 border-l border-border">
+            <div className="w-48 shrink-0 p-4 pl-6 border-l border-border">
               <div className="space-y-4">
                 <div>
                   <p className="text-xs text-muted-foreground">Redução Estimada</p>
-                  <p className={`font-semibold text-xl ${totalReduction > 0 ? 'text-success' : ''}`}>
+                  <p className={`font-bold text-xl ${totalReduction > 0 ? 'text-success' : ''}`}>
                     -{totalReduction.toLocaleString('pt-PT')}t CO₂e
                     <span className="text-sm font-normal ml-1">({formatPercentage(reductionPct, 0)})</span>
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Investimento Total</p>
-                  <p className="font-semibold text-xl">{totalInvestment.toLocaleString('pt-PT')}€</p>
+                  <p className="font-bold text-xl">{totalInvestment.toLocaleString('pt-PT')}€</p>
                 </div>
               </div>
             </div>
@@ -352,7 +352,7 @@ export const Step2Measures = ({
                 {reachedTarget ? (
                   <>
                     <CheckCircle className="h-4 w-4" />
-                    <span className="text-sm font-medium">Meta atingida!</span>
+                    <span className="text-sm font-normal">Meta atingida!</span>
                   </>
                 ) : (
                   <>

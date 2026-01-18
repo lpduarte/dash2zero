@@ -58,7 +58,7 @@ export function ProvidersTable({ providers, onSendEmail }: ProvidersTableProps) 
       <TableBody>
         {providers.map((provider) => (
           <TableRow key={provider.id}>
-            <TableCell className="font-medium">{provider.name}</TableCell>
+            <TableCell className="font-normal">{provider.name}</TableCell>
             <TableCell>{provider.nif}</TableCell>
             <TableCell className="text-muted-foreground">{provider.email}</TableCell>
             <TableCell>

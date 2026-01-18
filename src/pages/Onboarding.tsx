@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 
 // Abstract Analytics Illustration Component
 const AbstractIllustration = () => (
-  <div className="relative w-full max-w-md aspect-[4/3] bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 flex items-end justify-center gap-4">
+  <div className="relative w-full max-w-md aspect-[4/3] bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-8 flex items-end justify-center gap-4">
     {/* Abstract bars */}
     <div className="w-12 h-[40%] bg-primary/20 rounded-lg" />
     <div className="w-12 h-[65%] bg-primary/40 rounded-lg" />
@@ -63,10 +63,10 @@ const Onboarding = () => {
           {/* Logo & Header */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 mb-8">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Leaf className="h-6 w-6 text-primary" />
               </div>
-              <span className="text-xl font-semibold">Dash2Zero</span>
+              <span className="text-xl font-bold">Dash2Zero</span>
             </div>
             
             <h1 className="text-4xl md:text-4xl font-bold tracking-tight mb-4">
@@ -83,17 +83,17 @@ const Onboarding = () => {
           {/* Option Cards */}
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             {/* Option 1: Simple (Recommended) */}
-            <Card className="relative p-8 flex flex-col border-2 border-primary/50 bg-card shadow-lg hover:border-primary hover:shadow-xl transition-all duration-300 group rounded-2xl">
+            <Card className="relative p-8 flex flex-col border-2 border-primary/50 bg-card shadow-lg hover:border-primary hover:shadow-xl transition-all duration-300 group rounded-lg">
               <Badge className="absolute -top-3 right-6 bg-primary text-primary-foreground">
                 Recomendado
               </Badge>
               
               <div className="flex-1">
-                <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/15 transition-colors">
+                <div className="h-16 w-16 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/15 transition-colors">
                   <Calculator className="h-8 w-8 text-primary" />
                 </div>
                 
-                <h2 className="text-xl font-semibold mb-2">
+                <h2 className="text-xl font-bold mb-2">
                   Quero calcular do zero
                 </h2>
                 
@@ -139,13 +139,13 @@ const Onboarding = () => {
             </Card>
 
             {/* Option 2: Form */}
-            <Card className="relative p-8 flex flex-col border hover:border-primary/30 hover:shadow-lg transition-all duration-300 group rounded-2xl">
+            <Card className="relative p-8 flex flex-col border hover:border-primary/30 hover:shadow-lg transition-all duration-300 group rounded-lg">
               <div className="flex-1">
-                <div className="h-16 w-16 rounded-2xl bg-muted flex items-center justify-center mb-6 group-hover:bg-muted/80 transition-colors">
+                <div className="h-16 w-16 rounded-lg bg-muted flex items-center justify-center mb-6 group-hover:bg-muted/80 transition-colors">
                   <FileText className="h-8 w-8 text-muted-foreground" />
                 </div>
                 
-                <h2 className="text-xl font-semibold mb-2">
+                <h2 className="text-xl font-bold mb-2">
                   Já tenho dados calculados
                 </h2>
                 
@@ -222,7 +222,7 @@ const Onboarding = () => {
               ].map((benefit, index) => (
                 <div 
                   key={index}
-                  className="flex items-start gap-4 p-4 bg-card rounded-xl border hover:border-success/30 hover:shadow-sm transition-all"
+                  className="flex items-start gap-4 p-4 bg-card rounded-lg border hover:border-success/30 hover:shadow-md transition-all"
                 >
                   <div className="h-6 w-6 rounded-full bg-success/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -246,7 +246,7 @@ const Onboarding = () => {
       <footer className="py-8 px-6 text-center border-t bg-background">
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Mais de <span className="font-semibold text-foreground">500 empresas</span> já calcularam a sua pegada
+            Mais de <span className="font-bold text-foreground">500 empresas</span> já calcularam a sua pegada
           </p>
           
           <a 

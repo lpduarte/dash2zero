@@ -24,11 +24,11 @@ export const AdvancedFilterPanel = ({
   onReset,
 }: AdvancedFilterPanelProps) => {
   return (
-    <Card className="p-6 shadow-sm mb-8">
+    <Card className="p-6 shadow-md mb-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Filtros</h2>
+          <h2 className="text-xl font-bold">Filtros</h2>
         </div>
         <Button 
           variant="outline" 

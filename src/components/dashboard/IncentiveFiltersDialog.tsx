@@ -138,7 +138,7 @@ export const IncentiveFiltersDialog = ({
           <div className="space-y-6 py-4">
             {/* Onboarding Status Filter */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium">Status de onboarding</Label>
+              <Label className="text-sm font-normal">Status de onboarding</Label>
               <div className="space-y-2">
                 {onboardingStatusWithCounts.map(({ value, label, count }) => (
                   <label
@@ -160,7 +160,7 @@ export const IncentiveFiltersDialog = ({
 
             {/* Email Count Filter */}
             <div className="space-y-3">
-              <Label className="text-sm font-medium">Nº de emails enviados</Label>
+              <Label className="text-sm font-normal">Nº de emails enviados</Label>
               <div className="space-y-2">
                 {emailCountOptions.map(option => (
                   <label

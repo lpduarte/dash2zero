@@ -171,7 +171,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
 
             {/* Substitution List */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Building2 className="h-5 w-5" />
                 Lista de Substituições Recomendadas
               </h3>
@@ -189,7 +189,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
 
                       {/* Current supplier */}
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{plan.critical.name}</p>
+                        <p className="font-normal text-sm truncate">{plan.critical.name}</p>
                         <p className="text-xs text-muted-foreground">{sectorLabels[plan.critical.sector] || plan.critical.sector}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="destructive" className="text-xs">
@@ -203,7 +203,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
                       {/* Alternative supplier */}
                       {plan.alternative ? (
                         <div className="flex-1 min-w-0 bg-success/10 rounded-lg p-3">
-                          <p className="font-medium text-sm truncate text-success">{plan.alternative.name}</p>
+                          <p className="font-normal text-sm truncate text-success">{plan.alternative.name}</p>
                           <p className="text-xs text-muted-foreground">{sectorLabels[plan.alternative.sector] || plan.alternative.sector}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <Badge className="bg-success text-xs">
@@ -240,7 +240,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
 
             {/* Implementation Steps */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <TrendingDown className="h-5 w-5" />
                 Passos de Implementação
               </h3>
@@ -249,7 +249,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
                 {implementationSteps.map((step, index) => (
                   <div key={index} className="p-4 rounded-lg border bg-card">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-semibold text-sm">{step.phase}</h4>
+                      <h4 className="font-bold text-sm">{step.phase}</h4>
                       <Badge variant="outline" className="text-xs">{step.duration}</Badge>
                     </div>
                     <ul className="space-y-2">
@@ -269,7 +269,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
 
             {/* Financial Impact Details */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                 <Euro className="h-5 w-5" />
                 Análise de Impacto Financeiro
               </h3>

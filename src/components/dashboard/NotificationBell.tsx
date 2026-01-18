@@ -145,7 +145,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
       <PopoverContent className="w-96 p-0" align="end">
         <div className="p-4 border-b">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold">Notificações</h3>
+            <h3 className="font-bold">Notificações</h3>
             {unreadCount > 0 && (
               <Badge variant="secondary">{unreadCount} novas</Badge>
             )}
@@ -171,7 +171,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
                         <FileText className="h-5 w-5 text-primary" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-sm mb-1">{notification.title}</h4>
+                        <h4 className="font-bold text-sm mb-1">{notification.title}</h4>
                         <p className="text-xs text-muted-foreground">{notification.description}</p>
                       </div>
                     </div>
@@ -188,7 +188,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
                         {getIcon(notification.type)}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-sm mb-1">{notification.title}</h4>
+                        <h4 className="font-bold text-sm mb-1">{notification.title}</h4>
                         <p className="text-xs text-muted-foreground mb-1">
                           {notification.description}
                         </p>

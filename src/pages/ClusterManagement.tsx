@@ -253,7 +253,7 @@ export default function ClusterManagement() {
           <div className="flex justify-between items-start gap-4">
             {/* Left side - Cluster filters */}
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+              <h3 className="text-sm font-normal text-muted-foreground mb-3">Filtrar por Cluster</h3>
               <div className="flex flex-wrap gap-2">
                 {clusterOptions.map((option) => {
                   const Icon = option.icon;
@@ -272,10 +272,10 @@ export default function ClusterManagement() {
                       )}
                     >
                       <Icon className="h-4 w-4" />
-                      <span className="font-medium">{option.labelPlural}</span>
+                      <span className="font-normal">{option.labelPlural}</span>
                       <span
                         className={cn(
-                          "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
+                          "ml-1 px-2 py-0.5 rounded-full text-xs font-bold",
                           selectedClusterType === option.value
                             ? "bg-primary-foreground/20 text-primary-foreground"
                             : "bg-muted text-muted-foreground"
@@ -307,7 +307,7 @@ export default function ClusterManagement() {
         {/* Header with actions */}
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-semibold">{getClusterLabel()}</h2>
+            <h2 className="text-2xl font-bold">{getClusterLabel()}</h2>
             <p className="text-sm text-muted-foreground">
               {filteredSuppliers.length.toLocaleString('pt-PT')} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
             </p>
@@ -405,7 +405,7 @@ export default function ClusterManagement() {
                       key={company.id}
                       className={index % 2 === 0 ? "bg-muted/50" : "bg-background"}
                     >
-                      <TableCell className="font-medium">{company.name}</TableCell>
+                      <TableCell className="font-normal">{company.name}</TableCell>
                       <TableCell>{company.contact.email}</TableCell>
                       <TableCell className="capitalize">{company.sector}</TableCell>
                       <TableCell className="capitalize">{company.region}</TableCell>
@@ -415,7 +415,7 @@ export default function ClusterManagement() {
                       <TableCell>{company.scope1.toFixed(1)}</TableCell>
                       <TableCell>{company.scope2.toFixed(1)}</TableCell>
                       <TableCell>{company.scope3.toFixed(1)}</TableCell>
-                      <TableCell className="font-semibold">{company.totalEmissions.toFixed(1)}</TableCell>
+                      <TableCell className="font-bold">{company.totalEmissions.toFixed(1)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

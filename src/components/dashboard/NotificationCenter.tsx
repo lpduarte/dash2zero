@@ -163,7 +163,7 @@ export const NotificationCenter = ({ suppliers }: NotificationCenterProps) => {
                 
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <h4 className="font-semibold text-sm">{notification.title}</h4>
+                    <h4 className="font-bold text-sm">{notification.title}</h4>
                     {!notification.read && (
                       <Button
                         variant="ghost"
@@ -195,7 +195,7 @@ export const NotificationCenter = ({ suppliers }: NotificationCenterProps) => {
         </div>
 
         <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-          <h4 className="font-semibold text-sm mb-2 flex items-center gap-2">
+          <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             Tipos de Notificações Automáticas
           </h4>

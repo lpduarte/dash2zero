@@ -501,7 +501,7 @@ const Incentive = () => {
         
         {/* Funnel Metrics Card */}
         <Collapsible open={isMetricsExpanded} onOpenChange={setIsMetricsExpanded}>
-          <Card className="shadow-sm mb-6">
+          <Card className="shadow-md mb-6">
             <CardHeader className={cn("transition-all duration-[400ms]", isMetricsExpanded ? "pb-3" : "pb-6")}>
               <SectionHeader
                 icon={TrendingUp}
@@ -573,8 +573,8 @@ const Incentive = () => {
                     />
                   </div>
                   {/* Funnel visual with CSS */}
-                  <div className="col-span-3 border rounded-lg p-4 bg-card shadow-sm flex flex-col justify-between">
-                    <p className="text-xs font-medium text-muted-foreground">Progressão do Funil</p>
+                  <div className="col-span-3 border rounded-lg p-4 bg-card shadow-md flex flex-col justify-between">
+                    <p className="text-xs font-normal text-muted-foreground">Progressão do Funil</p>
                     
                     {/* Barra CSS - alinhada com "Sem interação..." do card à esquerda */}
                     <div className="h-4 w-full flex gap-px">
@@ -624,7 +624,7 @@ const Incentive = () => {
                         <div key={item.label} className="flex items-center gap-1.5 text-xs">
                           <div className={cn("h-2.5 w-2.5 rounded-full", item.color)} />
                           <span className="text-muted-foreground">{item.label}</span>
-                          <span className="font-medium">{item.value}</span>
+                          <span className="font-normal">{item.value}</span>
                         </div>
                       ))}
                     </div>
@@ -740,7 +740,7 @@ const Incentive = () => {
                             />
                             
                             <div className="flex-1 min-w-0 cursor-pointer" onClick={() => handleSelectCompany(company.id)}>
-                              <p className="font-medium truncate">{company.name}</p>
+                              <p className="font-normal truncate">{company.name}</p>
                             </div>
                             
                             {/* Status + próxima acção + histórico */}
@@ -803,7 +803,7 @@ const Incentive = () => {
                           <CollapsibleContent>
                             <div className="px-3 pb-3 pt-0">
                               <div className="bg-muted/50 rounded-lg p-3 space-y-2">
-                                <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                                <p className="text-xs font-normal text-muted-foreground flex items-center gap-1">
                                   <Mail className="h-3 w-3" />
                                   Histórico de emails
                                 </p>
@@ -860,7 +860,7 @@ const Incentive = () => {
                         
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="font-medium truncate">{company.name}</p>
+                            <p className="font-normal truncate">{company.name}</p>
                             <CheckCircle2 className="h-4 w-4 text-success flex-shrink-0" />
                           </div>
                           {company.lastContactDate && (
@@ -909,7 +909,7 @@ const Incentive = () => {
                       <Zap className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Envio Inteligente</p>
+                      <p className="font-normal text-sm">Envio Inteligente</p>
                       <p className="text-xs text-muted-foreground">
                         {selectedCompanies.length} empresa{selectedCompanies.length !== 1 ? 's' : ''} · Templates optimizados por status
                       </p>
@@ -993,11 +993,11 @@ const Incentive = () => {
                   <div className="space-y-3">
                     <div className="p-3 bg-muted/50 rounded-lg">
                       <p className="text-xs text-muted-foreground">Para</p>
-                      <p className="font-medium">{firstSelectedCompany.contact.email}</p>
+                      <p className="font-normal">{firstSelectedCompany.contact.email}</p>
                     </div>
                     <div className="p-3 bg-muted/50 rounded-lg">
                       <p className="text-xs text-muted-foreground">Assunto</p>
-                      <p className="font-medium">{previewSubject}</p>
+                      <p className="font-normal">{previewSubject}</p>
                     </div>
                     <div className="p-3 bg-muted/50 rounded-lg">
                       <p className="text-xs text-muted-foreground mb-1">Mensagem</p>
@@ -1056,7 +1056,7 @@ const Incentive = () => {
               {getSmartSendSummary.map(group => (
                 <div key={group.template} className="p-3 border rounded-lg bg-muted/30">
                   <div className="flex items-center justify-between mb-1">
-                    <p className="font-medium text-sm">{group.templateName}</p>
+                    <p className="font-normal text-sm">{group.templateName}</p>
                     <Badge variant="secondary">{group.companies.length}</Badge>
                   </div>
                   <p className="text-xs text-muted-foreground">

@@ -87,7 +87,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Zap className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Postos de Carregamento</span>
+                  <span className="font-normal">Postos de Carregamento</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">89</span>
@@ -127,7 +127,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Recycle className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Ecopontos</span>
+                  <span className="font-normal">Ecopontos</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">245</span>
@@ -170,7 +170,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Bike className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Estações de Bicicletas</span>
+                  <span className="font-normal">Estações de Bicicletas</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">52</span>
@@ -237,7 +237,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Leaf className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Contentores Orgânicos</span>
+                  <span className="font-normal">Contentores Orgânicos</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">178</span>
@@ -284,7 +284,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Route className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Ciclovias</span>
+                  <span className="font-normal">Ciclovias</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">47.3</span>
@@ -330,7 +330,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Bus className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Paragens Transportes Públicos</span>
+                  <span className="font-normal">Paragens Transportes Públicos</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">312</span>
@@ -373,7 +373,7 @@ export const ManageInfrastructureModal = ({
               <div className="flex items-center justify-between p-4 bg-muted/30">
                 <div className="flex items-center gap-3">
                   <Wind className="h-5 w-5 text-primary" />
-                  <span className="font-medium">Qualidade do Ar</span>
+                  <span className="font-normal">Qualidade do Ar</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold text-success">Bom</span>

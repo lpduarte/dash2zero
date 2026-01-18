@@ -72,11 +72,11 @@ export const SectorBenchmarking = ({
 
   return (
     <div className="space-y-6">
-      <Card className="p-6 shadow-sm">
+      <Card className="p-6 shadow-md">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-xl font-semibold">Comparação com a média da atividade</h2>
+              <h2 className="text-xl font-bold">Comparação com a média da atividade</h2>
               <p className="text-sm text-muted-foreground">
                 Desvio das emissões de cada fornecedor em relação à média do seu setor
               </p>
@@ -86,7 +86,7 @@ export const SectorBenchmarking = ({
                 <SelectValue placeholder="Filtrar por atividade">
                   <span className="flex items-center justify-between w-full">
                     <span>{selectedSector === 'all' ? 'Todas as atividades' : sectorsWithCounts.find(s => s.sector === selectedSector)?.name}</span>
-                    <span className="ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                    <span className="ml-2 px-2.5 py-0.5 rounded-full text-xs font-normal bg-muted text-muted-foreground">
                       {selectedSector === 'all' ? suppliers.length : sectorsWithCounts.find(s => s.sector === selectedSector)?.count}
                     </span>
                   </span>
@@ -96,7 +96,7 @@ export const SectorBenchmarking = ({
                 <SelectItem value="all" className="cursor-pointer">
                   <span className="flex items-center justify-between w-full min-w-[220px]">
                     <span>Todas as atividades</span>
-                    <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                    <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-normal bg-muted text-muted-foreground">
                       {suppliers.length}
                     </span>
                   </span>
@@ -105,7 +105,7 @@ export const SectorBenchmarking = ({
                   <SelectItem key={s.sector} value={s.sector} className="cursor-pointer">
                     <span className="flex items-center justify-between w-full min-w-[220px]">
                       <span>{s.name}</span>
-                      <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                      <span className="ml-4 px-2.5 py-0.5 rounded-full text-xs font-normal bg-muted text-muted-foreground">
                         {s.count}
                       </span>
                     </span>
@@ -138,7 +138,7 @@ export const SectorBenchmarking = ({
                 const data = payload[0].payload;
                 return (
                   <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                    <p className="font-semibold mb-2">{data.fullName}</p>
+                    <p className="font-bold mb-2">{data.fullName}</p>
                     <div className="space-y-1 text-sm">
                       <p>
                         <span className="text-muted-foreground">Emissões: </span>

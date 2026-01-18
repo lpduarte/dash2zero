@@ -58,7 +58,7 @@ export const SupplierCard = memo(({
   return <Card className="border border-border bg-card hover:shadow-lg transition-all">
       <CardHeader className="pb-3">
         <div className="flex flex-col gap-2">
-          <h3 className="text-xl font-semibold text-card-foreground">{supplier.name}</h3>
+          <h3 className="text-xl font-bold text-card-foreground">{supplier.name}</h3>
           <div className="flex flex-wrap gap-1.5">
             <Badge variant="outline" className="text-xs font-normal text-muted-foreground border-border/60">
               {getSectorName(supplier.sector)}
@@ -109,7 +109,7 @@ export const SupplierCard = memo(({
               <UserRound className="h-3.5 w-3.5 text-primary" />
             </div>
             <p className="text-xs text-muted-foreground mb-1">Por colaborador</p>
-            <p className="text-xl font-semibold text-foreground">{supplier.emissionsPerEmployee.toFixed(1)}</p>
+            <p className="text-xl font-bold text-foreground">{supplier.emissionsPerEmployee.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e/colab  </p>
           </div>
           <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
@@ -117,7 +117,7 @@ export const SupplierCard = memo(({
               <Maximize2 className="h-3.5 w-3.5 text-primary" />
             </div>
             <p className="text-xs text-muted-foreground mb-1">Por área</p>
-            <p className="text-xl font-semibold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
+            <p className="text-xl font-bold text-foreground">{supplier.emissionsPerArea.toFixed(3)}</p>
             <p className="text-xs text-muted-foreground">t CO₂e/m²</p>
           </div>
           <div className="p-3 rounded-lg border border-border bg-muted/30 relative">
@@ -125,26 +125,26 @@ export const SupplierCard = memo(({
               <Euro className="h-3.5 w-3.5 text-primary" />
             </div>
             <p className="text-xs text-muted-foreground mb-1">Por faturação</p>
-            <p className="text-xl font-semibold text-foreground">{supplier.emissionsPerRevenue.toFixed(1)}</p>
+            <p className="text-xl font-bold text-foreground">{supplier.emissionsPerRevenue.toFixed(1)}</p>
             <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
           </div>
         </div>
 
         {/* Scope Breakdown */}
         <div className="space-y-2">
-          <p className="text-sm font-medium text-muted-foreground">Emissões por Âmbito</p>
+          <p className="text-sm font-normal text-muted-foreground">Emissões por Âmbito</p>
           <div className="grid grid-cols-3 gap-2">
             <div className="p-2 rounded border border-scope-1/30 bg-scope-1/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 1</p>
-              <p className="text-sm font-semibold text-scope-1">{supplier.scope1.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-bold text-scope-1">{supplier.scope1.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
             <div className="p-2 rounded border border-scope-2/30 bg-scope-2/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 2</p>
-              <p className="text-sm font-semibold text-scope-2">{supplier.scope2.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-bold text-scope-2">{supplier.scope2.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
             <div className="p-2 rounded border border-scope-3/30 bg-scope-3/10">
               <p className="text-xs text-muted-foreground mb-0.5">Âmbito 3</p>
-              <p className="text-sm font-semibold text-scope-3">{supplier.scope3.toLocaleString('pt-PT')} t CO₂e</p>
+              <p className="text-sm font-bold text-scope-3">{supplier.scope3.toLocaleString('pt-PT')} t CO₂e</p>
             </div>
           </div>
         </div>

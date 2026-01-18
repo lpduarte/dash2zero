@@ -73,7 +73,7 @@ export const Step1Analysis = ({
             <div className={`w-10 h-10 rounded-full ${config.iconBg} flex items-center justify-center`}>
               <RiskIcon className={`h-5 w-5 ${config.iconColor}`} />
             </div>
-            <h3 className="text-2xl font-semibold">
+            <h3 className="text-2xl font-bold">
               Risco {config.label}
             </h3>
           </div>
@@ -84,7 +84,7 @@ export const Step1Analysis = ({
 
         {/* SECÇÃO 1: Intensidade de Carbono */}
         <div>
-          <p className="text-xl font-medium text-foreground mb-4">
+          <p className="text-xl font-normal text-foreground mb-4">
             Intensidade de Carbono
           </p>
 
@@ -95,7 +95,7 @@ export const Step1Analysis = ({
               <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                 <div className="h-full bg-danger rounded-full" style={{ width: '100%' }} />
               </div>
-              <span className="text-sm font-medium w-36 text-right shrink-0">
+              <span className="text-sm font-normal w-36 text-right shrink-0">
                 {formatNumber(empresaIntensity, 2)} kg CO₂e/€
               </span>
             </div>
@@ -106,7 +106,7 @@ export const Step1Analysis = ({
               <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                 <div className="h-full bg-success rounded-full" style={{ width: `${Math.min(setorBarWidth, 100)}%` }} />
               </div>
-              <span className="text-sm font-medium w-36 text-right shrink-0">
+              <span className="text-sm font-normal w-36 text-right shrink-0">
                 {formatNumber(avgSectorIntensity, 2)} kg CO₂e/€
               </span>
             </div>
@@ -119,7 +119,7 @@ export const Step1Analysis = ({
         <div className={`p-4 ${riskColors.alto.bg} ${riskColors.alto.bgDark} border ${riskColors.alto.border} rounded-lg`}>
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="h-4 w-4 text-danger" />
-            <h4 className="font-medium text-sm text-danger">
+            <h4 className="font-normal text-sm text-danger">
               Consequências para o Município (intensidade {'>'}1.5x média)
             </h4>
           </div>
@@ -171,7 +171,7 @@ export const Step1Analysis = ({
 
         {/* SECÇÃO 3: Distribuição por Âmbito */}
         <div>
-          <p className="text-xl font-medium text-foreground mb-4">
+          <p className="text-xl font-normal text-foreground mb-4">
             Distribuição por Âmbito
           </p>
 
@@ -225,7 +225,7 @@ export const Step1Analysis = ({
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Search className="h-4 w-4 text-muted-foreground" />
-              <p className="text-xl font-medium text-foreground">
+              <p className="text-xl font-normal text-foreground">
                 Análise por Âmbito
               </p>
             </div>
@@ -235,7 +235,7 @@ export const Step1Analysis = ({
                 <div key={scope.id} className={`p-3 rounded-lg border-2 ${scopeColors[scope.id].border} bg-background`}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className={`w-2 h-2 rounded-full ${scopeColors[scope.id].bg}`} />
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-normal">
                       {scope.name} ({formatPercentage(scope.pct, 0)})
                     </span>
                   </div>
@@ -260,7 +260,7 @@ export const Step1Analysis = ({
         <div className={`p-4 ${riskColors.alto.bg} ${riskColors.alto.bgDark} border ${riskColors.alto.border} rounded-lg`}>
           <div className="flex items-center gap-2 mb-3">
             <Target className="h-4 w-4 text-danger" />
-            <p className="text-sm font-medium text-danger">
+            <p className="text-sm font-normal text-danger">
               Para atingir zona segura
             </p>
           </div>
@@ -268,15 +268,15 @@ export const Step1Analysis = ({
           <ul className="space-y-1.5 text-sm text-danger">
             <li className="flex items-start gap-2">
               <span>•</span>
-              <span>Redução necessária: <span className="font-medium">{reducaoEstimada.toLocaleString('pt-PT')} t CO₂e (-{reducaoPct}%)</span></span>
+              <span>Redução necessária: <span className="font-normal">{reducaoEstimada.toLocaleString('pt-PT')} t CO₂e (-{reducaoPct}%)</span></span>
             </li>
             <li className="flex items-start gap-2">
               <span>•</span>
-              <span>Investimento estimado: <span className="font-medium">85.000€ - 150.000€</span></span>
+              <span>Investimento estimado: <span className="font-normal">85.000€ - 150.000€</span></span>
             </li>
             <li className="flex items-start gap-2">
               <span>•</span>
-              <span>Prazo típico: <span className="font-medium">12-24 meses</span></span>
+              <span>Prazo típico: <span className="font-normal">12-24 meses</span></span>
             </li>
           </ul>
         </div>

@@ -121,7 +121,7 @@ export function ClusterSelector({
   return (
     <>
       {/* Label - não faz sticky */}
-      <h3 className="text-sm font-medium text-muted-foreground mb-3">Filtrar por Cluster</h3>
+      <h3 className="text-sm font-normal text-muted-foreground mb-3">Filtrar por Cluster</h3>
       
       {/* Sticky container - só os botões */}
       <div 
@@ -149,10 +149,10 @@ export function ClusterSelector({
                 )}
               >
                 <Icon className="h-4 w-4" />
-                <span className="font-medium">{option.labelPlural}</span>
+                <span className="font-normal">{option.labelPlural}</span>
                 <span
                   className={cn(
-                    "ml-1 px-2 py-0.5 rounded-full text-xs font-semibold",
+                    "ml-1 px-2 py-0.5 rounded-full text-xs font-bold",
                     selectedCluster === option.value
                       ? "bg-primary-foreground/20 text-primary-foreground"
                       : "bg-muted text-muted-foreground"

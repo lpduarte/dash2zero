@@ -270,7 +270,7 @@ export function FilterModal({
         <div className="space-y-6 py-4">
           {/* Company Size Filter */}
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm font-medium mb-3">
+            <div className="flex items-center gap-2 text-sm font-normal mb-3">
               <Building2 className="h-4 w-4 text-muted-foreground" />
               Dimensão da Empresa
             </div>
@@ -295,7 +295,7 @@ export function FilterModal({
                       />
                       <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
                         <span>{option.label}</span>
-                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                        <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">
                           {option.count}
                         </span>
                       </Label>
@@ -308,7 +308,7 @@ export function FilterModal({
 
           {/* Location Filters */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-sm font-medium mb-3">
+            <div className="flex items-center gap-2 text-sm font-normal mb-3">
               {isMunicipio ? (
                 <>
                   <Landmark className="h-4 w-4 text-muted-foreground" />
@@ -350,7 +350,7 @@ export function FilterModal({
                           />
                           <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
                             <span>{option.label}</span>
-                            <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                            <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">
                               {option.count}
                             </span>
                           </Label>
@@ -394,7 +394,7 @@ export function FilterModal({
                           />
                           <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
                             <span>{option.label}</span>
-                            <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                            <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">
                               {option.count}
                             </span>
                           </Label>
@@ -436,7 +436,7 @@ export function FilterModal({
                       />
                       <Label className="text-sm cursor-pointer flex items-center justify-between flex-1">
                         <span>{option.label}</span>
-                        <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">
+                        <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">
                           {option.count}
                         </span>
                       </Label>

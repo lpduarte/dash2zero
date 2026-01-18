@@ -46,7 +46,7 @@ export const TopSuppliersByCAE = ({ suppliers }: TopSuppliersByCAEProps) => {
   const currentSectorData = selectedSector ? getSectorData(selectedSector) : null;
 
   return (
-    <Card className="p-6 shadow-sm">
+    <Card className="p-6 shadow-md">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-xl">
@@ -74,7 +74,7 @@ export const TopSuppliersByCAE = ({ suppliers }: TopSuppliersByCAEProps) => {
         {currentSectorData && (
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-xl">{currentSectorData.sectorName}</h3>
+              <h3 className="font-bold text-xl">{currentSectorData.sectorName}</h3>
               <Badge variant="secondary">{currentSectorData.totalInSector} empresas</Badge>
             </div>
             
@@ -94,9 +94,9 @@ export const TopSuppliersByCAE = ({ suppliers }: TopSuppliersByCAEProps) => {
                       {index + 1}
                     </div>
                     <div>
-                      <p className="font-medium">{supplier.name}</p>
+                      <p className="font-normal">{supplier.name}</p>
                       <p className="text-xs text-muted-foreground">
-                        Rating: <span className="font-semibold">{supplier.rating}</span>
+                        Rating: <span className="font-bold">{supplier.rating}</span>
                       </p>
                     </div>
                   </div>

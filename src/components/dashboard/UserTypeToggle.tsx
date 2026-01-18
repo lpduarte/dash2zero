@@ -19,7 +19,7 @@ export const UserTypeToggle = ({ currentType, onTypeChange }: UserTypeToggleProp
               className={cn(
                 "flex items-center justify-center w-9 h-9 rounded-md transition-all duration-200",
                 currentType === 'empresa'
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground shadow-md"
                   : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
               )}
             >
@@ -38,7 +38,7 @@ export const UserTypeToggle = ({ currentType, onTypeChange }: UserTypeToggleProp
               className={cn(
                 "flex items-center justify-center w-9 h-9 rounded-md transition-all duration-200",
                 currentType === 'municipio'
-                  ? "bg-primary text-primary-foreground shadow-sm"
+                  ? "bg-primary text-primary-foreground shadow-md"
                   : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
               )}
             >

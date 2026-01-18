@@ -52,7 +52,7 @@ export const ExportOptions = ({ suppliers }: ExportOptionsProps) => {
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm mb-3">Formatos Disponíveis</h4>
+            <h4 className="font-bold text-sm mb-3">Formatos Disponíveis</h4>
             
             <Button 
               onClick={handleExportPDF}
@@ -86,21 +86,21 @@ export const ExportOptions = ({ suppliers }: ExportOptionsProps) => {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-semibold text-sm mb-3">Resumo a Exportar</h4>
+            <h4 className="font-bold text-sm mb-3">Resumo a Exportar</h4>
             
             <div className="p-3 bg-card border border-border rounded-lg">
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Fornecedores:</span>
-                  <span className="font-semibold">{suppliers.length}</span>
+                  <span className="font-bold">{suppliers.length}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Emissões Totais:</span>
-                  <span className="font-semibold">{formatNumber(totalEmissions, 0)} t CO₂e</span>
+                  <span className="font-bold">{formatNumber(totalEmissions, 0)} t CO₂e</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Com SBTi:</span>
-                  <span className="font-semibold">{companiesWithSBTi} empresas</span>
+                  <span className="font-bold">{companiesWithSBTi} empresas</span>
                 </div>
               </div>
             </div>

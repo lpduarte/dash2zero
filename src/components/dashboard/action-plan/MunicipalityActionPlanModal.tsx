@@ -248,16 +248,16 @@ export const MunicipalityActionPlanModal = ({
             <div className="flex items-center gap-3">
               <div className="px-4 py-2 border rounded-lg bg-muted/30 text-sm">
                 <span className="text-muted-foreground">Setor: </span>
-                <span className="font-medium">{sectorLabels[supplier.sector] || supplier.sector}</span>
+                <span className="font-normal">{sectorLabels[supplier.sector] || supplier.sector}</span>
                 <span className="mx-2 text-muted-foreground">•</span>
                 <span className="text-muted-foreground">Dimensão: </span>
-                <span className="font-medium">{getDimensionLabel(supplier.companySize)}</span>
+                <span className="font-normal">{getDimensionLabel(supplier.companySize)}</span>
                 <span className="mx-2 text-muted-foreground">•</span>
                 <span className="text-muted-foreground">Freguesia: </span>
-                <span className="font-medium">{supplier.parish || 'N/A'}</span>
+                <span className="font-normal">{supplier.parish || 'N/A'}</span>
                 <span className="mx-2 text-muted-foreground">•</span>
                 <span className="text-muted-foreground">Risco: </span>
-                <span className={`font-medium ${riskColors[riskLevel as keyof typeof riskColors]?.text || 'text-muted-foreground'}`}>
+                <span className={`font-normal ${riskColors[riskLevel as keyof typeof riskColors]?.text || 'text-muted-foreground'}`}>
                   {getRiskLabel()}
                 </span>
               </div>
@@ -314,7 +314,7 @@ export const MunicipalityActionPlanModal = ({
 
                     <span
                       className={`
-                        text-sm font-medium transition-colors
+                        text-sm font-normal transition-colors
                         ${state === 'current'
                           ? 'text-primary'
                           : state === 'completed'

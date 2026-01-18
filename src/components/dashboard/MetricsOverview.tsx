@@ -142,7 +142,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
   return (
     <TooltipProvider delayDuration={100}>
       <Collapsible open={isEmissionsExpanded} onOpenChange={setIsEmissionsExpanded}>
-        <Card className="shadow-sm">
+        <Card className="shadow-md">
           <CardHeader className={cn("transition-all duration-[400ms]", isEmissionsExpanded ? "pb-3" : "pb-6")}>
             <SectionHeader
               icon={BarChart3}
@@ -187,12 +187,12 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                       </TooltipTrigger>
                       <TooltipContent side="right" className="p-0 w-56">
                         <div className="p-3 space-y-3">
-                          <p className="text-xs font-medium text-muted-foreground">Cenário de substituição</p>
+                          <p className="text-xs font-normal text-muted-foreground">Cenário de substituição</p>
                           
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <span className="text-xs text-muted-foreground">Atual</span>
-                              <span className="text-sm font-semibold">{Math.round(totalEmissions).toLocaleString('pt-PT')} t CO₂e</span>
+                              <span className="text-sm font-bold">{Math.round(totalEmissions).toLocaleString('pt-PT')} t CO₂e</span>
                             </div>
                             
                             <div className="relative h-2 bg-muted rounded-full overflow-hidden">
@@ -208,13 +208,13 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                             
                             <div className="flex items-center justify-between">
                               <span className="text-xs text-muted-foreground">Potencial</span>
-                              <span className="text-sm font-semibold text-success">{Math.round(potentialEmissions).toLocaleString('pt-PT')} t CO₂e</span>
+                              <span className="text-sm font-bold text-success">{Math.round(potentialEmissions).toLocaleString('pt-PT')} t CO₂e</span>
                             </div>
                           </div>
                           
                           <div className="pt-2 border-t border-border">
                             <div className="flex items-center justify-between">
-                              <span className="text-xs font-medium">Redução</span>
+                              <span className="text-xs font-normal">Redução</span>
                               <span className="text-sm font-bold text-success">-{formatPercentage(savingsPercentage, 1)}</span>
                             </div>
                           </div>
@@ -229,10 +229,10 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
             {/* Linha 2: Pegadas calculadas + Origem dos dados */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Pegadas calculadas */}
-              <div className={`p-4 border-2 rounded-lg shadow-sm ${percentageColors.bgLight} ${percentageColors.border}`}>
+              <div className={`p-4 border-2 rounded-lg shadow-md ${percentageColors.bgLight} ${percentageColors.border}`}>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
-                    <p className={`text-xs font-medium ${percentageColors.text}`}>Pegadas calculadas</p>
+                    <p className={`text-xs font-normal ${percentageColors.text}`}>Pegadas calculadas</p>
                     <div className={`${percentageColors.bg} text-white p-1.5 rounded`}>
                       <Calculator className="h-4 w-4" />
                     </div>
@@ -240,7 +240,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                   <div className="flex items-center justify-between">
                     <div>
                       <p className={`text-2xl font-bold ${percentageColors.text}`}>{companiesCalculated} de {total}</p>
-                      <p className={`text-xs ${percentageColors.text} mt-1 font-medium`}>{percentageCalculated}% do cluster</p>
+                      <p className={`text-xs ${percentageColors.text} mt-1 font-normal`}>{percentageCalculated}% do cluster</p>
                     </div>
                     {companiesMissing > 0 && (
                       <Button 
@@ -265,10 +265,10 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
               </div>
 
               {/* Origem dos dados */}
-              <div className="p-4 border rounded-lg shadow-sm">
+              <div className="p-4 border rounded-lg shadow-md">
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-muted-foreground">Origem dos dados</p>
+                    <p className="text-xs font-normal text-muted-foreground">Origem dos dados</p>
                     <div className="bg-primary/10 text-primary p-1.5 rounded">
                       <Database className="h-4 w-4" />
                     </div>
@@ -277,13 +277,13 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                   {/* Barra horizontal combinada */}
                   <div className="flex h-8 rounded-md overflow-hidden mt-2">
                     <div 
-                      className="bg-primary flex items-center justify-center text-white text-xs font-medium transition-all"
+                      className="bg-primary flex items-center justify-center text-white text-xs font-normal transition-all"
                       style={{ width: `${get2zeroPercentage}%` }}
                     >
                       {get2zeroPercentage > 15 && `${get2zeroPercentage}%`}
                     </div>
                     <div 
-                      className="bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-medium transition-all"
+                      className="bg-secondary flex items-center justify-center text-secondary-foreground text-xs font-normal transition-all"
                       style={{ width: `${formularioPercentage}%` }}
                     >
                       {formularioPercentage > 15 && `${formularioPercentage}%`}
@@ -295,10 +295,10 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                     <div className="flex items-center gap-2">
                       <Leaf className="h-3.5 w-3.5 text-primary" />
                       <span className="text-muted-foreground">Get2Zero Simple</span>
-                      <span className="font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{get2zeroCount}</span>
+                      <span className="font-bold text-primary bg-primary/10 px-1.5 py-0.5 rounded">{get2zeroCount}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="font-semibold text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{formularioCount}</span>
+                      <span className="font-bold text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{formularioCount}</span>
                       <span className="text-muted-foreground">Formulário</span>
                       <FileText className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>

@@ -163,7 +163,7 @@ export const CriticalSuppliersHighlight = ({
       medio: 'Médio',
       normal: 'Normal'
     };
-    return <Badge variant={variants[riskLevel]} className="text-xs font-semibold">
+    return <Badge variant={variants[riskLevel]} className="text-xs font-bold">
         {multiplier.toFixed(1)}x média
       </Badge>;
   };
@@ -230,7 +230,7 @@ export const CriticalSuppliersHighlight = ({
   };
   return <>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <Card className={cn("bg-gradient-to-br shadow-sm", isMunicipio ? "border-primary/50 from-primary/10 via-primary/5 to-accent/10" : "border-danger/50 from-danger/10 via-warning/5 to-accent/10")}>
+        <Card className={cn("bg-gradient-to-br shadow-md", isMunicipio ? "border-primary/50 from-primary/10 via-primary/5 to-accent/10" : "border-danger/50 from-danger/10 via-warning/5 to-accent/10")}>
           <CardHeader className={cn("transition-all duration-[400ms]", isOpen ? "pb-3" : "pb-6")}>
             <SectionHeader
               icon={isMunicipio ? Target : AlertTriangle}
@@ -273,13 +273,13 @@ export const CriticalSuppliersHighlight = ({
                       <SelectItem value="all">
                         <div className="flex items-center justify-between w-[230px]">
                           <span>{sectorLabels.all}</span>
-                          <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                          <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                         </div>
                       </SelectItem>
                       {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
                         <div className="flex items-center justify-between w-[230px]">
                           <span>{sectorLabels[sector] || sector}</span>
-                          <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                          <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
                         </div>
                       </SelectItem>)}
                     </SelectContent>
@@ -314,12 +314,12 @@ export const CriticalSuppliersHighlight = ({
                                 </TooltipTrigger>
                                 <TooltipContent side="top" className="max-w-[280px]">
                                   <div className="space-y-2 text-xs">
-                                    <p className="font-medium">Intensidade de carbono vs média do setor.</p>
+                                    <p className="font-normal">Intensidade de carbono vs média do setor.</p>
                                     <div className="space-y-1">
-                                      <p><span className={`${riskColors.critico.text} font-medium`}>Crítico:</span> ≥100% acima da média</p>
-                                      <p><span className={`${riskColors.alto.text} font-medium`}>Alto:</span> 50-100% acima da média</p>
-                                      <p><span className={`${riskColors.medio.text} font-medium`}>Médio:</span> 1-50% acima da média</p>
-                                      <p><span className={`${riskColors.baixo.text} font-medium`}>Baixo:</span> abaixo da média</p>
+                                      <p><span className={`${riskColors.critico.text} font-normal`}>Crítico:</span> ≥100% acima da média</p>
+                                      <p><span className={`${riskColors.alto.text} font-normal`}>Alto:</span> 50-100% acima da média</p>
+                                      <p><span className={`${riskColors.medio.text} font-normal`}>Médio:</span> 1-50% acima da média</p>
+                                      <p><span className={`${riskColors.baixo.text} font-normal`}>Baixo:</span> abaixo da média</p>
                                     </div>
                                   </div>
                                 </TooltipContent>
@@ -344,7 +344,7 @@ export const CriticalSuppliersHighlight = ({
                       const targetReached = planData?.reachedTarget;
                       return <TableRow key={item.supplier.id} className="hover:bg-primary/5">
                               {/* Coluna Empresa */}
-                              <TableCell className="font-medium">
+                              <TableCell className="font-normal">
                                 {item.supplier.name}
                               </TableCell>
                               
@@ -352,7 +352,7 @@ export const CriticalSuppliersHighlight = ({
                               <TableCell>
                                 <div className="flex flex-col">
                                   <div className="flex items-center gap-2">
-                                    <span className="font-medium">{item.supplier.emissionsPerRevenue.toFixed(2)}</span>
+                                    <span className="font-normal">{item.supplier.emissionsPerRevenue.toFixed(2)}</span>
                                     <span className="text-xs text-muted-foreground">kg CO₂e/€</span>
                                     {riskInfo.isAbove ? <TrendingUp className="h-3 w-3 text-danger" /> : <TrendingDown className="h-3 w-3 text-success" />}
                                   </div>
@@ -376,7 +376,7 @@ export const CriticalSuppliersHighlight = ({
                               avgSectorIntensity: item.avgSectorIntensity
                             });
                             setMunicipalityPlanOpen(true);
-                          }} className={cn("inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-medium", config.bgColor, config.color, config.borderColor, "border hover:opacity-80 transition-opacity cursor-pointer")}>
+                          }} className={cn("inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-normal", config.bgColor, config.color, config.borderColor, "border hover:opacity-80 transition-opacity cursor-pointer")}>
                                   <StatusIcon className="h-3 w-3" />
                                   <span>{config.label}</span>
                                   {showTarget && <span className={targetReached ? 'text-success' : 'text-warning'}>
@@ -446,7 +446,7 @@ export const CriticalSuppliersHighlight = ({
 
                           {/* Current supplier */}
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-sm truncate">{supplier.name}</h4>
+                            <h4 className="font-bold text-sm truncate">{supplier.name}</h4>
                             <SupplierLabel sector={supplier.sector} cluster={supplier.clusterId || supplier.cluster} />
                           </div>
 
@@ -496,7 +496,7 @@ export const CriticalSuppliersHighlight = ({
                                 <div className="flex items-center justify-between gap-3">
                                   <div className="min-w-0">
                                     <p className="text-xs text-muted-foreground mb-0.5">Alternativa</p>
-                                    <h4 className="font-semibold text-sm truncate text-success">{alternative.name}</h4>
+                                    <h4 className="font-bold text-sm truncate text-success">{alternative.name}</h4>
                                   </div>
                                   <div className="text-right shrink-0 flex items-center gap-2">
                                     <div className="flex items-baseline gap-1">
@@ -534,7 +534,7 @@ export const CriticalSuppliersHighlight = ({
                                         emissões inferiores a este fornecedor.
                                       </p>
                                       <div className="border-t border-border/50 pt-2">
-                                        <p className="text-xs font-medium mb-1">Sugestões de ação:</p>
+                                        <p className="text-xs font-normal mb-1">Sugestões de ação:</p>
                                         <ul className="text-xs text-muted-foreground space-y-0.5">
                                           <li>• Realizar auditoria energética conjunta</li>
                                           <li>• Propor formação em eficiência energética</li>

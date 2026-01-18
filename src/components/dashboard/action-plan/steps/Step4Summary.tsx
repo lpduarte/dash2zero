@@ -128,7 +128,7 @@ export const Step4Summary = ({
       <div className="shrink-0 p-6 pb-4 border-b border-border/50">
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="font-semibold text-2xl mb-1">Resumo do Plano de Ação</h3>
+            <h3 className="font-bold text-2xl mb-1">Resumo do Plano de Ação</h3>
             <p className="text-sm text-muted-foreground">
               Reveja o plano antes de exportar ou enviar à empresa.
               <span className="text-muted-foreground/70 ml-1">
@@ -170,7 +170,7 @@ export const Step4Summary = ({
         >
           {upcomingDeadlines.length > 0 && (
             <div className="mb-4">
-              <h5 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
+              <h5 className="text-sm font-normal text-muted-foreground mb-2 flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 Prazos de Candidatura
               </h5>
@@ -183,7 +183,7 @@ export const Step4Summary = ({
                       className={`flex items-center justify-between p-3 rounded-lg ${styles.container}`}
                     >
                       <span className="text-sm">{item.name}</span>
-                      <span className={`text-sm font-medium ${styles.text}`}>
+                      <span className={`text-sm font-normal ${styles.text}`}>
                         {item.daysRemaining <= 30 && <AlertTriangle className="h-4 w-4 inline mr-1" />}
                         {item.daysRemaining} dias ({item.deadline.toLocaleDateString('pt-PT')})
                       </span>
@@ -196,19 +196,19 @@ export const Step4Summary = ({
 
           <div className="space-y-2">
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-medium flex items-center justify-center">1</div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-normal flex items-center justify-center">1</div>
               <span className="text-sm">Apresentar plano à empresa e validar interesse</span>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-medium flex items-center justify-center">2</div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-normal flex items-center justify-center">2</div>
               <span className="text-sm">Apoiar na submissão de candidaturas a financiamento</span>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-medium flex items-center justify-center">3</div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-normal flex items-center justify-center">3</div>
               <span className="text-sm">Acompanhar implementação das medidas</span>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
-              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-medium flex items-center justify-center">4</div>
+              <div className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-normal flex items-center justify-center">4</div>
               <span className="text-sm">Monitorizar progresso e ajustar plano se necessário</span>
             </div>
           </div>
@@ -227,24 +227,24 @@ export const Step4Summary = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-muted border border-border rounded-lg text-center">
                 <p className="text-xs text-muted-foreground mb-1">Faturação Anual</p>
-                <p className="font-semibold text-xl">{(supplier.revenue || 0).toLocaleString('pt-PT')}€</p>
+                <p className="font-bold text-xl">{(supplier.revenue || 0).toLocaleString('pt-PT')}€</p>
               </div>
               <div className="p-4 bg-muted border border-border rounded-lg text-center">
                 <p className="text-xs text-muted-foreground mb-1">Emissões Totais</p>
-                <p className="font-semibold text-xl">{supplier.totalEmissions.toLocaleString('pt-PT')} t CO₂e</p>
+                <p className="font-bold text-xl">{supplier.totalEmissions.toLocaleString('pt-PT')} t CO₂e</p>
               </div>
             </div>
 
             {/* Emissões por Âmbito */}
             <div>
-              <h5 className="text-sm font-medium text-muted-foreground mb-3">Emissões por Âmbito</h5>
+              <h5 className="text-sm font-normal text-muted-foreground mb-3">Emissões por Âmbito</h5>
               <div className="grid grid-cols-3 gap-4">
                 <div className={`p-3 ${scopeColors[1].bgLight} border ${scopeColors[1].border} rounded-lg text-center`}>
                   <div className="flex items-center justify-center gap-2 mb-1">
                     <div className={`w-2 h-2 rounded-full ${scopeColors[1].bg}`} />
                     <p className={`text-xs ${scopeColors[1].textLight}`}>Âmbito 1 - Diretas</p>
                   </div>
-                  <p className={`font-semibold text-xl ${scopeColors[1].text}`}>
+                  <p className={`font-bold text-xl ${scopeColors[1].text}`}>
                     {(supplier.scope1 || 0).toLocaleString('pt-PT')} t CO₂e
                   </p>
                   <p className={`text-xs ${scopeColors[1].textLight}`}>
@@ -259,7 +259,7 @@ export const Step4Summary = ({
                     <div className={`w-2 h-2 rounded-full ${scopeColors[2].bg}`} />
                     <p className={`text-xs ${scopeColors[2].textLight}`}>Âmbito 2 - Energia</p>
                   </div>
-                  <p className={`font-semibold text-xl ${scopeColors[2].text}`}>
+                  <p className={`font-bold text-xl ${scopeColors[2].text}`}>
                     {(supplier.scope2 || 0).toLocaleString('pt-PT')} t CO₂e
                   </p>
                   <p className={`text-xs ${scopeColors[2].textLight}`}>
@@ -274,7 +274,7 @@ export const Step4Summary = ({
                     <div className={`w-2 h-2 rounded-full ${scopeColors[3].bg}`} />
                     <p className={`text-xs ${scopeColors[3].textLight}`}>Âmbito 3 - Indiretas</p>
                   </div>
-                  <p className={`font-semibold text-xl ${scopeColors[3].text}`}>
+                  <p className={`font-bold text-xl ${scopeColors[3].text}`}>
                     {(supplier.scope3 || 0).toLocaleString('pt-PT')} t CO₂e
                   </p>
                   <p className={`text-xs ${scopeColors[3].textLight}`}>
@@ -291,23 +291,23 @@ export const Step4Summary = ({
 
             {/* Intensidades */}
             <div>
-              <h5 className="text-sm font-medium text-muted-foreground mb-3">Intensidade de Carbono</h5>
+              <h5 className="text-sm font-normal text-muted-foreground mb-3">Intensidade de Carbono</h5>
               <div className="grid grid-cols-3 gap-4">
                 <div className={`p-4 ${riskColors.alto.bg} ${riskColors.alto.bgDark} border ${riskColors.alto.border} rounded-lg text-center`}>
                   <p className="text-xs text-danger mb-1">Intensidade Actual</p>
-                  <p className="font-semibold text-xl text-danger">{formatNumber(currentIntensity, 2)}</p>
+                  <p className="font-bold text-xl text-danger">{formatNumber(currentIntensity, 2)}</p>
                   <p className="text-xs text-danger">kg CO₂e/€</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center border ${reachedTarget 
                   ? `${riskColors.baixo.bg} ${riskColors.baixo.bgDark} ${riskColors.baixo.border}` 
                   : `${riskColors.medio.bg} ${riskColors.medio.bgDark} ${riskColors.medio.border}`}`}>
                   <p className={`text-xs mb-1 ${reachedTarget ? 'text-success' : 'text-warning'}`}>Nova Intensidade</p>
-                  <p className={`font-semibold text-xl ${reachedTarget ? 'text-success' : 'text-warning'}`}>{formatNumber(newIntensity, 2)}</p>
+                  <p className={`font-bold text-xl ${reachedTarget ? 'text-success' : 'text-warning'}`}>{formatNumber(newIntensity, 2)}</p>
                   <p className={`text-xs ${reachedTarget ? 'text-success' : 'text-warning'}`}>kg CO₂e/€</p>
                 </div>
                 <div className="p-4 bg-muted border border-border rounded-lg text-center">
                   <p className="text-xs text-muted-foreground mb-1">Média do Setor</p>
-                  <p className="font-semibold text-xl">{formatNumber(avgSectorIntensity, 2)}</p>
+                  <p className="font-bold text-xl">{formatNumber(avgSectorIntensity, 2)}</p>
                   <p className="text-xs text-muted-foreground">kg CO₂e/€</p>
                 </div>
               </div>
@@ -320,12 +320,12 @@ export const Step4Summary = ({
               {reachedTarget ? (
                 <>
                   <CheckCircle className="h-5 w-5" />
-                  <span className="font-medium">Meta atingida! A empresa passará a estar abaixo da média do setor.</span>
+                  <span className="font-normal">Meta atingida! A empresa passará a estar abaixo da média do setor.</span>
                 </>
               ) : (
                 <>
                   <AlertTriangle className="h-5 w-5" />
-                  <span className="font-medium">Meta não atingida. Considere adicionar mais medidas.</span>
+                  <span className="font-normal">Meta não atingida. Considere adicionar mais medidas.</span>
                 </>
               )}
             </div>
@@ -334,28 +334,28 @@ export const Step4Summary = ({
 
             {/* Impacto Total */}
             <div>
-              <h5 className="text-sm font-medium text-muted-foreground mb-3">Impacto das Medidas</h5>
+              <h5 className="text-sm font-normal text-muted-foreground mb-3">Impacto das Medidas</h5>
               <div className="grid grid-cols-4 gap-4">
                 <div className={`p-4 ${riskColors.baixo.bg} ${riskColors.baixo.bgDark} border ${riskColors.baixo.border} rounded-lg text-center`}>
                   <p className="text-xs text-success mb-1">Redução</p>
-                  <p className="font-semibold text-xl text-success">-{totalReduction.toLocaleString('pt-PT')}t</p>
+                  <p className="font-bold text-xl text-success">-{totalReduction.toLocaleString('pt-PT')}t</p>
                   <p className="text-xs text-success">CO₂e ({formatPercentage(reductionPercent, 0)})</p>
                 </div>
                 <div className="p-4 bg-muted border border-border rounded-lg text-center">
                   <p className="text-xs text-muted-foreground mb-1">Investimento</p>
-                  <p className="font-semibold text-xl">{totalInvestment.toLocaleString('pt-PT')}€</p>
+                  <p className="font-bold text-xl">{totalInvestment.toLocaleString('pt-PT')}€</p>
                   <p className="text-xs text-muted-foreground">Total</p>
                 </div>
                 <div className={`p-4 ${scopeColors[2].bgLight} border ${scopeColors[2].border} rounded-lg text-center`}>
                   <p className={`text-xs ${scopeColors[2].textLight} mb-1`}>Comparticipação</p>
-                  <p className={`font-semibold text-xl ${scopeColors[2].text}`}>{totalCoverage.toLocaleString('pt-PT')}€</p>
+                  <p className={`font-bold text-xl ${scopeColors[2].text}`}>{totalCoverage.toLocaleString('pt-PT')}€</p>
                   <p className={`text-xs ${scopeColors[2].textLight}`}>Até {formatPercentage(coveragePercent, 0)}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center border ${remaining === 0 
                   ? `${riskColors.baixo.bg} ${riskColors.baixo.bgDark} ${riskColors.baixo.border}` 
                   : `${riskColors.medio.bg} ${riskColors.medio.bgDark} ${riskColors.medio.border}`}`}>
                   <p className={`text-xs mb-1 ${remaining === 0 ? 'text-success' : 'text-warning'}`}>A cargo da empresa</p>
-                  <p className={`font-semibold text-xl ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{remaining.toLocaleString('pt-PT')}€</p>
+                  <p className={`font-bold text-xl ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{remaining.toLocaleString('pt-PT')}€</p>
                   <p className={`text-xs ${remaining === 0 ? 'text-success' : 'text-warning'}`}>{formatPercentage(100 - coveragePercent, 0)}</p>
                 </div>
               </div>
@@ -379,14 +379,14 @@ export const Step4Summary = ({
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${scopeColors[measure.scope as 1 | 2 | 3].bg}`} />
                     <div>
-                      <p className="text-sm font-medium">{measure.name}</p>
+                      <p className="text-sm font-normal">{measure.name}</p>
                       <p className="text-xs text-muted-foreground">
                         Âmbito {measure.scope} • {measure.interventionLevel === 'soft' ? 'Soft' : 'Interventiva'}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium text-success">-{measure.emissionReduction}t CO₂e</p>
+                    <p className="text-sm font-normal text-success">-{measure.emissionReduction}t CO₂e</p>
                     <p className="text-xs text-muted-foreground">{measure.investment.toLocaleString('pt-PT')}€</p>
                   </div>
                 </div>
@@ -411,11 +411,11 @@ export const Step4Summary = ({
               {selectedFundingData.map(fund => (
                 <div key={fund.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                   <div>
-                    <p className="text-sm font-medium">{fund.name}</p>
+                    <p className="text-sm font-normal">{fund.name}</p>
                     <p className="text-xs text-muted-foreground">{fund.provider}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-medium">
+                    <p className="text-sm font-normal">
                       Até {fund.maxAmount.toLocaleString('pt-PT')}€
                       {fund.percentage && ` (${fund.percentage}%)`}
                     </p>
@@ -443,28 +443,28 @@ export const Step4Summary = ({
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
               <Zap className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">{cascaisInfrastructure.chargingStations} postos de carregamento</p>
+                <p className="text-sm font-normal">{cascaisInfrastructure.chargingStations} postos de carregamento</p>
                 <p className="text-xs text-muted-foreground">Mobilidade elétrica</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
               <Bike className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">{cascaisInfrastructure.cyclingNetworkKm} km de ciclovias</p>
+                <p className="text-sm font-normal">{cascaisInfrastructure.cyclingNetworkKm} km de ciclovias</p>
                 <p className="text-xs text-muted-foreground">Rede ciclável</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
               <Sun className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">{cascaisInfrastructure.solarPotentialZones} zonas de potencial solar</p>
+                <p className="text-sm font-normal">{cascaisInfrastructure.solarPotentialZones} zonas de potencial solar</p>
                 <p className="text-xs text-muted-foreground">Energia renovável</p>
               </div>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
               <Recycle className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">{cascaisInfrastructure.recyclingCenters} centros de reciclagem</p>
+                <p className="text-sm font-normal">{cascaisInfrastructure.recyclingCenters} centros de reciclagem</p>
                 <p className="text-xs text-muted-foreground">Gestão de resíduos</p>
               </div>
             </div>

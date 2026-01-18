@@ -84,7 +84,7 @@ export const TopSuppliersHighlight = ({
     return acc;
   }, {} as Record<string, number>);
   return <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-    <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10 shadow-sm">
+    <Card className="border-success/50 bg-gradient-to-br from-success/10 via-primary/5 to-accent/10 shadow-md">
       <CardHeader className={cn("transition-all duration-[400ms]", isOpen ? "pb-3" : "pb-6")}>
         <SectionHeader
           icon={Trophy}
@@ -101,13 +101,13 @@ export const TopSuppliersHighlight = ({
                 <SelectItem value="all">
                   <div className="flex items-center justify-between w-[230px]">
                     <span>{sectorLabels.all}</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                   </div>
                 </SelectItem>
                 {uniqueSectors.map(sector => <SelectItem key={sector} value={sector}>
                     <div className="flex items-center justify-between w-[230px]">
                       <span>{sectorLabels[sector] || sector}</span>
-                      <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
+                      <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{sectorCounts[sector]}</span>
                     </div>
                   </SelectItem>)}
               </SelectContent>
@@ -124,7 +124,7 @@ export const TopSuppliersHighlight = ({
               </Badge>
 
               <div className="flex-1">
-                <h4 className="font-semibold mb-1">{supplier.name}</h4>
+                <h4 className="font-bold mb-1">{supplier.name}</h4>
                 <SupplierLabel sector={supplier.sector} cluster={supplier.clusterId || supplier.cluster} />
               </div>
 

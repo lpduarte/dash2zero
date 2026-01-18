@@ -51,10 +51,9 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --medal-bronze: 30 59% 50%;
 
     /* Shadows with brand tint */
-    --shadow-sm: 0 1px 2px 0 hsla(175, 30%, 20%, 0.05);
+    --shadow-md: 0 1px 2px 0 hsla(175, 30%, 20%, 0.05);
     --shadow-md: 0 4px 6px -1px hsla(175, 30%, 20%, 0.1);
     --shadow-lg: 0 10px 15px -3px hsla(175, 30%, 20%, 0.1);
-    --shadow-glow: 0 0 20px hsla(175, 66%, 38%, 0.3);
   }
 
   .dark {
@@ -95,10 +94,9 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --medal-bronze: 30 59% 50%;
 
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 20px hsla(175, 60%, 45%, 0.4);
   }
 }
 

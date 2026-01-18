@@ -20,9 +20,9 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <Card className="shadow-sm flex-1">
+      <Card className="shadow-md flex-1">
         <CardHeader>
-          <h2 className="text-xl font-semibold">Emissões por âmbito</h2>
+          <h2 className="text-xl font-bold">Emissões por âmbito</h2>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={240}>
@@ -57,7 +57,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
         {data.map((scope, index) => {
           const percentage = total > 0 ? (scope.value / total) * 100 : 0;
           return (
-            <Card key={scope.name} className="p-3 shadow-sm">
+            <Card key={scope.name} className="p-3 shadow-md">
               <div className="text-center">
                 <div className="text-xs text-muted-foreground mb-1">
                   Âmbito {index + 1}
@@ -67,7 +67,7 @@ export const EmissionsBreakdown = ({ suppliers }: EmissionsBreakdownProps) => {
                 </div>
                 <div className="text-xs text-muted-foreground">t CO₂e</div>
                 <div className="border-t border-border/50 mt-2 pt-2">
-                  <div className="text-sm font-medium" style={{ color: scope.color }}>
+                  <div className="text-sm font-normal" style={{ color: scope.color }}>
                     {percentage.toFixed(1)}%
                   </div>
                 </div>

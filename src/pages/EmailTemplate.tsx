@@ -50,7 +50,7 @@ const EmailTemplate = () => {
               <ArrowLeft className="h-4 w-4" />
               Voltar
             </Button>
-            <h1 className="text-xl font-semibold">Pré-visualização do Email</h1>
+            <h1 className="text-xl font-bold">Pré-visualização do Email</h1>
           </div>
           
           <div className="flex items-center gap-3">
@@ -154,7 +154,7 @@ const EmailTemplate = () => {
                 <div 
                   style={{ 
                     fontSize: "14px",
-                    fontWeight: 600,
+                    fontWeight: 700,
                     color: "hsl(175 66% 38%)",
                     letterSpacing: "0.05em",
                     textTransform: "uppercase" as const
@@ -253,7 +253,7 @@ const EmailTemplate = () => {
                       backgroundColor: "hsl(175 66% 38%)",
                       color: "#ffffff",
                       fontSize: "16px",
-                      fontWeight: 600,
+                      fontWeight: 700,
                       padding: "14px 32px",
                       borderRadius: "8px",
                       textDecoration: "none"
@@ -273,7 +273,7 @@ const EmailTemplate = () => {
                   <p style={{ fontSize: "14px", color: "#4a4a4a", marginBottom: "8px" }}>
                     Com os melhores cumprimentos,
                   </p>
-                  <p style={{ fontSize: "15px", color: "#1a1a1a", fontWeight: 600, marginBottom: "4px" }}>
+                  <p style={{ fontSize: "15px", color: "#1a1a1a", fontWeight: 700, marginBottom: "4px" }}>
                     {responsibleName}
                   </p>
                   <p style={{ fontSize: "14px", color: "#6a6a6a", marginBottom: "4px" }}>
@@ -318,7 +318,7 @@ const EmailTemplate = () => {
                     >
                       <Leaf style={{ width: "12px", height: "12px", color: "hsl(175 66% 38%)" }} />
                     </div>
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#1a1a1a" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#1a1a1a" }}>
                       Dash2Zero
                     </span>
                   </div>

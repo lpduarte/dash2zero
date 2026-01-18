@@ -201,14 +201,14 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
               <SelectItem value="all">
                 <div className="flex items-center justify-between w-[150px]">
                   <span>Todas as regiões</span>
-                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
               </SelectItem>
               {regions.map(r => (
                 <SelectItem key={r.value} value={r.value}>
                   <div className="flex items-center justify-between w-[150px]">
                     <span>{r.label}</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{r.count}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{r.count}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -228,14 +228,14 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
               <SelectItem value="all">
                 <div className="flex items-center justify-between w-[180px]">
                   <span>Todas as atividades</span>
-                  <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
+                  <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{suppliers.length}</span>
                 </div>
               </SelectItem>
               {sectors.map(s => (
                 <SelectItem key={s.value} value={s.value}>
                   <div className="flex items-center justify-between w-[180px]">
                     <span>{s.label}</span>
-                    <span className="bg-muted text-muted-foreground text-xs font-semibold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
+                    <span className="bg-muted text-muted-foreground text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center">{s.count}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -299,7 +299,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
 
       {/* Table View */}
       {viewMode === 'table' && (
-        <div className="rounded-md border overflow-x-auto shadow-sm">
+        <div className="rounded-md border overflow-x-auto shadow-md">
           <Table>
             <TableHeader>
               <TableRow>
@@ -322,7 +322,7 @@ export const CompaniesTab = ({ suppliers }: CompaniesTabProps) => {
                     className="cursor-pointer hover:bg-muted/50"
                     onClick={() => setSelectedSupplier(supplier)}
                   >
-                    <TableCell className="font-medium">{supplier.name}</TableCell>
+                    <TableCell className="font-normal">{supplier.name}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{supplier.contact.nif}</TableCell>
                     <TableCell>{getSectorLabel(supplier.sector)}</TableCell>
                     <TableCell>{getRegionLabel(supplier.region)}</TableCell>

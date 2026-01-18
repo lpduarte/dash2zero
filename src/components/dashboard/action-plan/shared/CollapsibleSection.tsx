@@ -42,9 +42,9 @@ export const CollapsibleSection = ({
               ) : (
                 <Icon className="h-5 w-5 text-muted-foreground" />
               )}
-              <span className={`font-medium ${highlighted ? 'font-semibold text-primary' : ''}`}>{title}</span>
+              <span className={`font-normal ${highlighted ? 'font-bold text-primary' : ''}`}>{title}</span>
               {badge !== undefined && (
-                <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-medium">
+                <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-normal">
                   {badge}
                 </span>
               )}

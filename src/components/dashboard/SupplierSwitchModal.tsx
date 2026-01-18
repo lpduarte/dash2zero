@@ -117,7 +117,7 @@ export const SupplierSwitchModal = ({
               <div className="p-4 bg-danger/5 border-b border-border flex flex-col">
                 <Badge className="bg-danger mb-2 w-fit">Empresa atual</Badge>
                 <div className="flex-1 flex items-center">
-                  <h3 className="font-semibold text-xl">{criticalSupplier.name}</h3>
+                  <h3 className="font-bold text-xl">{criticalSupplier.name}</h3>
                 </div>
               </div>
 
@@ -154,7 +154,7 @@ export const SupplierSwitchModal = ({
                         })
                         .map(([sector, alternatives]) => (
                         <div key={sector}>
-                          <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50">
+                          <div className="px-2 py-1.5 text-xs font-bold text-muted-foreground bg-muted/50">
                             {sector}
                           </div>
                           {alternatives.map((alt) => {
@@ -189,7 +189,7 @@ export const SupplierSwitchModal = ({
                 <div className="grid grid-cols-[1fr_48px_1fr] border-b border-border">
                   <div className="p-3 bg-danger/5">
                     <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
-                    <p className="font-semibold text-danger">
+                    <p className="font-bold text-danger">
                       {criticalSupplier.totalEmissions.toLocaleString("pt-PT")} t CO₂e
                     </p>
                   </div>
@@ -199,7 +199,7 @@ export const SupplierSwitchModal = ({
                   <div className="p-3 bg-success/5">
                     <p className="text-xs text-muted-foreground mb-1">Emissões totais</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-semibold text-success">
+                      <p className="font-bold text-success">
                         {selectedAlternative.totalEmissions.toLocaleString("pt-PT")} t CO₂e
                       </p>
                       <Badge className="bg-success text-xs">
@@ -213,7 +213,7 @@ export const SupplierSwitchModal = ({
                 <div className="grid grid-cols-[1fr_48px_1fr] border-b border-border">
                   <div className="p-3 bg-danger/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
-                    <p className="font-medium">{criticalSupplier.scope1.toLocaleString("pt-PT")} t CO₂e</p>
+                    <p className="font-normal">{criticalSupplier.scope1.toLocaleString("pt-PT")} t CO₂e</p>
                   </div>
                   <div className="flex items-center justify-center bg-muted/10 border-x border-border">
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -221,7 +221,7 @@ export const SupplierSwitchModal = ({
                   <div className="p-3 bg-success/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 1</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-medium">{selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e</p>
+                      <p className="font-normal">{selectedAlternative.scope1.toLocaleString("pt-PT")} t CO₂e</p>
                       {criticalSupplier.scope1 > 0 && (
                         <Badge variant="outline" className="text-xs text-success border-success/50">
                           {((criticalSupplier.scope1 - selectedAlternative.scope1) / criticalSupplier.scope1 * 100) > 0 ? '-' : '+'}
@@ -236,7 +236,7 @@ export const SupplierSwitchModal = ({
                 <div className="grid grid-cols-[1fr_48px_1fr] border-b border-border">
                   <div className="p-3 bg-danger/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
-                    <p className="font-medium">{criticalSupplier.scope2.toLocaleString("pt-PT")} t CO₂e</p>
+                    <p className="font-normal">{criticalSupplier.scope2.toLocaleString("pt-PT")} t CO₂e</p>
                   </div>
                   <div className="flex items-center justify-center bg-muted/10 border-x border-border">
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -244,7 +244,7 @@ export const SupplierSwitchModal = ({
                   <div className="p-3 bg-success/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 2</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-medium">{selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e</p>
+                      <p className="font-normal">{selectedAlternative.scope2.toLocaleString("pt-PT")} t CO₂e</p>
                       {criticalSupplier.scope2 > 0 && (
                         <Badge variant="outline" className="text-xs text-success border-success/50">
                           {((criticalSupplier.scope2 - selectedAlternative.scope2) / criticalSupplier.scope2 * 100) > 0 ? '-' : '+'}
@@ -259,7 +259,7 @@ export const SupplierSwitchModal = ({
                 <div className="grid grid-cols-[1fr_48px_1fr] border-b border-border">
                   <div className="p-3 bg-danger/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
-                    <p className="font-medium">{criticalSupplier.scope3.toLocaleString("pt-PT")} t CO₂e</p>
+                    <p className="font-normal">{criticalSupplier.scope3.toLocaleString("pt-PT")} t CO₂e</p>
                   </div>
                   <div className="flex items-center justify-center bg-muted/10 border-x border-border">
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -267,7 +267,7 @@ export const SupplierSwitchModal = ({
                   <div className="p-3 bg-success/5">
                     <p className="text-xs text-muted-foreground mb-1">Âmbito 3</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-medium">{selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e</p>
+                      <p className="font-normal">{selectedAlternative.scope3.toLocaleString("pt-PT")} t CO₂e</p>
                       {criticalSupplier.scope3 > 0 && (
                         <Badge variant="outline" className="text-xs text-success border-success/50">
                           {((criticalSupplier.scope3 - selectedAlternative.scope3) / criticalSupplier.scope3 * 100) > 0 ? '-' : '+'}
@@ -282,7 +282,7 @@ export const SupplierSwitchModal = ({
                 <div className="grid grid-cols-[1fr_48px_1fr]">
                   <div className="p-3 bg-danger/5">
                     <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
-                    <p className="font-medium">{criticalSupplier.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
+                    <p className="font-normal">{criticalSupplier.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                   </div>
                   <div className="flex items-center justify-center bg-muted/10 border-x border-border">
                     <ArrowRight className="h-4 w-4 text-muted-foreground" />
@@ -290,7 +290,7 @@ export const SupplierSwitchModal = ({
                   <div className="p-3 bg-success/5">
                     <p className="text-xs text-muted-foreground mb-1">Emissões por faturação</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-medium">{selectedAlternative.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
+                      <p className="font-normal">{selectedAlternative.emissionsPerRevenue.toFixed(1)} t CO₂e/€</p>
                       {criticalSupplier.emissionsPerRevenue > 0 && (
                         <Badge variant="outline" className="text-xs text-success border-success/50">
                           {((criticalSupplier.emissionsPerRevenue - selectedAlternative.emissionsPerRevenue) / criticalSupplier.emissionsPerRevenue * 100) > 0 ? '-' : '+'}

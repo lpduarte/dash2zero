@@ -179,7 +179,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <Badge className="bg-danger">Crítico</Badge>
-                          <span className="font-semibold">{rec.critical.name}</span>
+                          <span className="font-bold">{rec.critical.name}</span>
                         </div>
                         <p className="text-xs text-muted-foreground">{rec.reason}</p>
                       </div>
@@ -195,36 +195,36 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
 
                   <div className="flex items-center gap-4">
                     <div className="flex-1 p-4 bg-danger/5 border border-danger/30 rounded-lg">
-                      <p className="text-sm font-semibold text-danger mb-2">Fornecedor Atual</p>
+                      <p className="text-sm font-bold text-danger mb-2">Fornecedor Atual</p>
                       <p className="font-bold">{rec.critical.name}</p>
                       <div className="mt-2 space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Emissões:</span>
-                          <span className="font-semibold">{formatNumber(rec.critical.totalEmissions, 0)} ton</span>
+                          <span className="font-bold">{formatNumber(rec.critical.totalEmissions, 0)} ton</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">FE:</span>
-                          <span className="font-semibold">{formatNumber(rec.feCurrent, 1)} kg/€</span>
+                          <span className="font-bold">{formatNumber(rec.feCurrent, 1)} kg/€</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex flex-col items-center gap-2">
                       <ArrowRight className="h-8 w-8 text-primary" />
-                      <span className="text-xs font-semibold text-primary">MUDAR</span>
+                      <span className="text-xs font-bold text-primary">MUDAR</span>
                     </div>
 
                     <div className="flex-1 p-4 bg-success/5 border border-success/30 rounded-lg">
-                      <p className="text-sm font-semibold text-success mb-2">Alternativa Recomendada</p>
+                      <p className="text-sm font-bold text-success mb-2">Alternativa Recomendada</p>
                       <p className="font-bold">{rec.alternative.name}</p>
                       <div className="mt-2 space-y-1 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Emissões:</span>
-                          <span className="font-semibold">{formatNumber(rec.alternative.totalEmissions, 0)} ton</span>
+                          <span className="font-bold">{formatNumber(rec.alternative.totalEmissions, 0)} ton</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">FE:</span>
-                          <span className="font-semibold">{formatNumber(rec.feAlternative, 1)} kg/€</span>
+                          <span className="font-bold">{formatNumber(rec.feAlternative, 1)} kg/€</span>
                         </div>
                       </div>
                     </div>
@@ -234,7 +234,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
                         <TrendingDown className="h-4 w-4 text-success" />
-                        <span className="text-sm font-medium">Redução de Emissões</span>
+                        <span className="text-sm font-normal">Redução de Emissões</span>
                       </div>
                       <p className="text-2xl font-bold text-success">{formatNumber(rec.emissionsSavings, 0)} ton</p>
                       <p className="text-xs text-muted-foreground">-{formatPercentage(rec.emissionsSavingsPercent, 0)}</p>
@@ -243,7 +243,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
                         <Zap className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">Melhoria do FE</span>
+                        <span className="text-sm font-normal">Melhoria do FE</span>
                       </div>
                       <p className="text-2xl font-bold text-primary">{formatPercentage(rec.feImprovement, 0)}</p>
                       <p className="text-xs text-muted-foreground">mais eficiente</p>
@@ -252,7 +252,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                     <div className="text-center">
                       <div className="flex items-center justify-center gap-2 mb-2">
                         <DollarSign className="h-4 w-4 text-warning" />
-                        <span className="text-sm font-medium">Diferença Financeira</span>
+                        <span className="text-sm font-normal">Diferença Financeira</span>
                       </div>
                       <p className={`text-2xl font-bold ${rec.costDifference >= 0 ? 'text-success' : 'text-warning'}`}>
                         {rec.costDifference >= 0 ? '+' : ''}{formatNumber(rec.costDifference, 1)}M€
@@ -269,7 +269,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                         <div className="p-3 bg-success/5 border border-success/30 rounded-lg">
                           <div className="flex items-center gap-2 mb-2">
                             <CheckCircle className="h-4 w-4 text-success" />
-                            <span className="font-semibold text-sm">Benefícios</span>
+                            <span className="font-bold text-sm">Benefícios</span>
                           </div>
                           <ul className="space-y-1">
                             {rec.benefits.map((benefit, i) => (
@@ -285,7 +285,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                           <div className="p-3 bg-warning/5 border border-warning/30 rounded-lg">
                             <div className="flex items-center gap-2 mb-2">
                               <AlertTriangle className="h-4 w-4 text-warning" />
-                              <span className="font-semibold text-sm">Pontos de Atenção</span>
+                              <span className="font-bold text-sm">Pontos de Atenção</span>
                             </div>
                             <ul className="space-y-1">
                               {rec.risks.map((risk, i) => (
@@ -300,7 +300,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
                       </div>
 
                       <div className="p-4 bg-accent/5 border border-accent/30 rounded-lg">
-                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <h4 className="font-bold mb-2 flex items-center gap-2">
                           <Award className="h-4 w-4 text-accent" />
                           Conclusão
                         </h4>
@@ -333,7 +333,7 @@ export const SupplierRecommendations = ({ suppliers }: SupplierRecommendationsPr
         <Card className="border-success/30 bg-success/5">
           <CardContent className="pt-6 text-center">
             <CheckCircle className="h-12 w-12 text-success mx-auto mb-3" />
-            <h3 className="text-xl font-semibold mb-2">Excelente Performance!</h3>
+            <h3 className="text-xl font-bold mb-2">Excelente Performance!</h3>
             <p className="text-muted-foreground">
               Não foram identificados fornecedores críticos que necessitem de substituição imediata.
               Todos os fornecedores atuais apresentam bom desempenho em sustentabilidade.

@@ -113,7 +113,7 @@ export const BestWorstSuppliers = ({ suppliers }: BestWorstSuppliersProps) => {
             </div>
 
             <div className="pt-2 border-t border-danger/20 bg-danger/10 rounded-md p-2 -mx-2">
-              <p className="text-xs font-medium text-danger">
+              <p className="text-xs font-normal text-danger">
                 {formatPercentage((worst.totalEmissions / avgEmissions - 1) * 100, 0)} acima da média do grupo
               </p>
             </div>

@@ -104,7 +104,7 @@ export const SupplierEmissionsChart = ({
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-semibold">{config.title}</h2>
+            <h2 className="text-xl font-bold">{config.title}</h2>
             <p className="text-sm text-muted-foreground">
               Emissões ({config.unit})
             </p>
@@ -114,7 +114,7 @@ export const SupplierEmissionsChart = ({
               <button
                 key={key}
                 onClick={() => setSelectedMetric(key)}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                className={`px-4 py-2 text-sm font-normal rounded-md transition-all ${
                   selectedMetric === key
                     ? 'bg-background text-primary shadow-md border border-primary/20'
                     : 'text-muted-foreground hover:text-foreground'
@@ -150,7 +150,7 @@ export const SupplierEmissionsChart = ({
               const cluster = getClusterDisplay(data.cluster);
               return (
                 <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
-                  <p className="font-semibold mb-2">{data.fullName}</p>
+                  <p className="font-bold mb-2">{data.fullName}</p>
                   <div className="space-y-1 text-sm">
                     <p>
                       <span className="text-muted-foreground">{config.tooltip}: </span>

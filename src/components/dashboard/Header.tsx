@@ -51,7 +51,7 @@ export const Header = () => {
                 <Link to="/" className={cn(
                   "flex items-center justify-center gap-2 h-9 px-3 rounded-md transition-all duration-200",
                   location.pathname === "/"
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-md"
                     : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
                   <LayoutDashboard className="h-4 w-4" />
@@ -60,7 +60,7 @@ export const Header = () => {
                 <Link to="/clusters" className={cn(
                   "flex items-center justify-center gap-2 h-9 px-3 rounded-md transition-all duration-200",
                   location.pathname === "/clusters"
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-md"
                     : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                 )}>
                   <CircleDot className="h-4 w-4" />
@@ -76,7 +76,7 @@ export const Header = () => {
                   className={cn(
                     "flex items-center justify-center w-9 h-9 rounded-md transition-all duration-200",
                     !darkMode
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-md"
                       : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                   )}
                   title="Light mode"
@@ -88,7 +88,7 @@ export const Header = () => {
                   className={cn(
                     "flex items-center justify-center w-9 h-9 rounded-md transition-all duration-200",
                     darkMode
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-primary text-primary-foreground shadow-md"
                       : "text-foreground/70 hover:text-foreground hover:bg-primary/10"
                   )}
                   title="Dark mode"

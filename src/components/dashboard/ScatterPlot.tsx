@@ -48,7 +48,7 @@ export const ScatterPlot = ({ suppliers }: ScatterPlotProps) => {
                   const data = payload[0].payload;
                   return (
                     <div className="bg-card border rounded-lg p-3 shadow-lg">
-                      <p className="font-medium">{data.name}</p>
+                      <p className="font-normal">{data.name}</p>
                       <p className="text-sm">Score ESG: {data.esgScore.toFixed(0)}</p>
                       <p className="text-sm">Receita: {data.revenue.toFixed(1)} M€</p>
                       <p className="text-sm">Emissões: {data.emissions.toFixed(0)} ton</p>
