@@ -1,73 +1,69 @@
-# Welcome to your Lovable project
+# Dash2Zero
 
-## Project info
+Dashboard de análise de emissões carbónicas para a plataforma Get2C.
 
-**URL**: https://lovable.dev/projects/97b5de27-d3b9-4a17-a01a-674760c8e3a7
+## Sobre o Projeto
 
-## How can I edit this code?
+Dash2Zero é uma aplicação de visualização e análise de emissões de gases com efeito de estufa (GEE), permitindo:
 
-There are several ways of editing your application.
+- Monitorização de emissões por Scope 1, 2 e 3 (GHG Protocol)
+- Benchmarking setorial com dados INE (Contas das Emissões Atmosféricas)
+- Análise de risco carbónico de fornecedores
+- Gestão de clusters de empresas
+- Visualização geográfica por distrito/município
 
-**Use Lovable**
+## Stack Tecnológico
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/97b5de27-d3b9-4a17-a01a-674760c8e3a7) and start prompting.
+- **React 18** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - Component library
+- **Recharts** - Visualização de dados
 
-Changes made via Lovable will be committed automatically to this repo.
+## Desenvolvimento Local
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requisitos: Node.js & npm ([instalar com nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clonar o repositório
+git clone <URL_DO_REPO>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navegar para o diretório
+cd dash2zero-claude
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Instalar dependências
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Estrutura do Projeto
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+src/
+├── components/     # Componentes React
+├── data/          # Dados estáticos e configurações
+├── lib/           # Utilitários e funções
+├── pages/         # Páginas da aplicação
+└── types/         # Definições TypeScript
+```
 
-**Use GitHub Codespaces**
+## Documentação
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- **StyleGuide** (`/style-guide`) - Design system e componentes
+- **Metodologia** (`/methodology`) - Documentação metodológica e fontes de dados
 
-## What technologies are used for this project?
+## Fontes de Dados
 
-This project is built with:
+Os fatores de intensidade carbónica são baseados em:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+1. **INE** - Contas das Emissões Atmosféricas 1995-2022
+2. **APA** - Relatório do Estado do Ambiente
+3. **Eurostat** - Air Emissions Accounts by NACE
+4. **GHG Protocol** - Corporate Value Chain Standard
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/97b5de27-d3b9-4a17-a01a-674760c8e3a7) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Get2C · For a cooler world.
