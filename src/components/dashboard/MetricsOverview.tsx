@@ -142,7 +142,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
   return (
     <TooltipProvider delayDuration={100}>
       <Collapsible open={isEmissionsExpanded} onOpenChange={setIsEmissionsExpanded}>
-        <Card className="shadow-md">
+        <Card data-tour="metrics-overview" className="shadow-md">
           <CardHeader className={cn("transition-all duration-[400ms]", isEmissionsExpanded ? "pb-3" : "pb-6")}>
             <SectionHeader
               icon={BarChart3}
@@ -243,10 +243,10 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
                       <p className={`text-xs ${percentageColors.text} mt-1 font-normal`}>{percentageCalculated}% do cluster</p>
                     </div>
                     {companiesMissing > 0 && (
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className={`${percentageColors.text} border-current hover:bg-white/50 text-xs`}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`${percentageColors.text} border-current ${percentageColors.hoverBg} text-xs`}
                         onClick={() => navigate('/incentivo')}
                       >
                         <Mail className="h-3 w-3 mr-1.5" />

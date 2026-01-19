@@ -164,7 +164,7 @@ const Overview = () => {
 
         
         <Tabs defaultValue="home" className="space-y-6 mt-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList data-tour="tabs" className="grid w-full grid-cols-5">
             <TabsTrigger value="home">Visão geral</TabsTrigger>
             <TabsTrigger value="companies">Empresas</TabsTrigger>
             <TabsTrigger value="overview">Detalhes das emissões</TabsTrigger>

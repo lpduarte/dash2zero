@@ -177,19 +177,22 @@ export const getPercentageColors = (percentage: number) => {
     text: 'text-success',
     bg: 'bg-success',
     bgLight: 'bg-success/10',
-    border: 'border-success/30'
+    border: 'border-success/30',
+    hoverBg: 'hover:bg-success/25'
   };
   if (percentage >= 25) return {
     text: 'text-warning',
     bg: 'bg-warning',
     bgLight: 'bg-warning/10',
-    border: 'border-warning/30'
+    border: 'border-warning/30',
+    hoverBg: 'hover:bg-warning/25'
   };
   return {
     text: 'text-danger',
     bg: 'bg-danger',
     bgLight: 'bg-danger/10',
-    border: 'border-danger/30'
+    border: 'border-danger/30',
+    hoverBg: 'hover:bg-danger/25'
   };
 };
 
