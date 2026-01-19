@@ -1,10 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Calculator, Building2, Factory, TrendingDown,
-  ArrowRight, Info, BarChart3, Users, Landmark,
-  Briefcase, FileSpreadsheet, CheckCircle2
+  BookOpen, Building2, Factory, TrendingDown,
+  Info, BarChart3, Landmark,
+  Briefcase, FileSpreadsheet, CheckCircle2,
+  Leaf, Scale, Library
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -13,56 +14,233 @@ import { cn } from "@/lib/utils";
 // ============================================
 const METHODOLOGY_VERSION = {
   major: 1,
-  minor: 3,
+  minor: 4,
   patch: 0,
   date: "2026-01-19",
 };
 
 const getVersionString = () => `v${METHODOLOGY_VERSION.major}.${METHODOLOGY_VERSION.minor}.${METHODOLOGY_VERSION.patch}`;
+const getVersionDate = () => {
+  const date = new Date(METHODOLOGY_VERSION.date);
+  return date.toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
+};
+
+// Sections for navigation
+const sections = [
+  { id: 'potencial', label: 'Potencial de Melhoria', icon: TrendingDown },
+  { id: 'emissoes', label: 'Cálculo de Emissões', icon: Factory },
+  { id: 'indicadores', label: 'Indicadores', icon: BarChart3 },
+  { id: 'setores', label: 'Setores de Atividade', icon: Briefcase },
+  { id: 'intensidades', label: 'Fatores de Intensidade', icon: Scale },
+  { id: 'dados', label: 'Dados a Recolher', icon: FileSpreadsheet },
+  { id: 'bibliografia', label: 'Bibliografia', icon: Library },
+];
+
+// Section Header Component
+const SectionHeader = ({
+  title,
+  id,
+  icon: Icon,
+  description,
+}: {
+  title: string;
+  id: string;
+  icon?: React.ElementType;
+  description?: string;
+}) => (
+  <div id={id} className="scroll-mt-6 mb-8 mt-16 first:mt-0">
+    <div className="flex items-center gap-3 mb-2">
+      {Icon && (
+        <div className="p-2.5 rounded-lg bg-primary/10 shadow-md">
+          <Icon className="h-5 w-5 text-primary" />
+        </div>
+      )}
+      <h2 className="text-2xl font-bold">{title}</h2>
+    </div>
+    {description && <p className="text-muted-foreground mt-1">{description}</p>}
+  </div>
+);
+
+// Text Reveal Animation
+const TextReveal = ({ children, className = "" }: { children: string; className?: string }) => {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsActive(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const characters = children.split('');
+  let charIndex = 0;
+
+  return (
+    <span className={`inline-flex flex-wrap ${className}`}>
+      {characters.map((char, index) => {
+        if (char === ' ') {
+          return <span key={index} className="inline-block">&nbsp;</span>;
+        }
+        const delay = 0.05 + charIndex * 0.04;
+        charIndex++;
+        return (
+          <span
+            key={index}
+            className={`inline-block transition-all duration-500 ${
+              isActive
+                ? 'opacity-100 blur-0 scale-100'
+                : 'opacity-0 blur-sm scale-110'
+            }`}
+            style={{
+              transitionDelay: `${delay}s`,
+              transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}
+          >
+            {char}
+          </span>
+        );
+      })}
+    </span>
+  );
+};
 
 export default function Methodology() {
+  const [activeSection, setActiveSection] = useState('potencial');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section.id);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto py-8 px-4 max-w-5xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Calculator className="h-6 w-6 text-primary" />
+      {/* Sidebar Navigation */}
+      <aside className="w-64 border-r bg-card fixed h-screen overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="p-6">
+            {/* Logo + Title */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Leaf className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="font-bold">Get2C</h1>
+                <p className="text-xs text-muted-foreground">Metodologia</p>
+              </div>
             </div>
-            <h1 className="text-3xl font-bold">Documentação Metodológica</h1>
-            <Badge variant="outline" className="ml-2">{getVersionString()}</Badge>
+
+            {/* Navigation Links */}
+            <nav className="space-y-1">
+              {sections.map((section) => {
+                const Icon = section.icon;
+                const isActive = activeSection === section.id;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => scrollToSection(section.id)}
+                    className={`
+                      w-full flex items-start gap-3 px-3 py-2.5 rounded-lg text-sm text-left transition-all duration-200
+                      ${isActive
+                        ? 'bg-primary/10 text-primary font-normal shadow-md'
+                        : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
+                      }
+                    `}
+                  >
+                    <div className={`p-1.5 rounded-md transition-colors shrink-0 ${isActive ? 'bg-primary/20' : 'bg-muted'}`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    {section.label}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div className="mt-8 p-3 border rounded-lg bg-muted/30">
+              <p className="text-xs text-muted-foreground">
+                {getVersionString()} · {getVersionDate()}
+              </p>
+            </div>
           </div>
-          <p className="text-muted-foreground">
-            Esta página documenta as metodologias e fórmulas de cálculo utilizadas na plataforma Dash2Zero.
-          </p>
-        </div>
+        </ScrollArea>
+      </aside>
 
-        <Tabs defaultValue="potencial" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="potencial">Potencial de Melhoria</TabsTrigger>
-            <TabsTrigger value="emissoes">Cálculo de Emissões</TabsTrigger>
-            <TabsTrigger value="indicadores">Indicadores</TabsTrigger>
-            <TabsTrigger value="setores">Setores de Atividade</TabsTrigger>
-          </TabsList>
+      {/* Main Content - bg-grid-pattern provides both gray bg (::before) and grid (::after) */}
+      <main className="ml-64 bg-grid-pattern">
+        {/* Academic Header */}
+        <header className="relative bg-background overflow-hidden border-b">
+          {/* Subtle pulsing background - academic/scholarly tones */}
+          <div className="absolute inset-0 overflow-visible">
+            {/* Right side - main concentration */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/30 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(20%, -30%)' }} />
+            <div className="absolute top-1/3 right-10 w-48 h-48 bg-primary/25 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '1s' }} />
+            <div className="absolute bottom-0 right-1/4 w-56 h-56 bg-accent/30 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s', transform: 'translateY(30%)' }} />
+            {/* Left side - subtle balance */}
+            <div className="absolute top-0 left-0 w-36 h-36 bg-primary/15 rounded-full blur-3xl animate-pulse-slower" style={{ animationDelay: '1.5s', transform: 'translate(-30%, -30%)' }} />
+            <div className="absolute bottom-0 left-10 w-32 h-32 bg-muted-foreground/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '3s', transform: 'translateY(40%)' }} />
+          </div>
 
-          {/* Tab: Potencial de Melhoria */}
-          <TabsContent value="potencial" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingDown className="h-5 w-5 text-primary" />
-                  Potencial de Melhoria
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  O cálculo do potencial de melhoria é diferenciado consoante o tipo de utilizador,
-                  refletindo as diferentes estratégias disponíveis para redução de emissões.
-                </p>
+          <div className="relative p-8 max-w-5xl">
+            {/* Academic Badge */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="p-2 rounded-lg bg-primary/20">
+                <BookOpen className="h-6 w-6 text-primary" />
+              </div>
+              <Badge variant="outline" className="text-primary border-primary/30 cursor-help" title={`Última atualização: ${METHODOLOGY_VERSION.date}`}>
+                {getVersionString()}
+              </Badge>
+            </div>
+
+            <h1 className="text-4xl font-bold mb-4">
+              <TextReveal>Documentação Metodológica</TextReveal>
+            </h1>
+
+            {/* Academic-style subtitle */}
+            <div className="space-y-2">
+              <p className="text-xl text-muted-foreground max-w-3xl">
+                Metodologias, fórmulas de cálculo e fontes de dados utilizadas nas plataformas Get2C para análise de emissões de carbono.
+              </p>
+            </div>
+          </div>
+        </header>
+
+        {/* Content Sections */}
+        <div className="p-8 max-w-5xl">
+
+          {/* === SECTION: Potencial de Melhoria === */}
+          <SectionHeader
+            id="potencial"
+            title="Potencial de Melhoria"
+            icon={TrendingDown}
+            description="Metodologia para cálculo do potencial de redução de emissões"
+          />
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              O cálculo do potencial de melhoria é diferenciado consoante o tipo de utilizador,
+              refletindo as diferentes estratégias disponíveis para redução de emissões.
+            </p>
 
                 {/* Vista Empresa */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 rounded bg-blue-500/10">
                       <Building2 className="h-4 w-4 text-blue-500" />
@@ -100,7 +278,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Vista Município */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 rounded bg-purple-500/10">
                       <Landmark className="h-4 w-4 text-purple-500" />
@@ -140,7 +318,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Níveis de Potencial */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Classificação do Nível de Potencial</h3>
                   <p className="text-sm text-muted-foreground">
                     O nível de potencial é determinado pela percentagem de redução possível face às emissões atuais:
@@ -161,31 +339,28 @@ export default function Methodology() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          </div>
 
-          {/* Tab: Cálculo de Emissões */}
-          <TabsContent value="emissoes" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Factory className="h-5 w-5 text-primary" />
-                  Cálculo de Emissões
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  As emissões de gases com efeito de estufa (GEE) são calculadas seguindo o
-                  GHG Protocol, a metodologia internacional mais utilizada.
-                </p>
+          {/* === SECTION: Cálculo de Emissões === */}
+          <SectionHeader
+            id="emissoes"
+            title="Cálculo de Emissões"
+            icon={Factory}
+            description="Metodologia GHG Protocol para cálculo de emissões de gases com efeito de estufa"
+          />
+
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              As emissões de gases com efeito de estufa (GEE) são calculadas seguindo o
+              GHG Protocol, a metodologia internacional mais utilizada.
+            </p>
 
                 {/* Scopes */}
                 <div className="space-y-4">
                   <h3 className="font-semibold">Âmbitos de Emissões (Scopes)</h3>
 
                   <div className="grid gap-4">
-                    <div className="border rounded-lg p-4">
+                    <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-red-500">Scope 1</Badge>
                         <span className="font-medium">Emissões Diretas</span>
@@ -196,7 +371,7 @@ export default function Methodology() {
                       </p>
                     </div>
 
-                    <div className="border rounded-lg p-4">
+                    <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-orange-500">Scope 2</Badge>
                         <span className="font-medium">Emissões Indiretas - Energia</span>
@@ -207,7 +382,7 @@ export default function Methodology() {
                       </p>
                     </div>
 
-                    <div className="border rounded-lg p-4">
+                    <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-yellow-500 text-yellow-950">Scope 3</Badge>
                         <span className="font-medium">Outras Emissões Indiretas</span>
@@ -220,35 +395,32 @@ export default function Methodology() {
                   </div>
                 </div>
 
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <p className="text-sm font-medium mb-2">Fórmula de Cálculo Total:</p>
-                  <div className="p-3 bg-background rounded border">
-                    <p className="text-xs font-mono text-muted-foreground">
-                      Emissões Totais (t CO₂e) = Scope 1 + Scope 2 + Scope 3
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Tab: Indicadores */}
-          <TabsContent value="indicadores" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                  Indicadores de Intensidade
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  Os indicadores de intensidade permitem comparar empresas de diferentes dimensões,
-                  normalizando as emissões por diferentes métricas de atividade.
+            <div className="bg-muted/50 rounded-lg p-4">
+              <p className="text-sm font-medium mb-2">Fórmula de Cálculo Total:</p>
+              <div className="p-3 bg-background rounded border">
+                <p className="text-xs font-mono text-muted-foreground">
+                  Emissões Totais (t CO₂e) = Scope 1 + Scope 2 + Scope 3
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* === SECTION: Indicadores === */}
+          <SectionHeader
+            id="indicadores"
+            title="Indicadores de Intensidade"
+            icon={BarChart3}
+            description="Métricas normalizadas para comparação entre empresas"
+          />
+
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              Os indicadores de intensidade permitem comparar empresas de diferentes dimensões,
+              normalizando as emissões por diferentes métricas de atividade.
+            </p>
 
                 <div className="grid gap-4">
-                  <div className="border rounded-lg p-4">
+                  <div className="border rounded-lg p-4 bg-card">
                     <h4 className="font-medium mb-2">Emissões por Faturação</h4>
                     <p className="text-sm text-muted-foreground mb-3">
                       Mede a eficiência carbónica por unidade de valor económico gerado.
@@ -260,7 +432,7 @@ export default function Methodology() {
                     </div>
                   </div>
 
-                  <div className="border rounded-lg p-4">
+                  <div className="border rounded-lg p-4 bg-card">
                     <h4 className="font-medium mb-2">Emissões por Colaborador</h4>
                     <p className="text-sm text-muted-foreground mb-3">
                       Mede a pegada carbónica média por pessoa na organização.
@@ -272,7 +444,7 @@ export default function Methodology() {
                     </div>
                   </div>
 
-                  <div className="border rounded-lg p-4">
+                  <div className="border rounded-lg p-4 bg-card">
                     <h4 className="font-medium mb-2">Emissões por Área</h4>
                     <p className="text-sm text-muted-foreground mb-3">
                       Mede a intensidade de emissões por unidade de espaço ocupado.
@@ -285,31 +457,28 @@ export default function Methodology() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-2 p-3 bg-primary/5 rounded-lg border border-primary/20">
-                  <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                  <p className="text-sm text-muted-foreground">
-                    Estes indicadores são úteis para benchmarking setorial, permitindo identificar
-                    empresas com desempenho acima ou abaixo da média do seu setor.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <div className="flex items-start gap-2 p-3 bg-primary/5 rounded-lg border border-primary/20">
+              <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+              <p className="text-sm text-muted-foreground">
+                Estes indicadores são úteis para benchmarking setorial, permitindo identificar
+                empresas com desempenho acima ou abaixo da média do seu setor.
+              </p>
+            </div>
+          </div>
 
-          {/* Tab: Setores de Atividade */}
-          <TabsContent value="setores" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-primary" />
-                  Classificação de Setores
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  Os setores de atividade seguem a <strong>Classificação Portuguesa de Atividades Económicas (CAE Rev.3)</strong>,
-                  definida pelo INE - Instituto Nacional de Estatística.
-                </p>
+          {/* === SECTION: Setores de Atividade === */}
+          <SectionHeader
+            id="setores"
+            title="Classificação de Setores"
+            icon={Briefcase}
+            description="Classificação de atividades económicas segundo a CAE Rev.3"
+          />
+
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              Os setores de atividade seguem a <strong>Classificação Portuguesa de Atividades Económicas (CAE Rev.3)</strong>,
+              definida pelo INE - Instituto Nacional de Estatística.
+            </p>
 
                 {/* Obtenção do Setor */}
                 <div className="border rounded-lg p-4 space-y-4 bg-primary/5 border-primary/20">
@@ -328,7 +497,7 @@ export default function Methodology() {
                 </div>
 
                 {/* CAE Principal vs Secundário */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">CAE Principal vs CAEs Secundários</h3>
                   <p className="text-sm text-muted-foreground">
                     Em Portugal, as empresas podem ter múltiplos códigos CAE:
@@ -365,7 +534,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Setores Principais */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Setores Principais (Secções CAE)</h3>
                   <p className="text-sm text-muted-foreground">
                     Os setores principais correspondem às secções da CAE e agrupam atividades económicas com características semelhantes.
@@ -399,54 +568,53 @@ export default function Methodology() {
                 </div>
 
                 {/* Subsetores da Indústria */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Subsetores da Indústria (Divisões CAE - Secção C)</h3>
                   <p className="text-sm text-muted-foreground">
                     O setor industrial é subdividido em subsetores mais específicos para permitir
                     comparações mais precisas entre empresas com atividades semelhantes.
                   </p>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {[
-                      { code: "10-12", name: "Indústria Alimentar" },
-                      { code: "13-14", name: "Têxtil e Vestuário" },
-                      { code: "17", name: "Papel e Cartão" },
-                      { code: "20", name: "Química" },
-                      { code: "21", name: "Farmacêutica" },
-                      { code: "22", name: "Borracha e Plásticos" },
-                      { code: "23", name: "Cerâmica e Vidro" },
-                      { code: "24", name: "Metalurgia" },
-                      { code: "25", name: "Metalomecânica" },
-                      { code: "26-27", name: "Eletrónica" },
-                      { code: "29", name: "Automóvel" },
-                      { code: "31", name: "Mobiliário" },
-                    ].map((sub) => (
-                      <div key={sub.code} className="flex items-center gap-2 p-2 rounded bg-muted/30">
-                        <Badge variant="secondary" className="font-mono text-xs shrink-0">{sub.code}</Badge>
-                        <span className="text-sm">{sub.name}</span>
-                      </div>
-                    ))}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {[
+                  { code: "10-12", name: "Indústria Alimentar" },
+                  { code: "13-14", name: "Têxtil e Vestuário" },
+                  { code: "17", name: "Papel e Cartão" },
+                  { code: "20", name: "Química" },
+                  { code: "21", name: "Farmacêutica" },
+                  { code: "22", name: "Borracha e Plásticos" },
+                  { code: "23", name: "Cerâmica e Vidro" },
+                  { code: "24", name: "Metalurgia" },
+                  { code: "25", name: "Metalomecânica" },
+                  { code: "26-27", name: "Eletrónica" },
+                  { code: "29", name: "Automóvel" },
+                  { code: "31", name: "Mobiliário" },
+                ].map((sub) => (
+                  <div key={sub.code} className="flex items-center gap-2 p-2 rounded bg-muted/30">
+                    <Badge variant="secondary" className="font-mono text-xs shrink-0">{sub.code}</Badge>
+                    <span className="text-sm">{sub.name}</span>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                ))}
+              </div>
+            </div>
+          </div>
 
-            {/* Fatores de Intensidade Carbónica */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                  Fatores de Intensidade Carbónica por Setor
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  Os fatores de intensidade carbónica permitem comparar empresas do mesmo setor
-                  e estimar emissões quando dados reais não estão disponíveis.
-                </p>
+          {/* === SECTION: Fatores de Intensidade === */}
+          <SectionHeader
+            id="intensidades"
+            title="Fatores de Intensidade Carbónica"
+            icon={Scale}
+            description="Benchmarks setoriais de emissões por unidade de valor económico"
+          />
+
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              Os fatores de intensidade carbónica permitem comparar empresas do mesmo setor
+              e estimar emissões quando dados reais não estão disponíveis.
+            </p>
 
                 {/* Fonte dos Dados */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <div className="flex items-center gap-2">
                     <Landmark className="h-4 w-4 text-primary" />
                     <h3 className="font-semibold">Fonte dos Dados</h3>
@@ -476,7 +644,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Tabela de Intensidades */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Intensidade Carbónica por Setor (2022)</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
@@ -520,7 +688,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Subsetores da Indústria */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Intensidade de Subsetores Industriais (Secção C)</h3>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                     {[
@@ -570,7 +738,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Justificação de Valores */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <h3 className="font-semibold">Classificação dos Valores</h3>
                   <div className="space-y-3">
                     <div className="flex items-start gap-3 p-2 rounded bg-success/10 border border-success/30">
@@ -605,144 +773,37 @@ export default function Methodology() {
                   </div>
                 </div>
 
-                {/* Bibliografia */}
-                <div className="border rounded-lg p-4 space-y-4">
-                  <h3 className="font-semibold">Bibliografia e Fontes</h3>
-                  <div className="space-y-4 text-sm">
-                    {/* Fonte Principal */}
-                    <div className="space-y-1">
-                      <p className="font-medium">[1] INE - Contas das Emissões Atmosféricas 1995-2022</p>
-                      <p className="text-muted-foreground text-xs">
-                        Instituto Nacional de Estatística. Publicado em 15 de outubro de 2024.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        <a
-                          href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_destaques&DESTAQUESdest_boui=691765941&DESTAQUESmodo=2"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          Página INE →
-                        </a>
-                        <a
-                          href="https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=691766067&att_display=n&att_download=y"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          PDF Completo →
-                        </a>
-                      </div>
-                    </div>
+            {/* Limitações */}
+            <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
+              <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Limitações dos Dados</p>
+                <ul className="text-xs text-muted-foreground mt-1 space-y-1 list-disc list-inside">
+                  <li>Valores são médias setoriais; empresas individuais podem variar significativamente</li>
+                  <li>Dados de 2022 com metodologia INE, podem haver revisões futuras</li>
+                  <li>Valores estimados têm maior incerteza e devem ser usados com cautela</li>
+                  <li>Classificação CAE pode não captar especificidades de atividades mistas</li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-                    {/* Fonte Secundária */}
-                    <div className="space-y-1">
-                      <p className="font-medium">[2] APA - Relatório do Estado do Ambiente</p>
-                      <p className="text-muted-foreground text-xs">
-                        Agência Portuguesa do Ambiente. Indicadores de intensidade energética e carbónica.
-                      </p>
-                      <a
-                        href="https://rea.apambiente.pt/content/intensidade-energ%C3%A9tica-e-carb%C3%B3nica-da-economia"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline"
-                      >
-                        Ver indicador →
-                      </a>
-                    </div>
+          {/* === SECTION: Dados a Recolher === */}
+          <SectionHeader
+            id="dados"
+            title="Dados a Recolher por Empresa"
+            icon={FileSpreadsheet}
+            description="Informação necessária para cálculo e comparação de emissões"
+          />
 
-                    {/* Eurostat */}
-                    <div className="space-y-1">
-                      <p className="font-medium">[3] Eurostat - Air Emissions Accounts by NACE</p>
-                      <p className="text-muted-foreground text-xs">
-                        Base de dados europeia harmonizada de emissões por atividade económica.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        <a
-                          href="https://ec.europa.eu/eurostat/databrowser/view/env_ac_ainah_r2/default/table"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          Emissões por NACE →
-                        </a>
-                        <a
-                          href="https://ec.europa.eu/eurostat/databrowser/view/env_ac_aeint_r2/default/table"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          Intensidades →
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* DEFRA */}
-                    <div className="space-y-1">
-                      <p className="font-medium">[4] DEFRA/DESNZ - UK Carbon Footprint</p>
-                      <p className="text-muted-foreground text-xs">
-                        Fatores de conversão por código SIC do Reino Unido. Usado para comparação internacional.
-                      </p>
-                      <a
-                        href="https://www.gov.uk/government/statistics/uks-carbon-footprint"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline"
-                      >
-                        UK Statistics →
-                      </a>
-                    </div>
-
-                    {/* GHG Protocol */}
-                    <div className="space-y-1">
-                      <p className="font-medium">[5] GHG Protocol - Corporate Value Chain Standard</p>
-                      <p className="text-muted-foreground text-xs">
-                        Metodologia internacional para cálculo de emissões Scope 1, 2 e 3.
-                      </p>
-                      <a
-                        href="https://ghgprotocol.org/corporate-value-chain-scope-3-standard"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline"
-                      >
-                        GHG Protocol →
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Limitações */}
-                <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
-                  <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium">Limitações dos Dados</p>
-                    <ul className="text-xs text-muted-foreground mt-1 space-y-1 list-disc list-inside">
-                      <li>Valores são médias setoriais; empresas individuais podem variar significativamente</li>
-                      <li>Dados de 2022 com metodologia INE, podem haver revisões futuras</li>
-                      <li>Valores estimados têm maior incerteza e devem ser usados com cautela</li>
-                      <li>Classificação CAE pode não captar especificidades de atividades mistas</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Dados a Recolher */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileSpreadsheet className="h-5 w-5 text-primary" />
-                  Dados a Recolher por Empresa
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <p className="text-muted-foreground">
-                  Para permitir o cálculo de emissões e a comparação entre empresas, devem ser recolhidos
-                  os seguintes dados de cada organização:
-                </p>
+          <div className="space-y-6">
+            <p className="text-muted-foreground">
+              Para permitir o cálculo de emissões e a comparação entre empresas, devem ser recolhidos
+              os seguintes dados de cada organização:
+            </p>
 
                 {/* Dados Obrigatórios */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-success" />
                     <h3 className="font-semibold">Dados Obrigatórios</h3>
@@ -809,7 +870,7 @@ export default function Methodology() {
                 </div>
 
                 {/* Dados Opcionais */}
-                <div className="border rounded-lg p-4 space-y-4">
+                <div className="border rounded-lg p-4 space-y-4 bg-card">
                   <div className="flex items-center gap-2">
                     <Info className="h-4 w-4 text-muted-foreground" />
                     <h3 className="font-semibold">Dados Opcionais (Recomendados)</h3>
@@ -831,23 +892,145 @@ export default function Methodology() {
                   </div>
                 </div>
 
-                {/* Nota sobre qualidade dos dados */}
-                <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
-                  <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium">Qualidade dos Dados</p>
-                    <p className="text-sm text-muted-foreground">
-                      A fiabilidade das análises depende da qualidade dos dados fornecidos. Recomenda-se
-                      que as empresas utilizem dados verificados ou provenientes de relatórios de sustentabilidade
-                      auditados sempre que possível.
-                    </p>
-                  </div>
+            {/* Nota sobre qualidade dos dados */}
+            <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
+              <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
+              <div>
+                <p className="text-sm font-medium">Qualidade dos Dados</p>
+                <p className="text-sm text-muted-foreground">
+                  A fiabilidade das análises depende da qualidade dos dados fornecidos. Recomenda-se
+                  que as empresas utilizem dados verificados ou provenientes de relatórios de sustentabilidade
+                  auditados sempre que possível.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* === SECTION: Bibliografia === */}
+          <SectionHeader
+            id="bibliografia"
+            title="Bibliografia e Fontes"
+            icon={Library}
+            description="Referências e fontes de dados utilizadas"
+          />
+
+          <div className="space-y-6">
+            <div className="border rounded-lg p-6 space-y-6 bg-card">
+              {/* Fonte Principal */}
+              <div className="space-y-2 pb-4 border-b">
+                <p className="font-semibold">[1] INE - Contas das Emissões Atmosféricas 1995-2022</p>
+                <p className="text-muted-foreground text-sm">
+                  Instituto Nacional de Estatística. Publicado em 15 de outubro de 2024.
+                </p>
+                <div className="flex flex-wrap gap-3 mt-2">
+                  <a
+                    href="https://www.ine.pt/xportal/xmain?xpid=INE&xpgid=ine_destaques&DESTAQUESdest_boui=691765941&DESTAQUESmodo=2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    Página INE →
+                  </a>
+                  <a
+                    href="https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=691766067&att_display=n&att_download=y"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    PDF Completo →
+                  </a>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+              </div>
+
+              {/* Fonte Secundária */}
+              <div className="space-y-2 pb-4 border-b">
+                <p className="font-semibold">[2] APA - Relatório do Estado do Ambiente</p>
+                <p className="text-muted-foreground text-sm">
+                  Agência Portuguesa do Ambiente. Indicadores de intensidade energética e carbónica.
+                </p>
+                <a
+                  href="https://rea.apambiente.pt/content/intensidade-energ%C3%A9tica-e-carb%C3%B3nica-da-economia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  Ver indicador →
+                </a>
+              </div>
+
+              {/* Eurostat */}
+              <div className="space-y-2 pb-4 border-b">
+                <p className="font-semibold">[3] Eurostat - Air Emissions Accounts by NACE</p>
+                <p className="text-muted-foreground text-sm">
+                  Base de dados europeia harmonizada de emissões por atividade económica.
+                </p>
+                <div className="flex flex-wrap gap-3 mt-2">
+                  <a
+                    href="https://ec.europa.eu/eurostat/databrowser/view/env_ac_ainah_r2/default/table"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    Emissões por NACE →
+                  </a>
+                  <a
+                    href="https://ec.europa.eu/eurostat/databrowser/view/env_ac_aeint_r2/default/table"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    Intensidades →
+                  </a>
+                </div>
+              </div>
+
+              {/* DEFRA */}
+              <div className="space-y-2 pb-4 border-b">
+                <p className="font-semibold">[4] DEFRA/DESNZ - UK Carbon Footprint</p>
+                <p className="text-muted-foreground text-sm">
+                  Fatores de conversão por código SIC do Reino Unido. Usado para comparação internacional.
+                </p>
+                <a
+                  href="https://www.gov.uk/government/statistics/uks-carbon-footprint"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  UK Statistics →
+                </a>
+              </div>
+
+              {/* GHG Protocol */}
+              <div className="space-y-2">
+                <p className="font-semibold">[5] GHG Protocol - Corporate Value Chain Standard</p>
+                <p className="text-muted-foreground text-sm">
+                  Metodologia internacional para cálculo de emissões Scope 1, 2 e 3.
+                </p>
+                <a
+                  href="https://ghgprotocol.org/corporate-value-chain-scope-3-standard"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-primary hover:underline inline-flex items-center gap-1"
+                >
+                  GHG Protocol →
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+      {/* Footer with gradient */}
+      <footer className="footer-gradient ml-64 border-t">
+        <div className="footer-gradient-grain" />
+        <div className="relative z-10 max-w-5xl px-8 pt-16 pb-[40rem]">
+          <div className="text-muted-foreground text-sm">
+            <p className="text-foreground font-normal">Get2C Documentação Metodológica {getVersionString()} · {getVersionDate()}</p>
+            <p className="mt-2">For a cooler world.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

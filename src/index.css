@@ -164,6 +164,63 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
   .animate-glow-line {
     animation: glow-line 4s ease-in-out infinite;
   }
+
+  /* Background pattern utilities
+     Uses two pseudo-elements to layer correctly:
+     - ::before = gray background (z: -2, very back)
+     - ::after = pattern (z: -1, middle)
+     - content = normal flow (z: auto, front)
+  */
+
+  /* Grid pattern (Methodology page) */
+  .bg-grid-pattern {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .bg-grid-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-color: hsl(var(--background));
+  }
+
+  .bg-grid-pattern::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.25) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.25) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Dot pattern - Moleskine style (StyleGuide page) */
+  .bg-dot-pattern {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .bg-dot-pattern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-color: hsl(var(--background));
+  }
+
+  .bg-dot-pattern::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
 }
 
 /* Glowing line animation for header accent */

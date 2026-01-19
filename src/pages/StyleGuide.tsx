@@ -14,7 +14,7 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 10,
+  patch: 11,
   date: "2026-01-19",
   changelog: [
     "Auto-update via commit",
@@ -351,7 +351,7 @@ const SectionHeader = ({
   icon?: React.ElementType;
   description?: string;
 }) => (
-  <div id={id} className="scroll-mt-6 mb-8 mt-16 pt-8 border-t border-border/50 first:border-t-0 first:pt-0 first:mt-0">
+  <div id={id} className="scroll-mt-6 mb-8 mt-16 first:mt-0">
     <div className="flex items-center gap-3 mb-2">
       {Icon && (
         <div className="p-2.5 rounded-lg bg-primary/10 shadow-md">
@@ -506,8 +506,8 @@ const StyleGuide = () => {
         </ScrollArea>
       </aside>
 
-      {/* Conteúdo principal */}
-      <main className="ml-64">
+      {/* Conteúdo principal - bg-dot-pattern provides both gray bg and dot pattern */}
+      <main className="ml-64 bg-dot-pattern">
         {/* Header da página - vai até aos limites */}
         <header className="relative bg-background overflow-hidden border-b">
           {/* Animated pulsing background elements - mostly right, some left for balance */}
@@ -536,7 +536,7 @@ const StyleGuide = () => {
           <div className="relative p-8 max-w-5xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="p-2 rounded-lg bg-primary/20">
-                <Leaf className="h-6 w-6 text-primary" />
+                <Eye className="h-6 w-6 text-primary" />
               </div>
               <Badge variant="outline" className="text-primary border-primary/30 cursor-help" title={`Última atualização: ${STYLE_GUIDE_VERSION.date}\n\nAlterações:\n${STYLE_GUIDE_VERSION.changelog.map(c => `• ${c}`).join('\n')}`}>
                 {getVersionString()}
@@ -544,7 +544,7 @@ const StyleGuide = () => {
             </div>
 
             <h1 className="text-4xl font-bold mb-4">
-              <TextReveal>Get2C Product Design System</TextReveal>
+              <TextReveal>Product Design System</TextReveal>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl">
               O guia de referência visual para todas as plataformas Get2C.<br />
