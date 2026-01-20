@@ -47,6 +47,7 @@ import { emailTemplates, getCompanyEmailTracking, EmailRecord } from "@/data/ema
 import { SupplierWithoutFootprint } from "@/types/supplierNew";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
 import { pt } from "date-fns/locale";
 import { IncentiveFiltersDialog, IncentiveFilters } from "@/components/dashboard/IncentiveFiltersDialog";
 
@@ -317,11 +318,39 @@ const Incentive = () => {
     const emProgressoPerc = total > 0 ? Math.round((emProgresso / total) * 100) : 0;
     const completoPerc = total > 0 ? Math.round((completo / total) * 100) : 0;
     
-    // Mock data for time to value, bottleneck and best template
+    // Mock data for time to value and best template
     const avgDaysToConversion = 12;
-    const bottleneck = "Sem interação → Interessada";
     const bestTemplate = "Convite Inicial";
     const bestTemplateRate = 42;
+
+    // Template success stats (mock data)
+    const templateStats = [
+      { name: "Convite Inicial", conversions: 42, color: "hsl(var(--primary))" },
+      { name: "Lembrete", conversions: 31, color: "hsl(var(--warning))" },
+      { name: "Benefícios", conversions: 27, color: "hsl(var(--primary-dark))" },
+    ];
+
+    // Funnel stage distribution (excluding "por contactar" - not in active funnel)
+    const funnelStats = [
+      { name: "Sem interação", value: semInteracao, color: "hsl(var(--status-contacted))" },
+      { name: "Interessada", value: interessada, color: "hsl(var(--status-interested))" },
+      { name: "Registada", value: registada, color: "hsl(var(--status-registered))" },
+      { name: "Em progresso", value: emProgresso, color: "hsl(var(--status-progress))" },
+      { name: "Completo", value: completo, color: "hsl(var(--status-complete))" },
+    ].filter(s => s.value > 0);
+
+    // Calculate bottleneck (stage with most companies stuck - excluding completo)
+    const bottleneckStages = [
+      { name: "Sem interação", value: semInteracao, color: "hsl(var(--status-contacted))", tooltip: "Recebeu email mas não clicou no link" },
+      { name: "Interessada", value: interessada, color: "hsl(var(--status-interested))", tooltip: "Clicou no link do email" },
+      { name: "Registada", value: registada, color: "hsl(var(--status-registered))", tooltip: "Criou conta no Simple" },
+      { name: "Em progresso", value: emProgresso, color: "hsl(var(--status-progress))", tooltip: "Iniciou o cálculo da pegada" },
+    ];
+    const bottleneckStage = bottleneckStages.reduce((max, stage) =>
+      stage.value > max.value ? stage : max, bottleneckStages[0]);
+    const bottleneck = bottleneckStage.name;
+    const bottleneckColor = bottleneckStage.color;
+    const bottleneckTooltip = bottleneckStage.tooltip;
 
     // Email performance metrics (mock data)
     // Nota: Neste modelo simplificado, assumimos que quem progrediu no funil abriu/clicou no email
@@ -358,6 +387,8 @@ const Incentive = () => {
       emProgressoPerc,
       avgDaysToConversion,
       bottleneck,
+      bottleneckColor,
+      bottleneckTooltip,
       bestTemplate,
       bestTemplateRate,
       total,
@@ -378,6 +409,10 @@ const Incentive = () => {
       emailsSent,
       openRate,
       clickToOpenRate,
+      // Template stats
+      templateStats,
+      // Funnel stats
+      funnelStats,
     };
   }, [companiesWithoutFootprint]);
   
@@ -601,25 +636,113 @@ const Incentive = () => {
                   />
                 </div>
 
-                {/* Linha 2 - Insights Accionáveis (2 KPIs com texto) */}
+                {/* Linha 2 - Insights Accionáveis */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <KPICard
-                    title="Bottleneck"
-                    value={funnelMetrics.bottleneck}
-                    unit="fase com maior drop-off no funil"
-                    icon={AlertTriangle}
-                    iconColor="text-warning"
-                    iconBgColor="bg-warning/10"
-                    valueColor="text-warning"
-                  />
-                  <KPICard
-                    title="Melhor Template"
-                    value={funnelMetrics.bestTemplate}
-                    unit={`${funnelMetrics.bestTemplateRate}% conversão`}
-                    icon={Star}
-                    iconColor="text-primary"
-                    iconBgColor="bg-primary/10"
-                  />
+                  {/* Card composto: Bottleneck + Pie Chart */}
+                  <div className="border rounded-lg shadow-md flex overflow-hidden">
+                    {/* Lado esquerdo: Info do bottleneck */}
+                    <div className="flex-1 p-4 flex flex-col gap-3">
+                      <p className="text-xs font-normal text-muted-foreground h-7 flex items-center">Bottleneck</p>
+                      <div>
+                        <p className="text-2xl font-bold" style={{ color: funnelMetrics.bottleneckColor }}>{funnelMetrics.bottleneck}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{funnelMetrics.bottleneckTooltip}</p>
+                      </div>
+                    </div>
+
+                    {/* Separador vertical */}
+                    <div className="w-px bg-border" />
+
+                    {/* Lado direito: Mini Pie Chart */}
+                    <div className="w-[110px] flex items-center justify-center">
+                      <ResponsiveContainer width={94} height={94}>
+                        <PieChart>
+                          <Pie
+                            data={funnelMetrics.funnelStats}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={24}
+                            outerRadius={44}
+                            stroke="hsl(var(--card))"
+                            strokeWidth={1}
+                          >
+                            {funnelMetrics.funnelStats.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <RechartsTooltip
+                            position={{ x: -120, y: 27 }}
+                            content={({ active, payload }) => {
+                              if (active && payload && payload.length) {
+                                const data = payload[0].payload;
+                                return (
+                                  <div className="bg-popover border rounded-md shadow-md px-3 py-2 whitespace-nowrap">
+                                    <p className="text-xs font-medium">{data.name}</p>
+                                    <p className="text-xs text-muted-foreground">{data.value} empresas</p>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Card composto: Melhor Template + Pie Chart */}
+                  <div className="border rounded-lg shadow-md flex overflow-hidden">
+                    {/* Lado esquerdo: Info do melhor template */}
+                    <div className="flex-1 p-4 flex flex-col gap-3">
+                      <p className="text-xs font-normal text-muted-foreground h-7 flex items-center">Melhor Template</p>
+                      <div>
+                        <p className="text-2xl font-bold">{funnelMetrics.bestTemplate}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{funnelMetrics.bestTemplateRate}% conversão</p>
+                      </div>
+                    </div>
+
+                    {/* Separador vertical */}
+                    <div className="w-px bg-border" />
+
+                    {/* Lado direito: Mini Pie Chart */}
+                    <div className="w-[110px] flex items-center justify-center">
+                      <ResponsiveContainer width={94} height={94}>
+                        <PieChart>
+                          <Pie
+                            data={funnelMetrics.templateStats}
+                            dataKey="conversions"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={24}
+                            outerRadius={44}
+                            stroke="hsl(var(--card))"
+                            strokeWidth={1}
+                          >
+                            {funnelMetrics.templateStats.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <RechartsTooltip
+                            position={{ x: -120, y: 27 }}
+                            content={({ active, payload }) => {
+                              if (active && payload && payload.length) {
+                                const data = payload[0].payload;
+                                return (
+                                  <div className="bg-popover border rounded-md shadow-md px-3 py-2 whitespace-nowrap">
+                                    <p className="text-xs font-medium">{data.name}</p>
+                                    <p className="text-xs text-muted-foreground">{data.conversions}% conversão</p>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            }}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Funil com ramificação - largura total */}
@@ -1319,9 +1442,9 @@ const Incentive = () => {
                     <div>
                       <p className="font-medium text-sm">Bottleneck</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Identifica a fase do funil onde mais empresas estão a abandonar o processo.
-                        É onde deve concentrar esforços de melhoria — seja através de comunicação diferente,
-                        simplificação do processo, ou suporte adicional.
+                        Identifica a fase do funil onde mais empresas estão acumuladas sem avançar.
+                        O gráfico circular mostra a distribuição por fase. É onde deve concentrar esforços
+                        de melhoria — seja através de comunicação diferente, simplificação do processo, ou suporte adicional.
                       </p>
                     </div>
                   </div>
@@ -1334,8 +1457,8 @@ const Incentive = () => {
                       <p className="font-medium text-sm">Melhor Template</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         O template de email com maior taxa de conversão histórica.
-                        Use-o como referência para comunicação com empresas em fases iniciais do funil,
-                        ou como base para criar novos templates.
+                        O gráfico circular mostra a comparação entre templates. Use-o como referência
+                        para comunicação com empresas em fases iniciais do funil.
                       </p>
                     </div>
                   </div>
