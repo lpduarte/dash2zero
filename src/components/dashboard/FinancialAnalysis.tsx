@@ -82,7 +82,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
         <Card className="p-4 shadow-md hover:shadow-md transition-shadow">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-normal text-muted-foreground">Intensidade Carbónica Média</p>
+              <p className="text-xs font-normal text-muted-foreground">Intensidade de Carbono Média</p>
               <div className="bg-primary/10 text-primary p-1.5 rounded">
                 <Target className="h-4 w-4" />
               </div>
@@ -122,7 +122,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
                 name="Intensidade"
                 unit=" kg/€"
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
-                label={{ value: 'Intensidade Carbónica (kg CO₂e/€)', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Intensidade de Carbono (kg CO₂e/€)', angle: -90, position: 'insideLeft' }}
               />
               <Tooltip
                 content={({ active, payload }) => {
@@ -137,7 +137,7 @@ export const FinancialAnalysis = ({ suppliers }: FinancialAnalysisProps) => {
                           <span className="font-bold">{data.revenue.toFixed(1)} M€</span>
                         </p>
                         <p>
-                          <span className="text-muted-foreground">Intensidade Carbónica: </span>
+                          <span className="text-muted-foreground">Intensidade de Carbono: </span>
                           <span className="font-bold">{data.emissionsPerRevenue.toFixed(1)} kg CO₂e/€</span>
                         </p>
                         <p>

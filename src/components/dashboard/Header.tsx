@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import { Leaf, BarChart3, CircleDot, Moon, Sun, HelpCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { NotificationBell } from "./NotificationBell";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
 import { useTour } from "@/contexts/TourContext";
-import { allEmpresaSuppliers, allMunicipioSuppliers } from "@/data/suppliers";
 
 export const Header = () => {
   const location = useLocation();
@@ -67,10 +65,6 @@ export const Header = () => {
                   <span className="relative z-10">Gerir clusters</span>
                 </Link>
               </nav>
-
-              <div data-tour="notifications">
-                <NotificationBell suppliers={userType === 'municipio' ? allMunicipioSuppliers as any : allEmpresaSuppliers as any} />
-              </div>
 
               <div data-tour="theme-toggle" className="liquid-glass-container flex gap-1 p-1.5 rounded-full backdrop-blur-xl">
                 <button

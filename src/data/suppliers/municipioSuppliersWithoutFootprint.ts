@@ -30,7 +30,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 5, area: 45, revenue: 0.25,
     contact: { email: 'snackpraia@mail.pt', phone: '+351 214 810 003', website: '', nif: '513234003' },
     emailsSent: 2, lastContactDate: '2024-12-05',
-    onboardingStatus: 'interessada_simple',
+    onboardingStatus: 'interessada_formulario',
   },
   {
     id: 'mun-apo-np-004', name: 'Talho Tradicional', clusterId: 'mun-cluster-apoiadas',
@@ -48,7 +48,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 2, area: 40, revenue: 0.15,
     contact: { email: 'papelaria.escolar@mail.pt', phone: '+351 214 810 005', website: '', nif: '513234005' },
     emailsSent: 3, lastContactDate: '2024-12-18',
-    onboardingStatus: 'registada_simple',
+    onboardingStatus: 'em_progresso_formulario',
   },
   {
     id: 'mun-apo-np-006', name: 'Frutaria Fresca', clusterId: 'mun-cluster-apoiadas',
@@ -75,7 +75,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 4, area: 60, revenue: 0.28,
     contact: { email: 'esplanadasol@mail.pt', phone: '+351 214 810 008', website: '', nif: '513234008' },
     emailsSent: 2, lastContactDate: '2024-12-12',
-    onboardingStatus: 'interessada',
+    onboardingStatus: 'em_progresso_simple',
   },
 
   // ===== MONITORIZADAS SEM PEGADA (4) =====
@@ -86,7 +86,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 12, area: 450, revenue: 0.95,
     contact: { email: 'reservas@residencialcosta.pt', phone: '+351 214 820 001', website: 'https://residencialcosta.pt', nif: '514234001' },
     emailsSent: 2, lastContactDate: '2024-12-05',
-    onboardingStatus: 'em_progresso_simple',
+    onboardingStatus: 'em_progresso_formulario',
   },
   {
     id: 'mun-mon-np-002', name: 'Pensão Familiar', clusterId: 'mun-cluster-monitorizadas',
@@ -95,7 +95,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 8, area: 320, revenue: 0.55,
     contact: { email: 'reservas@pensaofamiliar.pt', phone: '+351 214 820 002', website: '', nif: '514234002' },
     emailsSent: 1, lastContactDate: '2024-11-28',
-    onboardingStatus: 'interessada',
+    onboardingStatus: 'em_progresso_formulario',
   },
   {
     id: 'mun-mon-np-003', name: 'Hostel Juventude Cascais', clusterId: 'mun-cluster-monitorizadas',

@@ -145,6 +145,7 @@ export default {
           pending: "hsl(var(--status-pending))",
           contacted: "hsl(var(--status-contacted))",
           interested: "hsl(var(--status-interested))",
+          registered: "hsl(var(--status-registered))",
           progress: "hsl(var(--status-progress))",
           complete: "hsl(var(--status-complete))",
         },

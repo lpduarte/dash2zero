@@ -104,7 +104,7 @@ export const ActionPlanModal = ({ open, onOpenChange, suppliers }: ActionPlanMod
       duration: "2-4 semanas",
       tasks: [
         "Verificar cumprimento dos novos acordos",
-        "Atualizar registos de pegada carbónica",
+        "Atualizar registos de pegada de carbono",
         "Documentar lições aprendidas"
       ]
     }

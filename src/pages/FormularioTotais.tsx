@@ -671,7 +671,7 @@ const FormularioTotais = () => {
               <>
                 <Separator className="my-6" />
                 <div className="text-center">
-                  <p className="text-sm text-muted-foreground">Intensidade carbónica</p>
+                  <p className="text-sm text-muted-foreground">Intensidade de carbono</p>
                   <p className="text-2xl font-bold">{formatNumber(intensity, 4)} <span className="text-sm font-normal text-muted-foreground">kg CO₂e/€</span></p>
                 </div>
               </>
@@ -1147,7 +1147,7 @@ const FormularioTotais = () => {
                 <>
                   <Separator className="my-6" />
                   <div className="text-center p-4 bg-muted/50 rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-1">Intensidade carbónica</p>
+                    <p className="text-sm text-muted-foreground mb-1">Intensidade de carbono</p>
                     <p className="text-4xl font-bold text-primary">
                       {formatNumber(intensity, 4)}
                     </p>

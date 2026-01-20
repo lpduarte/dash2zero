@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
 import { TourProvider } from "@/contexts/TourContext";
 import { ProductTour } from "@/components/tour/ProductTour";
+import Index from "./pages/Index";
 import Overview from "./pages/Overview";
 import ClusterManagement from "./pages/ClusterManagement";
 import Incentive from "./pages/Incentive";
@@ -28,6 +29,7 @@ const App = () => (
           <ProductTour />
           <BrowserRouter>
             <Routes>
+              <Route path="/index" element={<Index />} />
               <Route path="/" element={<Overview />} />
               <Route path="/analise" element={<Navigate to="/" replace />} />
               <Route path="/clusters" element={<ClusterManagement />} />

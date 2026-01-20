@@ -14,8 +14,8 @@ import {
 const STYLE_GUIDE_VERSION = {
   major: 1,
   minor: 4,
-  patch: 11,
-  date: "2026-01-19",
+  patch: 12,
+  date: "2026-01-20",
   changelog: [
     "Auto-update via commit",
     "Auto-update via commit",
@@ -45,6 +45,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -54,8 +55,9 @@ import { riskColors, scopeColors, iconSizes } from "@/lib/styles";
 // Recharts
 import {
   AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell,
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer
 } from "recharts";
+import { cn } from "@/lib/utils";
 
 // Technology brand icons (official SVG paths)
 const ReactIcon = ({ className }: { className?: string }) => (
@@ -95,6 +97,7 @@ const sections = [
   { id: 'tabs', label: 'Tabs', icon: Columns },
   { id: 'tabelas', label: 'Tabelas', icon: Table2 },
   { id: 'graficos', label: 'Gráficos', icon: PieChart },
+  { id: 'funil', label: 'Funil Onboarding', icon: Users },
   { id: 'icones', label: 'Ícones', icon: Star },
 ];
 
@@ -126,11 +129,12 @@ const allColors = {
     { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '45 50% 65%', hex: '#CCB380', note: 'Âmbito 2 - Energia (Âmbar)' },
     { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '195 45% 55%', hex: '#5A9EB3', note: 'Âmbito 3 - Cadeia de Valor (Petróleo)' },
   ],
-  // Onboarding status colors (5 CSS variables)
+  // Onboarding status colors (6 CSS variables)
   onboarding: [
     { name: '--status-pending', tailwind: 'bg-status-pending', hsl: '215 16% 65%', hex: '#94A3B8', note: 'Por contactar' },
     { name: '--status-contacted', tailwind: 'bg-status-contacted', hsl: '21 90% 48%', hex: '#EA580C', note: 'Sem interação' },
     { name: '--status-interested', tailwind: 'bg-status-interested', hsl: '38 92% 50%', hex: '#F59E0B', note: 'Interessada' },
+    { name: '--status-registered', tailwind: 'bg-status-registered', hsl: '78 50% 48%', hex: '#8FB85C', note: 'Registada' },
     { name: '--status-progress', tailwind: 'bg-status-progress', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Em progresso' },
     { name: '--status-complete', tailwind: 'bg-status-complete', hsl: '175 66% 38%', hex: '#219F94', note: 'Completo' },
   ],
@@ -453,11 +457,9 @@ const StyleGuide = () => {
           <div className="p-6">
             {/* Logo + Título */}
             <div className="flex items-center gap-2 mb-6">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Leaf className="h-5 w-5 text-primary" />
-              </div>
+              <Leaf className="h-8 w-8 text-primary" />
               <div>
-                <h1 className="font-bold">Get2C</h1>
+                <h1 className="font-bold">Dash2Zero</h1>
                 <p className="text-xs text-muted-foreground">Product Design System</p>
               </div>
             </div>
@@ -547,7 +549,7 @@ const StyleGuide = () => {
               <TextReveal>Product Design System</TextReveal>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl">
-              O guia de referência visual para todas as plataformas Get2C.<br />
+              O guia de referência visual para a plataforma Dash2Zero.<br />
               Componentes, cores, tipografia e padrões que definem a linguagem visual.<br />
               Para a equipa e sistemas de IA.
             </p>
@@ -727,15 +729,6 @@ const StyleGuide = () => {
               ))}
             </div>
 
-            {/* Badge Examples */}
-            <h4 className="text-sm font-normal mt-6 mb-3">Badges de Status</h4>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-2 py-1 text-xs rounded-md bg-status-pending/15 text-status-pending border border-status-pending/30">Por contactar</span>
-              <span className="px-2 py-1 text-xs rounded-md bg-status-contacted/15 text-status-contacted border border-status-contacted/30">Sem interação</span>
-              <span className="px-2 py-1 text-xs rounded-md bg-status-interested/15 text-status-interested border border-status-interested/30">Interessada</span>
-              <span className="px-2 py-1 text-xs rounded-md bg-status-progress/15 text-status-progress border border-status-progress/30">Em progresso</span>
-              <span className="px-2 py-1 text-xs rounded-md bg-status-complete/15 text-status-complete border border-status-complete/30">Completo</span>
-            </div>
           </div>
 
           {/* Cores de Medalhas */}
@@ -1001,6 +994,32 @@ const StyleGuide = () => {
               <Badge className={scopeColors[1].badge}>Âmbito 1</Badge>
               <Badge className={scopeColors[2].badge}>Âmbito 2</Badge>
               <Badge className={scopeColors[3].badge}>Âmbito 3</Badge>
+            </div>
+          </div>
+
+          {/* Badges de Estado de Onboarding */}
+          <div>
+            <h3 className="text-xl font-bold mb-4">Badges de Estado de Onboarding</h3>
+            <p className="text-sm text-muted-foreground mb-4">Estados do processo de adesão de empresas (página Incentivo)</p>
+            <div className="flex flex-wrap gap-3">
+              <Badge className="bg-status-pending/15 text-status-pending border border-status-pending/30 hover:bg-status-pending/25 transition-colors cursor-default">
+                Por contactar
+              </Badge>
+              <Badge className="bg-status-contacted/15 text-status-contacted border border-status-contacted/30 hover:bg-status-contacted/25 transition-colors cursor-default">
+                Sem interação
+              </Badge>
+              <Badge className="bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors cursor-default">
+                Interessada
+              </Badge>
+              <Badge className="bg-status-registered/15 text-status-registered border border-status-registered/30 hover:bg-status-registered/25 transition-colors cursor-default">
+                Registada
+              </Badge>
+              <Badge className="bg-status-progress/15 text-status-progress border border-status-progress/30 hover:bg-status-progress/25 transition-colors cursor-default">
+                Em progresso
+              </Badge>
+              <Badge className="bg-status-complete/15 text-status-complete border border-status-complete/30 hover:bg-status-complete/25 transition-colors cursor-default">
+                Completo
+              </Badge>
             </div>
           </div>
         </div>
@@ -1320,7 +1339,7 @@ const StyleGuide = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="name" tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
                   <YAxis tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }} />
-                  <Tooltip
+                  <RechartsTooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
@@ -1361,7 +1380,7 @@ const StyleGuide = () => {
                     <Cell fill="hsl(var(--scope-2))" />
                     <Cell fill="hsl(var(--scope-3))" />
                   </Pie>
-                  <Tooltip
+                  <RechartsTooltip
                     formatter={(value: number) => `${value}%`}
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
@@ -1387,6 +1406,167 @@ const StyleGuide = () => {
               </div>
             </div>
           </Card>
+        </div>
+
+        {/* === SECÇÃO: FUNIL ONBOARDING === */}
+        <SectionHeader
+          id="funil"
+          title="Funil Onboarding"
+          icon={Users}
+          description="Experimentação de visualizações para o fluxo de onboarding com ramificação"
+        />
+
+        <div className="space-y-8">
+          {(() => {
+            // Mock data - empresas por fase
+            const preDecision = {
+              pending: 45,      // Por contactar
+              contacted: 32,   // Sem interação
+              interested: 28,  // Interessada
+            };
+            const postDecision = {
+              simple: { registered: 8, progress: 6, complete: 4 },      // Total: 18
+              formulario: { progress: 6, complete: 3 },                  // Total: 9
+            };
+
+            // Cálculos
+            const preTotal = preDecision.pending + preDecision.contacted + preDecision.interested;
+            const simpleTotal = postDecision.simple.registered + postDecision.simple.progress + postDecision.simple.complete;
+            const formularioTotal = postDecision.formulario.progress + postDecision.formulario.complete;
+            const postTotal = simpleTotal + formularioTotal;
+            const grandTotal = preTotal + postTotal;
+
+            // Percentagens para layout dinâmico
+            const leftPercent = (preTotal / grandTotal) * 100;
+            const rightPercent = (postTotal / grandTotal) * 100;
+
+            // Legenda com contagens e tooltips
+            const legendItems = [
+              { label: 'Por contactar', value: preDecision.pending, color: 'bg-status-pending', borderColor: 'border-status-pending', tooltip: 'Ainda não recebeu nenhum email' },
+              { label: 'Sem interação', value: preDecision.contacted, color: 'bg-status-contacted', borderColor: 'border-status-contacted', tooltip: 'Recebeu email mas não clicou no link' },
+              { label: 'Interessada', value: preDecision.interested, color: 'bg-status-interested', borderColor: 'border-status-interested', tooltip: 'Clicou no link do email' },
+              { label: 'Registada', value: postDecision.simple.registered, color: 'bg-status-registered', borderColor: 'border-status-registered', tooltip: 'Criou conta no Simple' },
+              { label: 'Em progresso', value: postDecision.simple.progress + postDecision.formulario.progress, color: 'bg-status-progress', borderColor: 'border-status-progress', tooltip: 'Iniciou o cálculo da pegada' },
+              { label: 'Completo', value: postDecision.simple.complete + postDecision.formulario.complete, color: 'bg-status-complete', borderColor: 'border-status-complete', tooltip: 'Pegada calculada com sucesso' },
+            ];
+
+            // Segmentos com arredondamento dinâmico baseado na posição
+            const preSegments = [
+              { key: 'pending', value: preDecision.pending, color: 'bg-status-pending', label: 'Por contactar' },
+              { key: 'contacted', value: preDecision.contacted, color: 'bg-status-contacted', label: 'Sem interação' },
+              { key: 'interested', value: preDecision.interested, color: 'bg-status-interested', label: 'Interessada' },
+            ].filter(s => s.value > 0);
+
+            const simpleSegments = [
+              { key: 'registered', value: postDecision.simple.registered, color: 'bg-status-registered', label: 'Registada' },
+              { key: 'progress', value: postDecision.simple.progress, color: 'bg-status-progress', label: 'Em progresso' },
+              { key: 'complete', value: postDecision.simple.complete, color: 'bg-status-complete', label: 'Completo' },
+            ].filter(s => s.value > 0);
+
+            const formularioSegments = [
+              { key: 'progress', value: postDecision.formulario.progress, color: 'bg-status-progress', label: 'Em progresso' },
+              { key: 'complete', value: postDecision.formulario.complete, color: 'bg-status-complete', label: 'Completo' },
+            ].filter(s => s.value > 0);
+
+            return (
+              <Card className="p-6">
+                <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding</p>
+                <div className="flex items-center gap-2">
+                  {/* Fase pré-decisão - largura proporcional */}
+                  <div style={{ width: `${leftPercent}%` }}>
+                    <div className="h-4 flex gap-px">
+                      {preSegments.map((segment, index) => (
+                        <div
+                          key={segment.key}
+                          className={cn(
+                            segment.color,
+                            "h-full",
+                            index === 0 && "rounded-l-md",
+                            index === preSegments.length - 1 && "rounded-r-md"
+                          )}
+                          style={{ width: `${(segment.value / preTotal) * 100}%` }}
+                          title={`${segment.label}: ${segment.value}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Conector visual - posição dinâmica */}
+                  <div className="flex flex-col items-center gap-1 text-muted-foreground/50 shrink-0">
+                    <div className="w-px h-4 bg-current" />
+                    <ChevronRight className="h-4 w-4" />
+                    <div className="w-px h-4 bg-current" />
+                  </div>
+
+                  {/* Fase pós-decisão - largura proporcional */}
+                  <div style={{ width: `${rightPercent}%` }} className="space-y-1">
+                    {/* Ramo Simple - estende até ao limite direito (100%) */}
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold">Simple <span className="font-normal text-muted-foreground">({simpleTotal})</span></p>
+                      <div className="h-4 flex gap-px w-full">
+                        {simpleSegments.map((segment, index) => (
+                          <div
+                            key={segment.key}
+                            className={cn(
+                              segment.color,
+                              "h-full",
+                              index === 0 && "rounded-l-md",
+                              index === simpleSegments.length - 1 && "rounded-r-md"
+                            )}
+                            style={{ width: `${(segment.value / simpleTotal) * 100}%` }}
+                            title={`${segment.label}: ${segment.value}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Ramo Formulário - proporcional ao Simple */}
+                    <div className="space-y-1">
+                      <div className="h-4 flex gap-px" style={{ width: `${(formularioTotal / simpleTotal) * 100}%` }}>
+                        {formularioSegments.map((segment, index) => (
+                          <div
+                            key={segment.key}
+                            className={cn(
+                              segment.color,
+                              "h-full",
+                              index === 0 && "rounded-l-md",
+                              index === formularioSegments.length - 1 && "rounded-r-md"
+                            )}
+                            style={{ width: `${(segment.value / formularioTotal) * 100}%` }}
+                            title={`${segment.label}: ${segment.value}`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs font-bold">Formulário <span className="font-normal text-muted-foreground">({formularioTotal})</span></p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Separador */}
+                <Separator className="my-4" />
+
+                {/* Legenda com contagens e tooltips */}
+                <div className="flex flex-wrap justify-center gap-4">
+                  {legendItems.map((item) => (
+                    <TooltipProvider key={item.label} delayDuration={100}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex items-center gap-1.5 text-xs cursor-help">
+                            <div className={cn("h-2.5 w-2.5 rounded-full", item.color)} />
+                            <span className="text-muted-foreground">{item.label}</span>
+                            <span className="font-normal">{item.value}</span>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className={cn("border", item.borderColor)}>
+                          <p>{item.tooltip}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+              </Card>
+            );
+          })()}
         </div>
 
         {/* === SECÇÃO: ÍCONES === */}
@@ -1434,7 +1614,7 @@ const StyleGuide = () => {
         <div className="footer-gradient-grain" />
         <div className="relative z-10 max-w-5xl px-8 pt-16 pb-[40rem]">
           <div className="text-muted-foreground text-sm">
-            <p className="text-foreground font-normal">Get2C Product Design System {getVersionString()} · {getVersionDate()}</p>
+            <p className="text-foreground font-normal">Get2C · Product Design System {getVersionString()} · {getVersionDate()}</p>
             <p className="mt-2">For a cooler world.</p>
           </div>
         </div>

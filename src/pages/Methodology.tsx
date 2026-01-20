@@ -140,11 +140,9 @@ export default function Methodology() {
           <div className="p-6">
             {/* Logo + Title */}
             <div className="flex items-center gap-2 mb-6">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Leaf className="h-5 w-5 text-primary" />
-              </div>
+              <Leaf className="h-8 w-8 text-primary" />
               <div>
-                <h1 className="font-bold">Get2C</h1>
+                <h1 className="font-bold">Dash2Zero</h1>
                 <p className="text-xs text-muted-foreground">Metodologia</p>
               </div>
             </div>
@@ -217,7 +215,7 @@ export default function Methodology() {
             {/* Academic-style subtitle */}
             <div className="space-y-2">
               <p className="text-xl text-muted-foreground max-w-3xl">
-                Metodologias, fórmulas de cálculo e fontes de dados utilizadas nas plataformas Get2C para análise de emissões de carbono.
+                Metodologias, fórmulas de cálculo e fontes de dados utilizadas na plataforma Dash2Zero, para análise de emissões de carbono.
               </p>
             </div>
           </div>
@@ -250,11 +248,11 @@ export default function Methodology() {
 
                   <p className="text-sm text-muted-foreground">
                     Uma empresa pode otimizar a sua cadeia de valor substituindo fornecedores ou parceiros
-                    com elevada pegada carbónica por alternativas mais eficientes no mesmo setor.
+                    com elevada pegada de carbono por alternativas mais eficientes no mesmo setor.
                   </p>
 
                   <div className="bg-muted/50 rounded-lg p-4 space-y-3">
-                    <p className="text-sm font-medium">Metodologia:</p>
+                    <p className="text-sm font-bold">Metodologia:</p>
                     <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
                       <li>Para cada fornecedor, identificar alternativas no mesmo setor com menores emissões</li>
                       <li>Calcular a diferença entre as emissões do fornecedor atual e a melhor alternativa</li>
@@ -272,7 +270,7 @@ export default function Methodology() {
                     <Info className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
                     <p className="text-sm text-muted-foreground">
                       Este cálculo assume que a empresa pode escolher entre diferentes fornecedores
-                      do mesmo setor, priorizando aqueles com menor intensidade carbónica.
+                      do mesmo setor, priorizando aqueles com menor intensidade de carbono.
                     </p>
                   </div>
                 </div>
@@ -292,7 +290,7 @@ export default function Methodology() {
                   </p>
 
                   <div className="bg-muted/50 rounded-lg p-4 space-y-3">
-                    <p className="text-sm font-medium">Metodologia:</p>
+                    <p className="text-sm font-bold">Metodologia:</p>
                     <ol className="text-sm text-muted-foreground space-y-2 list-decimal list-inside">
                       <li>Calcular a média de emissões por setor de atividade</li>
                       <li>Identificar empresas com emissões acima da média do seu setor</li>
@@ -363,7 +361,7 @@ export default function Methodology() {
                     <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-red-500">Scope 1</Badge>
-                        <span className="font-medium">Emissões Diretas</span>
+                        <span className="font-bold">Emissões Diretas</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Emissões de fontes que a empresa possui ou controla diretamente
@@ -374,7 +372,7 @@ export default function Methodology() {
                     <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-orange-500">Scope 2</Badge>
-                        <span className="font-medium">Emissões Indiretas - Energia</span>
+                        <span className="font-bold">Emissões Indiretas - Energia</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Emissões associadas à produção da energia elétrica e térmica adquirida
@@ -385,7 +383,7 @@ export default function Methodology() {
                     <div className="border rounded-lg p-4 bg-card">
                       <div className="flex items-center gap-2 mb-2">
                         <Badge className="bg-yellow-500 text-yellow-950">Scope 3</Badge>
-                        <span className="font-medium">Outras Emissões Indiretas</span>
+                        <span className="font-bold">Outras Emissões Indiretas</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         Todas as outras emissões indiretas na cadeia de valor
@@ -396,7 +394,7 @@ export default function Methodology() {
                 </div>
 
             <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-sm font-medium mb-2">Fórmula de Cálculo Total:</p>
+              <p className="text-sm font-bold mb-2">Fórmula de Cálculo Total:</p>
               <div className="p-3 bg-background rounded border">
                 <p className="text-xs font-mono text-muted-foreground">
                   Emissões Totais (t CO₂e) = Scope 1 + Scope 2 + Scope 3
@@ -421,9 +419,9 @@ export default function Methodology() {
 
                 <div className="grid gap-4">
                   <div className="border rounded-lg p-4 bg-card">
-                    <h4 className="font-medium mb-2">Emissões por Faturação</h4>
+                    <h4 className="font-bold mb-2">Emissões por Faturação</h4>
                     <p className="text-sm text-muted-foreground mb-3">
-                      Mede a eficiência carbónica por unidade de valor económico gerado.
+                      Mede a eficiência de carbono por unidade de valor económico gerado.
                     </p>
                     <div className="p-3 bg-muted/50 rounded">
                       <p className="text-xs font-mono text-muted-foreground">
@@ -433,9 +431,9 @@ export default function Methodology() {
                   </div>
 
                   <div className="border rounded-lg p-4 bg-card">
-                    <h4 className="font-medium mb-2">Emissões por Colaborador</h4>
+                    <h4 className="font-bold mb-2">Emissões por Colaborador</h4>
                     <p className="text-sm text-muted-foreground mb-3">
-                      Mede a pegada carbónica média por pessoa na organização.
+                      Mede a pegada de carbono média por pessoa na organização.
                     </p>
                     <div className="p-3 bg-muted/50 rounded">
                       <p className="text-xs font-mono text-muted-foreground">
@@ -445,7 +443,7 @@ export default function Methodology() {
                   </div>
 
                   <div className="border rounded-lg p-4 bg-card">
-                    <h4 className="font-medium mb-2">Emissões por Área</h4>
+                    <h4 className="font-bold mb-2">Emissões por Área</h4>
                     <p className="text-sm text-muted-foreground mb-3">
                       Mede a intensidade de emissões por unidade de espaço ocupado.
                     </p>
@@ -506,7 +504,7 @@ export default function Methodology() {
                     <div className="flex items-start gap-3 p-3 rounded-lg bg-success/5 border border-success/20">
                       <Badge className="bg-success shrink-0">Principal</Badge>
                       <div>
-                        <p className="text-sm font-medium">CAE Principal</p>
+                        <p className="text-sm font-bold">CAE Principal</p>
                         <p className="text-xs text-muted-foreground">
                           A atividade económica principal da empresa, que representa mais de 50% do volume de negócios.
                           <strong> É este o setor utilizado para benchmarking e comparações.</strong>
@@ -516,7 +514,7 @@ export default function Methodology() {
                     <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
                       <Badge variant="secondary" className="shrink-0">Secundários</Badge>
                       <div>
-                        <p className="text-sm font-medium">CAEs Secundários</p>
+                        <p className="text-sm font-bold">CAEs Secundários</p>
                         <p className="text-xs text-muted-foreground">
                           Atividades adicionais da empresa. São guardados para referência mas não são utilizados
                           nas comparações setoriais para manter a consistência das análises.
@@ -559,7 +557,7 @@ export default function Methodology() {
                       <div key={sector.code} className="flex items-start gap-3 p-2 rounded hover:bg-muted/50">
                         <Badge variant="outline" className="font-mono shrink-0">{sector.code}</Badge>
                         <div>
-                          <span className="font-medium">{sector.name}</span>
+                          <span className="font-bold">{sector.name}</span>
                           <p className="text-xs text-muted-foreground">{sector.desc}</p>
                         </div>
                       </div>
@@ -602,14 +600,14 @@ export default function Methodology() {
           {/* === SECTION: Fatores de Intensidade === */}
           <SectionHeader
             id="intensidades"
-            title="Fatores de Intensidade Carbónica"
+            title="Fatores de Intensidade de Carbono"
             icon={Scale}
             description="Benchmarks setoriais de emissões por unidade de valor económico"
           />
 
           <div className="space-y-6">
             <p className="text-muted-foreground">
-              Os fatores de intensidade carbónica permitem comparar empresas do mesmo setor
+              Os fatores de intensidade de carbono permitem comparar empresas do mesmo setor
               e estimar emissões quando dados reais não estão disponíveis.
             </p>
 
@@ -621,23 +619,23 @@ export default function Methodology() {
                   </div>
                   <div className="space-y-3">
                     <div className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                      <span className="font-medium">Entidade:</span>
+                      <span className="font-bold">Entidade:</span>
                       <span className="text-muted-foreground">INE - Instituto Nacional de Estatística</span>
                     </div>
                     <div className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                      <span className="font-medium">Publicação:</span>
+                      <span className="font-bold">Publicação:</span>
                       <span className="text-muted-foreground">Contas das Emissões Atmosféricas 1995-2022</span>
                     </div>
                     <div className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                      <span className="font-medium">Data:</span>
+                      <span className="font-bold">Data:</span>
                       <span className="text-muted-foreground">Outubro 2024</span>
                     </div>
                     <div className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                      <span className="font-medium">Ano referência:</span>
+                      <span className="font-bold">Ano referência:</span>
                       <span className="text-muted-foreground">2022</span>
                     </div>
                     <div className="grid grid-cols-[120px_1fr] gap-2 text-sm">
-                      <span className="font-medium">Unidade:</span>
+                      <span className="font-bold">Unidade:</span>
                       <span className="text-muted-foreground">kg CO₂eq por € de VAB</span>
                     </div>
                   </div>
@@ -645,14 +643,14 @@ export default function Methodology() {
 
                 {/* Tabela de Intensidades */}
                 <div className="border rounded-lg p-4 space-y-4 bg-card">
-                  <h3 className="font-semibold">Intensidade Carbónica por Setor (2022)</h3>
+                  <h3 className="font-semibold">Intensidade de Carbono por Setor (2022)</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b">
-                          <th className="text-left py-2 pr-4 font-medium">Setor</th>
-                          <th className="text-right py-2 pr-4 font-medium">Intensidade</th>
-                          <th className="text-left py-2 font-medium">Fonte</th>
+                          <th className="text-left py-2 pr-4 font-bold">Setor</th>
+                          <th className="text-right py-2 pr-4 font-bold">Intensidade</th>
+                          <th className="text-left py-2 font-bold">Fonte</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y">
@@ -728,7 +726,7 @@ export default function Methodology() {
                 <div className="flex items-start gap-2 p-3 bg-blue-500/5 rounded-lg border border-blue-500/20">
                   <Info className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-sm font-medium">Sobre a Metodologia</p>
+                    <p className="text-sm font-bold">Sobre a Metodologia</p>
                     <p className="text-xs text-muted-foreground">
                       Os fatores de intensidade são calculados pelo INE como GWP/VAB (Potencial de Aquecimento Global
                       dividido pelo Valor Acrescentado Bruto). Refletem a média de emissões por unidade de valor
@@ -744,7 +742,7 @@ export default function Methodology() {
                     <div className="flex items-start gap-3 p-2 rounded bg-success/10 border border-success/30">
                       <Badge className="shrink-0">INE</Badge>
                       <div>
-                        <p className="text-sm font-medium">Valores Reportados</p>
+                        <p className="text-sm font-bold">Valores Reportados</p>
                         <p className="text-xs text-muted-foreground">
                           Citados diretamente nas publicações oficiais do INE, páginas 5 e 7 das Contas das Emissões Atmosféricas.
                         </p>
@@ -753,7 +751,7 @@ export default function Methodology() {
                     <div className="flex items-start gap-3 p-2 rounded bg-blue-500/10 border border-blue-500/30">
                       <Badge variant="outline" className="shrink-0">Calc.</Badge>
                       <div>
-                        <p className="text-sm font-medium">Valores Calculados</p>
+                        <p className="text-sm font-bold">Valores Calculados</p>
                         <p className="text-xs text-muted-foreground">
                           Derivados de relações VAB/GWP publicadas pelo INE. Ex: Financeiro = 1 / 463.8 €/kg = 0.002 kg/€.
                           Confirmados por comparação com dados Eurostat.
@@ -763,7 +761,7 @@ export default function Methodology() {
                     <div className="flex items-start gap-3 p-2 rounded bg-warning/10 border border-warning/30">
                       <Badge variant="outline" className="shrink-0">Est.</Badge>
                       <div>
-                        <p className="text-sm font-medium">Valores Estimados</p>
+                        <p className="text-sm font-bold">Valores Estimados</p>
                         <p className="text-xs text-muted-foreground">
                           Baseados em médias Eurostat para Portugal, comparação com DEFRA UK, ou interpolação de setores similares.
                           Têm maior incerteza e devem ser usados com cautela.
@@ -777,7 +775,7 @@ export default function Methodology() {
             <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
               <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-medium">Limitações dos Dados</p>
+                <p className="text-sm font-bold">Limitações dos Dados</p>
                 <ul className="text-xs text-muted-foreground mt-1 space-y-1 list-disc list-inside">
                   <li>Valores são médias setoriais; empresas individuais podem variar significativamente</li>
                   <li>Dados de 2022 com metodologia INE, podem haver revisões futuras</li>
@@ -813,54 +811,54 @@ export default function Methodology() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b">
-                          <th className="text-left py-2 pr-4 font-medium">Campo</th>
-                          <th className="text-left py-2 pr-4 font-medium">Descrição</th>
-                          <th className="text-left py-2 font-medium">Unidade</th>
+                          <th className="text-left py-2 pr-4 font-bold">Campo</th>
+                          <th className="text-left py-2 pr-4 font-bold">Descrição</th>
+                          <th className="text-left py-2 font-bold">Unidade</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y">
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Identificação</td>
+                          <td className="py-2 pr-4 font-bold">Identificação</td>
                           <td className="py-2 pr-4 text-muted-foreground">Nome da empresa e NIF</td>
                           <td className="py-2 text-muted-foreground">—</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Setor de Atividade</td>
+                          <td className="py-2 pr-4 font-bold">Setor de Atividade</td>
                           <td className="py-2 pr-4 text-muted-foreground">Classificação CAE principal</td>
                           <td className="py-2 text-muted-foreground">Código CAE</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Localização</td>
+                          <td className="py-2 pr-4 font-bold">Localização</td>
                           <td className="py-2 pr-4 text-muted-foreground">Distrito, município e freguesia</td>
                           <td className="py-2 text-muted-foreground">—</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Scope 1</td>
+                          <td className="py-2 pr-4 font-bold">Scope 1</td>
                           <td className="py-2 pr-4 text-muted-foreground">Emissões diretas (combustíveis, processos)</td>
                           <td className="py-2 text-muted-foreground">t CO₂e/ano</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Scope 2</td>
+                          <td className="py-2 pr-4 font-bold">Scope 2</td>
                           <td className="py-2 pr-4 text-muted-foreground">Emissões indiretas (energia comprada)</td>
                           <td className="py-2 text-muted-foreground">t CO₂e/ano</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Scope 3</td>
+                          <td className="py-2 pr-4 font-bold">Scope 3</td>
                           <td className="py-2 pr-4 text-muted-foreground">Outras emissões indiretas (cadeia de valor)</td>
                           <td className="py-2 text-muted-foreground">t CO₂e/ano</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Faturação</td>
+                          <td className="py-2 pr-4 font-bold">Faturação</td>
                           <td className="py-2 pr-4 text-muted-foreground">Volume de negócios anual</td>
                           <td className="py-2 text-muted-foreground">M€</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Colaboradores</td>
+                          <td className="py-2 pr-4 font-bold">Colaboradores</td>
                           <td className="py-2 pr-4 text-muted-foreground">Número de funcionários (FTE)</td>
                           <td className="py-2 text-muted-foreground">nº</td>
                         </tr>
                         <tr>
-                          <td className="py-2 pr-4 font-medium">Área</td>
+                          <td className="py-2 pr-4 font-bold">Área</td>
                           <td className="py-2 pr-4 text-muted-foreground">Área das instalações</td>
                           <td className="py-2 text-muted-foreground">m²</td>
                         </tr>
@@ -885,7 +883,7 @@ export default function Methodology() {
                       { field: "Ano de Referência", desc: "Ano a que os dados se referem" },
                     ].map((item) => (
                       <div key={item.field} className="flex items-start gap-3 p-2 rounded bg-muted/30">
-                        <span className="font-medium text-sm shrink-0">{item.field}</span>
+                        <span className="font-bold text-sm shrink-0">{item.field}</span>
                         <span className="text-sm text-muted-foreground">{item.desc}</span>
                       </div>
                     ))}
@@ -896,7 +894,7 @@ export default function Methodology() {
             <div className="flex items-start gap-2 p-3 bg-warning/5 rounded-lg border border-warning/20">
               <Info className="h-4 w-4 text-warning mt-0.5 shrink-0" />
               <div>
-                <p className="text-sm font-medium">Qualidade dos Dados</p>
+                <p className="text-sm font-bold">Qualidade dos Dados</p>
                 <p className="text-sm text-muted-foreground">
                   A fiabilidade das análises depende da qualidade dos dados fornecidos. Recomenda-se
                   que as empresas utilizem dados verificados ou provenientes de relatórios de sustentabilidade
@@ -946,7 +944,7 @@ export default function Methodology() {
               <div className="space-y-2 pb-4 border-b">
                 <p className="font-semibold">[2] APA - Relatório do Estado do Ambiente</p>
                 <p className="text-muted-foreground text-sm">
-                  Agência Portuguesa do Ambiente. Indicadores de intensidade energética e carbónica.
+                  Agência Portuguesa do Ambiente. Indicadores de intensidade energética e de carbono.
                 </p>
                 <a
                   href="https://rea.apambiente.pt/content/intensidade-energ%C3%A9tica-e-carb%C3%B3nica-da-economia"
@@ -1026,7 +1024,7 @@ export default function Methodology() {
         <div className="footer-gradient-grain" />
         <div className="relative z-10 max-w-5xl px-8 pt-16 pb-[40rem]">
           <div className="text-muted-foreground text-sm">
-            <p className="text-foreground font-normal">Get2C Documentação Metodológica {getVersionString()} · {getVersionDate()}</p>
+            <p className="text-foreground font-normal">Get2C · Documentação Metodológica {getVersionString()} · {getVersionDate()}</p>
             <p className="mt-2">For a cooler world.</p>
           </div>
         </div>

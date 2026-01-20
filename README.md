@@ -1,6 +1,6 @@
 # Dash2Zero
 
-Dashboard de análise de emissões carbónicas para a plataforma Get2C.
+Dashboard de análise de emissões de carbono para a plataforma Get2C.
 
 ## Sobre o Projeto
 
@@ -8,7 +8,7 @@ Dash2Zero é uma aplicação de visualização e análise de emissões de gases 
 
 - Monitorização de emissões por Scope 1, 2 e 3 (GHG Protocol)
 - Benchmarking setorial com dados INE (Contas das Emissões Atmosféricas)
-- Análise de risco carbónico de fornecedores
+- Análise de risco de carbono de fornecedores
 - Gestão de clusters de empresas
 - Visualização geográfica por distrito/município
 
@@ -57,7 +57,7 @@ src/
 
 ## Fontes de Dados
 
-Os fatores de intensidade carbónica são baseados em:
+Os fatores de intensidade de carbono são baseados em:
 
 1. **INE** - Contas das Emissões Atmosféricas 1995-2022
 2. **APA** - Relatório do Estado do Ambiente

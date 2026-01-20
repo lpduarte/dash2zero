@@ -1,5 +1,5 @@
 // ============================================================================
-// FATORES DE INTENSIDADE CARBÓNICA POR SETOR DE ATIVIDADE
+// FATORES DE INTENSIDADE DE CARBONO POR SETOR DE ATIVIDADE
 // ============================================================================
 // Versão: 1.0.0
 // Última atualização: 2026-01-19
@@ -23,8 +23,8 @@ export const bibliography = {
     pdfUrl: 'https://www.ine.pt/ngt_server/attachfileu.jsp?look_parentBoui=691766067&att_display=n&att_download=y',
     description: 'Publicação oficial do INE com dados de emissões atmosféricas por ramo de atividade económica em Portugal.',
     dataExtracted: [
-      'Intensidade carbónica Energia, água e saneamento: 2.8 kg CO₂eq/€ (página 5)',
-      'Intensidade carbónica Agricultura: 2.1 kg CO₂eq/€ (página 5)',
+      'Intensidade de carbono Energia, água e saneamento: 2.8 kg CO₂eq/€ (página 5)',
+      'Intensidade de carbono Agricultura: 2.1 kg CO₂eq/€ (página 5)',
       'Relação VAB/GWP Atividades financeiras: 463.8 €/kg CO₂eq (página 7)',
       'Relação VAB/GWP Outras atividades de serviços: 35.0 €/kg CO₂eq (página 7)',
     ],
@@ -35,14 +35,14 @@ export const bibliography = {
   // ---------------------------------------------------------------------------
   rea_apa_2023: {
     id: 'REA-APA-2023',
-    title: 'Relatório do Estado do Ambiente - Intensidade Energética e Carbónica',
+    title: 'Relatório do Estado do Ambiente - Intensidade Energética e de Carbono',
     author: 'APA - Agência Portuguesa do Ambiente',
     date: '2023',
     url: 'https://rea.apambiente.pt/content/intensidade-energ%C3%A9tica-e-carb%C3%B3nica-da-economia',
-    description: 'Indicadores de intensidade carbónica da economia portuguesa.',
+    description: 'Indicadores de intensidade de carbono da economia portuguesa.',
     dataExtracted: [
-      'Intensidade carbónica nacional: 0.27 kg CO₂eq/€ PIB (2022)',
-      'Intensidade carbónica nacional: 0.25 kg CO₂eq/€ PIB (2023)',
+      'Intensidade de carbono nacional: 0.27 kg CO₂eq/€ PIB (2022)',
+      'Intensidade de carbono nacional: 0.25 kg CO₂eq/€ PIB (2023)',
     ],
   },
 
@@ -97,7 +97,7 @@ export interface SectorEmissionFactor {
   sector: string;
   /** Código CAE/NACE da Secção */
   caeSection: string;
-  /** Intensidade carbónica em kg CO₂eq por € de VAB */
+  /** Intensidade de carbono em kg CO₂eq por € de VAB */
   intensity: number;
   /** Fonte do valor: 'reported' = citado diretamente, 'calculated' = calculado, 'estimated' = estimado */
   source: 'reported' | 'calculated' | 'estimated';
@@ -116,7 +116,7 @@ export interface IndustrySubsectorEmissionFactor {
   subsector: string;
   /** Código CAE da Divisão (2 dígitos) */
   caeDivision: string;
-  /** Intensidade carbónica em kg CO₂eq por € de VAB */
+  /** Intensidade de carbono em kg CO₂eq por € de VAB */
   intensity: number;
   /** Fonte do valor */
   source: 'reported' | 'calculated' | 'estimated';
@@ -133,7 +133,7 @@ export interface IndustrySubsectorEmissionFactor {
 // ============================================================================
 // FATORES DE INTENSIDADE POR SETOR PRINCIPAL (Secções CAE)
 // ============================================================================
-// Metodologia INE: Intensidade Carbónica = GWP / VAB
+// Metodologia INE: Intensidade de Carbono = GWP / VAB
 // Onde:
 //   GWP = Global Warming Potential (emissões em CO₂eq)
 //   VAB = Valor Acrescentado Bruto (em euros)
@@ -150,7 +150,7 @@ export const sectorEmissionFactors: SectorEmissionFactor[] = [
     source: 'reported',
     reference: 'INE-CEA-2022',
     year: 2022,
-    notes: 'Energia, água e saneamento - maior intensidade carbónica. Valor citado na página 5 da publicação INE.',
+    notes: 'Energia, água e saneamento - maior intensidade de carbono. Valor citado na página 5 da publicação INE.',
   },
   {
     sector: 'agua',
@@ -183,7 +183,7 @@ export const sectorEmissionFactors: SectorEmissionFactor[] = [
     reference: 'INE-CEA-2022',
     year: 2022,
     methodology: 'Calculado como inverso da relação VAB/GWP = 463.8 €/kg. Intensidade = 1/463.8 = 0.00216 ≈ 0.002 kg/€',
-    notes: 'Atividades financeiras e de seguros. Setor com menor intensidade carbónica.',
+    notes: 'Atividades financeiras e de seguros. Setor com menor intensidade de carbono.',
   },
   {
     sector: 'imobiliario',
@@ -506,7 +506,7 @@ export const industrySubsectorFactors: IndustrySubsectorEmissionFactor[] = [
 // ============================================================================
 
 /**
- * Obtém o fator de intensidade carbónica para um setor principal
+ * Obtém o fator de intensidade de carbono para um setor principal
  */
 export function getSectorEmissionIntensity(sector: string): number | undefined {
   const factor = sectorEmissionFactors.find(f => f.sector === sector);
@@ -514,7 +514,7 @@ export function getSectorEmissionIntensity(sector: string): number | undefined {
 }
 
 /**
- * Obtém o fator de intensidade carbónica para um subsetor da indústria
+ * Obtém o fator de intensidade de carbono para um subsetor da indústria
  */
 export function getSubsectorEmissionIntensity(subsector: string): number | undefined {
   const factor = industrySubsectorFactors.find(f => f.subsector === subsector);
@@ -622,7 +622,7 @@ export const emissionIntensityMetadata = {
   unit: 'kg CO₂eq por € de VAB',
 
   methodology: {
-    description: 'Intensidade Carbónica = GWP / VAB',
+    description: 'Intensidade de Carbono = GWP / VAB',
     gwp: 'Global Warming Potential - soma das emissões de CO₂, CH₄ e N₂O convertidas em CO₂ equivalente',
     vab: 'Valor Acrescentado Bruto - medida do contributo de cada atividade para a economia',
   },

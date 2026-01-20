@@ -327,7 +327,7 @@ export function FilterModal({
         <div className="space-y-4">
           {/* Dimensão da Empresa */}
           <div className="rounded-lg border p-4 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-bold">
               <Building2 className="h-4 w-4 text-primary" />
               Dimensão da empresa
             </div>
@@ -363,7 +363,7 @@ export function FilterModal({
 
           {/* Atividade da Empresa */}
           <div className="rounded-lg border p-4 space-y-3">
-            <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-bold">
               <Briefcase className="h-4 w-4 text-primary" />
               Atividade da empresa
             </div>
@@ -399,7 +399,7 @@ export function FilterModal({
 
           {/* Localização */}
           <div className="rounded-lg border p-4 space-y-4">
-            <div className="flex items-center gap-2 text-sm font-medium">
+            <div className="flex items-center gap-2 text-sm font-bold">
               <MapPin className="h-4 w-4 text-primary" />
               {isMunicipio ? `Localização em ${fixedMunicipality}` : "Localização"}
             </div>

@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { Header } from "@/components/dashboard/Header";
-import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { ClusterSelector, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { InfrastructureKPIs } from "@/components/dashboard/InfrastructureKPIs";
@@ -113,7 +112,7 @@ const Overview = () => {
   const clusterCounts = useMemo(() => {
     const counts: Record<string, number> = { all: baseSuppliers.length };
     clusters.forEach(cluster => {
-      counts[cluster.id] = baseSuppliers.filter(s => (s as any).clusterId === cluster.id).length;
+      counts[cluster.id] = baseSuppliers.filter(s => s.clusterId === cluster.id).length;
     });
     return counts;
   }, [baseSuppliers, clusters]);
@@ -124,7 +123,7 @@ const Overview = () => {
     };
     clusters.forEach(cluster => {
       potentials[cluster.id] = calculateImprovementPotential(
-        baseSuppliers.filter(s => (s as any).clusterId === cluster.id),
+        baseSuppliers.filter(s => s.clusterId === cluster.id),
         isMunicipio
       );
     });
@@ -146,7 +145,7 @@ const Overview = () => {
 
     // Filtro de cluster
     if (selectedCluster !== 'all') {
-      filtered = filtered.filter(supplier => (supplier as any).clusterId === selectedCluster);
+      filtered = filtered.filter(supplier => supplier.clusterId === selectedCluster);
     }
 
     // Filtro de dimensão (multiselect)
@@ -181,7 +180,6 @@ const Overview = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
-        <WelcomeBanner />
         <ClusterSelector
           selectedCluster={selectedCluster}
           onClusterChange={setSelectedCluster}

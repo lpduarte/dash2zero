@@ -10,28 +10,30 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { 
-  Search, 
-  Send, 
-  AlertTriangle, 
+import {
+  Search,
+  Send,
+  AlertTriangle,
   Loader2,
   Mail,
   Target,
   TrendingUp,
+  Info,
+  BookOpen,
   ChevronDown,
+  ChevronUp,
   ChevronRight,
   Archive,
   CheckCircle2,
   Calculator,
   Clock,
   Star,
-  Users,
-  UserX,
   Lightbulb,
   Zap
 } from "lucide-react";
@@ -58,47 +60,47 @@ interface CompanyWithTracking extends SupplierWithoutFootprint {
 const onboardingStatusConfig: Record<string, { label: string; color: string; tooltip: string }> = {
   por_contactar: {
     label: 'Por contactar',
-    color: 'bg-status-pending/15 text-status-pending border border-status-pending/30',
+    color: 'bg-status-pending/15 text-status-pending border border-status-pending/30 hover:bg-status-pending/25 transition-colors',
     tooltip: 'Ainda não recebeu nenhum email'
   },
   sem_interacao: {
     label: 'Sem interação',
-    color: 'bg-status-contacted/15 text-status-contacted border border-status-contacted/30',
+    color: 'bg-status-contacted/15 text-status-contacted border border-status-contacted/30 hover:bg-status-contacted/25 transition-colors',
     tooltip: 'Recebeu email mas não clicou no link'
   },
   interessada: {
     label: 'Interessada',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
     tooltip: 'Clicou no link do email'
   },
   interessada_simple: {
     label: 'Interessada / Simple',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
     tooltip: 'Escolheu o caminho Simple na landing page'
   },
   interessada_formulario: {
     label: 'Interessada / Formulário',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30',
+    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
     tooltip: 'Escolheu o caminho Formulário na landing page'
   },
   registada_simple: {
     label: 'Registada',
-    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    color: 'bg-status-registered/15 text-status-registered border border-status-registered/30 hover:bg-status-registered/25 transition-colors',
     tooltip: 'Criou conta no Simple'
   },
   em_progresso_simple: {
     label: 'Em progresso / Simple',
-    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30 hover:bg-status-progress/25 transition-colors',
     tooltip: 'Iniciou o cálculo da pegada no Simple'
   },
   em_progresso_formulario: {
     label: 'Em progresso / Formulário',
-    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30',
+    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30 hover:bg-status-progress/25 transition-colors',
     tooltip: 'Iniciou o preenchimento do formulário'
   },
   completo: {
     label: 'Completo',
-    color: 'bg-status-complete/15 text-status-complete border border-status-complete/30',
+    color: 'bg-status-complete/15 text-status-complete border border-status-complete/30 hover:bg-status-complete/25 transition-colors',
     tooltip: 'Pegada calculada com sucesso'
   },
 };
@@ -154,6 +156,7 @@ const Incentive = () => {
   const [isMetricsExpanded, setIsMetricsExpanded] = useState(true);
   const [sortBy, setSortBy] = useState<'name' | 'status' | 'emails' | 'lastContact'>('status');
   const [showSmartSendDialog, setShowSmartSendDialog] = useState(false);
+  const [showKPIsModal, setShowKPIsModal] = useState(false);
   
   // Status order for sorting (most advanced first)
   const statusOrder: Record<string, number> = {
@@ -286,21 +289,31 @@ const Incentive = () => {
     
     const porContactar = statusCounts['por_contactar'] || 0;
     const semInteracao = statusCounts['sem_interacao'] || 0;
-    const interessada = (statusCounts['interessada'] || 0) + 
-                        (statusCounts['interessada_simple'] || 0) + 
+    const interessada = (statusCounts['interessada'] || 0) +
+                        (statusCounts['interessada_simple'] || 0) +
                         (statusCounts['interessada_formulario'] || 0);
     const registada = statusCounts['registada_simple'] || 0;
-    const emProgresso = (statusCounts['em_progresso_simple'] || 0) + 
+    const emProgresso = (statusCounts['em_progresso_simple'] || 0) +
                         (statusCounts['em_progresso_formulario'] || 0);
-    const completo = statusCounts['completo'] || 0;
+
+    // Contagem de completos por caminho (baseado em completedVia)
+    const completedCompanies = allCompanies.filter(c => c.onboardingStatus === 'completo');
+    const completoSimple = completedCompanies.filter(c => c.completedVia === 'simple').length;
+    const completoFormulario = completedCompanies.filter(c => c.completedVia === 'formulario').length;
+    const completo = completoSimple + completoFormulario;
+
+    // Dados para o funil com ramificação
+    const simpleRegistered = statusCounts['registada_simple'] || 0;
+    const simpleProgress = statusCounts['em_progresso_simple'] || 0;
+    const formularioProgress = statusCounts['em_progresso_formulario'] || 0;
     
-    const emFunil = semInteracao + interessada + registada + emProgresso;
     const conversionRate = total > 0 ? Math.round((completo / total) * 100) : 0;
     
     // Percentages for funnel visualization
     const porContactarPerc = total > 0 ? Math.round((porContactar / total) * 100) : 0;
     const semInteracaoPerc = total > 0 ? Math.round((semInteracao / total) * 100) : 0;
     const interessadaPerc = total > 0 ? Math.round((interessada / total) * 100) : 0;
+    const registadaPerc = total > 0 ? Math.round((registada / total) * 100) : 0;
     const emProgressoPerc = total > 0 ? Math.round((emProgresso / total) * 100) : 0;
     const completoPerc = total > 0 ? Math.round((completo / total) * 100) : 0;
     
@@ -309,6 +322,15 @@ const Incentive = () => {
     const bottleneck = "Sem interação → Interessada";
     const bestTemplate = "Convite Inicial";
     const bestTemplateRate = 42;
+
+    // Email performance metrics (mock data)
+    // Nota: Neste modelo simplificado, assumimos que quem progrediu no funil abriu/clicou no email
+    const emailsSent = total - porContactar; // Empresas que receberam pelo menos 1 email
+    const emailsOpened = semInteracao + interessada + registada + emProgresso + completo; // Quem abriu = quem passou de "por contactar"
+    const emailsClicked = interessada + registada + emProgresso + completo; // Quem clicou = quem ficou interessado+
+
+    const openRate = emailsSent > 0 ? Math.round((emailsOpened / emailsSent) * 100) : 0;
+    const clickToOpenRate = emailsOpened > 0 ? Math.round((emailsClicked / emailsOpened) * 100) : 0;
     
     const chartData = [
       {
@@ -316,11 +338,12 @@ const Incentive = () => {
         porContactar,
         semInteracao,
         interessada,
+        registada,
         emProgresso,
         completo,
       }
     ];
-    
+
     return {
       conversionRate,
       porContactar,
@@ -329,9 +352,10 @@ const Incentive = () => {
       semInteracaoPerc,
       interessada,
       interessadaPerc,
+      registada,
+      registadaPerc,
       emProgresso,
       emProgressoPerc,
-      emFunil,
       avgDaysToConversion,
       bottleneck,
       bestTemplate,
@@ -340,6 +364,20 @@ const Incentive = () => {
       completo,
       completoPerc,
       chartData,
+      // Dados para funil com ramificação
+      simple: {
+        registered: simpleRegistered,
+        progress: simpleProgress,
+        complete: completoSimple,
+      },
+      formulario: {
+        progress: formularioProgress,
+        complete: completoFormulario,
+      },
+      // Email performance metrics
+      emailsSent,
+      openRate,
+      clickToOpenRate,
     };
   }, [companiesWithoutFootprint]);
   
@@ -397,10 +435,10 @@ const Incentive = () => {
   };
   
   const getEmailCountColor = (count: number) => {
-    if (count === 0) return "bg-muted text-muted-foreground";
-    if (count === 1) return "bg-primary/20 text-primary";
-    if (count === 2) return "bg-warning/20 text-warning";
-    return "bg-danger/20 text-danger";
+    if (count === 0) return "bg-muted text-muted-foreground border border-muted-foreground/30";
+    if (count === 1) return "bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors";
+    if (count === 2) return "bg-warning/20 text-warning border border-warning/30 hover:bg-warning/30 transition-colors";
+    return "bg-danger/20 text-danger border border-danger/30 hover:bg-danger/30 transition-colors";
   };
   
   // Preview
@@ -505,16 +543,27 @@ const Incentive = () => {
             <CardHeader className={cn("transition-all duration-[400ms]", isMetricsExpanded ? "pb-3" : "pb-6")}>
               <SectionHeader
                 icon={TrendingUp}
-                title="Progresso do Onboarding"
+                title="Progresso de onboarding"
                 collapsible
                 expanded={isMetricsExpanded}
                 onToggle={() => setIsMetricsExpanded(!isMetricsExpanded)}
+                actions={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => setShowKPIsModal(true)}
+                  >
+                    <Info className="h-3 w-3" />
+                    O que significa cada KPI?
+                  </Button>
+                }
               />
             </CardHeader>
             <CollapsibleContent>
               <CardContent>
-                {/* Linha 1 - 5 KPIs */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {/* Linha 1 - Métricas de Performance (4 KPIs numéricos) */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <KPICard
                     title="Taxa de Conversão"
                     value={`${funnelMetrics.conversionRate}%`}
@@ -525,23 +574,6 @@ const Incentive = () => {
                     valueColor="text-success"
                   />
                   <KPICard
-                    title="Por Calcular"
-                    value={funnelMetrics.porContactar}
-                    unit="sem nenhum email"
-                    icon={UserX}
-                    iconColor="text-primary"
-                    iconBgColor="bg-primary/10"
-                  />
-                  <KPICard
-                    title="Em Funil"
-                    value={funnelMetrics.emFunil}
-                    unit="contactadas em progresso"
-                    icon={Users}
-                    iconColor="text-primary"
-                    iconBgColor="bg-primary/10"
-                    valueColor="text-primary"
-                  />
-                  <KPICard
                     title="Time to Value"
                     value={funnelMetrics.avgDaysToConversion}
                     unit="dias em média"
@@ -550,86 +582,208 @@ const Incentive = () => {
                     iconBgColor="bg-primary/10"
                   />
                   <KPICard
+                    title="Open Rate"
+                    value={`${funnelMetrics.openRate}%`}
+                    unit={`${funnelMetrics.emailsSent} emails enviados`}
+                    icon={Mail}
+                    iconColor={funnelMetrics.openRate >= 20 ? "text-success" : "text-warning"}
+                    iconBgColor={funnelMetrics.openRate >= 20 ? "bg-success/10" : "bg-warning/10"}
+                    valueColor={funnelMetrics.openRate >= 20 ? "text-success" : "text-warning"}
+                  />
+                  <KPICard
+                    title="Click-to-Open"
+                    value={`${funnelMetrics.clickToOpenRate}%`}
+                    unit="qualidade do conteúdo"
+                    icon={Zap}
+                    iconColor={funnelMetrics.clickToOpenRate >= 30 ? "text-success" : "text-primary"}
+                    iconBgColor={funnelMetrics.clickToOpenRate >= 30 ? "bg-success/10" : "bg-primary/10"}
+                    valueColor={funnelMetrics.clickToOpenRate >= 30 ? "text-success" : "text-primary"}
+                  />
+                </div>
+
+                {/* Linha 2 - Insights Accionáveis (2 KPIs com texto) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <KPICard
+                    title="Bottleneck"
+                    value={funnelMetrics.bottleneck}
+                    unit="fase com maior drop-off no funil"
+                    icon={AlertTriangle}
+                    iconColor="text-warning"
+                    iconBgColor="bg-warning/10"
+                    valueColor="text-warning"
+                  />
+                  <KPICard
                     title="Melhor Template"
                     value={funnelMetrics.bestTemplate}
                     unit={`${funnelMetrics.bestTemplateRate}% conversão`}
                     icon={Star}
-                    iconColor="text-warning"
-                    iconBgColor="bg-warning/10"
+                    iconColor="text-primary"
+                    iconBgColor="bg-primary/10"
                   />
                 </div>
-                
-                {/* Linha 2 - Bottleneck largo + espaço para funil visual */}
-                <div className="grid grid-cols-5 gap-4 mt-4">
-                  <div className="col-span-2">
-                    <KPICard
-                      title="Bottleneck"
-                      value={funnelMetrics.bottleneck}
-                      unit="fase com maior drop-off no funil"
-                      icon={AlertTriangle}
-                      iconColor="text-warning"
-                      iconBgColor="bg-warning/10"
-                      valueColor="text-warning"
-                    />
-                  </div>
-                  {/* Funnel visual with CSS */}
-                  <div className="col-span-3 border rounded-lg p-4 bg-card shadow-md flex flex-col justify-between">
-                    <p className="text-xs font-normal text-muted-foreground">Progressão do Funil</p>
-                    
-                    {/* Barra CSS - alinhada com "Sem interação..." do card à esquerda */}
-                    <div className="h-4 w-full flex gap-px">
-                      {[
-                        { key: 'porContactar', value: funnelMetrics.porContactar, color: 'bg-status-pending', label: 'Por contactar' },
-                        { key: 'semInteracao', value: funnelMetrics.semInteracao, color: 'bg-status-contacted', label: 'Sem interação' },
-                        { key: 'interessada', value: funnelMetrics.interessada, color: 'bg-status-interested', label: 'Interessada' },
-                        { key: 'emProgresso', value: funnelMetrics.emProgresso, color: 'bg-status-progress', label: 'Em progresso' },
-                        { key: 'completo', value: funnelMetrics.completo, color: 'bg-status-complete', label: 'Completo' },
-                      ].filter(stage => stage.value > 0).map((stage, index, visibleArr) => {
-                        const total = visibleArr.reduce((sum, s) => sum + s.value, 0);
-                        const percentage = total > 0 ? (stage.value / total) * 100 : 0;
-                        const isFirst = index === 0;
-                        const isLast = index === visibleArr.length - 1;
-                        return (
-                          <TooltipProvider key={stage.key}>
+
+                {/* Funil com ramificação - largura total */}
+                {(() => {
+                  const preTotal = funnelMetrics.porContactar + funnelMetrics.semInteracao + funnelMetrics.interessada;
+                  const simpleTotal = funnelMetrics.simple.registered + funnelMetrics.simple.progress + funnelMetrics.simple.complete;
+                  const formularioTotal = funnelMetrics.formulario.progress + funnelMetrics.formulario.complete;
+                  const postTotal = simpleTotal + formularioTotal;
+                  const grandTotal = preTotal + postTotal;
+
+                  const leftPercent = postTotal === 0 ? 100 : preTotal === 0 ? 0 : (preTotal / grandTotal) * 100;
+                  const rightPercent = preTotal === 0 ? 100 : postTotal === 0 ? 0 : (postTotal / grandTotal) * 100;
+
+                  const legendItems = [
+                    { label: 'Por contactar', value: funnelMetrics.porContactar, color: 'bg-status-pending', borderColor: 'border-status-pending', tooltip: 'Ainda não recebeu nenhum email' },
+                    { label: 'Sem interação', value: funnelMetrics.semInteracao, color: 'bg-status-contacted', borderColor: 'border-status-contacted', tooltip: 'Recebeu email mas não clicou no link' },
+                    { label: 'Interessada', value: funnelMetrics.interessada, color: 'bg-status-interested', borderColor: 'border-status-interested', tooltip: 'Clicou no link do email' },
+                    { label: 'Registada', value: funnelMetrics.simple.registered, color: 'bg-status-registered', borderColor: 'border-status-registered', tooltip: 'Criou conta no Simple' },
+                    { label: 'Em progresso', value: funnelMetrics.simple.progress + funnelMetrics.formulario.progress, color: 'bg-status-progress', borderColor: 'border-status-progress', tooltip: 'Iniciou o cálculo da pegada' },
+                    { label: 'Completo', value: funnelMetrics.simple.complete + funnelMetrics.formulario.complete, color: 'bg-status-complete', borderColor: 'border-status-complete', tooltip: 'Pegada calculada com sucesso' },
+                  ];
+
+                  return (
+                    <div className="border rounded-lg p-4 bg-card shadow-md mt-4">
+                      <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding</p>
+                      <div className="flex items-center gap-2">
+                        {/* Fase pré-decisão */}
+                        {preTotal > 0 && (() => {
+                          const preSegments = [
+                            { key: 'pending', value: funnelMetrics.porContactar, color: 'bg-status-pending', label: 'Por contactar' },
+                            { key: 'contacted', value: funnelMetrics.semInteracao, color: 'bg-status-contacted', label: 'Sem interação' },
+                            { key: 'interested', value: funnelMetrics.interessada, color: 'bg-status-interested', label: 'Interessada' },
+                          ].filter(s => s.value > 0);
+
+                          return (
+                            <>
+                              <div style={{ width: `${leftPercent}%` }}>
+                                <div className="h-4 flex gap-px">
+                                  {preSegments.map((segment, index) => (
+                                    <div
+                                      key={segment.key}
+                                      className={cn(
+                                        segment.color,
+                                        "h-full",
+                                        index === 0 && "rounded-l-md",
+                                        index === preSegments.length - 1 && "rounded-r-md"
+                                      )}
+                                      style={{ width: `${(segment.value / preTotal) * 100}%` }}
+                                      title={`${segment.label}: ${segment.value}`}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Conector visual */}
+                              {postTotal > 0 && (
+                                <div className="flex flex-col items-center gap-1 text-muted-foreground/50 shrink-0">
+                                  <div className="w-px h-4 bg-current" />
+                                  <ChevronRight className="h-4 w-4" />
+                                  <div className="w-px h-4 bg-current" />
+                                </div>
+                              )}
+                            </>
+                          );
+                        })()}
+
+                        {/* Fase pós-decisão */}
+                        {postTotal > 0 && (
+                          <div style={{ width: `${rightPercent}%` }} className="space-y-1">
+                            {/* Ramo Simple */}
+                            {(() => {
+                              // Calcular largura proporcional para cada ramo
+                              const maxBranchTotal = Math.max(simpleTotal, formularioTotal);
+                              const simpleWidthPercent = maxBranchTotal > 0 ? (simpleTotal / maxBranchTotal) * 100 : 0;
+                              const formularioWidthPercent = maxBranchTotal > 0 ? (formularioTotal / maxBranchTotal) * 100 : 0;
+
+                              const simpleSegments = [
+                                { key: 'registered', value: funnelMetrics.simple.registered, color: 'bg-status-registered', label: 'Registada' },
+                                { key: 'progress', value: funnelMetrics.simple.progress, color: 'bg-status-progress', label: 'Em progresso' },
+                                { key: 'complete', value: funnelMetrics.simple.complete, color: 'bg-status-complete', label: 'Completo' },
+                              ].filter(s => s.value > 0);
+
+                              const formularioSegments = [
+                                { key: 'progress', value: funnelMetrics.formulario.progress, color: 'bg-status-progress', label: 'Em progresso' },
+                                { key: 'complete', value: funnelMetrics.formulario.complete, color: 'bg-status-complete', label: 'Completo' },
+                              ].filter(s => s.value > 0);
+
+                              return (
+                                <>
+                                  {/* Ramo Simple */}
+                                  {simpleTotal > 0 && (
+                                    <div className="space-y-1">
+                                      <p className="text-xs font-bold">Simple <span className="font-normal text-muted-foreground">({simpleTotal})</span></p>
+                                      <div className="h-4 flex gap-px" style={{ width: `${simpleWidthPercent}%` }}>
+                                        {simpleSegments.map((segment, index) => (
+                                          <div
+                                            key={segment.key}
+                                            className={cn(
+                                              segment.color,
+                                              "h-full",
+                                              index === 0 && "rounded-l-md",
+                                              index === simpleSegments.length - 1 && "rounded-r-md"
+                                            )}
+                                            style={{ width: `${(segment.value / simpleTotal) * 100}%` }}
+                                            title={`${segment.label}: ${segment.value}`}
+                                          />
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Ramo Formulário */}
+                                  {formularioTotal > 0 && (
+                                    <div className="space-y-1">
+                                      <div className="h-4 flex gap-px" style={{ width: `${formularioWidthPercent}%` }}>
+                                        {formularioSegments.map((segment, index) => (
+                                          <div
+                                            key={segment.key}
+                                            className={cn(
+                                              segment.color,
+                                              "h-full",
+                                              index === 0 && "rounded-l-md",
+                                              index === formularioSegments.length - 1 && "rounded-r-md"
+                                            )}
+                                            style={{ width: `${(segment.value / formularioTotal) * 100}%` }}
+                                            title={`${segment.label}: ${segment.value}`}
+                                          />
+                                        ))}
+                                      </div>
+                                      <p className="text-xs font-bold">Formulário <span className="font-normal text-muted-foreground">({formularioTotal})</span></p>
+                                    </div>
+                                  )}
+                                </>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Separador */}
+                      <Separator className="my-4" />
+
+                      {/* Legenda com contagens e tooltips */}
+                      <div className="flex flex-wrap justify-center gap-4">
+                        {legendItems.map((item) => (
+                          <TooltipProvider key={item.label} delayDuration={100}>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <div 
-                                  className={cn(
-                                    stage.color,
-                                    "h-full transition-opacity hover:opacity-80 cursor-default",
-                                    isFirst && "rounded-l-full",
-                                    isLast && "rounded-r-full"
-                                  )}
-                                  style={{ width: `${percentage}%` }}
-                                />
+                                <div className="flex items-center gap-1.5 text-xs cursor-help">
+                                  <div className={cn("h-2.5 w-2.5 rounded-full", item.color)} />
+                                  <span className="text-muted-foreground">{item.label}</span>
+                                  <span className="font-normal">{item.value}</span>
+                                </div>
                               </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{stage.label}: {stage.value} ({percentage.toFixed(0)}%)</p>
+                              <TooltipContent side="bottom" className={cn("border", item.borderColor)}>
+                                <p>{item.tooltip}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
-                        );
-                      })}
+                        ))}
+                      </div>
                     </div>
-                    
-                    {/* Legenda */}
-                    <div className="flex flex-wrap justify-center gap-4">
-                      {[
-                        { label: 'Por contactar', value: funnelMetrics.porContactar, color: 'bg-status-pending' },
-                        { label: 'Sem interação', value: funnelMetrics.semInteracao, color: 'bg-status-contacted' },
-                        { label: 'Interessada', value: funnelMetrics.interessada, color: 'bg-status-interested' },
-                        { label: 'Em progresso', value: funnelMetrics.emProgresso, color: 'bg-status-progress' },
-                        { label: 'Completo', value: funnelMetrics.completo, color: 'bg-status-complete' },
-                      ].map((item) => (
-                        <div key={item.label} className="flex items-center gap-1.5 text-xs">
-                          <div className={cn("h-2.5 w-2.5 rounded-full", item.color)} />
-                          <span className="text-muted-foreground">{item.label}</span>
-                          <span className="font-normal">{item.value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                  );
+                })()}
               </CardContent>
             </CollapsibleContent>
           </Card>
@@ -770,20 +924,18 @@ const Incentive = () => {
                                   <Tooltip>
                                     <TooltipTrigger asChild>
                                       <CollapsibleTrigger asChild>
-                                        <Button
-                                          variant="ghost"
-                                          size="sm"
-                                          className={`gap-1 ${getEmailCountColor(company.emailsSent)}`}
+                                        <button
+                                          className={`inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-normal rounded-md ${getEmailCountColor(company.emailsSent)}`}
                                           onClick={() => toggleExpandCompany(company.id)}
                                         >
-                                          <Mail className="h-3 w-3" />
+                                          <Mail className="h-3.5 w-3.5" />
                                           {company.emailsSent}
                                           {expandedCompany === company.id ? (
-                                            <ChevronDown className="h-3 w-3" />
+                                            <ChevronUp className="h-3.5 w-3.5" />
                                           ) : (
-                                            <ChevronRight className="h-3 w-3" />
+                                            <ChevronDown className="h-3.5 w-3.5" />
                                           )}
-                                        </Button>
+                                        </button>
                                       </CollapsibleTrigger>
                                     </TooltipTrigger>
                                     {company.emailsSent >= 3 && (
@@ -792,9 +944,11 @@ const Incentive = () => {
                                   </Tooltip>
                                 </TooltipProvider>
                               ) : (
-                                <Badge variant="outline" className="text-muted-foreground">
-                                  0 emails
-                                </Badge>
+                                <div className="inline-flex items-center gap-1.5 h-8 px-2.5 text-xs font-normal bg-muted text-muted-foreground border border-muted-foreground/30 rounded-md">
+                                  <Mail className="h-3.5 w-3.5" />
+                                  0
+                                  <ChevronDown className="h-3.5 w-3.5 opacity-0" />
+                                </div>
                               )}
                             </div>
                           </div>
@@ -1078,6 +1232,120 @@ const Incentive = () => {
                   <Send className="mr-2 h-4 w-4" />
                 )}
                 Enviar {selectedCompanies.length} emails
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Modal de explicação dos KPIs */}
+        <Dialog open={showKPIsModal} onOpenChange={setShowKPIsModal}>
+          <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+            <DialogHeader>
+              <div className="flex items-center gap-3">
+                <BookOpen className="h-5 w-5 text-primary" />
+                <DialogTitle>O que significa cada KPI?</DialogTitle>
+              </div>
+            </DialogHeader>
+
+            <div className="space-y-4 py-4">
+              {/* Linha 1: Métricas de Performance */}
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Métricas de Performance</p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="p-2 rounded-lg bg-success/10">
+                      <TrendingUp className="h-4 w-4 text-success" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Taxa de Conversão</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Percentagem de empresas que completaram o cálculo da pegada de carbono.
+                        É o indicador principal de sucesso do programa de onboarding.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Clock className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Time to Value</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Tempo médio (em dias) desde o primeiro contacto até à conclusão do cálculo da pegada.
+                        Quanto menor, mais eficiente é o processo de onboarding.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Mail className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Open Rate</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Percentagem de emails abertos pelos destinatários.
+                        Benchmark B2B: <span className="text-success font-medium">&gt;20%</span> é considerado bom.
+                        Indica a eficácia do assunto e timing dos emails.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Zap className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Click-to-Open (CTOR)</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Percentagem de quem clicou no link entre quem abriu o email.
+                        Benchmark B2B: <span className="text-success font-medium">&gt;30%</span> é considerado bom.
+                        Mede a qualidade e relevância do conteúdo do email.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Linha 2: Insights Accionáveis */}
+              <div>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Insights Accionáveis</p>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3 p-3 border rounded-lg border-warning/30 bg-warning/5">
+                    <div className="p-2 rounded-lg bg-warning/10">
+                      <AlertTriangle className="h-4 w-4 text-warning" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Bottleneck</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Identifica a fase do funil onde mais empresas estão a abandonar o processo.
+                        É onde deve concentrar esforços de melhoria — seja através de comunicação diferente,
+                        simplificação do processo, ou suporte adicional.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 border rounded-lg">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Star className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Melhor Template</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        O template de email com maior taxa de conversão histórica.
+                        Use-o como referência para comunicação com empresas em fases iniciais do funil,
+                        ou como base para criar novos templates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <DialogFooter>
+              <Button onClick={() => setShowKPIsModal(false)}>
+                Entendido
               </Button>
             </DialogFooter>
           </DialogContent>

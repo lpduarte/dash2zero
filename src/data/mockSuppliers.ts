@@ -2,7 +2,7 @@ import { Supplier } from "@/types/supplier";
 import { getBestEmissionIntensity } from "./emissionIntensity";
 
 // ============================================================================
-// BENCHMARKS DE INTENSIDADE CARBÓNICA POR SETOR (INE 2022)
+// BENCHMARKS DE INTENSIDADE DE CARBONO POR SETOR (INE 2022)
 // Usados para gerar emissões realistas nos mock data
 // Unidade: kg CO₂eq por € de VAB
 // ============================================================================
@@ -3669,5 +3669,18 @@ const cascaisSuppliers = [
 // Export processed suppliers with NIFs and location data
 const processedRawSuppliers: Supplier[] = rawSuppliers.map((supplier, index) => addFieldsToSupplier(supplier, index));
 
+// Process Cascais suppliers - recalculate emissions but keep their location data
+const processedCascaisSuppliers: Supplier[] = cascaisSuppliers.map((supplier, index) => {
+  const recalculated = recalculateRealisticEmissions(supplier, index);
+  return {
+    ...recalculated,
+    // Preserve original location and size
+    district: supplier.district,
+    municipality: supplier.municipality,
+    parish: supplier.parish,
+    companySize: supplier.companySize,
+  } as Supplier;
+});
+
 // Combine raw suppliers with Cascais-specific suppliers
-export const mockSuppliers: Supplier[] = [...processedRawSuppliers, ...cascaisSuppliers as Supplier[]];
+export const mockSuppliers: Supplier[] = [...processedRawSuppliers, ...processedCascaisSuppliers];

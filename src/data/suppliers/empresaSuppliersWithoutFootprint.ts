@@ -11,7 +11,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 28, area: 800, revenue: 2.1,
     contact: { email: 'geral@plasticosinovacao.pt', phone: '+351 253 000 001', website: 'https://plasticosinovacao.pt', nif: '504234001' },
     emailsSent: 2, lastContactDate: '2024-11-15',
-    onboardingStatus: 'interessada_simple',
+    onboardingStatus: 'interessada_formulario',
   },
   {
     id: 'emp-sup-np-002', name: 'Embalagens Express', clusterId: 'emp-cluster-fornecedores',
@@ -103,7 +103,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 20, area: 850, revenue: 0.95,
     contact: { email: 'info@fitnesspro.pt', phone: '+351 214 300 006', website: 'https://fitnesspro.pt', nif: '505234006' },
     emailsSent: 3, lastContactDate: '2024-12-15',
-    onboardingStatus: 'registada_simple',
+    onboardingStatus: 'em_progresso_formulario',
   },
   {
     id: 'emp-cli-np-007', name: 'Escritório Advocacia Silva', clusterId: 'emp-cluster-clientes',
@@ -213,7 +213,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 180, revenue: 1.2,
     contact: { email: 'geral@contabilidadeconfianca.pt', phone: '+351 222 500 003', website: 'https://contabilidadeconfianca.pt', nif: '506234003' },
     emailsSent: 2, lastContactDate: '2024-12-08',
-    onboardingStatus: 'interessada_simple',
+    onboardingStatus: 'interessada_formulario',
   },
   {
     id: 'emp-par-np-004', name: 'Design Criativo Lda', clusterId: 'emp-cluster-parceiros',

@@ -2,9 +2,9 @@ import type { Supplier } from '@/types/supplier';
 import { getBestEmissionIntensity } from '@/data/emissionIntensity';
 
 // ============================================================================
-// ANÁLISE DE RISCO CARBÓNICO
+// ANÁLISE DE RISCO DE CARBONO
 // ============================================================================
-// Compara a intensidade carbónica de fornecedores contra:
+// Compara a intensidade de carbono de fornecedores contra:
 // 1. Benchmarks INE (dados oficiais portugueses)
 // 2. Média interna dos fornecedores no sistema (opcional)
 // ============================================================================

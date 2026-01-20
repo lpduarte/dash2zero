@@ -1,23 +1,25 @@
-import { useState } from "react";
-import { Bell, AlertTriangle, CheckCircle, Info, Download, FileText } from "lucide-react";
+import { useState, useMemo } from "react";
+import { Bell, AlertTriangle, CheckCircle, Info, Download, FileText, Target } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { Supplier } from "@/types/supplier";
 import { toast } from "sonner";
+import { OwnerType } from "@/types/clusterNew";
+import { hasFootprint } from "@/types/supplierNew";
+import { getClustersByOwnerType } from "@/data/clusters";
+import { getSuppliersByOwnerType, getSuppliersWithFootprintByOwnerType } from "@/data/suppliers";
 
 interface NotificationBellProps {
-  suppliers: Supplier[];
+  userType: OwnerType;
 }
 
 interface Notification {
   id: string;
-  type: "warning" | "info" | "success" | "export";
+  type: "warning" | "info" | "success" | "export" | "milestone";
   title: string;
   description: string;
   supplier?: string;
@@ -25,13 +27,73 @@ interface Notification {
   read: boolean;
 }
 
-export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
+// Milestones to notify
+const MILESTONES = [25, 50, 75, 100];
+
+export const NotificationBell = ({ userType }: NotificationBellProps) => {
+  const suppliers = useMemo(() => getSuppliersWithFootprintByOwnerType(userType), [userType]);
+  const allSuppliers = useMemo(() => getSuppliersByOwnerType(userType), [userType]);
+  const clusters = useMemo(() => getClustersByOwnerType(userType), [userType]);
+
   const generateNotifications = (): Notification[] => {
     const notifications: Notification[] = [];
-    const avgEmissions = suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length;
-    const avgFE = suppliers.reduce((sum, s) => sum + s.emissionsPerRevenue, 0) / suppliers.length;
 
-    // Add export options as notifications
+    // === MILESTONE NOTIFICATIONS (clusters reaching coverage goals) ===
+    clusters.forEach(cluster => {
+      const clusterSuppliers = allSuppliers.filter(s => s.clusterId === cluster.id);
+      const totalInCluster = clusterSuppliers.length;
+
+      if (totalInCluster === 0) return;
+
+      const withFootprint = clusterSuppliers.filter(s => hasFootprint(s)).length;
+      const coverage = (withFootprint / totalInCluster) * 100;
+
+      // Check each milestone
+      MILESTONES.forEach(milestone => {
+        if (coverage >= milestone && coverage < milestone + 25) {
+          if (milestone === 100) {
+            // Special message for 100%
+            notifications.push({
+              id: `milestone-${cluster.id}-100`,
+              type: "milestone",
+              title: "Cluster completo!",
+              description: `${cluster.name}: todas as ${totalInCluster} empresas têm pegada calculada`,
+              timestamp: "",
+              read: false,
+            });
+          } else if (milestone === 75) {
+            notifications.push({
+              id: `milestone-${cluster.id}-75`,
+              type: "milestone",
+              title: "Quase lá!",
+              description: `${cluster.name} atingiu 75% de cobertura (${withFootprint}/${totalInCluster})`,
+              timestamp: "",
+              read: false,
+            });
+          } else if (milestone === 50) {
+            notifications.push({
+              id: `milestone-${cluster.id}-50`,
+              type: "milestone",
+              title: "Metade alcançada",
+              description: `${cluster.name} atingiu 50% de cobertura (${withFootprint}/${totalInCluster})`,
+              timestamp: "",
+              read: false,
+            });
+          } else if (milestone === 25) {
+            notifications.push({
+              id: `milestone-${cluster.id}-25`,
+              type: "milestone",
+              title: "Progresso inicial",
+              description: `${cluster.name} atingiu 25% de cobertura (${withFootprint}/${totalInCluster})`,
+              timestamp: "",
+              read: false,
+            });
+          }
+        }
+      });
+    });
+
+    // === EXPORT OPTIONS ===
     notifications.push({
       id: "export-pdf",
       type: "export",
@@ -41,7 +103,16 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
       read: false,
     });
 
+    // === EXISTING NOTIFICATIONS (warnings, alternatives, improvements) ===
+    const avgEmissions = suppliers.length > 0
+      ? suppliers.reduce((sum, s) => sum + s.totalEmissions, 0) / suppliers.length
+      : 0;
+    const avgFE = suppliers.length > 0
+      ? suppliers.reduce((sum, s) => sum + s.emissionsPerRevenue, 0) / suppliers.length
+      : 0;
+
     suppliers.forEach(supplier => {
+      // High emission factor warning
       if (supplier.emissionsPerRevenue > avgFE * 1.5) {
         notifications.push({
           id: `fe-high-${supplier.id}`,
@@ -54,9 +125,10 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
         });
       }
 
+      // Better alternatives available
       const sectorSuppliers = suppliers.filter(s => s.sector === supplier.sector && s.id !== supplier.id);
-      const betterAlternatives = sectorSuppliers.filter(s => 
-        s.totalEmissions < supplier.totalEmissions * 0.7 && 
+      const betterAlternatives = sectorSuppliers.filter(s =>
+        s.totalEmissions < supplier.totalEmissions * 0.7 &&
         (s.rating < supplier.rating || s.hasSBTi)
       );
 
@@ -72,6 +144,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
         });
       }
 
+      // Significant improvement
       if (supplier.yearlyProgress && supplier.yearlyProgress.length >= 2) {
         const lastYear = supplier.yearlyProgress[supplier.yearlyProgress.length - 1];
         const previousYear = supplier.yearlyProgress[supplier.yearlyProgress.length - 2];
@@ -91,7 +164,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
       }
     });
 
-    return notifications.slice(0, 8); // Limit to 8 notifications
+    return notifications.slice(0, 10);
   };
 
   const [notifications, setNotifications] = useState<Notification[]>(generateNotifications());
@@ -99,7 +172,7 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAsRead = (id: string) => {
-    setNotifications(notifications.map(n => 
+    setNotifications(notifications.map(n =>
       n.id === id ? { ...n, read: true } : n
     ));
   };
@@ -116,9 +189,11 @@ export const NotificationBell = ({ suppliers }: NotificationBellProps) => {
       case "warning":
         return <AlertTriangle className="h-4 w-4 text-warning" />;
       case "success":
-        return <CheckCircle className="h-4 w-4 text-success" />;
+        return <CheckCircle className="h-4 w-4 text-primary" />;
       case "export":
         return <Download className="h-4 w-4 text-primary" />;
+      case "milestone":
+        return <Target className="h-4 w-4 text-primary" />;
       default:
         return <Info className="h-4 w-4 text-primary" />;
     }
