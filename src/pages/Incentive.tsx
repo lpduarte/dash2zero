@@ -761,7 +761,7 @@ const Incentive = () => {
             Incentivo ao Cálculo de Pegada
           </h1>
           <p className="text-muted-foreground mt-1">
-            Contacte empresas para calcular ou atualizar a sua pegada de carbono
+            Contacte empresas para calcular a sua pegada de carbono
           </p>
         </div>
 
