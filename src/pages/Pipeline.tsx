@@ -1,0 +1,232 @@
+import { useState } from "react";
+import {
+  CheckCircle2,
+  Circle,
+  Clock,
+  AlertCircle,
+  ChevronDown,
+  ChevronRight,
+  Calendar,
+  User,
+  ListTodo
+} from "lucide-react";
+import { Header } from "@/components/dashboard/Header";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
+import pipelineData from "@/data/pipeline.json";
+
+type Status = "completed" | "in-progress" | "pending" | "blocked";
+type Category = "critical" | "important" | "normal";
+
+interface PipelineItem {
+  id: string;
+  title: string;
+  description: string;
+  category: Category;
+  status: Status;
+  priority: number;
+  criteria: string[];
+  dependencies: string[];
+}
+
+const statusConfig: Record<Status, { label: string; icon: typeof CheckCircle2; className: string }> = {
+  completed: { label: "Concluído", icon: CheckCircle2, className: "text-success" },
+  "in-progress": { label: "Em progresso", icon: Clock, className: "text-warning" },
+  pending: { label: "Pendente", icon: Circle, className: "text-muted-foreground" },
+  blocked: { label: "Bloqueado", icon: AlertCircle, className: "text-destructive" }
+};
+
+const categoryConfig: Record<Category, { label: string; variant: "destructive" | "warning" | "secondary" }> = {
+  critical: { label: "Crítico", variant: "destructive" },
+  important: { label: "Importante", variant: "warning" },
+  normal: { label: "Normal", variant: "secondary" }
+};
+
+function PipelineItemCard({ item }: { item: PipelineItem }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const status = statusConfig[item.status];
+  const category = categoryConfig[item.category];
+  const StatusIcon = status.icon;
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <div className={cn(
+        "border rounded-lg transition-colors bg-card",
+        item.status === "completed" && "bg-success/5 border-success/20",
+        item.status === "in-progress" && "bg-warning/5 border-warning/20"
+      )}>
+        <CollapsibleTrigger className="w-full">
+          <div className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors rounded-lg">
+            <div className="flex items-center gap-2">
+              {isOpen ? (
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              )}
+              <StatusIcon className={cn("h-5 w-5", status.className)} />
+            </div>
+
+            <div className="flex-1 text-left">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground font-mono">#{item.id}</span>
+                <span className="font-medium">{item.title}</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-0.5">{item.description}</p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Badge variant={category.variant}>{category.label}</Badge>
+              <Badge variant="outline">{status.label}</Badge>
+            </div>
+          </div>
+        </CollapsibleTrigger>
+
+        <CollapsibleContent>
+          <div className="px-4 pb-4 pt-0 ml-11 space-y-3">
+            <div>
+              <h4 className="text-sm font-medium mb-2">Critérios de conclusão:</h4>
+              <ul className="space-y-1">
+                {item.criteria.map((criterion, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm">
+                    <Circle className="h-3 w-3 mt-1.5 text-muted-foreground flex-shrink-0" />
+                    <span className="text-muted-foreground">{criterion}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {item.dependencies.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium mb-1">Dependências:</h4>
+                <div className="flex gap-1">
+                  {item.dependencies.map((dep) => (
+                    <Badge key={dep} variant="outline" className="text-xs">
+                      #{dep}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </CollapsibleContent>
+      </div>
+    </Collapsible>
+  );
+}
+
+export default function Pipeline() {
+  const { metadata, summary, items } = pipelineData;
+
+  const completedPercentage = summary.total > 0 ? Math.round((summary.completed / summary.total) * 100) : 0;
+
+  const criticalItems = items.filter(i => i.category === "critical");
+  const importantItems = items.filter(i => i.category === "important");
+  const normalItems = items.filter(i => i.category === "normal");
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
+        {/* Page Title */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            <ListTodo className="h-6 w-6 text-primary" />
+            Pipeline de Desenvolvimento
+          </h1>
+          <p className="text-muted-foreground mt-1">
+            Acompanhe o progresso das funcionalidades em desenvolvimento
+          </p>
+        </div>
+
+        {/* Metadata */}
+        <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
+          <div className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            <span>Cliente: {metadata.client}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            <span>Atualizado: {new Date(metadata.lastUpdated).toLocaleDateString('pt-PT')}</span>
+          </div>
+        </div>
+
+        {/* Progress Summary */}
+        <Card className="mb-8 shadow-md">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Progresso Geral</CardTitle>
+            <CardDescription>
+              {summary.completed} de {summary.total} itens concluídos
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Progress value={completedPercentage} className="h-3" />
+
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="space-y-1">
+                <div className="text-2xl font-bold text-success">{summary.completed}</div>
+                <div className="text-xs text-muted-foreground">Concluídos</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl font-bold text-warning">{summary.inProgress}</div>
+                <div className="text-xs text-muted-foreground">Em progresso</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-2xl font-bold text-muted-foreground">{summary.pending}</div>
+                <div className="text-xs text-muted-foreground">Pendentes</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Critical Items */}
+        <div className="space-y-3 mb-8">
+          <div className="flex items-center gap-2">
+            <Badge variant="destructive">Crítico</Badge>
+            <span className="text-sm text-muted-foreground">
+              {criticalItems.filter(i => i.status === "completed").length}/{criticalItems.length} concluídos
+            </span>
+          </div>
+          <div className="space-y-2">
+            {criticalItems.map((item) => (
+              <PipelineItemCard key={item.id} item={item as PipelineItem} />
+            ))}
+          </div>
+        </div>
+
+        {/* Important Items */}
+        <div className="space-y-3 mb-8">
+          <div className="flex items-center gap-2">
+            <Badge variant="warning">Importante</Badge>
+            <span className="text-sm text-muted-foreground">
+              {importantItems.filter(i => i.status === "completed").length}/{importantItems.length} concluídos
+            </span>
+          </div>
+          <div className="space-y-2">
+            {importantItems.map((item) => (
+              <PipelineItemCard key={item.id} item={item as PipelineItem} />
+            ))}
+          </div>
+        </div>
+
+        {/* Normal Items */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary">Normal</Badge>
+            <span className="text-sm text-muted-foreground">
+              {normalItems.filter(i => i.status === "completed").length}/{normalItems.length} concluídos
+            </span>
+          </div>
+          <div className="space-y-2">
+            {normalItems.map((item) => (
+              <PipelineItemCard key={item.id} item={item as PipelineItem} />
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Pencil, Copy, Archive, Trash2 } from "lucide-react";
 import { ClusterDefinition } from "@/types/clusterNew";
-import { cn } from "@/lib/utils";
 
 interface ClusterActionsMenuProps {
   cluster: ClusterDefinition;
@@ -36,18 +37,11 @@ export function ClusterActionsMenu({
 }: ClusterActionsMenuProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const menuItemClass = cn(
-    "flex items-center w-full px-3 py-2 text-sm rounded-md cursor-pointer",
-    "hover:bg-accent hover:text-accent-foreground",
-    "transition-colors"
-  );
 
   return (
     <>
-      <Popover open={menuOpen} onOpenChange={setMenuOpen}>
-        <PopoverTrigger asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
@@ -57,57 +51,48 @@ export function ClusterActionsMenu({
             <MoreHorizontal className="h-4 w-4" />
             <span className="sr-only">Abrir menu</span>
           </Button>
-        </PopoverTrigger>
-        <PopoverContent align="end" className="w-48 p-2">
-          <div className="flex flex-col gap-1">
-            <button
-              className={menuItemClass}
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(cluster);
-                setMenuOpen(false);
-              }}
-            >
-              <Pencil className="h-4 w-4 mr-2" />
-              Editar cluster
-            </button>
-            <button
-              className={menuItemClass}
-              onClick={(e) => {
-                e.stopPropagation();
-                onDuplicate(cluster);
-                setMenuOpen(false);
-              }}
-            >
-              <Copy className="h-4 w-4 mr-2" />
-              Duplicar cluster
-            </button>
-            <div className="h-px bg-border my-1" />
-            <button
-              className={menuItemClass}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowArchiveConfirm(true);
-                setMenuOpen(false);
-              }}
-            >
-              <Archive className="h-4 w-4 mr-2" />
-              Arquivar cluster
-            </button>
-            <button
-              className={cn(menuItemClass, "text-danger hover:text-danger")}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDeleteConfirm(true);
-                setMenuOpen(false);
-              }}
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Eliminar cluster
-            </button>
-          </div>
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(cluster);
+            }}
+          >
+            <Pencil className="h-4 w-4 mr-2" />
+            Editar cluster
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              onDuplicate(cluster);
+            }}
+          >
+            <Copy className="h-4 w-4 mr-2" />
+            Duplicar cluster
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowArchiveConfirm(true);
+            }}
+          >
+            <Archive className="h-4 w-4 mr-2" />
+            Arquivar cluster
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="text-danger focus:text-danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDeleteConfirm(true);
+            }}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Eliminar cluster
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* Archive Confirmation */}
       <Dialog open={showArchiveConfirm} onOpenChange={setShowArchiveConfirm}>
