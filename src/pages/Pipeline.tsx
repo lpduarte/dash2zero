@@ -145,10 +145,6 @@ export default function Pipeline() {
         {/* Metadata */}
         <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
           <div className="flex items-center gap-2">
-            <User className="h-4 w-4" />
-            <span>Cliente: {metadata.client}</span>
-          </div>
-          <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             <span>Atualizado: {new Date(metadata.lastUpdated).toLocaleDateString('pt-PT')}</span>
           </div>
