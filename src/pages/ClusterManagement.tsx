@@ -72,6 +72,7 @@ export default function ClusterManagement() {
     district: [],
     municipality: [],
     parish: [],
+    sector: [],
   });
 
   // Base suppliers - filtrados por ownerType
@@ -156,7 +157,12 @@ export default function ClusterManagement() {
     if (universalFilters.parish.length > 0) {
       filtered = filtered.filter(s => universalFilters.parish.includes(s.parish));
     }
-    
+
+    // Filtro de setor/atividade
+    if (universalFilters.sector.length > 0) {
+      filtered = filtered.filter(s => universalFilters.sector.includes(s.sector));
+    }
+
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
