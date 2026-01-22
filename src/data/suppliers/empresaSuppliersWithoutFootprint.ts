@@ -11,7 +11,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 28, area: 800, revenue: 2.1,
     contact: { email: 'geral@plasticosinovacao.pt', phone: '+351 253 000 001', website: 'https://plasticosinovacao.pt', nif: '504234001' },
     emailsSent: 2, lastContactDate: '2024-11-15',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-sup-np-002', name: 'Embalagens Express', clusterId: 'emp-cluster-fornecedores',
@@ -121,7 +121,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'media', employees: 65, area: 3500, revenue: 5.2,
     contact: { email: 'reservas@estreladomar.pt', phone: '+351 289 100 008', website: 'https://estreladomar.pt', nif: '505234008' },
     emailsSent: 2, lastContactDate: '2024-11-22',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-cli-np-009', name: 'Supermercado Família', clusterId: 'emp-cluster-clientes',
@@ -176,6 +176,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     contact: { email: 'geral@lavandariaexpress.pt', phone: '+351 212 100 014', website: '', nif: '505234014' },
     emailsSent: 3, lastContactDate: '2024-12-18',
     onboardingStatus: 'completo',
+    completedVia: 'formulario',
   },
   {
     id: 'emp-cli-np-015', name: 'Padaria Tradição', clusterId: 'emp-cluster-clientes',
@@ -213,7 +214,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'pequena', employees: 15, area: 180, revenue: 1.2,
     contact: { email: 'geral@contabilidadeconfianca.pt', phone: '+351 222 500 003', website: 'https://contabilidadeconfianca.pt', nif: '506234003' },
     emailsSent: 2, lastContactDate: '2024-12-08',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-par-np-004', name: 'Design Criativo Lda', clusterId: 'emp-cluster-parceiros',
@@ -312,7 +313,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 4, area: 80, revenue: 0.28,
     contact: { email: 'estudio@fotografiapro.pt', phone: '+351 213 200 014', website: 'https://fotografiapro.pt', nif: '506234014' },
     emailsSent: 2, lastContactDate: '2024-12-01',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'emp-par-np-015', name: 'Catering Gourmet', clusterId: 'emp-cluster-parceiros',
@@ -340,6 +341,7 @@ export const empresaSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     contact: { email: 'orcamentos@jardinagemverde.pt', phone: '+351 214 700 017', website: 'https://jardinagemverde.pt', nif: '506234017' },
     emailsSent: 3, lastContactDate: '2024-12-22',
     onboardingStatus: 'completo',
+    completedVia: 'simple',
   },
   {
     id: 'emp-par-np-018', name: 'Manutenção Industrial', clusterId: 'emp-cluster-parceiros',

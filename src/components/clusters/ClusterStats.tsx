@@ -1,36 +1,41 @@
 import { useMemo } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ClusterProvider } from "@/types/cluster";
-import { CheckCircle2, Clock, XCircle, TrendingUp, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SupplierAny, hasFootprint } from "@/types/supplierNew";
 
 interface ClusterStatsProps {
-  providers: ClusterProvider[];
   selectedCluster?: string;
-  companiesWithoutFootprint?: Array<{ onboardingStatus: string; clusterId: string; completedVia?: 'simple' | 'formulario' }>;
+  companies?: SupplierAny[];
 }
 
-export function ClusterStats({ providers, selectedCluster, companiesWithoutFootprint }: ClusterStatsProps) {
-  const notRegistered = providers.filter((p) => p.status === "not-registered").length;
-  const inProgress = providers.filter((p) => p.status === "in-progress").length;
-  const completed = providers.filter((p) => p.status === "completed").length;
-  const total = providers.length;
-  const registeredPercentage = total > 0 ? Math.round(((inProgress + completed) / total) * 100) : 0;
+export function ClusterStats({ selectedCluster, companies }: ClusterStatsProps) {
 
-  // Filter companies without footprint by selected cluster
-  const filteredCompaniesWithoutFootprint = useMemo(() => {
-    if (!companiesWithoutFootprint) return [];
-    if (selectedCluster && selectedCluster !== 'all') {
-      return companiesWithoutFootprint.filter(c => c.clusterId === selectedCluster);
-    }
-    return companiesWithoutFootprint;
-  }, [companiesWithoutFootprint, selectedCluster]);
+  // Normalizar empresas para formato comum (com onboardingStatus e completedVia)
+  const normalizedCompanies = useMemo(() => {
+    if (!companies) return [];
+    return companies.map(company => {
+      if (hasFootprint(company)) {
+        // Empresas com pegada são "completo"
+        return {
+          clusterId: company.clusterId,
+          onboardingStatus: 'completo' as const,
+          completedVia: (company.dataSource === 'get2zero' ? 'simple' : 'formulario') as const,
+        };
+      }
+      // Empresas sem pegada já têm os campos necessários
+      return {
+        clusterId: company.clusterId,
+        onboardingStatus: company.onboardingStatus,
+        completedVia: company.completedVia,
+      };
+    });
+  }, [companies]);
 
   // Calculate funnel metrics (same logic as Incentive page)
   const funnelMetrics = useMemo(() => {
-    const allCompanies = filteredCompaniesWithoutFootprint;
+    const allCompanies = normalizedCompanies;
     const total = allCompanies.length;
 
     const statusCounts = allCompanies.reduce((acc, c) => {
@@ -40,9 +45,7 @@ export function ClusterStats({ providers, selectedCluster, companiesWithoutFootp
 
     const porContactar = statusCounts['por_contactar'] || 0;
     const semInteracao = statusCounts['sem_interacao'] || 0;
-    const interessada = (statusCounts['interessada'] || 0) +
-                        (statusCounts['interessada_simple'] || 0) +
-                        (statusCounts['interessada_formulario'] || 0);
+    const interessada = statusCounts['interessada'] || 0;
 
     // Contagem de completos por caminho (baseado em completedVia)
     const completedCompanies = allCompanies.filter(c => c.onboardingStatus === 'completo');
@@ -69,72 +72,13 @@ export function ClusterStats({ providers, selectedCluster, companiesWithoutFootp
         complete: completoFormulario,
       },
     };
-  }, [filteredCompaniesWithoutFootprint]);
+  }, [normalizedCompanies]);
 
-  const showOnboardingSection = filteredCompaniesWithoutFootprint.length > 0 && selectedCluster;
+  const showOnboardingSection = normalizedCompanies.length > 0 && selectedCluster;
 
   return (
     <div className="space-y-4">
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="shadow-md">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-destructive/10">
-                <XCircle className="h-5 w-5 text-destructive" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{notRegistered}</div>
-                <div className="text-sm text-muted-foreground">Não Registados</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <Clock className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{inProgress}</div>
-                <div className="text-sm text-muted-foreground">Em Progresso</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-success/10">
-                <CheckCircle2 className="h-5 w-5 text-success" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{completed}</div>
-                <div className="text-sm text-muted-foreground">Concluídos</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="shadow-md">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <TrendingUp className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{registeredPercentage}%</div>
-                <div className="text-sm text-muted-foreground">Taxa de Registo</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Onboarding Funnel - copied from Incentive page */}
+      {/* Onboarding Funnel */}
       {showOnboardingSection && (() => {
         const preTotal = funnelMetrics.porContactar + funnelMetrics.semInteracao + funnelMetrics.interessada;
         const simpleTotal = funnelMetrics.simple.registered + funnelMetrics.simple.progress + funnelMetrics.simple.complete;

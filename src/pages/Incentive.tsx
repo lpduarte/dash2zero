@@ -76,76 +76,19 @@ interface CompanyWithTracking extends SupplierWithoutFootprint {
   };
 }
 
-const onboardingStatusConfig: Record<string, { label: string; color: string; borderColor: string; tooltip: string }> = {
-  por_contactar: {
-    label: 'Por contactar',
-    color: 'bg-status-pending/15 text-status-pending border border-status-pending/30 hover:bg-status-pending/25 transition-colors',
-    borderColor: 'border-status-pending',
-    tooltip: 'Ainda não recebeu nenhum email'
-  },
-  sem_interacao: {
-    label: 'Sem interação',
-    color: 'bg-status-contacted/15 text-status-contacted border border-status-contacted/30 hover:bg-status-contacted/25 transition-colors',
-    borderColor: 'border-status-contacted',
-    tooltip: 'Recebeu email mas não clicou no link'
-  },
-  interessada: {
-    label: 'Interessada',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
-    borderColor: 'border-status-interested',
-    tooltip: 'Clicou no link do email'
-  },
-  interessada_simple: {
-    label: 'Interessada / Simple',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
-    borderColor: 'border-status-interested',
-    tooltip: 'Escolheu o caminho Simple na landing page'
-  },
-  interessada_formulario: {
-    label: 'Interessada / Formulário',
-    color: 'bg-status-interested/15 text-status-interested border border-status-interested/30 hover:bg-status-interested/25 transition-colors',
-    borderColor: 'border-status-interested',
-    tooltip: 'Escolheu o caminho Formulário na landing page'
-  },
-  registada_simple: {
-    label: 'Registada / Simple',
-    color: 'bg-status-registered/15 text-status-registered border border-status-registered/30 hover:bg-status-registered/25 transition-colors',
-    borderColor: 'border-status-registered',
-    tooltip: 'Criou conta no Simple'
-  },
-  em_progresso_simple: {
-    label: 'Em progresso / Simple',
-    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30 hover:bg-status-progress/25 transition-colors',
-    borderColor: 'border-status-progress',
-    tooltip: 'Iniciou o cálculo da pegada no Simple'
-  },
-  em_progresso_formulario: {
-    label: 'Em progresso / Formulário',
-    color: 'bg-status-progress/15 text-status-progress border border-status-progress/30 hover:bg-status-progress/25 transition-colors',
-    borderColor: 'border-status-progress',
-    tooltip: 'Iniciou o preenchimento do formulário'
-  },
-  completo: {
-    label: 'Completo',
-    color: 'bg-status-complete/15 text-status-complete border border-status-complete/30 hover:bg-status-complete/25 transition-colors',
-    borderColor: 'border-status-complete',
-    tooltip: 'Pegada calculada com sucesso'
-  },
-};
+// Import centralized status config
+import { onboardingStatusConfig, getStatusLabel, OnboardingStatus } from "@/config/onboardingStatus";
 
 // Template suggestions based on onboarding status (map to template IDs)
 const templateSuggestions: Record<string, string> = {
   por_contactar: 't1',           // Convite Inicial
   sem_interacao: 't2',           // Lembrete
   interessada: 't3',             // Benefícios (como ajuda)
-  interessada_simple: 't3',
-  interessada_formulario: 't3',
   registada_simple: 't3',        // Benefícios
   em_progresso_simple: 't2',     // Lembrete (suporte)
   em_progresso_formulario: 't2',
   completo: 't1',                // Ignorado mas mapeado
 };
-
 
 // Next action helper based on onboarding status
 const getNextAction = (status: string): string => {
@@ -153,8 +96,6 @@ const getNextAction = (status: string): string => {
     por_contactar: 'Enviar convite',
     sem_interacao: 'Enviar lembrete',
     interessada: 'Oferecer ajuda',
-    interessada_simple: 'Oferecer ajuda',
-    interessada_formulario: 'Oferecer ajuda',
     registada_simple: 'Incentivar início',
     em_progresso_simple: 'Dar suporte',
     em_progresso_formulario: 'Dar suporte',
@@ -213,11 +154,9 @@ const Incentive = () => {
     em_progresso_formulario: 1,
     em_progresso_simple: 2,
     registada_simple: 3,
-    interessada_formulario: 4,
-    interessada_simple: 5,
-    interessada: 6,
-    sem_interacao: 7,
-    por_contactar: 8,
+    interessada: 4,
+    sem_interacao: 5,
+    por_contactar: 6,
   };
 
   // Handle URL params from Clusters page
@@ -395,9 +334,7 @@ const Incentive = () => {
     
     const porContactar = statusCounts['por_contactar'] || 0;
     const semInteracao = statusCounts['sem_interacao'] || 0;
-    const interessada = (statusCounts['interessada'] || 0) +
-                        (statusCounts['interessada_simple'] || 0) +
-                        (statusCounts['interessada_formulario'] || 0);
+    const interessada = statusCounts['interessada'] || 0;
     const registada = statusCounts['registada_simple'] || 0;
     const emProgresso = (statusCounts['em_progresso_simple'] || 0) +
                         (statusCounts['em_progresso_formulario'] || 0);

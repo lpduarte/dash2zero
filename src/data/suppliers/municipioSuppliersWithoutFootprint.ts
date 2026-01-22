@@ -30,7 +30,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 5, area: 45, revenue: 0.25,
     contact: { email: 'snackpraia@mail.pt', phone: '+351 214 810 003', website: '', nif: '513234003' },
     emailsSent: 2, lastContactDate: '2024-12-05',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
   {
     id: 'mun-apo-np-004', name: 'Talho Tradicional', clusterId: 'mun-cluster-apoiadas',
@@ -114,6 +114,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     contact: { email: 'reservas@vistamar.pt', phone: '+351 214 820 004', website: 'https://vistamar.pt', nif: '514234004' },
     emailsSent: 3, lastContactDate: '2024-12-20',
     onboardingStatus: 'completo',
+    completedVia: 'simple',
   },
 
   // ===== PARCEIRAS SEM PEGADA (3) =====
@@ -142,7 +143,7 @@ export const municipioSuppliersWithoutFootprint: SupplierWithoutFootprint[] = [
     companySize: 'micro', employees: 4, area: 60, revenue: 0.28,
     contact: { email: 'info@consultoriaambiental.pt', phone: '+351 214 830 003', website: '', nif: '515234003' },
     emailsSent: 2, lastContactDate: '2024-12-08',
-    onboardingStatus: 'interessada_formulario',
+    onboardingStatus: 'interessada',
   },
 ];
 

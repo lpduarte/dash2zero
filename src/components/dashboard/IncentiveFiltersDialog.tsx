@@ -36,8 +36,6 @@ const onboardingStatusOptions = [
   { value: "por_contactar", label: "Por contactar" },
   { value: "sem_interacao", label: "Sem interação" },
   { value: "interessada", label: "Interessada" },
-  { value: "interessada_simple", label: "Interessada / Simple" },
-  { value: "interessada_formulario", label: "Interessada / Formulário" },
   { value: "registada_simple", label: "Registada" },
   { value: "em_progresso_simple", label: "Em progresso / Simple" },
   { value: "em_progresso_formulario", label: "Em progresso / Formulário" },

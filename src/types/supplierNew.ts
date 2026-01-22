@@ -62,16 +62,15 @@ export interface SupplierWithoutFootprint {
   };
   emailsSent: number;
   lastContactDate?: string;
-  onboardingStatus: 
+  onboardingStatus:
     | 'por_contactar'
     | 'sem_interacao'
     | 'interessada'
-    | 'interessada_simple'
-    | 'interessada_formulario'
     | 'registada_simple'
     | 'em_progresso_simple'
     | 'em_progresso_formulario'
     | 'completo';
+  completedVia?: 'simple' | 'formulario';
 }
 
 export type SupplierAny = SupplierWithFootprint | SupplierWithoutFootprint;

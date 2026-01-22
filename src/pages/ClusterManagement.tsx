@@ -2,26 +2,6 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationEllipsis,
-} from "@/components/ui/pagination";
 import { Header } from "@/components/dashboard/Header";
 import { ClusterStats } from "@/components/clusters/ClusterStats";
 import { ProvidersTable } from "@/components/clusters/ProvidersTable";
@@ -38,29 +18,15 @@ import {
   updateCluster,
   deleteCluster,
 } from "@/data/clusters";
-import { ClusterProvider } from "@/types/cluster";
 import { ClusterDefinition, CreateClusterInput } from "@/types/clusterNew";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
-import { Users, Upload, Download, Search, X, Target } from "lucide-react";
+import { SupplierWithoutFootprint, SupplierAny } from "@/types/supplierNew";
+import { Users, Upload, Download, Target } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig } from "@/config/clusters";
 
-// Converter Supplier para ClusterProvider
-const supplierToProvider = (supplier: Supplier): ClusterProvider => ({
-  id: supplier.id,
-  name: supplier.name,
-  nif: supplier.contact.nif,
-  email: supplier.contact.email,
-  status: supplier.rating === 'A' || supplier.rating === 'B' ? 'completed' : 
-          supplier.rating === 'C' ? 'in-progress' : 'not-registered',
-  emailsSent: Math.floor(Math.random() * 5),
-  lastContact: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000),
-});
-
-const ITEMS_PER_PAGE = 10;
-
 export default function ClusterManagement() {
-  const { user, isMunicipio, userType } = useUser();
+  const { isMunicipio, userType } = useUser();
   const navigate = useNavigate();
   const ownerType = isMunicipio ? 'municipio' : 'empresa';
 
@@ -68,9 +34,6 @@ export default function ClusterManagement() {
   const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editingCluster, setEditingCluster] = useState<ClusterDefinition | undefined>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeFilters, setActiveFilters] = useState<string[]>(["NIF/NIPC", "Email", "Setor"]);
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
     companySize: [],
     district: [],
@@ -104,14 +67,30 @@ export default function ClusterManagement() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userType, clustersVersion]);
 
-  // Get cluster counts - dinâmicos
+  // Combinar todas as empresas (com e sem pegada) num formato normalizado
+  const allCompanies = useMemo((): SupplierAny[] => {
+    // Empresas com pegada - são tratadas como "completo"
+    const withFootprint = baseSuppliers.map(s => ({
+      ...s,
+      onboardingStatus: 'completo' as const,
+      completedVia: (s.dataSource === 'get2zero' ? 'simple' : 'formulario') as const,
+      // Campos extra que SupplierWithoutFootprint tem
+      emailsSent: 0,
+    }));
+
+    const withoutFootprint = companiesWithoutFootprint as SupplierWithoutFootprint[];
+
+    return [...withFootprint, ...withoutFootprint];
+  }, [baseSuppliers, companiesWithoutFootprint]);
+
+  // Get cluster counts - baseado em TODAS as empresas
   const clusterCounts = useMemo(() => {
-    const counts: Record<string, number> = { all: baseSuppliers.length };
+    const counts: Record<string, number> = { all: allCompanies.length };
     clusters.forEach(cluster => {
-      counts[cluster.id] = baseSuppliers.filter(s => s.clusterId === cluster.id).length;
+      counts[cluster.id] = allCompanies.filter(c => c.clusterId === cluster.id).length;
     });
     return counts;
-  }, [baseSuppliers, clusters]);
+  }, [allCompanies, clusters]);
 
   // Filter suppliers by selected cluster and universal filters
   const filteredSuppliers = useMemo(() => {
@@ -146,28 +125,16 @@ export default function ClusterManagement() {
       filtered = filtered.filter(s => universalFilters.sector.includes(s.sector));
     }
 
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (company) =>
-          company.name.toLowerCase().includes(query) ||
-          company.id.toLowerCase().includes(query) ||
-          company.contact.email.toLowerCase().includes(query) ||
-          company.sector.toLowerCase().includes(query)
-      );
-    }
-    
     return filtered;
-  }, [selectedClusterType, searchQuery, universalFilters, baseSuppliers, isMunicipio]);
+  }, [selectedClusterType, universalFilters, baseSuppliers, isMunicipio]);
 
-  // Converter suppliers filtrados para formato ClusterProvider
-  const clusterProviders = useMemo(() => {
-    return filteredSuppliers.map(supplierToProvider);
-  }, [filteredSuppliers]);
-
-  const totalPages = Math.ceil(filteredSuppliers.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedSuppliers = filteredSuppliers.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // Filter all companies by selected cluster
+  const filteredAllCompanies = useMemo(() => {
+    if (selectedClusterType === 'all') {
+      return allCompanies;
+    }
+    return allCompanies.filter(c => c.clusterId === selectedClusterType);
+  }, [allCompanies, selectedClusterType]);
 
   const handleImport = (file: File) => {
     console.log("Importing file:", file.name);
@@ -211,15 +178,6 @@ export default function ClusterManagement() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  const removeFilter = (filter: string) => {
-    setActiveFilters(activeFilters.filter((f) => f !== filter));
-  };
-
-  const getClusterLabel = () => {
-    const option = clusterOptions.find(o => o.value === selectedClusterType);
-    return option?.label || 'Cluster';
   };
 
   // CRUD Handlers
@@ -276,12 +234,10 @@ export default function ClusterManagement() {
         {/* Cluster Selector */}
         <ClusterSelector
           selectedCluster={selectedClusterType}
-          onClusterChange={(cluster) => {
-            setSelectedClusterType(cluster);
-            setCurrentPage(1);
-          }}
+          onClusterChange={setSelectedClusterType}
           clusterCounts={clusterCounts}
           showPotential={false}
+          showFilterButton={false}
           suppliers={baseSuppliers}
           universalFilters={universalFilters}
           onUniversalFiltersChange={setUniversalFilters}
@@ -291,13 +247,7 @@ export default function ClusterManagement() {
         />
 
         {/* Actions Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold">{getClusterLabel()}</h2>
-            <p className="text-sm text-muted-foreground">
-              {filteredSuppliers.length.toLocaleString('pt-PT')} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
-            </p>
-          </div>
+        <div className="mb-6 flex items-center justify-end">
           <div className="flex gap-2">
             <Button onClick={() => navigate(`/incentivo?cluster=${selectedClusterType}`)}>
               <Target className="h-4 w-4 mr-2" />
@@ -314,141 +264,15 @@ export default function ClusterManagement() {
           </div>
         </div>
 
-        <Tabs defaultValue="resumo" className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="resumo">Vista Resumida</TabsTrigger>
-            <TabsTrigger value="detalhes">Vista Detalhada</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="resumo" className="space-y-6">
-            <ClusterStats
-              providers={clusterProviders}
-              selectedCluster={selectedClusterType}
-              companiesWithoutFootprint={companiesWithoutFootprint}
-            />
-            <Card className="p-6 shadow-md">
-              <ProvidersTable providers={clusterProviders} />
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="detalhes" className="space-y-6">
-            {/* Search and filters */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1 flex items-center gap-2 border border-border rounded-md px-4 py-2 bg-card">
-                {activeFilters.map((filter) => (
-                  <Badge key={filter} variant="secondary" className="gap-1 bg-secondary/50">
-                    {filter}
-                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeFilter(filter)} />
-                  </Badge>
-                ))}
-              </div>
-              <div className="relative sm:w-64">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Pesquisar..."
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            {/* Full details table */}
-            <Card className="shadow-md overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50 hover:bg-muted/50">
-                    <TableHead className="text-foreground font-bold min-w-[180px]">Nome</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[200px]">Email</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[120px]">Setor</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[100px]">Região</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[120px]">Faturação (€)</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[100px]">Colab.</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[100px]">Área (m²)</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[120px]">Âmbito 1</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[120px]">Âmbito 2</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[120px]">Âmbito 3</TableHead>
-                    <TableHead className="text-foreground font-bold min-w-[140px]">Total (t CO₂e)</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedSuppliers.map((company, index) => (
-                    <TableRow
-                      key={company.id}
-                      className={index % 2 === 0 ? "bg-muted/50" : "bg-background"}
-                    >
-                      <TableCell className="font-normal">{company.name}</TableCell>
-                      <TableCell>{company.contact.email}</TableCell>
-                      <TableCell className="capitalize">{company.sector}</TableCell>
-                      <TableCell className="capitalize">{company.region}</TableCell>
-                      <TableCell>{(company.revenue * 1000000).toLocaleString('pt-PT')}</TableCell>
-                      <TableCell>{company.employees}</TableCell>
-                      <TableCell>{company.area.toLocaleString('pt-PT')}</TableCell>
-                      <TableCell>{company.scope1.toFixed(1)}</TableCell>
-                      <TableCell>{company.scope2.toFixed(1)}</TableCell>
-                      <TableCell>{company.scope3.toFixed(1)}</TableCell>
-                      <TableCell className="font-bold">{company.totalEmissions.toFixed(1)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Pagination>
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                    />
-                  </PaginationItem>
-                  {currentPage > 2 && (
-                    <PaginationItem>
-                      <PaginationLink onClick={() => setCurrentPage(1)} className="cursor-pointer">1</PaginationLink>
-                    </PaginationItem>
-                  )}
-                  {currentPage > 3 && <PaginationItem><PaginationEllipsis /></PaginationItem>}
-                  {currentPage > 1 && (
-                    <PaginationItem>
-                      <PaginationLink onClick={() => setCurrentPage(currentPage - 1)} className="cursor-pointer">
-                        {currentPage - 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  <PaginationItem>
-                    <PaginationLink isActive className="cursor-pointer">{currentPage}</PaginationLink>
-                  </PaginationItem>
-                  {currentPage < totalPages && (
-                    <PaginationItem>
-                      <PaginationLink onClick={() => setCurrentPage(currentPage + 1)} className="cursor-pointer">
-                        {currentPage + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  {currentPage < totalPages - 2 && <PaginationItem><PaginationEllipsis /></PaginationItem>}
-                  {currentPage < totalPages - 1 && (
-                    <PaginationItem>
-                      <PaginationLink onClick={() => setCurrentPage(totalPages)} className="cursor-pointer">
-                        {totalPages}
-                      </PaginationLink>
-                    </PaginationItem>
-                  )}
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                    />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            )}
-          </TabsContent>
-        </Tabs>
+        <div className="space-y-6">
+          <ClusterStats
+            selectedCluster={selectedClusterType}
+            companies={filteredAllCompanies}
+          />
+          <Card className="p-6 shadow-md">
+            <ProvidersTable companies={filteredAllCompanies} />
+          </Card>
+        </div>
       </main>
 
       <ImportDialog

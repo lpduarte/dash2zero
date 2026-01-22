@@ -40,6 +40,7 @@ interface ClusterSelectorProps extends ClusterActionsProps {
   clusterCounts: Record<string, number>;
   clusterPotentials?: Record<string, ImprovementPotential>;
   showPotential?: boolean;
+  showFilterButton?: boolean;
   suppliers: Supplier[];
   universalFilters: UniversalFilterState;
   onUniversalFiltersChange: (filters: UniversalFilterState) => void;
@@ -72,6 +73,7 @@ export function ClusterSelector({
   clusterCounts,
   clusterPotentials,
   showPotential = true,
+  showFilterButton = true,
   suppliers,
   universalFilters,
   onUniversalFiltersChange,
@@ -288,12 +290,14 @@ export function ClusterSelector({
           </div>
 
           {/* Right side - Filter button */}
-          <div data-tour="filter-button" className="flex-shrink-0">
-            <FilterButton
-              activeFiltersCount={activeFiltersCount}
-              onClick={() => setFilterModalOpen(true)}
-            />
-          </div>
+          {showFilterButton && (
+            <div data-tour="filter-button" className="flex-shrink-0">
+              <FilterButton
+                activeFiltersCount={activeFiltersCount}
+                onClick={() => setFilterModalOpen(true)}
+              />
+            </div>
+          )}
         </div>
 
         {/* Active filters chips */}

@@ -442,8 +442,6 @@ export const getClusterOnboardingStats = <T extends { onboardingStatus: string }
   const porContactar = statusCounts['por_contactar'] || 0;
   const semInteracao = statusCounts['sem_interacao'] || 0;
   const interessada = (statusCounts['interessada'] || 0) +
-                      (statusCounts['interessada_simple'] || 0) +
-                      (statusCounts['interessada_formulario'] || 0) +
                       (statusCounts['registada_simple'] || 0);
   const emProgresso = (statusCounts['em_progresso_simple'] || 0) +
                       (statusCounts['em_progresso_formulario'] || 0);
