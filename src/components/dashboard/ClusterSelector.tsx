@@ -1,4 +1,4 @@
-import { TrendingDown, Settings, Pencil, Trash2, Plus } from "lucide-react";
+import { TrendingDown, Settings, Pencil, Trash2, Plus, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
@@ -163,13 +163,42 @@ export function ClusterSelector({
     onUniversalFiltersChange(newFilters);
   };
 
+  // Detect empty state (no clusters created yet)
+  const hasNoClusters = clusterOptions.filter(c => c.value !== 'all').length === 0;
+
+  // Empty state when no clusters exist
+  if (hasNoClusters && onCreateNew) {
+    return (
+      <div className="mb-6">
+        <div className="flex items-center gap-4">
+          {/* Botão Novo cluster */}
+          <button
+            onClick={onCreateNew}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-dashed border-primary text-primary hover:bg-primary/5 transition-all"
+          >
+            <Plus className="h-4 w-4" />
+            <span className="font-normal">Novo cluster</span>
+          </button>
+
+          {/* Seta animada + texto */}
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <ArrowLeft className="h-5 w-5 animate-pulse" />
+            <span className="text-sm">
+              Crie clusters para organizar empresas (ex: Fornecedores, Clientes, Parceiros)
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* Label - não faz sticky */}
       <h3 className="text-sm font-normal text-muted-foreground mb-3">Filtrar por Cluster</h3>
-      
+
       {/* Sticky container - só os botões */}
-      <div 
+      <div
         ref={stickyRef}
         className={cn(
           "sticky top-4 z-50 py-2 px-4 mb-4 -mx-4 rounded-lg transition-all duration-200",

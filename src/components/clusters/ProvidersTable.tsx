@@ -1,6 +1,17 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -12,14 +23,118 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SupplierAny, hasFootprint } from "@/types/supplierNew";
 import { onboardingStatusConfig, getStatusLabel, getStatusOrder, OnboardingStatus, CompletedVia } from "@/config/onboardingStatus";
 import { cn } from "@/lib/utils";
-import { Search, Filter, ChevronUp, ChevronDown, ChevronsUpDown, X } from "lucide-react";
+import { Search, Filter, ChevronUp, ChevronDown, ChevronsUpDown, X, Trash2, Mail, Plus, CircleDot, UserPlus, ClipboardPaste, FileSpreadsheet } from "lucide-react";
+import { ManualEntryTab, NewCompanyData } from "./tabs/ManualEntryTab";
+import { PasteDataTab } from "./tabs/PasteDataTab";
+import { FileImportTab } from "./tabs/FileImportTab";
 
 interface ProvidersTableProps {
   companies: SupplierAny[];
+  onUpdateCompany?: (companyId: string, field: 'name' | 'nif' | 'email', value: string) => void;
+  onDeleteCompanies?: (companyIds: string[]) => void;
+  onAddCompanies?: () => void;
+  onAddCompaniesInline?: (companies: NewCompanyData[]) => void;
+  onIncentivize?: () => void;
+  hasNoClusters?: boolean;
+  selectedClusterId?: string | null;
+}
+
+type EditableField = 'name' | 'nif' | 'email';
+
+interface EditingCell {
+  companyId: string;
+  field: EditableField;
+}
+
+// EditableCell component for inline editing
+interface EditableCellProps {
+  value: string;
+  companyId: string;
+  field: EditableField;
+  isEditing: boolean;
+  onStartEdit: (companyId: string, field: EditableField) => void;
+  onSave: (value: string) => void;
+  onCancel: () => void;
+  className?: string;
+}
+
+function EditableCell({
+  value,
+  companyId,
+  field,
+  isEditing,
+  onStartEdit,
+  onSave,
+  onCancel,
+  className = '',
+}: EditableCellProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [editValue, setEditValue] = useState(value);
+
+  useEffect(() => {
+    if (isEditing) {
+      setEditValue(value);
+    }
+  }, [isEditing, value]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  const handleSave = () => {
+    const trimmedValue = editValue.trim();
+    if (trimmedValue) {
+      onSave(trimmedValue);
+    } else {
+      onCancel();
+    }
+  };
+
+  if (!isEditing) {
+    return (
+      <span
+        onClick={() => onStartEdit(companyId, field)}
+        className={cn(
+          "cursor-text block h-8 flex items-center",
+          className
+        )}
+      >
+        {value}
+      </span>
+    );
+  }
+
+  return (
+    <input
+      ref={inputRef}
+      value={editValue}
+      onChange={(e) => setEditValue(e.target.value)}
+      onBlur={handleSave}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleSave();
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          onCancel();
+        }
+      }}
+      className={cn(
+        "h-8 w-full rounded-md border border-input bg-background px-2 py-1 text-sm",
+        "focus-visible:outline-none focus-visible:border-ring",
+        className
+      )}
+    />
+  );
 }
 
 type SortField = 'name' | 'nif' | 'email' | 'status';
@@ -72,13 +187,14 @@ interface SortableHeaderProps {
   sortState: SortState;
   onSort: (field: SortField) => void;
   children?: React.ReactNode;
+  className?: string;
 }
 
-function SortableHeader({ field, label, sortState, onSort, children }: SortableHeaderProps) {
+function SortableHeader({ field, label, sortState, onSort, children, className }: SortableHeaderProps) {
   const isActive = sortState.field === field;
 
   return (
-    <TableHead>
+    <TableHead className={className}>
       <div className="flex items-center gap-1">
         <button
           onClick={() => onSort(field)}
@@ -181,13 +297,136 @@ function StatusFilter({ statusFilters, setStatusFilters, statusCounts }: StatusF
   );
 }
 
-export function ProvidersTable({ companies }: ProvidersTableProps) {
+// Type for local edits storage
+type EditedValues = Record<string, { name?: string; nif?: string; email?: string }>;
+
+export function ProvidersTable({ companies, onUpdateCompany, onDeleteCompanies, onAddCompanies, onAddCompaniesInline, onIncentivize, hasNoClusters, selectedClusterId }: ProvidersTableProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortState, setSortState] = useState<SortState>({
     field: 'status',
     direction: 'asc'
   });
   const [statusFilters, setStatusFilters] = useState<FilterStatus[]>([]);
+  const [editingCell, setEditingCell] = useState<EditingCell | null>(null);
+  const [editedValues, setEditedValues] = useState<EditedValues>({});
+
+  // Selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [lastClickedIndex, setLastClickedIndex] = useState<number | null>(null);
+
+  // Delete confirmation state
+  const [deleteTarget, setDeleteTarget] = useState<string | 'bulk' | null>(null);
+
+  const handleStartEdit = (companyId: string, field: EditableField) => {
+    setEditingCell({ companyId, field });
+  };
+
+  const handleSaveEdit = (companyId: string, field: EditableField, value: string) => {
+    // Update local state
+    setEditedValues(prev => ({
+      ...prev,
+      [companyId]: {
+        ...prev[companyId],
+        [field]: value
+      }
+    }));
+    // Notify parent if callback provided
+    if (onUpdateCompany) {
+      onUpdateCompany(companyId, field, value);
+    }
+    setEditingCell(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCell(null);
+  };
+
+  // Get the display value for a field (edited or original)
+  const getDisplayValue = (company: SupplierAny, field: EditableField): string => {
+    const edited = editedValues[company.id];
+    if (edited && edited[field] !== undefined) {
+      return edited[field]!;
+    }
+    switch (field) {
+      case 'name': return company.name;
+      case 'nif': return company.contact.nif;
+      case 'email': return company.contact.email;
+    }
+  };
+
+  // Handle checkbox click with shift+click support
+  const handleCheckboxClick = (e: React.MouseEvent, companyId: string, index: number, visibleCompanies: SupplierAny[]) => {
+    const isShiftClick = e.shiftKey;
+    const isSelected = selectedIds.has(companyId);
+
+    if (isShiftClick && lastClickedIndex !== null) {
+      // Select range from last clicked to current
+      const start = Math.min(lastClickedIndex, index);
+      const end = Math.max(lastClickedIndex, index);
+      const newSelectedIds = new Set(selectedIds);
+
+      for (let i = start; i <= end; i++) {
+        newSelectedIds.add(visibleCompanies[i].id);
+      }
+
+      setSelectedIds(newSelectedIds);
+    } else {
+      // Toggle single selection
+      const newSelectedIds = new Set(selectedIds);
+      if (isSelected) {
+        newSelectedIds.delete(companyId);
+      } else {
+        newSelectedIds.add(companyId);
+      }
+      setSelectedIds(newSelectedIds);
+    }
+
+    setLastClickedIndex(index);
+  };
+
+  // Handle select all checkbox
+  const handleSelectAll = (visibleCompanies: SupplierAny[]) => {
+    const visibleIds = visibleCompanies.map(c => c.id);
+    const allVisibleSelected = visibleIds.every(id => selectedIds.has(id));
+
+    if (allVisibleSelected) {
+      // Deselect all visible
+      const newSelectedIds = new Set(selectedIds);
+      visibleIds.forEach(id => newSelectedIds.delete(id));
+      setSelectedIds(newSelectedIds);
+    } else {
+      // Select all visible
+      const newSelectedIds = new Set(selectedIds);
+      visibleIds.forEach(id => newSelectedIds.add(id));
+      setSelectedIds(newSelectedIds);
+    }
+  };
+
+  // Handle delete confirmation
+  const handleConfirmDelete = () => {
+    if (!onDeleteCompanies || !deleteTarget) return;
+
+    if (deleteTarget === 'bulk') {
+      onDeleteCompanies(Array.from(selectedIds));
+      setSelectedIds(new Set());
+    } else {
+      onDeleteCompanies([deleteTarget]);
+      // Remove from selection if it was selected
+      const newSelectedIds = new Set(selectedIds);
+      newSelectedIds.delete(deleteTarget);
+      setSelectedIds(newSelectedIds);
+    }
+
+    setDeleteTarget(null);
+  };
+
+  // Get company name for delete confirmation message
+  const getCompanyNameForDelete = (companyId: string): string => {
+    const company = companies.find(c => c.id === companyId);
+    if (!company) return '';
+    const edited = editedValues[companyId];
+    return edited?.name ?? company.name;
+  };
 
   // Count companies by filter status (for filter display)
   const statusCounts = useMemo(() => {
@@ -263,33 +502,111 @@ export function ProvidersTable({ companies }: ProvidersTableProps) {
     setStatusFilters([]);
   };
 
-  // Empty state: no companies at all
-  if (companies.length === 0) {
+  // Empty state 1: No clusters created at all
+  if (hasNoClusters) {
     return (
-      <div className="text-center py-12 text-muted-foreground">
-        Nenhuma empresa neste cluster.
+      <Card className="border-2 border-dashed border-muted-foreground/30">
+        <div className="py-16 text-center">
+          <CircleDot className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+          <p className="text-muted-foreground">
+            Crie um cluster para começar a adicionar empresas
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
+  // Empty state 2: "Todas" view with no companies
+  if (companies.length === 0 && !selectedClusterId) {
+    return (
+      <Card className="border-2 border-dashed border-muted-foreground/30">
+        <div className="py-16 text-center">
+          <CircleDot className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
+          <p className="text-muted-foreground">
+            Seleccione um cluster para adicionar empresas
+          </p>
+        </div>
+      </Card>
+    );
+  }
+
+  // Empty state 3: Cluster selected but no companies - show inline tabs
+  if (companies.length === 0 && selectedClusterId && onAddCompaniesInline) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold">Empresas</h3>
+        </div>
+
+        <Tabs defaultValue="manual" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="manual" className="gap-2">
+              <UserPlus className="h-4 w-4" />
+              Manual
+            </TabsTrigger>
+            <TabsTrigger value="paste" className="gap-2">
+              <ClipboardPaste className="h-4 w-4" />
+              Colar dados
+            </TabsTrigger>
+            <TabsTrigger value="file" className="gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Importar ficheiro
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="manual">
+            <ManualEntryTab onAddCompanies={onAddCompaniesInline} onClose={() => {}} />
+          </TabsContent>
+          <TabsContent value="paste">
+            <PasteDataTab onAddCompanies={onAddCompaniesInline} onClose={() => {}} />
+          </TabsContent>
+          <TabsContent value="file">
+            <FileImportTab onAddCompanies={onAddCompaniesInline} onClose={() => {}} />
+          </TabsContent>
+        </Tabs>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {/* Search input */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Pesquisar por nome, NIF ou email..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-9"
-        />
-        {searchQuery && (
-          <button
-            onClick={() => setSearchQuery('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          >
-            <X className="h-4 w-4" />
-          </button>
+      {/* Search and actions row */}
+      <div className="flex items-center gap-4">
+        {/* Search input */}
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Pesquisar por nome, NIF ou email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Action buttons */}
+        {(onAddCompanies || onIncentivize) && (
+          <div className="flex gap-2 shrink-0">
+            {onIncentivize && (
+              <Button onClick={onIncentivize}>
+                <Mail className="h-4 w-4 mr-2" />
+                Incentivar cálculo da pegada
+              </Button>
+            )}
+            {onAddCompanies && (
+              <Button variant="outline" onClick={onAddCompanies}>
+                <Plus className="h-4 w-4 mr-2" />
+                Adicionar empresas
+              </Button>
+            )}
+          </div>
         )}
       </div>
 
@@ -306,7 +623,21 @@ export function ProvidersTable({ companies }: ProvidersTableProps) {
       ) : (
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-transparent">
+              {/* Checkbox column */}
+              <TableHead className="w-10 align-middle">
+                <Checkbox
+                  checked={
+                    filteredAndSortedCompanies.length > 0 &&
+                    filteredAndSortedCompanies.every(c => selectedIds.has(c.id))
+                      ? true
+                      : filteredAndSortedCompanies.some(c => selectedIds.has(c.id))
+                        ? "indeterminate"
+                        : false
+                  }
+                  onCheckedChange={() => handleSelectAll(filteredAndSortedCompanies)}
+                />
+              </TableHead>
               <SortableHeader
                 field="name"
                 label="Nome"
@@ -318,6 +649,7 @@ export function ProvidersTable({ companies }: ProvidersTableProps) {
                 label="NIF"
                 sortState={sortState}
                 onSort={handleSort}
+                className="w-40"
               />
               <SortableHeader
                 field="email"
@@ -337,19 +669,77 @@ export function ProvidersTable({ companies }: ProvidersTableProps) {
                   statusCounts={statusCounts}
                 />
               </SortableHeader>
+              {/* Actions column */}
+              <TableHead className="w-10">
+                {selectedIds.size >= 2 && (
+                  <button
+                    onClick={() => setDeleteTarget('bulk')}
+                    className="p-1 rounded hover:bg-muted transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </button>
+                )}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredAndSortedCompanies.map((company) => {
+            {filteredAndSortedCompanies.map((company, index) => {
               const { status, completedVia } = getCompanyStatus(company);
               const config = onboardingStatusConfig[status];
               const label = getStatusLabel(status, completedVia);
+              const isRowEditing = editingCell?.companyId === company.id;
+              const isSelected = selectedIds.has(company.id);
 
               return (
-                <TableRow key={company.id}>
-                  <TableCell className="font-normal">{company.name}</TableCell>
-                  <TableCell>{company.contact.nif}</TableCell>
-                  <TableCell className="text-muted-foreground">{company.contact.email}</TableCell>
+                <TableRow
+                  key={company.id}
+                  className={cn(
+                    "group",
+                    isRowEditing && "hover:bg-transparent",
+                    isSelected && "bg-muted/50"
+                  )}
+                >
+                  {/* Checkbox cell */}
+                  <TableCell className="w-10 align-middle">
+                    <Checkbox
+                      checked={isSelected}
+                      onClick={(e) => handleCheckboxClick(e, company.id, index, filteredAndSortedCompanies)}
+                    />
+                  </TableCell>
+                  <TableCell className="font-normal">
+                    <EditableCell
+                      value={getDisplayValue(company, 'name')}
+                      companyId={company.id}
+                      field="name"
+                      isEditing={isRowEditing && editingCell?.field === 'name'}
+                      onStartEdit={handleStartEdit}
+                      onSave={(value) => handleSaveEdit(company.id, 'name', value)}
+                      onCancel={handleCancelEdit}
+                    />
+                  </TableCell>
+                  <TableCell className="w-40">
+                    <EditableCell
+                      value={getDisplayValue(company, 'nif')}
+                      companyId={company.id}
+                      field="nif"
+                      isEditing={isRowEditing && editingCell?.field === 'nif'}
+                      onStartEdit={handleStartEdit}
+                      onSave={(value) => handleSaveEdit(company.id, 'nif', value)}
+                      onCancel={handleCancelEdit}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <EditableCell
+                      value={getDisplayValue(company, 'email')}
+                      companyId={company.id}
+                      field="email"
+                      isEditing={isRowEditing && editingCell?.field === 'email'}
+                      onStartEdit={handleStartEdit}
+                      onSave={(value) => handleSaveEdit(company.id, 'email', value)}
+                      onCancel={handleCancelEdit}
+                      className="text-muted-foreground"
+                    />
+                  </TableCell>
                   <TableCell>
                     <TooltipProvider delayDuration={100}>
                       <Tooltip>
@@ -366,12 +756,46 @@ export function ProvidersTable({ companies }: ProvidersTableProps) {
                       </Tooltip>
                     </TooltipProvider>
                   </TableCell>
+                  {/* Actions cell */}
+                  <TableCell className="w-10">
+                    <button
+                      onClick={() => setDeleteTarget(company.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
+                    >
+                      <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
+                    </button>
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       )}
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog open={deleteTarget !== null} onOpenChange={() => setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar eliminação</AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteTarget === 'bulk'
+                ? `Tem a certeza que deseja eliminar ${selectedIds.size} empresas? Esta acção não pode ser revertida.`
+                : deleteTarget
+                  ? `Tem a certeza que deseja eliminar "${getCompanyNameForDelete(deleteTarget)}"? Esta acção não pode ser revertida.`
+                  : ''}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              variant="destructive"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

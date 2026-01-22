@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Header } from "@/components/dashboard/Header";
 import { ClusterStats } from "@/components/clusters/ClusterStats";
 import { ProvidersTable } from "@/components/clusters/ProvidersTable";
-import { ImportDialog } from "@/components/clusters/ImportDialog";
+import { AddCompaniesDialog, NewCompanyData } from "@/components/clusters/AddCompaniesDialog";
 import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
 import { ClusterSelector } from "@/components/dashboard/ClusterSelector";
 import {
@@ -21,7 +21,7 @@ import {
 import { ClusterDefinition, CreateClusterInput } from "@/types/clusterNew";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
 import { SupplierWithoutFootprint, SupplierAny } from "@/types/supplierNew";
-import { Users, Upload, Download, Target } from "lucide-react";
+import { CircleDot } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig } from "@/config/clusters";
 
@@ -31,7 +31,7 @@ export default function ClusterManagement() {
   const ownerType = isMunicipio ? 'municipio' : 'empresa';
 
   const [selectedClusterType, setSelectedClusterType] = useState<string>('all');
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
+  const [addCompaniesDialogOpen, setAddCompaniesDialogOpen] = useState(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [editingCluster, setEditingCluster] = useState<ClusterDefinition | undefined>();
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({
@@ -92,6 +92,10 @@ export default function ClusterManagement() {
     return counts;
   }, [allCompanies, clusters]);
 
+  // State detection for empty states
+  const hasNoClusters = clusters.length === 0;
+  const selectedClusterId = selectedClusterType !== 'all' ? selectedClusterType : null;
+
   // Filter suppliers by selected cluster and universal filters
   const filteredSuppliers = useMemo(() => {
     let filtered = baseSuppliers;
@@ -136,54 +140,24 @@ export default function ClusterManagement() {
     return allCompanies.filter(c => c.clusterId === selectedClusterType);
   }, [allCompanies, selectedClusterType]);
 
-  const handleImport = (file: File) => {
-    console.log("Importing file:", file.name);
+  const handleAddCompanies = (companies: NewCompanyData[]) => {
+    console.log("Adding companies:", companies);
+    // TODO: Implement actual company addition logic
   };
 
-  const handleExport = () => {
-    const headers = [
-      "Nome", "NIF/NIPC", "Email", "Setor", "Cluster", "Distrito", "Faturação anual (€)",
-      "Colaboradores", "Área (m²)", "Âmbito 1 (t CO₂e)", "Âmbito 2 (t CO₂e)",
-      "Âmbito 3 (t CO₂e)", "Emissões Totais (t CO₂e)", "Rating"
-    ];
-
-    const csvContent = [
-      headers.join(","),
-      ...filteredSuppliers.map((company) =>
-        [
-          `"${company.name}"`,
-          company.id,
-          company.contact.email,
-          company.sector,
-          company.clusterId || '',
-          company.region,
-          company.revenue * 1000000,
-          company.employees,
-          company.area,
-          company.scope1,
-          company.scope2,
-          company.scope3,
-          company.totalEmissions,
-          company.rating,
-        ].join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", `cluster_${selectedClusterType}_${new Date().toISOString().split("T")[0]}.csv`);
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleAddCompaniesInline = (companies: NewCompanyData[]) => {
+    console.log("Adding companies inline:", companies);
+    // TODO: Implement actual company addition logic
   };
 
   // CRUD Handlers
   const handleCreateCluster = (input: CreateClusterInput) => {
-    createCluster(input, ownerType);
+    const newCluster = createCluster(input, ownerType);
     refreshClusters();
+    // Automatically select the newly created cluster
+    if (newCluster) {
+      setSelectedClusterType(newCluster.id);
+    }
   };
 
   const handleEditCluster = (cluster: ClusterDefinition) => {
@@ -223,8 +197,8 @@ export default function ClusterManagement() {
         {/* Page Title */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
-            Gestão de Clusters
+            <CircleDot className="h-6 w-6 text-primary" />
+            Gerir clusters
           </h1>
           <p className="text-muted-foreground mt-1">
             Organize e monitorize os seus grupos de empresas
@@ -246,40 +220,31 @@ export default function ClusterManagement() {
           onCreateNew={() => setCreateDialogOpen(true)}
         />
 
-        {/* Actions Header */}
-        <div className="mb-6 flex items-center justify-end">
-          <div className="flex gap-2">
-            <Button onClick={() => navigate(`/incentivo?cluster=${selectedClusterType}`)}>
-              <Target className="h-4 w-4 mr-2" />
-              Incentivar
-            </Button>
-            <Button variant="outline" onClick={handleExport}>
-              <Download className="h-4 w-4 mr-2" />
-              Exportar
-            </Button>
-            <Button variant="outline" onClick={() => setImportDialogOpen(true)}>
-              <Upload className="h-4 w-4 mr-2" />
-              Importar
-            </Button>
-          </div>
-        </div>
-
         <div className="space-y-6">
           <ClusterStats
             selectedCluster={selectedClusterType}
             companies={filteredAllCompanies}
           />
           <Card className="p-6 shadow-md">
-            <ProvidersTable companies={filteredAllCompanies} />
+            <ProvidersTable
+              companies={filteredAllCompanies}
+              onAddCompanies={() => setAddCompaniesDialogOpen(true)}
+              onAddCompaniesInline={handleAddCompaniesInline}
+              onIncentivize={() => navigate(`/incentivo?cluster=${selectedClusterType}`)}
+              hasNoClusters={hasNoClusters}
+              selectedClusterId={selectedClusterId}
+            />
           </Card>
         </div>
       </main>
 
-      <ImportDialog
-        open={importDialogOpen}
-        onOpenChange={setImportDialogOpen}
-        clusterId={selectedClusterType}
-        onImport={handleImport}
+      <AddCompaniesDialog
+        open={addCompaniesDialogOpen}
+        onOpenChange={setAddCompaniesDialogOpen}
+        clusterId={selectedClusterType === 'all' ? '' : selectedClusterType}
+        onClusterChange={setSelectedClusterType}
+        clusters={clusters}
+        onAddCompanies={handleAddCompanies}
       />
 
       <CreateClusterDialog

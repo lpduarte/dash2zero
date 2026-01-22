@@ -14,7 +14,9 @@
       "Bash(xargs sed:*)",
       "WebSearch",
       "Bash(git checkout:*)",
-      "WebFetch(domain:www.ine.pt)"
+      "WebFetch(domain:www.ine.pt)",
+      "Bash(find:*)",
+      "Bash(npm run lint:*)"
     ]
   }
 }

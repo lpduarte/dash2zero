@@ -5,7 +5,7 @@ import {
   Table2, PieChart, Star, Moon, Sun, Factory, Building2,
   Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
   Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
-  Eye, Mail, Users, Leaf, Copy, Code, Truck, Plus
+  Eye, Mail, Users, Leaf, Copy, Code, Truck, Plus, MessageSquare
 } from "lucide-react";
 
 // ============================================
@@ -46,6 +46,17 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -93,6 +104,7 @@ const sections = [
   { id: 'badges', label: 'Badges', icon: Tag },
   { id: 'inputs', label: 'Inputs', icon: FormInput },
   { id: 'select', label: 'Select', icon: ListFilter },
+  { id: 'dialogs', label: 'Dialogs', icon: MessageSquare },
   { id: 'kpi-cards', label: 'KPI Cards', icon: BarChart3 },
   { id: 'tabs', label: 'Tabs', icon: Columns },
   { id: 'tabelas', label: 'Tabelas', icon: Table2 },
@@ -913,6 +925,7 @@ const StyleGuide = () => {
               <Button variant="outline">Outline</Button>
               <Button variant="ghost">Ghost</Button>
               <Button variant="link">Link</Button>
+              <Button variant="destructive">Destructive</Button>
               <button className="inline-flex items-center justify-center gap-2 h-10 px-4 py-2 rounded-md text-sm font-normal border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors">
                 <Plus className="h-4 w-4" />
                 Dashed
@@ -1083,6 +1096,64 @@ const StyleGuide = () => {
               <SelectItem value="opt3">Opção 3</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        {/* === SECÇÃO: DIALOGS === */}
+        <SectionHeader
+          id="dialogs"
+          title="Dialogs"
+          icon={MessageSquare}
+          description="Modais de confirmação e alertas"
+        />
+
+        <div className="space-y-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">Alert Dialog</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Modal de confirmação com botão de fechar no canto. O conteúdo fica centrado.
+            </p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline">Abrir Alert Dialog</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirmar acção</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Esta é uma mensagem de confirmação. Tem a certeza que deseja continuar com esta acção?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction>Confirmar</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-bold mb-4">Alert Dialog Destructive</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Variante para acções destrutivas como eliminar.
+            </p>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="destructive">Eliminar item</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirmar eliminação</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Tem a certeza que deseja eliminar este item? Esta acção não pode ser revertida.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction variant="destructive">Eliminar</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
 
         {/* === SECÇÃO: KPI CARDS === */}
