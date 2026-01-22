@@ -1,16 +1,40 @@
-import { TrendingDown } from "lucide-react";
+import { TrendingDown, Settings, Pencil, Trash2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { ClusterDefinition } from "@/types/clusterNew";
 import { FilterButton } from "./FilterButton";
 import { FilterModal } from "./FilterModal";
 import { ActiveFiltersDisplay } from "./ActiveFiltersDisplay";
 import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig } from "@/config/clusters";
+import { getClusterById } from "@/data/clusters";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 type ImprovementPotential = 'high' | 'medium' | 'low';
 
-interface ClusterSelectorProps {
+interface ClusterActionsProps {
+  onEdit?: (cluster: ClusterDefinition) => void;
+  onDelete?: (cluster: ClusterDefinition) => void;
+  onCreateNew?: () => void;
+}
+
+interface ClusterSelectorProps extends ClusterActionsProps {
   selectedCluster: string;
   onClusterChange: (cluster: string) => void;
   clusterCounts: Record<string, number>;
@@ -51,13 +75,29 @@ export function ClusterSelector({
   suppliers,
   universalFilters,
   onUniversalFiltersChange,
+  onEdit,
+  onDelete,
+  onCreateNew,
 }: ClusterSelectorProps) {
   const { userType } = useUser();
   const clusterOptions = getClusterConfig(userType);
-  
+
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [isStuck, setIsStuck] = useState(false);
+  const [actionsDropdownOpen, setActionsDropdownOpen] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const stickyRef = useRef<HTMLDivElement>(null);
+
+  // Check if cluster actions are enabled (handlers provided)
+  const hasClusterActions = !!(onEdit || onDelete);
+
+  // Get the selected cluster definition for actions
+  const selectedClusterDef = selectedCluster !== 'all' ? getClusterById(selectedCluster) : undefined;
+
+  // Close dropdown when cluster changes
+  useEffect(() => {
+    setActionsDropdownOpen(false);
+  }, [selectedCluster]);
 
   // Detect when sticky element is stuck
   useEffect(() => {
@@ -139,42 +179,112 @@ export function ClusterSelector({
           <div data-tour="cluster-selector" className="flex flex-wrap gap-2">
             {clusterOptions.map((option) => {
               const Icon = option.icon;
+              const isSelected = selectedCluster === option.value;
+              const canHaveActions = hasClusterActions && option.value !== 'all';
+              const showActions = isSelected && canHaveActions;
+
               return (
-              <button
-                key={option.value}
-                onClick={() => onClusterChange(option.value)}
-                className={cn(
-                  "group flex items-center gap-2 px-4 py-2.5 rounded-lg border transition-all duration-200",
-                  "[&_svg]:text-current",
-                  selectedCluster === option.value
-                    ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-primary hover:text-primary-foreground hover:shadow-md"
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                <span className="font-normal">{option.labelPlural}</span>
-                <span
+                <div
+                  key={option.value}
                   className={cn(
-                    "ml-1 px-2 py-0.5 rounded-full text-xs font-bold",
-                    selectedCluster === option.value
-                      ? "bg-primary-foreground/20 text-primary-foreground"
-                      : "bg-muted text-muted-foreground"
+                    "group flex items-center rounded-lg border transition-all duration-200",
+                    "[&_svg]:text-current",
+                    isSelected
+                      ? "bg-primary text-primary-foreground border-primary shadow-md"
+                      : "bg-card text-card-foreground border-border hover:border-primary/50 hover:bg-primary hover:text-primary-foreground hover:shadow-md"
                   )}
                 >
-                  {clusterCounts[option.value]}
-                </span>
-                {showPotential && clusterPotentials && (() => {
-                  const potential = clusterPotentials[option.value];
-                  const config = getPotentialConfig(potential, selectedCluster === option.value);
-                  const PotentialIcon = config.icon;
-                  return (
-                    <span className={cn("ml-1 p-1 rounded-full", config.bgColor)}>
-                      <PotentialIcon className={cn("h-3 w-3", config.color)} />
+                  <button
+                    onClick={() => onClusterChange(option.value)}
+                    className="flex items-center gap-2 px-4 py-2.5"
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span className="font-normal">{option.labelPlural}</span>
+                    <span
+                      className={cn(
+                        "ml-1 px-2 py-0.5 rounded-full text-xs font-bold",
+                        isSelected
+                          ? "bg-primary-foreground/20 text-primary-foreground"
+                          : "bg-muted text-muted-foreground group-hover:bg-primary-foreground/20 group-hover:text-primary-foreground"
+                      )}
+                    >
+                      {clusterCounts[option.value]}
                     </span>
-                  );
-                })()}
+                    {showPotential && clusterPotentials && (() => {
+                      const potential = clusterPotentials[option.value];
+                      const config = getPotentialConfig(potential, isSelected);
+                      const PotentialIcon = config.icon;
+                      return (
+                        <span className={cn("ml-1 p-1 rounded-full", config.bgColor)}>
+                          <PotentialIcon className={cn("h-3 w-3", config.color)} />
+                        </span>
+                      );
+                    })()}
+                  </button>
+                  {canHaveActions && (
+                    <div
+                      className={cn(
+                        "overflow-hidden transition-all duration-300 ease-out flex",
+                        showActions ? "max-w-[40px]" : "max-w-0"
+                      )}
+                    >
+                      <DropdownMenu open={showActions && actionsDropdownOpen} onOpenChange={setActionsDropdownOpen}>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            className="flex items-center justify-center px-2 border-l border-primary-foreground/20 self-stretch"
+                            onClick={(e) => e.stopPropagation()}
+                            tabIndex={showActions ? 0 : -1}
+                          >
+                            <span className="flex items-center justify-center p-1 rounded hover:bg-primary-foreground/15 transition-colors">
+                              <Settings className="h-4 w-4" />
+                            </span>
+                          </button>
+                        </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {onEdit && (
+                          <DropdownMenuItem
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActionsDropdownOpen(false);
+                              if (selectedClusterDef) onEdit(selectedClusterDef);
+                            }}
+                          >
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Editar cluster
+                          </DropdownMenuItem>
+                        )}
+                        {onEdit && onDelete && <DropdownMenuSeparator />}
+                        {onDelete && (
+                          <DropdownMenuItem
+                            className="text-danger focus:text-danger"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActionsDropdownOpen(false);
+                              setShowDeleteConfirm(true);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Eliminar cluster
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* New cluster button */}
+            {onCreateNew && (
+              <button
+                onClick={onCreateNew}
+                className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="font-normal">Novo cluster</span>
               </button>
-            );})}
+            )}
           </div>
 
           {/* Right side - Filter button */}
@@ -200,6 +310,36 @@ export function ClusterSelector({
         open={filterModalOpen}
         onOpenChange={setFilterModalOpen}
       />
+
+      {/* Delete Confirmation Dialog */}
+      {selectedClusterDef && (
+        <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Eliminar cluster</DialogTitle>
+              <DialogDescription>
+                Tem a certeza que pretende eliminar o cluster "{selectedClusterDef.name}"?
+                Esta ação é irreversível. As empresas associadas serão mantidas,
+                mas perderão a associação a este cluster.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
+                Cancelar
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  if (onDelete) onDelete(selectedClusterDef);
+                  setShowDeleteConfirm(false);
+                }}
+              >
+                Eliminar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }

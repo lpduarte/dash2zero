@@ -35,12 +35,13 @@ export function ClusterActionsMenu({
   onDelete,
   triggerClassName,
 }: ClusterActionsMenuProps) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -56,6 +57,7 @@ export function ClusterActionsMenu({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
+              setDropdownOpen(false);
               onEdit(cluster);
             }}
           >
@@ -65,6 +67,7 @@ export function ClusterActionsMenu({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
+              setDropdownOpen(false);
               onDuplicate(cluster);
             }}
           >
@@ -75,6 +78,7 @@ export function ClusterActionsMenu({
           <DropdownMenuItem
             onClick={(e) => {
               e.stopPropagation();
+              setDropdownOpen(false);
               setShowArchiveConfirm(true);
             }}
           >
@@ -85,6 +89,7 @@ export function ClusterActionsMenu({
             className="text-danger focus:text-danger"
             onClick={(e) => {
               e.stopPropagation();
+              setDropdownOpen(false);
               setShowDeleteConfirm(true);
             }}
           >

@@ -50,9 +50,7 @@ export const createCluster = (
   const newCluster: ClusterDefinition = {
     id: generateClusterId(ownerType),
     name: input.name,
-    description: input.description,
     icon: input.icon,
-    color: input.color,
     ownerId,
     ownerType,
     createdAt: new Date(),
@@ -95,11 +93,6 @@ export const updateCluster = (
   return updatedCluster;
 };
 
-export const archiveCluster = (id: string): boolean => {
-  const result = updateCluster(id, { isArchived: true });
-  return !!result;
-};
-
 export const deleteCluster = (id: string): boolean => {
   const cluster = getClusterById(id);
   if (!cluster) return false;
@@ -114,21 +107,6 @@ export const deleteCluster = (id: string): boolean => {
   clusterMemberships = clusterMemberships.filter(m => m.clusterId !== id);
 
   return true;
-};
-
-export const duplicateCluster = (id: string): ClusterDefinition | undefined => {
-  const cluster = getClusterById(id);
-  if (!cluster) return undefined;
-
-  return createCluster(
-    {
-      name: `${cluster.name} (cópia)`,
-      description: cluster.description,
-      icon: cluster.icon,
-      color: cluster.color,
-    },
-    cluster.ownerType
-  );
 };
 
 // Membership Operations

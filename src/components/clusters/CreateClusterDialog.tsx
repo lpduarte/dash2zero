@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import {
@@ -31,7 +30,7 @@ import {
   Store,
   LucideIcon,
 } from "lucide-react";
-import { ClusterDefinition, CreateClusterInput, availableClusterColors } from "@/types/clusterNew";
+import { ClusterDefinition, CreateClusterInput } from "@/types/clusterNew";
 import { isClusterNameUnique } from "@/data/clusters";
 import { useUser } from "@/contexts/UserContext";
 
@@ -78,46 +77,35 @@ export function CreateClusterDialog({
   const isEditMode = !!existingCluster;
 
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [selectedIcon, setSelectedIcon] = useState<string>("Building2");
-  const [selectedColor, setSelectedColor] = useState<string>(availableClusterColors[0].value);
-  const [errors, setErrors] = useState<{ name?: string; description?: string }>({});
+  const [nameError, setNameError] = useState<string>();
 
   // Reset form when dialog opens/closes or existingCluster changes
   useEffect(() => {
     if (open) {
       if (existingCluster) {
         setName(existingCluster.name);
-        setDescription(existingCluster.description || "");
         setSelectedIcon(existingCluster.icon);
-        setSelectedColor(existingCluster.color || availableClusterColors[0].value);
       } else {
         setName("");
-        setDescription("");
         setSelectedIcon("Building2");
-        setSelectedColor(availableClusterColors[0].value);
       }
-      setErrors({});
+      setNameError(undefined);
     }
   }, [open, existingCluster]);
 
   const validate = (): boolean => {
-    const newErrors: { name?: string; description?: string } = {};
-
     if (!name.trim()) {
-      newErrors.name = "O nome é obrigatório";
+      setNameError("O nome é obrigatório");
+      return false;
     } else if (name.length > 50) {
-      newErrors.name = "O nome não pode ter mais de 50 caracteres";
+      setNameError("O nome não pode ter mais de 50 caracteres");
+      return false;
     } else if (!isClusterNameUnique(name, ownerType, existingCluster?.id)) {
-      newErrors.name = "Já existe um cluster com este nome";
+      setNameError("Já existe um cluster com este nome");
+      return false;
     }
-
-    if (description.length > 200) {
-      newErrors.description = "A descrição não pode ter mais de 200 caracteres";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return true;
   };
 
   const handleSave = () => {
@@ -125,9 +113,7 @@ export function CreateClusterDialog({
 
     onSave({
       name: name.trim(),
-      description: description.trim() || undefined,
       icon: selectedIcon,
-      color: selectedColor,
     });
 
     onOpenChange(false);
@@ -158,44 +144,19 @@ export function CreateClusterDialog({
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (errors.name) setErrors({ ...errors, name: undefined });
+                if (nameError) setNameError(undefined);
               }}
               placeholder="Ex: Distribuidores, Investidores..."
               maxLength={50}
-              className={cn(errors.name && "border-danger focus-visible:ring-danger")}
+              className={cn(nameError && "border-danger focus-visible:ring-danger")}
             />
             <div className="flex justify-between text-xs">
-              {errors.name ? (
-                <span className="text-danger">{errors.name}</span>
+              {nameError ? (
+                <span className="text-danger">{nameError}</span>
               ) : (
                 <span className="text-muted-foreground">&nbsp;</span>
               )}
               <span className="text-muted-foreground">{name.length}/50</span>
-            </div>
-          </div>
-
-          {/* Descrição */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Descrição (opcional)</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
-                if (errors.description) setErrors({ ...errors, description: undefined });
-              }}
-              placeholder="Breve descrição do cluster..."
-              maxLength={200}
-              rows={3}
-              className={cn(errors.description && "border-danger focus-visible:ring-danger")}
-            />
-            <div className="flex justify-between text-xs">
-              {errors.description ? (
-                <span className="text-danger">{errors.description}</span>
-              ) : (
-                <span className="text-muted-foreground">&nbsp;</span>
-              )}
-              <span className="text-muted-foreground">{description.length}/200</span>
             </div>
           </div>
 
@@ -223,28 +184,6 @@ export function CreateClusterDialog({
                   </button>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Cor */}
-          <div className="space-y-2">
-            <Label>Cor</Label>
-            <div className="flex gap-2">
-              {availableClusterColors.map((color) => (
-                <button
-                  key={color.value}
-                  type="button"
-                  onClick={() => setSelectedColor(color.value)}
-                  className={cn(
-                    "w-8 h-8 rounded-full border-2 transition-all",
-                    selectedColor === color.value
-                      ? "border-foreground scale-110"
-                      : "border-transparent hover:scale-105"
-                  )}
-                  style={{ backgroundColor: color.value }}
-                  title={color.label}
-                />
-              ))}
             </div>
           </div>
         </div>

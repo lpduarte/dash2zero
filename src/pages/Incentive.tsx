@@ -57,7 +57,6 @@ import { ClusterSelector } from "@/components/dashboard/ClusterSelector";
 import { UniversalFilterState, Supplier } from "@/types/supplier";
 import { emailTemplates as defaultEmailTemplates, getCompanyEmailTracking, getDeliveryMetrics, EmailRecord, EmailTemplate } from "@/data/emailTracking";
 import { SupplierWithoutFootprint } from "@/types/supplierNew";
-import { useToast } from "@/hooks/use-toast";
 import { format, formatDistanceToNow } from "date-fns";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
 import { pt } from "date-fns/locale";
@@ -166,7 +165,6 @@ const getNextAction = (status: string): string => {
 
 const Incentive = () => {
   const { isMunicipio } = useUser();
-  const { toast } = useToast();
   const [searchParams] = useSearchParams();
 
   // Read URL params for deep linking from Clusters page
@@ -587,11 +585,6 @@ const Incentive = () => {
 
   const handleSaveTemplate = () => {
     if (!templateForm.name || !templateForm.subject || !templateForm.body) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Preencha todos os campos obrigatórios.",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -605,10 +598,6 @@ const Incentive = () => {
         body: templateForm.body,
       };
       setTemplates(prev => [...prev, newTemplate]);
-      toast({
-        title: "Template criado",
-        description: `O template "${newTemplate.name}" foi criado com sucesso.`,
-      });
     } else if (editingTemplate) {
       // Update existing template
       setTemplates(prev => prev.map(t =>
@@ -621,10 +610,6 @@ const Incentive = () => {
         setSubject(templateForm.subject);
         setMessage(templateForm.body);
       }
-      toast({
-        title: "Template atualizado",
-        description: `O template "${templateForm.name}" foi atualizado com sucesso.`,
-      });
     }
 
     // Reset form state
@@ -635,11 +620,6 @@ const Incentive = () => {
 
   const handleDeleteTemplate = (template: EmailTemplate) => {
     if (templates.length <= 1) {
-      toast({
-        title: "Não é possível apagar",
-        description: "Deve existir pelo menos um template.",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -652,11 +632,6 @@ const Incentive = () => {
         handleTemplateChange(remaining[0].id);
       }
     }
-
-    toast({
-      title: "Template removido",
-      description: `O template "${template.name}" foi removido.`,
-    });
   };
 
   const handleCancelTemplateEdit = () => {
@@ -667,15 +642,10 @@ const Incentive = () => {
 
   const handleSend = async () => {
     if (selectedCompanies.length === 0) return;
-    
+
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Emails enviados",
-      description: `${selectedCompanies.length} email(s) enviados com sucesso.`,
-    });
-    
+
     setSelectedCompanies([]);
     setIsLoading(false);
   };
@@ -746,14 +716,9 @@ const Incentive = () => {
   const handleSmartSend = async () => {
     setShowSmartSendDialog(false);
     setIsLoading(true);
-    
+
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Emails enviados",
-      description: `${selectedCompanies.length} email(s) enviados com templates optimizados.`,
-    });
-    
+
     setSelectedCompanies([]);
     setIsLoading(false);
   };

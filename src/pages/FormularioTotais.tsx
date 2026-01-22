@@ -51,7 +51,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useToast } from "@/hooks/use-toast";
 import { formatNumber } from "@/lib/formatters";
 
 // ============ Types ============
@@ -487,8 +486,7 @@ const ScopeCard = ({
 // ============ Main Component ============
 const FormularioTotais = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  
+
   // Step state
   const [step, setStep] = useState(1);
   

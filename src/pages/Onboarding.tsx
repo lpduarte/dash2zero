@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 
 // Abstract Analytics Illustration Component
 const AbstractIllustration = () => (
@@ -38,7 +37,6 @@ const AbstractIllustration = () => (
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const handleSimpleClick = () => {
     navigate("/");

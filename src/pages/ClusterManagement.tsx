@@ -27,7 +27,6 @@ import { ClusterStats } from "@/components/clusters/ClusterStats";
 import { ProvidersTable } from "@/components/clusters/ProvidersTable";
 import { ImportDialog } from "@/components/clusters/ImportDialog";
 import { CreateClusterDialog } from "@/components/clusters/CreateClusterDialog";
-import { ClusterActionsMenu } from "@/components/clusters/ClusterActionsMenu";
 import { ClusterSelector } from "@/components/dashboard/ClusterSelector";
 import {
   getSuppliersWithFootprintByOwnerType,
@@ -37,18 +36,14 @@ import {
   getClustersByOwnerType,
   createCluster,
   updateCluster,
-  archiveCluster,
   deleteCluster,
-  duplicateCluster,
-  getClusterById,
 } from "@/data/clusters";
 import { ClusterProvider } from "@/types/cluster";
 import { ClusterDefinition, CreateClusterInput } from "@/types/clusterNew";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
-import { Users, Upload, Download, Search, X, Plus, Target } from "lucide-react";
+import { Users, Upload, Download, Search, X, Target } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig } from "@/config/clusters";
-import { useToast } from "@/hooks/use-toast";
 
 // Converter Supplier para ClusterProvider
 const supplierToProvider = (supplier: Supplier): ClusterProvider => ({
@@ -66,7 +61,6 @@ const ITEMS_PER_PAGE = 10;
 
 export default function ClusterManagement() {
   const { user, isMunicipio, userType } = useUser();
-  const { toast } = useToast();
   const navigate = useNavigate();
   const ownerType = isMunicipio ? 'municipio' : 'empresa';
 
@@ -230,12 +224,8 @@ export default function ClusterManagement() {
 
   // CRUD Handlers
   const handleCreateCluster = (input: CreateClusterInput) => {
-    const newCluster = createCluster(input, ownerType);
+    createCluster(input, ownerType);
     refreshClusters();
-    toast({
-      title: "Cluster criado",
-      description: `O cluster "${newCluster.name}" foi criado com sucesso.`,
-    });
   };
 
   const handleEditCluster = (cluster: ClusterDefinition) => {
@@ -245,56 +235,18 @@ export default function ClusterManagement() {
 
   const handleUpdateCluster = (input: CreateClusterInput) => {
     if (!editingCluster) return;
-    const updated = updateCluster(editingCluster.id, input);
-    if (updated) {
-      refreshClusters();
-      toast({
-        title: "Cluster atualizado",
-        description: `O cluster "${updated.name}" foi atualizado com sucesso.`,
-      });
-    }
+    updateCluster(editingCluster.id, input);
+    refreshClusters();
     setEditingCluster(undefined);
-  };
-
-  const handleDuplicateCluster = (cluster: ClusterDefinition) => {
-    const duplicated = duplicateCluster(cluster.id);
-    if (duplicated) {
-      refreshClusters();
-      toast({
-        title: "Cluster duplicado",
-        description: `Foi criada uma cópia do cluster "${cluster.name}".`,
-      });
-    }
-  };
-
-  const handleArchiveCluster = (cluster: ClusterDefinition) => {
-    const success = archiveCluster(cluster.id);
-    if (success) {
-      // Se o cluster arquivado estava selecionado, voltar para "all"
-      if (selectedClusterType === cluster.id) {
-        setSelectedClusterType('all');
-      }
-      refreshClusters();
-      toast({
-        title: "Cluster arquivado",
-        description: `O cluster "${cluster.name}" foi arquivado.`,
-      });
-    }
   };
 
   const handleDeleteCluster = (cluster: ClusterDefinition) => {
     const success = deleteCluster(cluster.id);
     if (success) {
-      // Se o cluster eliminado estava selecionado, voltar para "all"
       if (selectedClusterType === cluster.id) {
         setSelectedClusterType('all');
       }
       refreshClusters();
-      toast({
-        title: "Cluster eliminado",
-        description: `O cluster "${cluster.name}" foi eliminado permanentemente.`,
-        variant: "destructive",
-      });
     }
   };
 
@@ -333,36 +285,20 @@ export default function ClusterManagement() {
           suppliers={baseSuppliers}
           universalFilters={universalFilters}
           onUniversalFiltersChange={setUniversalFilters}
+          onEdit={handleEditCluster}
+          onDelete={handleDeleteCluster}
+          onCreateNew={() => setCreateDialogOpen(true)}
         />
 
         {/* Actions Header */}
         <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div>
-              <h2 className="text-xl font-bold">{getClusterLabel()}</h2>
-              <p className="text-sm text-muted-foreground">
-                {filteredSuppliers.length.toLocaleString('pt-PT')} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
-              </p>
-            </div>
-            {/* Menu de ações do cluster selecionado */}
-            {selectedClusterType !== 'all' && (() => {
-              const cluster = getClusterById(selectedClusterType);
-              return cluster ? (
-                <ClusterActionsMenu
-                  cluster={cluster}
-                  onEdit={handleEditCluster}
-                  onDuplicate={handleDuplicateCluster}
-                  onArchive={handleArchiveCluster}
-                  onDelete={handleDeleteCluster}
-                />
-              ) : null;
-            })()}
+          <div>
+            <h2 className="text-xl font-bold">{getClusterLabel()}</h2>
+            <p className="text-sm text-muted-foreground">
+              {filteredSuppliers.length.toLocaleString('pt-PT')} empresas {selectedClusterType !== 'all' ? 'neste cluster' : 'no total'}
+            </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => setCreateDialogOpen(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Cluster
-            </Button>
             <Button onClick={() => navigate(`/incentivo?cluster=${selectedClusterType}`)}>
               <Target className="h-4 w-4 mr-2" />
               Incentivar
