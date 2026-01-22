@@ -279,7 +279,7 @@ export function ClusterSelector({
             {onCreateNew && (
               <button
                 onClick={onCreateNew}
-                className="group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-200"
               >
                 <Plus className="h-4 w-4" />
                 <span className="font-normal">Novo cluster</span>

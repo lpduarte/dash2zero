@@ -5,7 +5,7 @@ import {
   Table2, PieChart, Star, Moon, Sun, Factory, Building2,
   Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
   Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
-  Eye, Mail, Users, Leaf, Copy, Code, Truck
+  Eye, Mail, Users, Leaf, Copy, Code, Truck, Plus
 } from "lucide-react";
 
 // ============================================
@@ -907,12 +907,16 @@ const StyleGuide = () => {
           {/* Variantes */}
           <div>
             <h3 className="text-xl font-bold mb-4">Variantes</h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <Button>Default</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="outline">Outline</Button>
               <Button variant="ghost">Ghost</Button>
               <Button variant="link">Link</Button>
+              <button className="inline-flex items-center justify-center gap-2 h-10 px-4 py-2 rounded-md text-sm font-normal border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-colors">
+                <Plus className="h-4 w-4" />
+                Dashed
+              </button>
             </div>
           </div>
 
@@ -955,6 +959,7 @@ const StyleGuide = () => {
               </Button>
             </div>
           </div>
+
         </div>
 
         {/* === SECÇÃO: BADGES === */}
