@@ -208,14 +208,10 @@ export default function Pipeline() {
           <CardContent className="space-y-4">
             <Progress value={completedPercentage} className="h-3" />
 
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-2 gap-4 text-center">
               <div className="space-y-1">
                 <div className="text-2xl font-bold text-success">{summary.completed}</div>
                 <div className="text-xs text-muted-foreground">Concluídos</div>
-              </div>
-              <div className="space-y-1">
-                <div className="text-2xl font-bold text-warning">{summary.inProgress}</div>
-                <div className="text-xs text-muted-foreground">Em progresso</div>
               </div>
               <div className="space-y-1">
                 <div className="text-2xl font-bold text-muted-foreground">{summary.pending}</div>
