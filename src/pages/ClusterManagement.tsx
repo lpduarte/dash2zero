@@ -54,12 +54,14 @@ export default function ClusterManagement() {
   // Base suppliers - filtrados por ownerType
   const baseSuppliers = useMemo(() => {
     return getSuppliersWithFootprintByOwnerType(ownerType) as Supplier[];
-  }, [ownerType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerType, clustersVersion]);
 
   // Companies without footprint - for onboarding stats
   const companiesWithoutFootprint = useMemo(() => {
     return getSuppliersWithoutFootprintByOwnerType(ownerType);
-  }, [ownerType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerType, clustersVersion]);
 
   // Clusters dinâmicos (depende de clustersVersion para refresh)
   const clusters = useMemo(() => {
