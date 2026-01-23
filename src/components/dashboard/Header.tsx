@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
-import { Leaf, BarChart3, CircleDot, Moon, Sun, HelpCircle } from "lucide-react";
+import { Leaf, BarChart3, CircleDot, Moon, Sun } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
-import { useTour } from "@/contexts/TourContext";
 
 export const Header = () => {
   const location = useLocation();
   const { userType, setUserType } = useUser();
-  const { startTour } = useTour();
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -36,7 +34,7 @@ export const Header = () => {
         {/* Content - above everything */}
         <div className="relative max-w-[1400px] mx-auto" style={{ zIndex: 2 }}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3" data-tour="welcome">
+            <div className="flex items-center gap-3">
               <Leaf className="h-14 w-14 text-primary" />
               <div>
                 <h1 className="text-4xl font-bold text-foreground">dash2zero</h1>
@@ -45,11 +43,9 @@ export const Header = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <div data-tour="user-type-toggle">
-                <UserTypeToggle currentType={userType} onTypeChange={setUserType} />
-              </div>
+              <UserTypeToggle currentType={userType} onTypeChange={setUserType} />
 
-              <nav data-tour="navigation" className="liquid-glass-container flex gap-2 p-2 rounded-full backdrop-blur-xl">
+              <nav className="liquid-glass-container flex gap-2 p-2 rounded-full backdrop-blur-xl">
                 <Link to="/" className={cn(
                   "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
                   location.pathname === "/" ? "active border-primary/25" : "inactive"
@@ -66,7 +62,7 @@ export const Header = () => {
                 </Link>
               </nav>
 
-              <div data-tour="theme-toggle" className="liquid-glass-container flex gap-1 p-1.5 rounded-full backdrop-blur-xl">
+              <div className="liquid-glass-container flex gap-1 p-1.5 rounded-full backdrop-blur-xl">
                 <button
                   onClick={() => setDarkMode(false)}
                   className={cn(
@@ -89,15 +85,6 @@ export const Header = () => {
                 </button>
               </div>
 
-              <div data-tour="help-button" className="liquid-glass-container flex p-1.5 rounded-full backdrop-blur-xl">
-                <button
-                  onClick={startTour}
-                  className="liquid-glass-btn inactive relative flex items-center justify-center w-9 h-9 rounded-full text-sm font-medium overflow-hidden border border-transparent"
-                  title="Iniciar visita guiada"
-                >
-                  <HelpCircle className="h-4 w-4 relative z-10" />
-                </button>
-              </div>
             </div>
           </div>
         </div>

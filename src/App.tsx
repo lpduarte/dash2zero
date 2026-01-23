@@ -2,8 +2,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
-import { TourProvider } from "@/contexts/TourContext";
-import { ProductTour } from "@/components/tour/ProductTour";
 import Index from "./pages/Index";
 import Overview from "./pages/Overview";
 import ClusterManagement from "./pages/ClusterManagement";
@@ -22,9 +20,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <UserProvider>
-        <TourProvider>
-          <ProductTour />
-          <BrowserRouter>
+        <BrowserRouter>
             <Routes>
               <Route path="/index" element={<Index />} />
               <Route path="/" element={<Overview />} />
@@ -41,7 +37,6 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </TourProvider>
       </UserProvider>
     </TooltipProvider>
   </QueryClientProvider>

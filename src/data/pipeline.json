@@ -217,14 +217,13 @@
     },
     {
       "id": "12",
-      "title": "Dashboard: Tour e Planos de Melhoria",
-      "description": "Melhorar textos da tour e implementar ferramenta de planos",
+      "title": "Dashboard: Planos de Melhoria",
+      "description": "Implementar ferramenta de planos de melhoria",
       "category": "important",
       "status": "pending",
       "priority": 12,
-      "briefing": "12-dashboard-tour-planos.md",
+      "briefing": "12-dashboard-planos.md",
       "criteria": [
-        "Textos da tour atualizados",
         "UI de planos de melhoria criada",
         "Associação de planos a empresas funcional"
       ],

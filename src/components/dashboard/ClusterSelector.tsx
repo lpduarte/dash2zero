@@ -270,7 +270,7 @@ export function ClusterSelector({
       >
         <div className="flex justify-between items-center gap-4">
           {/* Left side - Cluster buttons */}
-          <div data-tour="cluster-selector" className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2">
             {visibleClusterOptions.map((option) => {
               const Icon = option.icon;
               const isSelected = selectedCluster === option.value;
@@ -383,7 +383,7 @@ export function ClusterSelector({
 
           {/* Right side - Filter button */}
           {showFilterButton && (
-            <div data-tour="filter-button" className="flex-shrink-0">
+            <div className="flex-shrink-0">
               <FilterButton
                 activeFiltersCount={activeFiltersCount}
                 onClick={() => setFilterModalOpen(true)}

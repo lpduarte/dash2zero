@@ -176,7 +176,7 @@ export const MetricsOverview = ({ suppliers, totalCompanies }: MetricsOverviewPr
   return (
     <TooltipProvider delayDuration={100}>
       <Collapsible open={isEmissionsExpanded} onOpenChange={setIsEmissionsExpanded}>
-        <Card data-tour="metrics-overview" className="shadow-md">
+        <Card className="shadow-md">
           <CardHeader className={cn("transition-all duration-[400ms]", isEmissionsExpanded ? "pb-3" : "pb-6")}>
             <SectionHeader
               icon={BarChart3}
