@@ -581,66 +581,473 @@ const StyleGuide = () => {
           description="As tecnologias e ferramentas que compõem este sistema"
         />
 
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-[#61DAFB]/10">
-                  <ReactIcon className="h-5 w-5 text-[#61DAFB]" />
-                </div>
-                <span className="font-bold">React 19</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Biblioteca principal para construção de interfaces
-              </p>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-[#3178C6]/10">
-                  <TypeScriptIcon className="h-5 w-5 text-[#3178C6]" />
-                </div>
-                <span className="font-bold">TypeScript</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Tipagem estática para código mais robusto
-              </p>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-[#06B6D4]/10">
-                  <TailwindIcon className="h-5 w-5 text-[#06B6D4]" />
-                </div>
-                <span className="font-bold">Tailwind CSS</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Framework de utility classes para estilos
-              </p>
-            </Card>
-            <Card className="p-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-lg bg-foreground/10">
-                  <ShadcnIcon className="h-5 w-5" />
-                </div>
-                <span className="font-bold">shadcn/ui</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Componentes base acessíveis e customizáveis
-              </p>
-            </Card>
-          </div>
+        <Tabs defaultValue="cards" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="cards">Cards</TabsTrigger>
+            <TabsTrigger value="lista">Lista</TabsTrigger>
+          </TabsList>
 
-          <Card className="p-4">
-            <h4 className="font-bold mb-3">Outras dependências relevantes</h4>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline">Recharts</Badge>
-              <Badge variant="outline">Lucide React</Badge>
-              <Badge variant="outline">Radix UI</Badge>
-              <Badge variant="outline">React Router</Badge>
-              <Badge variant="outline">TanStack Query</Badge>
-              <Badge variant="outline">Vite</Badge>
+          {/* === VERSÃO CARDS === */}
+          <TabsContent value="cards" className="space-y-6">
+            {/* Stack Principal */}
+            <div>
+              <h3 className="text-lg font-bold mb-3">Stack Principal</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-[#61DAFB]/10">
+                      <ReactIcon className="h-5 w-5 text-[#61DAFB]" />
+                    </div>
+                    <div>
+                      <span className="font-bold">React</span>
+                      <Badge variant="outline" className="ml-2 text-xs">19.2</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Componentes funcionais com hooks
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-[#3178C6]/10">
+                      <TypeScriptIcon className="h-5 w-5 text-[#3178C6]" />
+                    </div>
+                    <div>
+                      <span className="font-bold">TypeScript</span>
+                      <Badge variant="outline" className="ml-2 text-xs">5.9</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Tipagem estática em todo o código
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-[#06B6D4]/10">
+                      <TailwindIcon className="h-5 w-5 text-[#06B6D4]" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Tailwind</span>
+                      <Badge variant="outline" className="ml-2 text-xs">3.4</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Utility-first CSS com variáveis em <code className="text-xs bg-muted px-1 rounded">index.css</code>
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-[#646CFF]/10">
+                      <Zap className="h-5 w-5 text-[#646CFF]" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Vite</span>
+                      <Badge variant="outline" className="ml-2 text-xs">5.4</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Build tool com HMR via SWC
+                  </p>
+                </Card>
+              </div>
             </div>
-          </Card>
-        </div>
+
+            {/* Componentes UI */}
+            <div>
+              <h3 className="text-lg font-bold mb-3">Componentes UI</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-foreground/10">
+                      <ShadcnIcon className="h-5 w-5" />
+                    </div>
+                    <span className="font-bold">shadcn/ui</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Base dos componentes em <code className="text-xs bg-muted px-1 rounded">src/components/ui/</code>
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Layers className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Radix UI</span>
+                      <Badge variant="outline" className="ml-2 text-xs">1.x/2.x</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    14 primitivos acessíveis (Dialog, Select, Tabs...)
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-orange-500/10">
+                      <Star className="h-5 w-5 text-orange-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Lucide</span>
+                      <Badge variant="outline" className="ml-2 text-xs">0.563</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Biblioteca de ícones SVG
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-purple-500/10">
+                      <Palette className="h-5 w-5 text-purple-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">CVA</span>
+                      <Badge variant="outline" className="ml-2 text-xs">0.7</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Variantes de componentes (Button, Badge...)
+                  </p>
+                </Card>
+              </div>
+            </div>
+
+            {/* Dados e Navegação */}
+            <div>
+              <h3 className="text-lg font-bold mb-3">Dados e Navegação</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-red-500/10">
+                      <ChevronRight className="h-5 w-5 text-red-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">React Router</span>
+                      <Badge variant="outline" className="ml-2 text-xs">6.30</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Navegação SPA entre páginas
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-amber-500/10">
+                      <TrendingUp className="h-5 w-5 text-amber-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">TanStack Query</span>
+                      <Badge variant="outline" className="ml-2 text-xs">5.90</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Cache e estado do servidor
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-blue-500/10">
+                      <BarChart3 className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Recharts</span>
+                      <Badge variant="outline" className="ml-2 text-xs">2.15</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Gráficos (Area, Bar, Pie)
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-green-500/10">
+                      <AlertCircle className="h-5 w-5 text-green-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">date-fns</span>
+                      <Badge variant="outline" className="ml-2 text-xs">4.1</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Formatação de datas em PT
+                  </p>
+                </Card>
+              </div>
+            </div>
+
+            {/* Utilidades */}
+            <div>
+              <h3 className="text-lg font-bold mb-3">Utilidades</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-pink-500/10">
+                      <AlertTriangle className="h-5 w-5 text-pink-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">Sonner</span>
+                      <Badge variant="outline" className="ml-2 text-xs">1.7</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Toast notifications
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-slate-500/10">
+                      <Code className="h-5 w-5 text-slate-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">clsx</span>
+                      <Badge variant="outline" className="ml-2 text-xs">2.1</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Concatenação condicional de classes
+                  </p>
+                </Card>
+                <Card className="p-4">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 rounded-lg bg-cyan-500/10">
+                      <Layers className="h-5 w-5 text-cyan-500" />
+                    </div>
+                    <div>
+                      <span className="font-bold">tailwind-merge</span>
+                      <Badge variant="outline" className="ml-2 text-xs">2.6</Badge>
+                    </div>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Merge inteligente de classes Tailwind
+                  </p>
+                </Card>
+              </div>
+            </div>
+
+            {/* DevDependencies */}
+            <div>
+              <h3 className="text-lg font-bold mb-3">DevDependencies (Build)</h3>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card className="p-4 bg-muted/30">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm">ESLint</span>
+                    <Badge variant="outline" className="text-xs">9.39</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Linting do código</p>
+                </Card>
+                <Card className="p-4 bg-muted/30">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm">TS-ESLint</span>
+                    <Badge variant="outline" className="text-xs">8.53</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Regras TypeScript</p>
+                </Card>
+                <Card className="p-4 bg-muted/30">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm">PostCSS</span>
+                    <Badge variant="outline" className="text-xs">8.5</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Processamento CSS</p>
+                </Card>
+                <Card className="p-4 bg-muted/30">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-bold text-sm">Autoprefixer</span>
+                    <Badge variant="outline" className="text-xs">10.4</Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Prefixos CSS automáticos</p>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* === VERSÃO LISTA === */}
+          <TabsContent value="lista" className="space-y-6">
+            {/* Stack Principal */}
+            <Card className="overflow-hidden">
+              <div className="p-3 bg-muted/50 border-b">
+                <h3 className="font-bold text-sm">Stack Principal</h3>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[180px]">Tecnologia</TableHead>
+                    <TableHead className="w-[80px]">Versão</TableHead>
+                    <TableHead>Uso no projeto</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-normal">React</TableCell>
+                    <TableCell><Badge variant="outline">19.2</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Componentes funcionais com hooks</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">TypeScript</TableCell>
+                    <TableCell><Badge variant="outline">5.9</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Tipagem estática em todo o código</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Tailwind CSS</TableCell>
+                    <TableCell><Badge variant="outline">3.4</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Utility-first CSS com variáveis customizadas</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Vite</TableCell>
+                    <TableCell><Badge variant="outline">5.4</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Build tool e dev server com HMR via SWC</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+
+            {/* Componentes UI */}
+            <Card className="overflow-hidden">
+              <div className="p-3 bg-muted/50 border-b">
+                <h3 className="font-bold text-sm">Componentes UI</h3>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[180px]">Dependência</TableHead>
+                    <TableHead className="w-[80px]">Versão</TableHead>
+                    <TableHead>Uso no projeto</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-normal">shadcn/ui</TableCell>
+                    <TableCell><Badge variant="outline">-</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Base dos componentes em src/components/ui/</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Radix UI</TableCell>
+                    <TableCell><Badge variant="outline">1.x/2.x</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">14 primitivos acessíveis (Dialog, Select, Tabs...)</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Lucide React</TableCell>
+                    <TableCell><Badge variant="outline">0.563</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Biblioteca de ícones SVG</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">CVA</TableCell>
+                    <TableCell><Badge variant="outline">0.7</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Variantes de componentes (Button, Badge...)</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+
+            {/* Dados e Navegação */}
+            <Card className="overflow-hidden">
+              <div className="p-3 bg-muted/50 border-b">
+                <h3 className="font-bold text-sm">Dados e Navegação</h3>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[180px]">Dependência</TableHead>
+                    <TableHead className="w-[80px]">Versão</TableHead>
+                    <TableHead>Uso no projeto</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-normal">React Router</TableCell>
+                    <TableCell><Badge variant="outline">6.30</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Navegação SPA entre páginas</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">TanStack Query</TableCell>
+                    <TableCell><Badge variant="outline">5.90</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Cache e estado do servidor</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Recharts</TableCell>
+                    <TableCell><Badge variant="outline">2.15</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Gráficos (Area, Bar, Pie)</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">date-fns</TableCell>
+                    <TableCell><Badge variant="outline">4.1</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Formatação de datas em PT</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+
+            {/* Utilidades */}
+            <Card className="overflow-hidden">
+              <div className="p-3 bg-muted/50 border-b">
+                <h3 className="font-bold text-sm">Utilidades</h3>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[180px]">Dependência</TableHead>
+                    <TableHead className="w-[80px]">Versão</TableHead>
+                    <TableHead>Uso no projeto</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-normal">Sonner</TableCell>
+                    <TableCell><Badge variant="outline">1.7</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Toast notifications</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">clsx</TableCell>
+                    <TableCell><Badge variant="outline">2.1</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Concatenação condicional de classes</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">tailwind-merge</TableCell>
+                    <TableCell><Badge variant="outline">2.6</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Merge inteligente de classes Tailwind</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+
+            {/* DevDependencies */}
+            <Card className="overflow-hidden">
+              <div className="p-3 bg-muted/50 border-b">
+                <h3 className="font-bold text-sm">DevDependencies (Build)</h3>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[180px]">Dependência</TableHead>
+                    <TableHead className="w-[80px]">Versão</TableHead>
+                    <TableHead>Uso no projeto</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-normal">ESLint</TableCell>
+                    <TableCell><Badge variant="outline">9.39</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Linting do código</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">TypeScript-ESLint</TableCell>
+                    <TableCell><Badge variant="outline">8.53</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Regras TypeScript para ESLint</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">PostCSS</TableCell>
+                    <TableCell><Badge variant="outline">8.5</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Processamento CSS</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-normal">Autoprefixer</TableCell>
+                    <TableCell><Badge variant="outline">10.4</Badge></TableCell>
+                    <TableCell className="text-muted-foreground">Prefixos CSS automáticos</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* === SECÇÃO: CORES === */}
         <SectionHeader
