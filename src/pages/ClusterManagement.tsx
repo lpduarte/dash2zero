@@ -28,6 +28,7 @@ import { Supplier, UniversalFilterState } from "@/types/supplier";
 import { SupplierWithoutFootprint, SupplierAny } from "@/types/supplierNew";
 import { CircleDot } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { AdminSubheader } from "@/components/admin/AdminSubheader";
 import { getClusterConfig } from "@/config/clusters";
 
 export default function ClusterManagement() {
@@ -300,6 +301,7 @@ export default function ClusterManagement() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdminSubheader />
 
       <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
         {/* Page Title */}

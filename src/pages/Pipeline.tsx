@@ -14,6 +14,7 @@ import {
   EyeOff
 } from "lucide-react";
 import { Header } from "@/components/dashboard/Header";
+import { AdminSubheader } from "@/components/admin/AdminSubheader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -171,6 +172,7 @@ export default function Pipeline() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdminSubheader />
 
       <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
         {/* Page Title */}

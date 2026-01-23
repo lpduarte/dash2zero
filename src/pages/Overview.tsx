@@ -27,6 +27,7 @@ import { getClustersByOwnerType } from "@/data/clusters";
 import { getSectorsWithCounts } from "@/data/sectors";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
 import { useUser } from "@/contexts/UserContext";
+import { AdminSubheader } from "@/components/admin/AdminSubheader";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
 // Lógica diferenciada: Empresa usa substituição, Município usa média setorial
@@ -181,6 +182,7 @@ const Overview = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdminSubheader />
       <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
         <ClusterSelector
           selectedCluster={selectedCluster}

@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
+import { AdminSubheader } from "@/components/admin/AdminSubheader";
 import { getClustersByOwnerType } from "@/data/clusters";
 import {
   getSuppliersWithoutFootprintByOwnerType,
@@ -669,6 +670,7 @@ const Incentive = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AdminSubheader />
 
       <main className="relative z-10 max-w-[1400px] mx-auto px-8 py-8">
         {/* Page Title */}
