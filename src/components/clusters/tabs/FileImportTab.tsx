@@ -1,5 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Table,
@@ -12,6 +14,7 @@ import {
 import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, Info, Download } from "lucide-react";
 import { toast } from "sonner";
 import { NewCompanyData } from "./ManualEntryTab";
+import { cn } from "@/lib/utils";
 
 interface FileImportTabProps {
   onAddCompanies: (companies: NewCompanyData[]) => void;
@@ -121,11 +124,79 @@ function parseFile(file: File): Promise<ParsedRow[]> {
   });
 }
 
+// Editable cell component
+function EditableCell({
+  value,
+  onChange,
+  hasError,
+  placeholder = "—",
+}: {
+  value: string;
+  onChange: (newValue: string) => void;
+  hasError?: boolean;
+  placeholder?: string;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [localValue, setLocalValue] = useState(value);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setLocalValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [editing]);
+
+  const handleSave = () => {
+    onChange(localValue);
+    setEditing(false);
+  };
+
+  if (editing) {
+    return (
+      <Input
+        ref={inputRef}
+        value={localValue}
+        onChange={(e) => setLocalValue(e.target.value)}
+        onBlur={handleSave}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSave();
+          }
+          if (e.key === "Escape") {
+            setLocalValue(value);
+            setEditing(false);
+          }
+        }}
+        className="h-7 text-sm"
+      />
+    );
+  }
+
+  return (
+    <span
+      onClick={() => setEditing(true)}
+      className={cn(
+        "cursor-text block px-2 py-1 -mx-2 rounded hover:bg-muted transition-colors",
+        hasError && "text-destructive",
+        !value && "text-muted-foreground italic"
+      )}
+    >
+      {value || placeholder}
+    </span>
+  );
+}
+
 export function FileImportTab({ onAddCompanies, onClose }: FileImportTabProps) {
   const [file, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedRow[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [ignoreInvalid, setIgnoreInvalid] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const downloadTemplate = () => {
@@ -191,34 +262,71 @@ export function FileImportTab({ onAddCompanies, onClose }: FileImportTabProps) {
   const handleClear = () => {
     setFile(null);
     setParsedData(null);
+    setIgnoreInvalid(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
+  // Update a row and revalidate
+  const updateRow = (index: number, field: "name" | "nif" | "email", value: string) => {
+    setParsedData((prev) => {
+      if (!prev) return prev;
+
+      return prev.map((row, i) => {
+        if (i !== index) return row;
+
+        const updated = {
+          ...row,
+          [field]: field === "nif" ? value.replace(/\D/g, "") : value,
+        };
+
+        // Revalidate
+        const errors: string[] = [];
+        if (!updated.name.trim()) errors.push("Nome em falta");
+        if (!updated.nif) errors.push("NIF em falta");
+        else if (!isValidNif(updated.nif)) errors.push("NIF inválido");
+        if (!updated.email) errors.push("Email em falta");
+        else if (!isValidEmail(updated.email)) errors.push("Email inválido");
+
+        return { ...updated, errors, valid: errors.length === 0 };
+      });
+    });
+  };
+
   const handleImport = () => {
     if (!parsedData) return;
 
-    const validCompanies = parsedData
-      .filter(r => r.valid)
-      .map(r => ({
-        name: r.name,
-        nif: r.nif,
-        email: r.email,
-      }));
+    const toImport = parsedData.filter((r) => r.valid);
 
-    if (validCompanies.length === 0) {
+    if (toImport.length === 0) {
       toast.error("Nenhuma empresa válida para importar");
       return;
     }
 
-    onAddCompanies(validCompanies);
-    toast.success(`${validCompanies.length} empresa${validCompanies.length > 1 ? "s" : ""} importada${validCompanies.length > 1 ? "s" : ""} com sucesso`);
+    const companies = toImport.map((r) => ({
+      name: r.name,
+      nif: r.nif,
+      email: r.email,
+    }));
+
+    onAddCompanies(companies);
+    toast.success(
+      `${companies.length} empresa${companies.length > 1 ? "s" : ""} importada${companies.length > 1 ? "s" : ""} com sucesso`
+    );
     onClose();
   };
 
-  const validCount = parsedData?.filter(r => r.valid).length ?? 0;
+  const validCount = parsedData?.filter((r) => r.valid).length ?? 0;
   const invalidCount = parsedData ? parsedData.length - validCount : 0;
+
+  // Check if field has error
+  const fieldHasError = (row: ParsedRow, field: "name" | "nif" | "email") => {
+    if (field === "name") return row.errors.some((e) => e.includes("Nome"));
+    if (field === "nif") return row.errors.some((e) => e.includes("NIF"));
+    if (field === "email") return row.errors.some((e) => e.includes("Email"));
+    return false;
+  };
 
   if (!parsedData) {
     return (
@@ -287,6 +395,11 @@ export function FileImportTab({ onAddCompanies, onClose }: FileImportTabProps) {
     );
   }
 
+  // Determine which rows to show based on ignoreInvalid
+  const rowsToShow = ignoreInvalid ? parsedData.filter((r) => r.valid) : parsedData;
+  const importCount = ignoreInvalid ? validCount : validCount;
+  const canImport = ignoreInvalid ? validCount > 0 : invalidCount === 0 && validCount > 0;
+
   return (
     <div className="space-y-4 pt-4">
       <div className="flex items-center justify-between">
@@ -321,29 +434,64 @@ export function FileImportTab({ onAddCompanies, onClose }: FileImportTabProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {parsedData.map((row, i) => (
-              <TableRow key={i} className={row.valid ? "" : "bg-destructive/5"}>
-                <TableCell className="font-normal">{row.name || <span className="text-muted-foreground italic">—</span>}</TableCell>
-                <TableCell>{row.nif || <span className="text-muted-foreground italic">—</span>}</TableCell>
-                <TableCell className="text-muted-foreground">{row.email || <span className="italic">—</span>}</TableCell>
-                <TableCell className="text-center">
-                  {row.valid ? (
-                    <CheckCircle className="h-4 w-4 text-green-500 inline-block" />
-                  ) : (
-                    <span title={row.errors.join(", ")}>
-                      <AlertCircle className="h-4 w-4 text-destructive inline-block" />
-                    </span>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {rowsToShow.map((row, i) => {
+              // Find original index for updateRow
+              const originalIndex = parsedData.indexOf(row);
+              return (
+                <TableRow key={originalIndex} className={row.valid ? "" : "bg-destructive/5"}>
+                  <TableCell className="font-normal py-1">
+                    <EditableCell
+                      value={row.name}
+                      onChange={(v) => updateRow(originalIndex, "name", v)}
+                      hasError={fieldHasError(row, "name")}
+                    />
+                  </TableCell>
+                  <TableCell className="py-1">
+                    <EditableCell
+                      value={row.nif}
+                      onChange={(v) => updateRow(originalIndex, "nif", v)}
+                      hasError={fieldHasError(row, "nif")}
+                    />
+                  </TableCell>
+                  <TableCell className="text-muted-foreground py-1">
+                    <EditableCell
+                      value={row.email}
+                      onChange={(v) => updateRow(originalIndex, "email", v)}
+                      hasError={fieldHasError(row, "email")}
+                    />
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {row.valid ? (
+                      <CheckCircle className="h-4 w-4 text-green-500 inline-block" />
+                    ) : (
+                      <span title={row.errors.join(", ")}>
+                        <AlertCircle className="h-4 w-4 text-destructive inline-block cursor-help" />
+                      </span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
 
+      {invalidCount > 0 && (
+        <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
+          <Checkbox
+            id="ignoreInvalidFile"
+            checked={ignoreInvalid}
+            onCheckedChange={(c) => setIgnoreInvalid(c === true)}
+          />
+          <label htmlFor="ignoreInvalidFile" className="text-sm cursor-pointer">
+            Ignorar {invalidCount} {invalidCount === 1 ? "linha inválida" : "linhas inválidas"}
+          </label>
+        </div>
+      )}
+
       <div className="flex justify-end">
-        <Button onClick={handleImport} disabled={validCount === 0}>
-          Importar {validCount} empresa{validCount !== 1 ? "s" : ""}
+        <Button onClick={handleImport} disabled={!canImport}>
+          Importar {importCount} empresa{importCount !== 1 ? "s" : ""}
         </Button>
       </div>
     </div>
