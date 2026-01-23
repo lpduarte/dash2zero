@@ -726,7 +726,7 @@ export function ProvidersTable({ companies, onUpdateCompany, onDeleteCompanies, 
               <TableHead className="w-20">
                 {selectedIds.size >= 2 && (
                   <div className="flex items-center gap-1">
-                    {onMoveCompanies && clusters.length > 1 && (
+                    {onMoveCompanies && clusters.length > 1 && selectedClusterId && (
                       <button
                         onClick={() => setMoveTarget('bulk')}
                         className="p-1 rounded hover:bg-muted transition-colors"
@@ -824,7 +824,7 @@ export function ProvidersTable({ companies, onUpdateCompany, onDeleteCompanies, 
                   {/* Actions cell */}
                   <TableCell className="w-20">
                     <div className="flex items-center gap-1">
-                      {onMoveCompanies && clusters.length > 1 && (
+                      {onMoveCompanies && clusters.length > 1 && selectedClusterId && (
                         <button
                           onClick={() => setMoveTarget(company)}
                           className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-muted"
