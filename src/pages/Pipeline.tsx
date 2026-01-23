@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePageTitle } from "@/lib/usePageTitle";
 import {
   CheckCircle2,
@@ -9,15 +9,21 @@ import {
   ChevronRight,
   Calendar,
   ListTodo,
-  Check
+  Check,
+  Eye,
+  EyeOff
 } from "lucide-react";
 import { Header } from "@/components/dashboard/Header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import pipelineData from "@/data/pipeline.json";
+
+const STORAGE_KEY = "pipeline-hide-completed";
 
 type Status = "completed" | "in-progress" | "pending" | "blocked";
 type Category = "critical" | "important" | "normal";
@@ -133,11 +139,24 @@ export default function Pipeline() {
   usePageTitle("Pipeline");
   const { metadata, summary, items } = pipelineData;
 
+  const [hideCompleted, setHideCompleted] = useState(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored === "true";
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, String(hideCompleted));
+  }, [hideCompleted]);
+
   const completedPercentage = summary.total > 0 ? Math.round((summary.completed / summary.total) * 100) : 0;
 
-  const criticalItems = items.filter(i => i.category === "critical");
-  const importantItems = items.filter(i => i.category === "important");
-  const normalItems = items.filter(i => i.category === "normal");
+  const filteredItems = hideCompleted
+    ? items.filter(i => i.status !== "completed")
+    : items;
+
+  const criticalItems = filteredItems.filter(i => i.category === "critical");
+  const importantItems = filteredItems.filter(i => i.category === "important");
+  const normalItems = filteredItems.filter(i => i.category === "normal");
 
   return (
     <div className="min-h-screen bg-background">
@@ -155,11 +174,26 @@ export default function Pipeline() {
           </p>
         </div>
 
-        {/* Metadata */}
-        <div className="flex items-center gap-6 text-sm text-muted-foreground mb-6">
+        {/* Metadata and Filters */}
+        <div className="flex items-center justify-between text-sm text-muted-foreground mb-6">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4" />
             <span>Atualizado: {new Date(metadata.lastUpdated).toLocaleDateString('pt-PT')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {hideCompleted ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+            <Label htmlFor="hide-completed" className="text-sm cursor-pointer">
+              Ocultar concluídos
+            </Label>
+            <Switch
+              id="hide-completed"
+              checked={hideCompleted}
+              onCheckedChange={setHideCompleted}
+            />
           </div>
         </div>
 
@@ -192,49 +226,55 @@ export default function Pipeline() {
         </Card>
 
         {/* Critical Items */}
-        <div className="space-y-3 mb-8">
-          <div className="flex items-center gap-2">
-            <Badge variant="destructive">Crítico</Badge>
-            <span className="text-sm text-muted-foreground">
-              {criticalItems.filter(i => i.status === "completed").length}/{criticalItems.length} concluídos
-            </span>
+        {criticalItems.length > 0 && (
+          <div className="space-y-3 mb-8">
+            <div className="flex items-center gap-2">
+              <Badge variant="destructive">Crítico</Badge>
+              <span className="text-sm text-muted-foreground">
+                {criticalItems.filter(i => i.status === "completed").length}/{criticalItems.length} concluídos
+              </span>
+            </div>
+            <div className="space-y-2">
+              {criticalItems.map((item) => (
+                <PipelineItemCard key={item.id} item={item as PipelineItem} />
+              ))}
+            </div>
           </div>
-          <div className="space-y-2">
-            {criticalItems.map((item) => (
-              <PipelineItemCard key={item.id} item={item as PipelineItem} />
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* Important Items */}
-        <div className="space-y-3 mb-8">
-          <div className="flex items-center gap-2">
-            <Badge variant="warning">Importante</Badge>
-            <span className="text-sm text-muted-foreground">
-              {importantItems.filter(i => i.status === "completed").length}/{importantItems.length} concluídos
-            </span>
+        {importantItems.length > 0 && (
+          <div className="space-y-3 mb-8">
+            <div className="flex items-center gap-2">
+              <Badge variant="warning">Importante</Badge>
+              <span className="text-sm text-muted-foreground">
+                {importantItems.filter(i => i.status === "completed").length}/{importantItems.length} concluídos
+              </span>
+            </div>
+            <div className="space-y-2">
+              {importantItems.map((item) => (
+                <PipelineItemCard key={item.id} item={item as PipelineItem} />
+              ))}
+            </div>
           </div>
-          <div className="space-y-2">
-            {importantItems.map((item) => (
-              <PipelineItemCard key={item.id} item={item as PipelineItem} />
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* Normal Items */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">Normal</Badge>
-            <span className="text-sm text-muted-foreground">
-              {normalItems.filter(i => i.status === "completed").length}/{normalItems.length} concluídos
-            </span>
+        {normalItems.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary">Normal</Badge>
+              <span className="text-sm text-muted-foreground">
+                {normalItems.filter(i => i.status === "completed").length}/{normalItems.length} concluídos
+              </span>
+            </div>
+            <div className="space-y-2">
+              {normalItems.map((item) => (
+                <PipelineItemCard key={item.id} item={item as PipelineItem} />
+              ))}
+            </div>
           </div>
-          <div className="space-y-2">
-            {normalItems.map((item) => (
-              <PipelineItemCard key={item.id} item={item as PipelineItem} />
-            ))}
-          </div>
-        </div>
+        )}
       </main>
     </div>
   );
