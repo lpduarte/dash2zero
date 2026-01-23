@@ -35,7 +35,7 @@ const ACTIVE_CLIENT_KEY = 'dash2zero_active_client';
 interface UserContextType {
   user: User;
   userType: UserType;
-  setUserType: () => void;
+  setUserType: (type?: UserType) => void;
   isEmpresa: boolean;
   isMunicipio: boolean;
   isGet2C: boolean;
@@ -71,11 +71,25 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const isMunicipio = currentUser.userType === 'municipio';
   const isGet2C = currentUser.userType === 'get2c';
 
-  // Toggle entre os mock users (empresa → município → get2c → empresa)
-  const toggleUserType = () => {
-    const currentIndex = mockUsers.findIndex(u => u.id === currentUser.id);
-    const nextIndex = (currentIndex + 1) % mockUsers.length;
-    const newUser = mockUsers[nextIndex];
+  // Mudar tipo de utilizador - aceita tipo direto ou faz cycle
+  const setUserTypeDirectly = (type?: UserType) => {
+    let newUser: User;
+
+    if (type) {
+      // Selecionar diretamente o tipo especificado
+      const targetUser = mockUsers.find(u => u.userType === type);
+      if (targetUser) {
+        newUser = targetUser;
+      } else {
+        return; // Tipo não encontrado
+      }
+    } else {
+      // Cycle entre os mock users (empresa → município → get2c → empresa)
+      const currentIndex = mockUsers.findIndex(u => u.id === currentUser.id);
+      const nextIndex = (currentIndex + 1) % mockUsers.length;
+      newUser = mockUsers[nextIndex];
+    }
+
     setCurrentUser(newUser);
 
     // Limpar cliente ativo se não for Get2C
@@ -102,7 +116,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     <UserContext.Provider value={{
       user: currentUser,
       userType: currentUser.userType,
-      setUserType: toggleUserType,
+      setUserType: setUserTypeDirectly,
       isEmpresa,
       isMunicipio,
       isGet2C,

@@ -1,4 +1,4 @@
-import { Building2, Landmark } from "lucide-react";
+import { Building2, Landmark, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserType } from "@/types/user";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -43,6 +43,23 @@ export const UserTypeToggle = ({ currentType, onTypeChange }: UserTypeToggleProp
           </TooltipTrigger>
           <TooltipContent>
             <p>Visão Município</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={() => onTypeChange('get2c')}
+              className={cn(
+                "liquid-glass-btn relative flex items-center justify-center w-9 h-9 rounded-full text-sm font-medium overflow-hidden border border-transparent",
+                currentType === 'get2c' ? "active border-primary/25" : "inactive"
+              )}
+            >
+              <Shield className="h-4 w-4 relative z-10" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Visão Get2C</p>
           </TooltipContent>
         </Tooltip>
       </div>

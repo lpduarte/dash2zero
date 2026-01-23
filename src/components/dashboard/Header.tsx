@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Leaf, BarChart3, CircleDot, Moon, Sun } from "lucide-react";
+import { Leaf, BarChart3, CircleDot, Moon, Sun, Shield } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
@@ -7,7 +7,7 @@ import { useUser } from "@/contexts/UserContext";
 
 export const Header = () => {
   const location = useLocation();
-  const { userType, setUserType } = useUser();
+  const { userType, setUserType, isGet2C, activeClient } = useUser();
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -46,20 +46,36 @@ export const Header = () => {
               <UserTypeToggle currentType={userType} onTypeChange={setUserType} />
 
               <nav className="liquid-glass-container flex gap-2 p-2 rounded-full backdrop-blur-xl">
-                <Link to="/" className={cn(
-                  "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
-                  location.pathname === "/" ? "active border-primary/25" : "inactive"
-                )}>
-                  <BarChart3 className="h-4 w-4 relative z-10" />
-                  <span className="relative z-10">Dashboard</span>
-                </Link>
-                <Link to="/clusters" className={cn(
-                  "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
-                  location.pathname === "/clusters" ? "active border-primary/25" : "inactive"
-                )}>
-                  <CircleDot className="h-4 w-4 relative z-10" />
-                  <span className="relative z-10">Gerir clusters</span>
-                </Link>
+                {/* Admin link - apenas para Get2C */}
+                {isGet2C && (
+                  <Link to="/admin" className={cn(
+                    "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
+                    location.pathname === "/admin" ? "active border-primary/25" : "inactive"
+                  )}>
+                    <Shield className="h-4 w-4 relative z-10" />
+                    <span className="relative z-10">Admin</span>
+                  </Link>
+                )}
+
+                {/* Dashboard e Clusters - apenas se não for Get2C OU se tiver cliente ativo */}
+                {(!isGet2C || activeClient) && (
+                  <>
+                    <Link to="/" className={cn(
+                      "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
+                      location.pathname === "/" ? "active border-primary/25" : "inactive"
+                    )}>
+                      <BarChart3 className="h-4 w-4 relative z-10" />
+                      <span className="relative z-10">Dashboard</span>
+                    </Link>
+                    <Link to="/clusters" className={cn(
+                      "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
+                      location.pathname === "/clusters" ? "active border-primary/25" : "inactive"
+                    )}>
+                      <CircleDot className="h-4 w-4 relative z-10" />
+                      <span className="relative z-10">Gerir clusters</span>
+                    </Link>
+                  </>
+                )}
               </nav>
 
               <div className="liquid-glass-container flex gap-1 p-1.5 rounded-full backdrop-blur-xl">
