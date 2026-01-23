@@ -12,6 +12,7 @@ import EmailTemplate from "./pages/EmailTemplate";
 import StyleGuide from "./pages/StyleGuide";
 import Methodology from "./pages/Methodology";
 import Pipeline from "./pages/Pipeline";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/style-guide" element={<StyleGuide />} />
               <Route path="/metodologia" element={<Methodology />} />
               <Route path="/pipeline" element={<Pipeline />} />
+              <Route path="/admin" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
