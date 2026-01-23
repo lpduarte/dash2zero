@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Header } from "@/components/dashboard/Header";
@@ -29,6 +30,7 @@ import { useUser } from "@/contexts/UserContext";
 import { getClusterConfig } from "@/config/clusters";
 
 export default function ClusterManagement() {
+  usePageTitle("Clusters");
   const { isMunicipio, userType } = useUser();
   const navigate = useNavigate();
   const ownerType = isMunicipio ? 'municipio' : 'empresa';

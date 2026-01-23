@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { useNavigate } from "react-router-dom";
 import { 
   Leaf, 
@@ -485,6 +486,7 @@ const ScopeCard = ({
 
 // ============ Main Component ============
 const FormularioTotais = () => {
+  usePageTitle("Formulário");
   const navigate = useNavigate();
 
   // Step state

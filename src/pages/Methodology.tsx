@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -104,6 +105,7 @@ const TextReveal = ({ children, className = "" }: { children: string; className?
 };
 
 export default function Methodology() {
+  usePageTitle("Metodologia");
   const [activeSection, setActiveSection] = useState('potencial');
 
   useEffect(() => {

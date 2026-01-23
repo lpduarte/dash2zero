@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import {
   CheckCircle2,
   Circle,
@@ -118,6 +119,7 @@ function PipelineItemCard({ item }: { item: PipelineItem }) {
 }
 
 export default function Pipeline() {
+  usePageTitle("Pipeline");
   const { metadata, summary, items } = pipelineData;
 
   const completedPercentage = summary.total > 0 ? Math.round((summary.completed / summary.total) * 100) : 0;

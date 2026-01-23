@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { usePageTitle } from "@/lib/usePageTitle";
 import { Link } from 'react-router-dom';
 import {
   BarChart3,
@@ -144,6 +145,7 @@ const PageCard = ({ page }: { page: PageLink }) => (
 );
 
 const Index = () => {
+  usePageTitle("Início");
   return (
     <div className="min-h-screen bg-diagonal-pattern relative overflow-hidden">
       {/* Pulsing background - full page */}

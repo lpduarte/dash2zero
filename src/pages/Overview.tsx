@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { Header } from "@/components/dashboard/Header";
 import { ClusterSelector, ImprovementPotential } from "@/components/dashboard/ClusterSelector";
 import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
@@ -84,6 +85,7 @@ const calculateImprovementPotential = (suppliers: Supplier[], isMunicipio: boole
 };
 
 const Overview = () => {
+  usePageTitle("Dashboard");
   const { user, isMunicipio } = useUser();
   const [selectedCluster, setSelectedCluster] = useState<string>('all');
   const [universalFilters, setUniversalFilters] = useState<UniversalFilterState>({

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,6 +43,7 @@ const templates: EmailTemplateData[] = [
 ];
 
 const EmailTemplate = () => {
+  usePageTitle("Template Email");
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("t1");
   const [subject, setSubject] = useState(templates[0].subject);
   const [responsibleName, setResponsibleName] = useState("João Silva");

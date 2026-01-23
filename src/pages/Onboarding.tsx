@@ -1,4 +1,5 @@
 import { Calculator, FileText, Check, HelpCircle, Leaf, ChevronDown, CheckCircle } from "lucide-react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,6 +37,7 @@ const AbstractIllustration = () => (
 );
 
 const Onboarding = () => {
+  usePageTitle("Onboarding");
   const navigate = useNavigate();
 
   const handleSimpleClick = () => {

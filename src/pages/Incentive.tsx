@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import { useSearchParams } from "react-router-dom";
 import { Header } from "@/components/dashboard/Header";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -105,6 +106,7 @@ const getNextAction = (status: string): string => {
 };
 
 const Incentive = () => {
+  usePageTitle("Incentivo");
   const { isMunicipio } = useUser();
   const [searchParams] = useSearchParams();
 

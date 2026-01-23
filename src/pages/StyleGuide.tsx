@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { usePageTitle } from "@/lib/usePageTitle";
 import {
   Palette, Type, Layers, MousePointerClick, Tag,
   FormInput, ListFilter, BarChart3, AlertCircle, Columns,
@@ -422,6 +423,7 @@ const TextReveal = ({ children, className = "" }: { children: string; className?
 };
 
 const StyleGuide = () => {
+  usePageTitle("Style Guide");
   const [darkMode, setDarkMode] = useState(false);
   const [activeSection, setActiveSection] = useState('stack');
 
