@@ -47,14 +47,14 @@ interface PipelineItem {
 const statusConfig: Record<Status, { label: string; icon: typeof CheckCircle2; className: string }> = {
   completed: { label: "Concluído", icon: CheckCircle2, className: "text-success" },
   "in-progress": { label: "Em progresso", icon: Clock, className: "text-warning" },
-  pending: { label: "Pendente", icon: Circle, className: "text-muted-foreground" },
+  pending: { label: "WIP", icon: Circle, className: "text-muted-foreground" },
   blocked: { label: "Bloqueado", icon: AlertCircle, className: "text-destructive" }
 };
 
-const categoryConfig: Record<Category, { label: string; variant: "destructive" | "warning" | "success" }> = {
+const categoryConfig: Record<Category, { label: string; variant: "destructive" | "warning" | "secondary" }> = {
   critical: { label: "Crítico", variant: "destructive" },
   important: { label: "Importante", variant: "warning" },
-  normal: { label: "Normal", variant: "success" }
+  normal: { label: "Normal", variant: "secondary" }
 };
 
 function PipelineItemCard({ item }: { item: PipelineItem }) {
@@ -215,7 +215,7 @@ export default function Pipeline() {
               </div>
               <div className="space-y-1">
                 <div className="text-2xl font-bold text-muted-foreground">{summary.pending}</div>
-                <div className="text-xs text-muted-foreground">Pendentes</div>
+                <div className="text-xs text-muted-foreground">WIP</div>
               </div>
             </div>
           </CardContent>
@@ -259,7 +259,7 @@ export default function Pipeline() {
         {normalItems.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Badge variant="success">Normal</Badge>
+              <Badge variant="secondary">Normal</Badge>
               <span className="text-sm text-muted-foreground">
                 {normalItems.filter(i => i.status === "completed").length}/{normalItems.length} concluídos
               </span>
