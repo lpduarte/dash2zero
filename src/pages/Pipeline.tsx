@@ -50,10 +50,10 @@ const statusConfig: Record<Status, { label: string; icon: typeof CheckCircle2; c
   blocked: { label: "Bloqueado", icon: AlertCircle, className: "text-destructive" }
 };
 
-const categoryConfig: Record<Category, { label: string; variant: "destructive" | "warning" | "secondary" }> = {
+const categoryConfig: Record<Category, { label: string; variant: "destructive" | "orange" | "warning" }> = {
   critical: { label: "Crítico", variant: "destructive" },
-  important: { label: "Importante", variant: "warning" },
-  normal: { label: "Normal", variant: "secondary" }
+  important: { label: "Importante", variant: "orange" },
+  normal: { label: "Normal", variant: "warning" }
 };
 
 function PipelineItemCard({ item }: { item: PipelineItem }) {
@@ -232,13 +232,13 @@ export default function Pipeline() {
               )}
               {importantPct > 0 && (
                 <div
-                  className="h-full bg-warning transition-all"
+                  className="h-full bg-orange-500 transition-all"
                   style={{ width: `${importantPct}%` }}
                 />
               )}
               {normalPct > 0 && (
                 <div
-                  className="h-full bg-secondary transition-all"
+                  className="h-full bg-warning transition-all"
                   style={{ width: `${normalPct}%` }}
                 />
               )}
@@ -257,12 +257,12 @@ export default function Pipeline() {
                 <span className="font-bold">{criticalWipCount}</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
-                <div className="h-2.5 w-2.5 rounded-full bg-warning" />
+                <div className="h-2.5 w-2.5 rounded-full bg-orange-500" />
                 <span className="text-muted-foreground">Importantes</span>
                 <span className="font-bold">{importantWipCount}</span>
               </div>
               <div className="flex items-center gap-1.5 text-xs">
-                <div className="h-2.5 w-2.5 rounded-full bg-secondary" />
+                <div className="h-2.5 w-2.5 rounded-full bg-warning" />
                 <span className="text-muted-foreground">Normais</span>
                 <span className="font-bold">{normalWipCount}</span>
               </div>
@@ -291,7 +291,7 @@ export default function Pipeline() {
         {importantItems.length > 0 && (
           <div className="space-y-3 mb-8">
             <div className="flex items-center gap-2">
-              <Badge variant="warning">Importante</Badge>
+              <Badge variant="orange">Importante</Badge>
               <span className="text-sm text-muted-foreground">
                 {importantItems.filter(i => i.status === "completed").length}/{importantItems.length} concluídos
               </span>
@@ -308,7 +308,7 @@ export default function Pipeline() {
         {normalItems.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Badge variant="secondary">Normal</Badge>
+              <Badge variant="warning">Normal</Badge>
               <span className="text-sm text-muted-foreground">
                 {normalItems.filter(i => i.status === "completed").length}/{normalItems.length} concluídos
               </span>
