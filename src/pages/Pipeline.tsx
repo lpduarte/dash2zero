@@ -217,7 +217,7 @@ export default function Pipeline() {
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Stacked Progress Bar */}
-            <div className="h-3 w-full rounded-full overflow-hidden flex bg-muted">
+            <div className="h-3 w-full rounded-full overflow-hidden flex gap-px bg-muted">
               {completedPct > 0 && (
                 <div
                   className="h-full bg-success transition-all"
