@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { User, UserType } from '@/types/user';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { User, UserType, Client } from '@/types/user';
+import { mockClients } from '@/data/mockClients';
 
 // Mock users para prototipagem
 const mockUsers: User[] = [
@@ -16,41 +17,99 @@ const mockUsers: User[] = [
     email: 'ambiente@cm-cascais.pt',
     userType: 'municipio',
     municipality: 'Cascais',
+    clientId: 'cascais',
+    createdAt: new Date(),
+  },
+  {
+    id: 'get2c-admin',
+    name: 'Get2C Admin',
+    email: 'admin@get2c.pt',
+    userType: 'get2c',
     createdAt: new Date(),
   },
 ];
 
+// Chave para persistir cliente ativo no localStorage
+const ACTIVE_CLIENT_KEY = 'dash2zero_active_client';
+
 interface UserContextType {
   user: User;
   userType: UserType;
-  setUserType: () => void; // Toggle entre users
+  setUserType: () => void;
   isEmpresa: boolean;
   isMunicipio: boolean;
+  isGet2C: boolean;
+
+  // Gestão de clientes (apenas para Get2C)
+  clients: Client[];
+  activeClient: Client | null;
+  setActiveClient: (client: Client | null) => void;
+
+  // Permissões efectivas (do cliente ativo ou todas se Get2C sem cliente)
+  effectivePermissions: Client['permissions'] | null;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User>(mockUsers[0]);
+  const [clients] = useState<Client[]>(mockClients.filter(c => !c.isArchived));
+  const [activeClient, setActiveClientState] = useState<Client | null>(null);
+
+  // Restaurar cliente ativo do localStorage ao iniciar
+  useEffect(() => {
+    const savedClientId = localStorage.getItem(ACTIVE_CLIENT_KEY);
+    if (savedClientId && currentUser.userType === 'get2c') {
+      const client = mockClients.find(c => c.id === savedClientId && !c.isArchived);
+      if (client) {
+        setActiveClientState(client);
+      }
+    }
+  }, [currentUser.userType]);
 
   const isEmpresa = currentUser.userType === 'empresa';
   const isMunicipio = currentUser.userType === 'municipio';
+  const isGet2C = currentUser.userType === 'get2c';
 
-  // Toggle entre os dois mock users
+  // Toggle entre os mock users (empresa → município → get2c → empresa)
   const toggleUserType = () => {
-    const newUser = currentUser.userType === 'empresa' 
-      ? mockUsers[1]  // Muda para Cascais
-      : mockUsers[0]; // Muda para Empresa
+    const currentIndex = mockUsers.findIndex(u => u.id === currentUser.id);
+    const nextIndex = (currentIndex + 1) % mockUsers.length;
+    const newUser = mockUsers[nextIndex];
     setCurrentUser(newUser);
+
+    // Limpar cliente ativo se não for Get2C
+    if (newUser.userType !== 'get2c') {
+      setActiveClientState(null);
+      localStorage.removeItem(ACTIVE_CLIENT_KEY);
+    }
   };
 
+  // Definir cliente ativo (com persistência)
+  const setActiveClient = (client: Client | null) => {
+    setActiveClientState(client);
+    if (client) {
+      localStorage.setItem(ACTIVE_CLIENT_KEY, client.id);
+    } else {
+      localStorage.removeItem(ACTIVE_CLIENT_KEY);
+    }
+  };
+
+  // Permissões efectivas
+  const effectivePermissions = activeClient?.permissions ?? null;
+
   return (
-    <UserContext.Provider value={{ 
+    <UserContext.Provider value={{
       user: currentUser,
       userType: currentUser.userType,
       setUserType: toggleUserType,
-      isEmpresa, 
-      isMunicipio 
+      isEmpresa,
+      isMunicipio,
+      isGet2C,
+      clients,
+      activeClient,
+      setActiveClient,
+      effectivePermissions,
     }}>
       {children}
     </UserContext.Provider>
