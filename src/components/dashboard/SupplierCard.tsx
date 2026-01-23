@@ -1,8 +1,7 @@
 import { memo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Mail, ExternalLink, FileText, Building2, Users, Handshake, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Mail, FileText, Building2, Users, Handshake, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getSectorName } from "@/data/sectors";
 
@@ -161,12 +160,6 @@ export const SupplierCard = memo(({
               <span className="truncate">{supplier.contact.email}</span>
             </div>
           </div>
-          {supplier.sustainabilityReport && <Button variant="outline" size="sm" className="w-full" asChild>
-              <a href={supplier.sustainabilityReport} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-3 w-3 mr-2" />
-                Ver Relatório de Sustentabilidade
-              </a>
-            </Button>}
         </div>
       </CardContent>
     </Card>;

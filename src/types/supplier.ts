@@ -6,7 +6,6 @@ export interface Supplier {
   // ---------------------------------------------------------------------------
   sector: string;              // CAE Principal - atividade económica principal (obrigatório)
   subsector?: string;          // Divisão CAE dentro da Indústria (química, vidro, têxtil, etc.)
-  secondarySectors?: string[]; // CAEs Secundários - atividades adicionais (opcional, para referência)
   region: string;
   district: string; // Distrito (ex: "Porto", "Lisboa", "Faro")
   municipality: string; // Município (ex: "Portimão", "Matosinhos")
@@ -34,7 +33,6 @@ export interface Supplier {
     website: string;
     nif: string;
   };
-  sustainabilityReport?: string;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';
   dataSource: 'formulario' | 'get2zero';
   cluster?: 'fornecedor' | 'cliente' | 'parceiro'; // Legacy - manter para compatibilidade

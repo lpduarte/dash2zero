@@ -46,7 +46,6 @@ export const convertToSupplierWithFootprint = (
     hasSBTi: supplier.hasSBTi,
     certifications: supplier.certifications,
     yearlyProgress: supplier.yearlyProgress,
-    sustainabilityReport: supplier.sustainabilityReport,
     rating: supplier.rating,
     dataSource: supplier.dataSource,
   };

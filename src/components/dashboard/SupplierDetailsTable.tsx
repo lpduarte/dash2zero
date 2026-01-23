@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Supplier } from "@/types/supplier";
-import { ExternalLink, Download, AlertTriangle, Award } from "lucide-react";
+import { Download, Award } from "lucide-react";
 
 interface SupplierDetailsTableProps {
   suppliers: Supplier[];
@@ -52,7 +52,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                 <TableHead>Certificações</TableHead>
                 <TableHead>SBTi</TableHead>
                 <TableHead>Risco</TableHead>
-                <TableHead>Relatório</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -82,17 +81,6 @@ export const SupplierDetailsTable = ({ suppliers }: SupplierDetailsTableProps) =
                   </TableCell>
                   <TableCell>
                     {getRiskIndicator(supplier.totalEmissions, supplier.hasSBTi, supplier.certifications.length)}
-                  </TableCell>
-                  <TableCell>
-                    {supplier.sustainabilityReport ? (
-                      <Button variant="ghost" size="sm" asChild>
-                        <a href={supplier.sustainabilityReport} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </Button>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">N/A</span>
-                    )}
                   </TableCell>
                 </TableRow>
               ))}

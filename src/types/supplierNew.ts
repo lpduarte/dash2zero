@@ -34,7 +34,6 @@ export interface SupplierWithFootprint {
     year: number;
     emissions: number;
   }[];
-  sustainabilityReport?: string;
   rating: 'A' | 'B' | 'C' | 'D' | 'E';
   dataSource: 'formulario' | 'get2zero';
 }
