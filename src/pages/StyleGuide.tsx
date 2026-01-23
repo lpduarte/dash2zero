@@ -588,7 +588,7 @@ const StyleGuide = () => {
                 <div className="p-2 rounded-lg bg-[#61DAFB]/10">
                   <ReactIcon className="h-5 w-5 text-[#61DAFB]" />
                 </div>
-                <span className="font-bold">React 18</span>
+                <span className="font-bold">React 19</span>
               </div>
               <p className="text-sm text-muted-foreground">
                 Biblioteca principal para construção de interfaces

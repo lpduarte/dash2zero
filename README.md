@@ -14,7 +14,7 @@ Dash2Zero é uma aplicação de visualização e análise de emissões de gases 
 
 ## Stack Tecnológico
 
-- **React 18** - UI library
+- **React 19** - UI library
 - **TypeScript** - Type safety
 - **Vite** - Build tool
 - **Tailwind CSS** - Styling

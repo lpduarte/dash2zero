@@ -240,7 +240,7 @@
       "priority": 13,
       "briefing": "13-questoes-tecnicas-sbti.md",
       "criteria": [
-        { "text": "Versão React verificada e documentada", "done": false },
+        { "text": "Versão React verificada e documentada", "done": true },
         { "text": "Nível de integração SBTi definido", "done": false },
         { "text": "Implementação inicial SBTi (se decidido)", "done": false }
       ],
