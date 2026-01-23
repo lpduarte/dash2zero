@@ -21,17 +21,30 @@ import { cn } from '@/lib/utils';
 import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 
+// Componente wrapper que faz early return se condições não forem cumpridas
 export const AdminSubheader = () => {
-  const navigate = useNavigate();
-  const { isGet2C, activeClient, setActiveClient, clients } = useUser();
+  const { isGet2C, activeClient } = useUser();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Não mostrar se não for Get2C ou não tiver cliente ativo
+  // Early return ANTES de qualquer hook condicional
   if (!isGet2C || !activeClient) {
     return null;
   }
+
+  // Renderizar componente interno apenas quando temos cliente garantido
+  return <AdminSubheaderContent client={activeClient} />;
+};
+
+// Componente interno com toda a lógica - client está garantidamente definido
+interface AdminSubheaderContentProps {
+  client: Client;
+}
+
+const AdminSubheaderContent = ({ client }: AdminSubheaderContentProps) => {
+  const navigate = useNavigate();
+  const { setActiveClient, clients } = useUser();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Filtrar clientes para o dropdown
   const filteredClients = useMemo(() => {
@@ -44,8 +57,8 @@ export const AdminSubheader = () => {
   }, [clients, searchQuery]);
 
   // Trocar de cliente
-  const handleSelectClient = (client: Client) => {
-    setActiveClient(client);
+  const handleSelectClient = (selectedClient: Client) => {
+    setActiveClient(selectedClient);
     setIsOpen(false);
     setSearchQuery('');
   };
@@ -82,15 +95,15 @@ export const AdminSubheader = () => {
                     "border border-primary/20"
                   )}
                 >
-                  {activeClient.type === 'municipio'
+                  {client.type === 'municipio'
                     ? <MapPin className="h-4 w-4 text-primary" />
                     : <Building2 className="h-4 w-4 text-primary" />
                   }
                   <span className="font-bold max-w-[200px] truncate">
-                    {activeClient.name}
+                    {client.name}
                   </span>
                   <Badge variant="outline" className="text-xs ml-1">
-                    {activeClient.type === 'municipio' ? 'Município' : 'Empresa'}
+                    {client.type === 'municipio' ? 'Município' : 'Empresa'}
                   </Badge>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </Button>
@@ -122,32 +135,32 @@ export const AdminSubheader = () => {
                         Nenhum cliente encontrado
                       </p>
                     ) : (
-                      filteredClients.map(client => (
+                      filteredClients.map(c => (
                         <button
-                          key={client.id}
-                          onClick={() => handleSelectClient(client)}
+                          key={c.id}
+                          onClick={() => handleSelectClient(c)}
                           className={cn(
                             "w-full flex items-center gap-3 p-2 rounded-md text-left",
                             "hover:bg-muted transition-colors",
-                            client.id === activeClient.id && "bg-primary/5"
+                            c.id === client.id && "bg-primary/5"
                           )}
                         >
                           <div className={cn(
                             "w-8 h-8 rounded-md flex items-center justify-center shrink-0",
-                            client.type === 'municipio' ? "bg-primary/10" : "bg-muted"
+                            c.type === 'municipio' ? "bg-primary/10" : "bg-muted"
                           )}>
-                            {client.type === 'municipio'
+                            {c.type === 'municipio'
                               ? <MapPin className="h-4 w-4 text-primary" />
                               : <Building2 className="h-4 w-4 text-muted-foreground" />
                             }
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-bold text-sm truncate">{client.name}</p>
+                            <p className="font-bold text-sm truncate">{c.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              {client.metrics.totalCompanies} empresas · {client.metrics.totalClusters} clusters
+                              {c.metrics.totalCompanies} empresas · {c.metrics.totalClusters} clusters
                             </p>
                           </div>
-                          {client.id === activeClient.id && (
+                          {c.id === client.id && (
                             <Check className="h-4 w-4 text-primary shrink-0" />
                           )}
                         </button>
