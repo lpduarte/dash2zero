@@ -1,14 +1,22 @@
 import { useState, useEffect } from "react";
 import { Leaf, BarChart3, CircleDot, Moon, Sun, Shield } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
 
 export const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { userType, setUserType, isGet2C, activeClient } = useUser();
   const [darkMode, setDarkMode] = useState(false);
+
+  // Redirecionar Get2C sem cliente ativo para /admin
+  useEffect(() => {
+    if (isGet2C && !activeClient && location.pathname !== '/admin') {
+      navigate('/admin', { replace: true });
+    }
+  }, [isGet2C, activeClient, location.pathname, navigate]);
 
   useEffect(() => {
     if (darkMode) {
