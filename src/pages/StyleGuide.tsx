@@ -637,8 +637,6 @@ const StyleGuide = () => {
               <Badge variant="outline">Radix UI</Badge>
               <Badge variant="outline">React Router</Badge>
               <Badge variant="outline">TanStack Query</Badge>
-              <Badge variant="outline">React Hook Form</Badge>
-              <Badge variant="outline">Zod</Badge>
               <Badge variant="outline">Vite</Badge>
             </div>
           </Card>
