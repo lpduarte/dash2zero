@@ -2,6 +2,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UserProvider, useUser } from "@/contexts/UserContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import Index from "./pages/Index";
 import Overview from "./pages/Overview";
 import ClusterManagement from "./pages/ClusterManagement";
@@ -28,8 +29,9 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <UserProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <UserProvider>
         <BrowserRouter>
           <div className="bg-grain">
             <Routes>
@@ -51,7 +53,8 @@ const App = () => (
           </div>
           </BrowserRouter>
       </UserProvider>
-    </TooltipProvider>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

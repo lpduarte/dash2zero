@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { usePageTitle } from "@/lib/usePageTitle";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   Palette, Type, Layers, MousePointerClick, Tag,
   FormInput, ListFilter, BarChart3, AlertCircle, Columns,
@@ -424,17 +425,8 @@ const TextReveal = ({ children, className = "" }: { children: string; className?
 
 const StyleGuide = () => {
   usePageTitle("Style Guide");
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, setDarkMode } = useTheme();
   const [activeSection, setActiveSection] = useState('stack');
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-
 
   useEffect(() => {
     const handleScroll = () => {

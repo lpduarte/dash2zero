@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
 import { useUser } from "@/contexts/UserContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,7 +15,7 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { userType, setUserType, isGet2C, activeClient, clients, setActiveClient } = useUser();
-  const [darkMode, setDarkMode] = useState(false);
+  const { darkMode, setDarkMode } = useTheme();
   const [clientSwitcherOpen, setClientSwitcherOpen] = useState(false);
   const [clientSearchQuery, setClientSearchQuery] = useState('');
 
@@ -41,14 +42,6 @@ export const Header = () => {
       navigate('/admin', { replace: true });
     }
   }, [isGet2C, activeClient, location.pathname, navigate]);
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
 
   return (
     <header className="relative overflow-x-clip" style={{ overflowY: 'visible' }}>
