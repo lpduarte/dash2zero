@@ -397,7 +397,7 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={chartData} margin={{ top: 4, right: 0, bottom: 4, left: 0 }}>
+      <AreaChart data={chartData} margin={{ top: 4, right: 2, bottom: 4, left: 2 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
