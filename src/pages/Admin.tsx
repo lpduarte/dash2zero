@@ -219,7 +219,7 @@ const Admin = () => {
             unit={`Em ${aggregatedMetrics.totalClusters} clusters`}
           />
           {/* Card composto: Taxa de conversão + Donut chart */}
-          <div className="border rounded-lg shadow-md flex overflow-hidden">
+          <div className="border rounded-md shadow-md bg-card hover:shadow-lg hover:border-primary/25 transition-all duration-200 flex overflow-hidden">
             {/* Info */}
             <div className="flex-1 p-4 flex flex-col gap-3">
               <div className="flex items-center justify-between">
