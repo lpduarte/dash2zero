@@ -282,7 +282,7 @@ const Admin = () => {
             <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
           </div>
           <div className={cn(elements.sectionCard, "flex-1 rounded-md flex flex-col hover:shadow-lg hover:border-primary/25 transition-all duration-200 overflow-visible")}>
-            <div className="flex-1 min-h-[80px] overflow-visible">
+            <div className="flex-1 min-h-[80px] overflow-visible -mx-[6px]">
               <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
             </div>
             <Separator className="my-4" />
