@@ -496,7 +496,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       {/* Métricas em mini-cards */}
       <div className="grid grid-cols-3 gap-3 mb-4">
         {/* Grelha 2x2 */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 col-span-2">
           <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
             <span className="text-xs text-muted-foreground">Empresas</span>
             <span className="text-sm font-bold text-foreground">{client.metrics.totalCompanies}</span>
