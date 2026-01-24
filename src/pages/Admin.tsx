@@ -50,7 +50,7 @@ import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
 import { ClientFormDialog, ClientFormData } from '@/components/admin/ClientFormDialog';
-import { Area, AreaChart, ResponsiveContainer } from 'recharts';
+import { Area, AreaChart, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 
 // Tipos de filtro
 type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
@@ -237,8 +237,8 @@ const Admin = () => {
             <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding global</p>
             <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
           </div>
-          <div className={cn(elements.sectionCard, "flex-1 rounded-md")}>
-            <div className="h-16">
+          <div className={cn(elements.sectionCard, "flex-1 rounded-md flex flex-col")}>
+            <div className="flex-1 min-h-0">
               <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
             </div>
             <Separator className="my-4" />
@@ -422,6 +422,19 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
             <stop offset="95%" stopColor="hsl(var(--status-complete))" stopOpacity={0.1} />
           </linearGradient>
         </defs>
+        <RechartsTooltip
+          content={({ active, payload }) => {
+            if (active && payload?.length) {
+              const value = Math.round((payload[0].value as number) - 0.1);
+              return (
+                <div className="bg-popover border rounded px-2 py-1 text-xs shadow-md">
+                  <span className="font-bold">{value}</span> pegadas
+                </div>
+              );
+            }
+            return null;
+          }}
+        />
         <Area
           dataKey="completions"
           type="natural"
