@@ -356,11 +356,6 @@ const Admin = () => {
           </div>
         </div>
 
-        {/* Contagem de resultados */}
-        <p className="text-sm text-muted-foreground mb-4">
-          {filteredClients.length} {filteredClients.length === 1 ? 'cliente encontrado' : 'clientes encontrados'}
-        </p>
-
         {/* Grid de Cards de Clientes */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filteredClients.map(client => (
