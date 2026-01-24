@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Building2, MapPin, Landmark, ChevronDown, Filter, Briefcase } from "lucide-react";
 import { getSectorsWithCounts } from "@/data/sectors";
 import {
@@ -43,6 +43,7 @@ export function FilterModal({
 }: FilterModalProps) {
   const { user, isMunicipio } = useUser();
   const [localFilters, setLocalFilters] = useState<UniversalFilterState>(currentFilters);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
 
   // Município fixo quando userType === 'municipio'
   const fixedMunicipality = isMunicipio ? user.municipality : undefined;
@@ -314,7 +315,7 @@ export function FilterModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md max-w-[90vw]">
+      <DialogContent ref={dialogContentRef} className="sm:max-w-md max-w-[90vw]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-muted">
@@ -338,7 +339,7 @@ export function FilterModal({
                   <ChevronDown className="h-4 w-4 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2" align="start">
+              <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2" align="start">
                 <div className="space-y-1">
                   {sizeOptions.map(option => (
                     <div
@@ -374,7 +375,7 @@ export function FilterModal({
                   <ChevronDown className="h-4 w-4 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
+              <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[300px] overflow-y-auto" align="start">
                 <div className="space-y-1">
                   {sectorOptions.map(option => (
                     <div
@@ -417,7 +418,7 @@ export function FilterModal({
                         <ChevronDown className="h-4 w-4 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
+                    <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
                       <div className="space-y-1">
                         {districtOptions.map(option => (
                           <div
@@ -454,7 +455,7 @@ export function FilterModal({
                         <ChevronDown className="h-4 w-4 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
+                    <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
                       <div className="space-y-1">
                         {municipalityOptions.map(option => (
                           <div
@@ -491,7 +492,7 @@ export function FilterModal({
                         <ChevronDown className="h-4 w-4 opacity-50" />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
+                    <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
                       <div className="space-y-1">
                         {parishOptions.map(option => (
                           <div
@@ -527,7 +528,7 @@ export function FilterModal({
                       <ChevronDown className="h-4 w-4 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="z-[100] w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
+                  <PopoverContent portalContainer={dialogContentRef.current} className="w-[calc(100vw-4rem)] sm:w-[380px] p-2 max-h-[250px] overflow-y-auto" align="start">
                     <div className="space-y-1">
                       {parishOptions.map(option => (
                         <div
