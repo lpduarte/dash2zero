@@ -48,6 +48,8 @@ import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
 import { ClientFormDialog, ClientFormData } from '@/components/admin/ClientFormDialog';
+import { Area, AreaChart } from 'recharts';
+import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 
 // Tipos de filtro
 type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
@@ -378,44 +380,45 @@ const getClientAlerts = (client: Client, conversionRate: number) => {
   return alerts;
 };
 
-// Componente: Gráfico de linha de atividade (estilo GitHub)
+// Config do chart de atividade
+const activityChartConfig = {
+  completions: {
+    label: "Pegadas",
+    color: "hsl(var(--status-complete))",
+  },
+} satisfies ChartConfig;
+
+// Componente: Gráfico de área de atividade (Recharts)
 interface ActivityLineChartProps {
   data: number[];
 }
 
 const ActivityLineChart = ({ data }: ActivityLineChartProps) => {
-  const max = Math.max(...data, 1);
-  const chartId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
-
-  // Criar pontos para a polyline
-  const points = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * 100;
-    const y = 32 - (v / max) * 28; // 32px altura, 28px range útil
-    return `${x},${y}`;
-  }).join(' ');
-
-  // Pontos para o polígono (área preenchida)
-  const areaPoints = `0,32 ${points} 100,32`;
+  // Converter array para formato recharts
+  const chartData = data.map((value, index) => ({
+    week: `S${index + 1}`,
+    completions: value,
+  }));
 
   return (
-    <svg viewBox="0 0 100 32" className="w-full h-8" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={chartId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" className="text-status-complete" stopColor="currentColor" stopOpacity="0.3" />
-          <stop offset="100%" className="text-status-complete" stopColor="currentColor" stopOpacity="0.05" />
-        </linearGradient>
-      </defs>
-      <polygon points={areaPoints} fill={`url(#${chartId})`} />
-      <polyline
-        points={points}
-        fill="none"
-        className="text-status-complete"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <ChartContainer config={activityChartConfig} className="h-8 w-full !aspect-auto">
+      <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
+        <defs>
+          <linearGradient id="fillCompletions" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="var(--color-completions)" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="var(--color-completions)" stopOpacity={0.1} />
+          </linearGradient>
+        </defs>
+        <Area
+          dataKey="completions"
+          type="natural"
+          fill="url(#fillCompletions)"
+          fillOpacity={0.4}
+          stroke="var(--color-completions)"
+          strokeWidth={2}
+        />
+      </AreaChart>
+    </ChartContainer>
   );
 };
 
