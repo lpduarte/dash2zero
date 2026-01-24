@@ -321,22 +321,21 @@ const Admin = () => {
                 {/* Tipo */}
                 <div className="space-y-2 flex flex-col items-end">
                   <p className="text-xs font-bold text-muted-foreground">Por tipo</p>
-                  <div className="inline-flex rounded-md border border-input">
+                  <div className="inline-flex rounded-md border border-input overflow-hidden">
                     {([
                       { value: 'todos', label: 'Todos', icon: null },
                       { value: 'municipio', label: 'Municípios', icon: Landmark },
                       { value: 'empresa', label: 'Empresas', icon: Building2 },
-                    ] as const).map((opt, i, arr) => (
+                    ] as const).map((opt) => (
                       <Button
                         key={opt.value}
                         variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none gap-1.5 border-0",
-                          i === 0 && "rounded-l-md",
-                          i === arr.length - 1 && "rounded-r-md",
-                          i !== 0 && "border-l border-input",
-                          typeFilter === opt.value && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                          "h-7 text-xs rounded-none gap-1.5 border-0 border-l first:border-l-0",
+                          typeFilter === opt.value
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground border-primary"
+                            : "border-input"
                         )}
                         onClick={() => setTypeFilter(opt.value)}
                       >
@@ -352,22 +351,21 @@ const Admin = () => {
                 {/* Status */}
                 <div className="space-y-2 flex flex-col items-end">
                   <p className="text-xs font-bold text-muted-foreground">Por status</p>
-                  <div className="inline-flex rounded-md border border-input">
+                  <div className="inline-flex rounded-md border border-input overflow-hidden">
                     {([
                       { value: 'ativos', label: 'Ativos', icon: null },
                       { value: 'arquivados', label: 'Arquivados', icon: Archive },
                       { value: 'todos', label: 'Todos', icon: null },
-                    ] as const).map((opt, i, arr) => (
+                    ] as const).map((opt) => (
                       <Button
                         key={opt.value}
                         variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none gap-1.5 border-0",
-                          i === 0 && "rounded-l-md",
-                          i === arr.length - 1 && "rounded-r-md",
-                          i !== 0 && "border-l border-input",
-                          statusFilter === opt.value && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                          "h-7 text-xs rounded-none gap-1.5 border-0 border-l first:border-l-0",
+                          statusFilter === opt.value
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground border-primary"
+                            : "border-input"
                         )}
                         onClick={() => setStatusFilter(opt.value)}
                       >
