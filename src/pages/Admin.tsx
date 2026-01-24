@@ -119,6 +119,13 @@ const Admin = () => {
           completo: activeClients.reduce((sum, c) => sum + c.metrics.funnelStats.formulario.completo, 0),
         },
       },
+      globalWeeklyCompletions: activeClients.reduce((acc, c) => {
+        const completions = c.metrics.weeklyCompletions || [];
+        completions.forEach((val, idx) => {
+          acc[idx] = (acc[idx] || 0) + val;
+        });
+        return acc;
+      }, [] as number[]),
     };
   }, [allClients]);
 
@@ -226,8 +233,20 @@ const Admin = () => {
 
         {/* Funil Global Agregado */}
         <div className={cn(elements.sectionCard, "mb-8 rounded-md")}>
-          <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding global</p>
-          <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
+          <div className="flex gap-6">
+            {/* Funil */}
+            <div className="flex-1">
+              <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding global</p>
+              <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
+            </div>
+            {/* Gráfico pegadas */}
+            <div className="w-48">
+              <p className="text-xs font-normal text-muted-foreground mb-4">Pegadas completadas</p>
+              <div className="h-16">
+                <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Ferramentas de pesquisa e filtro */}
