@@ -332,10 +332,10 @@ const Admin = () => {
                         variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none gap-1.5 border-0 border-l first:border-l-0",
+                          "h-7 text-xs rounded-none gap-1.5",
                           typeFilter === opt.value
-                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground border-primary"
-                            : "border-input"
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                            : "hover:bg-muted"
                         )}
                         onClick={() => setTypeFilter(opt.value)}
                       >
@@ -362,10 +362,10 @@ const Admin = () => {
                         variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none gap-1.5 border-0 border-l first:border-l-0",
+                          "h-7 text-xs rounded-none gap-1.5",
                           statusFilter === opt.value
-                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground border-primary"
-                            : "border-input"
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
+                            : "hover:bg-muted"
                         )}
                         onClick={() => setStatusFilter(opt.value)}
                       >
