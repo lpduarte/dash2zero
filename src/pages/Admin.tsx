@@ -48,8 +48,7 @@ import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
 import { ClientFormDialog, ClientFormData } from '@/components/admin/ClientFormDialog';
-import { Area, AreaChart } from 'recharts';
-import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
+import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
 // Tipos de filtro
 type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
@@ -380,14 +379,6 @@ const getClientAlerts = (client: Client, conversionRate: number) => {
   return alerts;
 };
 
-// Config do chart de atividade
-const activityChartConfig = {
-  completions: {
-    label: "Pegadas",
-    color: "hsl(var(--status-complete))",
-  },
-} satisfies ChartConfig;
-
 // Componente: Gráfico de área de atividade (Recharts)
 interface ActivityLineChartProps {
   data: number[];
@@ -395,22 +386,20 @@ interface ActivityLineChartProps {
 }
 
 const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
-  // Converter array para formato recharts
   const chartData = data.map((value, index) => ({
     week: `S${index + 1}`,
     completions: value,
   }));
 
-  // ID único para evitar conflitos entre múltiplos gráficos
   const gradientId = `fillCompletions-${clientId}`;
 
   return (
-    <ChartContainer config={activityChartConfig} className="h-full w-full !aspect-auto">
+    <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 2, left: 0 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="var(--color-completions)" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="var(--color-completions)" stopOpacity={0.1} />
+            <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="hsl(var(--status-complete))" stopOpacity={0.1} />
           </linearGradient>
         </defs>
         <Area
@@ -418,11 +407,11 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
           type="natural"
           fill={`url(#${gradientId})`}
           fillOpacity={0.4}
-          stroke="var(--color-completions)"
+          stroke="hsl(var(--status-complete))"
           strokeWidth={2}
         />
       </AreaChart>
-    </ChartContainer>
+    </ResponsiveContainer>
   );
 };
 
