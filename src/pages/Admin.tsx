@@ -406,16 +406,22 @@ interface ActivityLineChartProps {
 const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
   // Adicionar pequeno offset para evitar valores exactamente 0
   // Isto previne que a linha toque no fundo absoluto do gráfico
-  const chartData = data.map((value, index) => ({
-    week: `S${index + 1}`,
-    completions: value + 0.1,
-  }));
+  const chartData = data.map((value, index) => {
+    const weeksAgo = data.length - 1 - index;
+    const date = new Date();
+    date.setDate(date.getDate() - (weeksAgo * 7));
+    return {
+      week: `S${index + 1}`,
+      date: date.toLocaleDateString('pt-PT', { day: 'numeric', month: 'short' }),
+      completions: value + 0.1,
+    };
+  });
 
   const gradientId = `fillCompletions-${clientId}`;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={chartData} margin={{ top: 4, right: 2, bottom: 4, left: 2 }}>
+      <AreaChart data={chartData} margin={{ top: 4, right: 8, bottom: 4, left: 8 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
@@ -426,9 +432,11 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
           content={({ active, payload }) => {
             if (active && payload?.length) {
               const value = Math.round((payload[0].value as number) - 0.1);
+              const date = payload[0].payload.date;
               return (
                 <div className="bg-popover border rounded px-2 py-1 text-xs shadow-md">
-                  <span className="font-bold">{value}</span> pegadas
+                  <p className="text-muted-foreground">{date}</p>
+                  <p><span className="font-bold">{value}</span> pegadas</p>
                 </div>
               );
             }
