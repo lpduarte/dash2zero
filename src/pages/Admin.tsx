@@ -510,7 +510,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
             )}
           </div>
           <Separator className="my-2 -mx-3 w-[calc(100%+1.5rem)]" />
-          <p className="text-xs text-muted-foreground text-center">Atividade</p>
+          <p className="text-xs text-muted-foreground text-center">Pegadas completadas</p>
         </div>
       </div>
 
