@@ -31,6 +31,7 @@ const App = () => (
     <TooltipProvider>
       <UserProvider>
         <BrowserRouter>
+          <div className="bg-grain">
             <Routes>
               <Route path="/index" element={<Index />} />
               <Route path="/" element={<Overview />} />
@@ -47,6 +48,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+          </div>
           </BrowserRouter>
       </UserProvider>
     </TooltipProvider>
