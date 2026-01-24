@@ -209,8 +209,6 @@ const Admin = () => {
             title="Empresas registadas"
             value={aggregatedMetrics.totalCompanies}
             icon={Users}
-            iconColor="text-muted-foreground"
-            iconBgColor="bg-muted"
             unit={`Em ${aggregatedMetrics.totalClusters} clusters`}
           />
           <KPICard
@@ -226,8 +224,6 @@ const Admin = () => {
             title="Por contactar"
             value={aggregatedMetrics.funnelTotals.porContactar}
             icon={MailWarning}
-            iconColor="text-muted-foreground"
-            iconBgColor="bg-muted"
             unit="Aguardam primeiro email"
           />
         </div>
