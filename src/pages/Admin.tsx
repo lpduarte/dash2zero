@@ -282,7 +282,7 @@ const Admin = () => {
             <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
           </div>
           <div className={cn(elements.sectionCard, "flex-1 rounded-md flex flex-col hover:shadow-lg hover:border-primary/25 transition-all duration-200 overflow-visible")}>
-            <div className="flex-1 min-h-[80px] overflow-visible -mx-4">
+            <div className="flex-1 min-h-[80px] overflow-visible">
               <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
             </div>
             <Separator className="my-4" />
@@ -496,7 +496,7 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%" style={{ overflow: 'visible' }}>
-      <AreaChart data={chartData} margin={{ top: 6, right: 2, bottom: 2, left: 2 }} style={{ overflow: 'visible' }}>
+      <AreaChart data={chartData} margin={{ top: 4, right: 0, bottom: 0, left: 0 }} style={{ overflow: 'visible' }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
@@ -635,7 +635,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
         </div>
         {/* Gráfico à direita */}
         <div className={cn("border rounded-md p-3 bg-card overflow-visible", shadows.sm)}>
-          <div className="h-16 overflow-visible -mx-2">
+          <div className="h-16 overflow-visible -mx-1">
             {client.metrics.weeklyCompletions && (
               <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
             )}
