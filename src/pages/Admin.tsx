@@ -464,7 +464,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
             <img
               src={client.logo}
               alt={client.name}
-              className="w-full h-full object-contain p-2"
+              className="w-full h-full object-contain p-2 dark:invert"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
