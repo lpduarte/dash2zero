@@ -242,7 +242,7 @@ const Admin = () => {
               <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
             </div>
             <Separator className="my-4" />
-            <p className="text-xs text-muted-foreground text-center">Pegadas completadas</p>
+            <p className="text-xs text-muted-foreground text-center">Pegadas completadas globais</p>
           </div>
         </div>
 
