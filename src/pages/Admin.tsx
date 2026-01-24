@@ -411,7 +411,8 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
           fillOpacity={0.4}
           stroke="hsl(var(--status-complete))"
           strokeWidth={2}
-          isAnimationActive={false}
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </AreaChart>
     </ResponsiveContainer>
