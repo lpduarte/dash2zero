@@ -529,7 +529,8 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       )}
 
       {/* Mini funil com ramificação */}
-      <div className="mb-4">
+      <div className={cn("border bg-card rounded-md p-3 mb-4", shadows.sm)}>
+        <p className="text-xs text-muted-foreground mb-2">Onboarding</p>
         <MiniFunnelBar stats={client.metrics.funnelStats} showBranches />
       </div>
 
