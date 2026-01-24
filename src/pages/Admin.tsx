@@ -319,11 +319,11 @@ const Admin = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-auto">
-              <div className="space-y-4">
+              <div className="flex flex-col items-end space-y-4">
                 {/* Tipo */}
-                <div className="space-y-2">
+                <div className="space-y-2 flex flex-col items-end">
                   <p className="text-xs font-bold text-muted-foreground">Tipo</p>
-                  <div className="inline-flex rounded-md border">
+                  <div className="inline-flex rounded-md">
                     {([
                       { value: 'todos', label: 'Todos', icon: null },
                       { value: 'municipio', label: 'Municípios', icon: Landmark },
@@ -331,12 +331,13 @@ const Admin = () => {
                     ] as const).map((opt, i, arr) => (
                       <Button
                         key={opt.value}
-                        variant={typeFilter === opt.value ? 'default' : 'ghost'}
+                        variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none border-0 gap-1.5",
+                          "h-7 text-xs rounded-none gap-1.5",
                           i === 0 && "rounded-l-md",
-                          i === arr.length - 1 && "rounded-r-md"
+                          i === arr.length - 1 && "rounded-r-md",
+                          typeFilter === opt.value && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
                         )}
                         onClick={() => setTypeFilter(opt.value)}
                       >
@@ -347,12 +348,12 @@ const Admin = () => {
                   </div>
                 </div>
 
-                <Separator />
+                <Separator className="-mx-4 w-[calc(100%+2rem)]" />
 
                 {/* Status */}
-                <div className="space-y-2">
+                <div className="space-y-2 flex flex-col items-end">
                   <p className="text-xs font-bold text-muted-foreground">Status</p>
-                  <div className="inline-flex rounded-md border">
+                  <div className="inline-flex rounded-md">
                     {([
                       { value: 'ativos', label: 'Ativos', icon: null },
                       { value: 'arquivados', label: 'Arquivados', icon: Archive },
@@ -360,12 +361,13 @@ const Admin = () => {
                     ] as const).map((opt, i, arr) => (
                       <Button
                         key={opt.value}
-                        variant={statusFilter === opt.value ? 'default' : 'ghost'}
+                        variant="ghost"
                         size="sm"
                         className={cn(
-                          "h-7 text-xs rounded-none border-0 gap-1.5",
+                          "h-7 text-xs rounded-none gap-1.5",
                           i === 0 && "rounded-l-md",
-                          i === arr.length - 1 && "rounded-r-md"
+                          i === arr.length - 1 && "rounded-r-md",
+                          statusFilter === opt.value && "bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
                         )}
                         onClick={() => setStatusFilter(opt.value)}
                       >
