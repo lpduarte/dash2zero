@@ -44,6 +44,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { elements, shadows } from '@/lib/styles';
 import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
@@ -223,7 +224,7 @@ const Admin = () => {
         </div>
 
         {/* Funil Global Agregado */}
-        <div className="border rounded-lg p-4 bg-card shadow-sm mb-8">
+        <div className={cn(elements.sectionCard, "mb-8")}>
           <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding global</p>
           <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
         </div>
@@ -450,7 +451,8 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
 
   return (
     <div className={cn(
-      "border rounded-lg p-5 bg-card shadow-sm transition-all hover:shadow-md",
+      elements.sectionCard,
+      "p-5 transition-all hover:shadow-lg",
       client.isArchived && "opacity-60"
     )}>
       {/* Header do card */}
@@ -489,15 +491,15 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
 
       {/* Métricas em mini-cards */}
       <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="bg-muted/50 rounded-lg p-3 text-center">
+        <div className={cn("bg-muted/50 rounded-lg p-3 text-center", shadows.sm)}>
           <p className="text-xl font-bold text-foreground">{client.metrics.totalCompanies}</p>
           <p className="text-xs text-muted-foreground">Empresas</p>
         </div>
-        <div className="bg-muted/50 rounded-lg p-3 text-center">
+        <div className={cn("bg-muted/50 rounded-lg p-3 text-center", shadows.sm)}>
           <p className={cn("text-xl font-bold", conversionColor)}>{conversionRate}%</p>
           <p className="text-xs text-muted-foreground">Conversão</p>
         </div>
-        <div className="border rounded-lg p-3 bg-card">
+        <div className={cn("border rounded-lg p-3 bg-card", shadows.sm)}>
           <div className="h-12">
             {client.metrics.weeklyCompletions && (
               <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
