@@ -46,7 +46,7 @@ import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
 import { ClientFormDialog, ClientFormData } from '@/components/admin/ClientFormDialog';
-import { Area, AreaChart, ResponsiveContainer, Tooltip as RechartsTooltip, PieChart, Pie, Cell } from 'recharts';
+import { Area, AreaChart, ResponsiveContainer, Tooltip as RechartsTooltip, PieChart, Pie, Cell, YAxis } from 'recharts';
 
 // Tipos de filtro
 type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
@@ -496,13 +496,14 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={chartData} margin={{ top: 4, right: 8, bottom: 4, left: 8 }}>
+      <AreaChart data={chartData} margin={{ top: 8, right: 12, bottom: 4, left: 12 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
             <stop offset="95%" stopColor="hsl(var(--status-complete))" stopOpacity={0.1} />
           </linearGradient>
         </defs>
+        <YAxis domain={[0, 'dataMax + 2']} hide />
         <RechartsTooltip
           content={({ active, payload }) => {
             if (active && payload?.length) {
