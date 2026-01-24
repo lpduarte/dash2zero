@@ -19,6 +19,7 @@ import {
   Clock,
   TrendingDown,
   Mail,
+  MailWarning,
 } from 'lucide-react';
 import { Header } from '@/components/dashboard/Header';
 import { KPICard } from '@/components/ui/kpi-card';
@@ -224,9 +225,9 @@ const Admin = () => {
           <KPICard
             title="Por contactar"
             value={aggregatedMetrics.funnelTotals.porContactar}
-            icon={MapPin}
-            iconColor="text-warning"
-            iconBgColor="bg-warning/10"
+            icon={MailWarning}
+            iconColor="text-muted-foreground"
+            iconBgColor="bg-muted"
             unit="Aguardam primeiro email"
           />
         </div>
