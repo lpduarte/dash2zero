@@ -195,7 +195,7 @@ const Admin = () => {
         </div>
 
         {/* KPIs Globais */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
           <KPICard
             title="Total de clientes"
             value={aggregatedMetrics.totalClients}
@@ -233,11 +233,11 @@ const Admin = () => {
 
         {/* Funil Global + Gráfico Pegadas */}
         <div className="flex gap-4 mb-8">
-          <div className={cn(elements.sectionCard, "flex-[2] rounded-md")}>
+          <div className={cn(elements.sectionCard, "flex-[2] rounded-md hover:shadow-lg hover:border-primary/25 transition-all duration-200")}>
             <p className="text-xs font-normal text-muted-foreground mb-4">Progresso de onboarding global</p>
             <GlobalFunnelBar metrics={aggregatedMetrics.funnelTotals} />
           </div>
-          <div className={cn(elements.sectionCard, "flex-1 rounded-md flex flex-col")}>
+          <div className={cn(elements.sectionCard, "flex-1 rounded-md flex flex-col hover:shadow-lg hover:border-primary/25 transition-all duration-200")}>
             <div className="flex-1 min-h-0">
               <ActivityLineChart data={aggregatedMetrics.globalWeeklyCompletions} clientId="global" />
             </div>
