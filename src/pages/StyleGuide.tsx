@@ -464,7 +464,7 @@ const StyleGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative z-10">
       {/* Sidebar de navegação */}
       <aside className="w-64 border-r bg-card fixed h-screen overflow-hidden">
         <ScrollArea className="h-full">

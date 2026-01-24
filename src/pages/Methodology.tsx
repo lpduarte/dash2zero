@@ -186,7 +186,7 @@ export default function Methodology() {
       </aside>
 
       {/* Main Content - bg-grid-pattern provides both gray bg (::before) and grid (::after) */}
-      <main className="ml-64 bg-grid-pattern">
+      <main className="ml-64 bg-grid-pattern relative z-10">
         {/* Academic Header */}
         <header className="relative bg-background overflow-hidden border-b">
           {/* Subtle pulsing background - academic/scholarly tones */}

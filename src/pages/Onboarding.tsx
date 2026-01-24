@@ -53,7 +53,7 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative z-10">
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent [background-size:24px_24px] pointer-events-none" />
       

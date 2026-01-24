@@ -626,7 +626,7 @@ const FormularioTotais = () => {
   // Success screen after submission
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative z-10">
         <div className="max-w-3xl mx-auto px-6 py-12">
           {/* Logo */}
           <div className="flex justify-center mb-8">
@@ -755,7 +755,7 @@ const FormularioTotais = () => {
   // Pre-form selection screen (no stepper)
   if (step === 1 && importMode === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative z-10">
         <div className="max-w-[800px] mx-auto px-6 py-12">
           {/* Logo */}
           <div className="text-center mb-4">
@@ -870,7 +870,7 @@ const FormularioTotais = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30 relative z-10">
       <div className="max-w-[800px] mx-auto px-6 py-12">
         {/* Logo */}
         <div className="text-center mb-4">

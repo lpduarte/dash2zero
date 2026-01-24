@@ -147,7 +147,7 @@ const PageCard = ({ page }: { page: PageLink }) => (
 const Index = () => {
   usePageTitle("Início");
   return (
-    <div className="min-h-screen bg-diagonal-pattern relative overflow-hidden">
+    <div className="min-h-screen bg-diagonal-pattern relative z-10 overflow-hidden">
       {/* Pulsing background - full page */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {/* Large central pulse */}

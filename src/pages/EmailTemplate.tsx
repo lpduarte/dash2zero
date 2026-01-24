@@ -77,7 +77,7 @@ const EmailTemplate = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <div className="min-h-screen bg-muted/30 relative z-10">
       {/* Toolbar */}
       <div className="sticky top-0 z-10 bg-background border-b px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
