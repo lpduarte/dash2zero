@@ -583,7 +583,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
             <img
               src={client.logo}
               alt={client.name}
-              className="w-full h-full object-contain p-2 dark:invert"
+              className={cn("w-full h-full object-contain p-2 dark:invert", client.isArchived && "opacity-30 grayscale")}
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
                 e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -592,13 +592,13 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
           ) : null}
           <div className={cn(client.logo && "hidden")}>
             {client.type === 'municipio'
-              ? <MapPin className="h-7 w-7 text-primary" />
-              : <Building2 className="h-7 w-7 text-secondary-foreground" />
+              ? <MapPin className={cn("h-7 w-7", client.isArchived ? "text-muted-foreground/50" : "text-primary")} />
+              : <Building2 className={cn("h-7 w-7", client.isArchived ? "text-muted-foreground/50" : "text-secondary-foreground")} />
             }
           </div>
         </div>
         <div className="min-w-0 flex-1 self-center">
-          <h3 className="font-bold text-foreground text-lg line-clamp-1">{client.name}</h3>
+          <h3 className={cn("font-bold text-lg line-clamp-1", client.isArchived ? "text-muted-foreground" : "text-foreground")}>{client.name}</h3>
         </div>
         {/* Ícones: arquivo (se arquivado) + tipo */}
         <div className="flex items-center gap-1.5 shrink-0">
