@@ -378,36 +378,44 @@ const getClientAlerts = (client: Client, conversionRate: number) => {
   return alerts;
 };
 
-// Componente: Sparkline de atividade
-interface ActivitySparklineProps {
+// Componente: Gráfico de linha de atividade (estilo GitHub)
+interface ActivityLineChartProps {
   data: number[];
 }
 
-const ActivitySparkline = ({ data }: ActivitySparklineProps) => {
+const ActivityLineChart = ({ data }: ActivityLineChartProps) => {
   const max = Math.max(...data, 1);
+  const chartId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
+
+  // Criar pontos para a polyline
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * 100;
+    const y = 32 - (v / max) * 28; // 32px altura, 28px range útil
+    return `${x},${y}`;
+  }).join(' ');
+
+  // Pontos para o polígono (área preenchida)
+  const areaPoints = `0,32 ${points} 100,32`;
 
   return (
-    <TooltipProvider delayDuration={100}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <div className="flex items-end gap-px h-8 cursor-help">
-            {data.map((value, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "w-1.5 rounded-t-sm transition-all",
-                  value > 0 ? "bg-status-complete" : "bg-muted"
-                )}
-                style={{ height: `${Math.max((value / max) * 100, 8)}%` }}
-              />
-            ))}
-          </div>
-        </TooltipTrigger>
-        <TooltipContent side="top">
-          <p>Pegadas completas por semana (últimas 12)</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <svg viewBox="0 0 100 32" className="w-full h-8" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={chartId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" className="text-status-complete" stopColor="currentColor" stopOpacity="0.3" />
+          <stop offset="100%" className="text-status-complete" stopColor="currentColor" stopOpacity="0.05" />
+        </linearGradient>
+      </defs>
+      <polygon points={areaPoints} fill={`url(#${chartId})`} />
+      <polyline
+        points={points}
+        fill="none"
+        className="text-status-complete"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 };
 
@@ -446,132 +454,119 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       client.isArchived && "opacity-60"
     )}>
       {/* Header do card */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-4">
-          {/* Avatar/Logo maior (48px) */}
-          <div className={cn(
-            "w-12 h-12 rounded-lg flex items-center justify-center overflow-hidden shrink-0",
-            client.type === 'municipio' ? "bg-primary/10" : "bg-secondary/50"
-          )}>
-            {client.logo ? (
-              <img
-                src={client.logo}
-                alt={client.name}
-                className="w-full h-full object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                }}
-              />
-            ) : null}
-            <div className={cn(client.logo && "hidden")}>
-              {client.type === 'municipio'
-                ? <MapPin className="h-6 w-6 text-primary" />
-                : <Building2 className="h-6 w-6 text-secondary-foreground" />
-              }
-            </div>
+      <div className="flex items-center gap-4 mb-4">
+        {/* Avatar/Logo maior (80px) */}
+        <div className={cn(
+          "w-20 h-20 rounded-xl flex items-center justify-center overflow-hidden shrink-0",
+          client.type === 'municipio' ? "bg-primary/10" : "bg-secondary/50"
+        )}>
+          {client.logo ? (
+            <img
+              src={client.logo}
+              alt={client.name}
+              className="w-full h-full object-contain p-2"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          <div className={cn(client.logo && "hidden")}>
+            {client.type === 'municipio'
+              ? <MapPin className="h-10 w-10 text-primary" />
+              : <Building2 className="h-10 w-10 text-secondary-foreground" />
+            }
           </div>
-          <div className="min-w-0">
-            <h3 className="font-bold text-foreground line-clamp-1">{client.name}</h3>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs text-muted-foreground">
-                {client.type === 'municipio' ? 'Município' : 'Empresa'}
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-bold text-foreground text-lg line-clamp-1">{client.name}</h3>
+          <p className="text-sm text-muted-foreground">
+            {client.type === 'municipio' ? 'Município' : 'Empresa'}
+            {client.isArchived && <span className="text-warning ml-2">· Arquivado</span>}
+          </p>
+        </div>
+      </div>
+
+      {/* Métricas em mini-cards */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="bg-muted/50 rounded-lg p-3 text-center">
+          <p className="text-xl font-bold text-foreground">{client.metrics.totalCompanies}</p>
+          <p className="text-xs text-muted-foreground">Empresas</p>
+        </div>
+        <div className="bg-muted/50 rounded-lg p-3 text-center">
+          <p className={cn("text-xl font-bold", conversionColor)}>{conversionRate}%</p>
+          <p className="text-xs text-muted-foreground">Conversão</p>
+        </div>
+        <div className="bg-muted/50 rounded-lg p-3">
+          {client.metrics.weeklyCompletions && (
+            <ActivityLineChart data={client.metrics.weeklyCompletions} />
+          )}
+          <p className="text-xs text-muted-foreground text-center mt-1">Atividade</p>
+        </div>
+      </div>
+
+      {/* Alertas em card */}
+      {alerts.length > 0 && (
+        <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 mb-4">
+          <div className="flex items-center gap-4 flex-wrap text-xs">
+            {alerts.map((alert, idx) => (
+              <span key={idx} className={cn("flex items-center gap-1.5", alert.color)}>
+                <alert.icon className="h-3.5 w-3.5" />
+                {alert.message}
               </span>
-              {client.isArchived && (
-                <span className="text-xs text-warning">· Arquivado</span>
-              )}
-              {alerts.length > 0 && (
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="inline-flex items-center gap-1 text-xs text-warning cursor-help">
-                        <AlertTriangle className="h-3 w-3" />
-                        {alerts.length} {alerts.length === 1 ? 'alerta' : 'alertas'}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" className="max-w-xs">
-                      <ul className="space-y-1">
-                        {alerts.map((alert, idx) => (
-                          <li key={idx} className={cn("flex items-center gap-2 text-xs", alert.color)}>
-                            <alert.icon className="h-3 w-3" />
-                            {alert.message}
-                          </li>
-                        ))}
-                      </ul>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-            </div>
+            ))}
           </div>
         </div>
-
-        {/* Botões de ação visíveis */}
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onEdit}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Archive className="h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {client.isArchived ? 'Desarquivar cliente?' : 'Arquivar cliente?'}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {client.isArchived
-                    ? `Tem a certeza que quer desarquivar "${client.name}"? O cliente voltará a aparecer na lista de clientes ativos.`
-                    : `Tem a certeza que quer arquivar "${client.name}"? O cliente deixará de aparecer na lista principal.`
-                  }
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={onToggleArchive}>
-                  {client.isArchived ? 'Desarquivar' : 'Arquivar'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      </div>
-
-      {/* Métricas + Sparkline */}
-      <div className="flex items-center justify-between gap-4 mb-4">
-        <div className="flex items-center gap-4">
-          <div className="text-center">
-            <p className="text-lg font-bold text-foreground">{client.metrics.totalCompanies}</p>
-            <p className="text-xs text-muted-foreground">Empresas</p>
-          </div>
-          <div className="text-center">
-            <p className={cn("text-lg font-bold", conversionColor)}>{conversionRate}%</p>
-            <p className="text-xs text-muted-foreground">Conversão</p>
-          </div>
-        </div>
-        {client.metrics.weeklyCompletions && (
-          <ActivitySparkline data={client.metrics.weeklyCompletions} />
-        )}
-      </div>
+      )}
 
       {/* Mini funil com ramificação */}
       <div className="mb-4">
         <MiniFunnelBar stats={client.metrics.funnelStats} showBranches />
       </div>
 
-      {/* Botão principal */}
-      <Button
-        variant="default"
-        className="w-full gap-2"
-        onClick={onEnter}
-        disabled={client.isArchived}
-      >
-        <LayoutDashboard className="h-4 w-4" />
-        Dashboard
-      </Button>
+      {/* Botões em linha */}
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" onClick={onEdit}>
+          <Pencil className="h-4 w-4 mr-1.5" />
+          Editar
+        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              <Archive className="h-4 w-4 mr-1.5" />
+              Arquivar
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                {client.isArchived ? 'Desarquivar cliente?' : 'Arquivar cliente?'}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {client.isArchived
+                  ? `Tem a certeza que quer desarquivar "${client.name}"? O cliente voltará a aparecer na lista de clientes ativos.`
+                  : `Tem a certeza que quer arquivar "${client.name}"? O cliente deixará de aparecer na lista principal.`
+                }
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={onToggleArchive}>
+                {client.isArchived ? 'Desarquivar' : 'Arquivar'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <Button
+          variant="default"
+          className="flex-1"
+          onClick={onEnter}
+          disabled={client.isArchived}
+        >
+          <LayoutDashboard className="h-4 w-4 mr-1.5" />
+          Dashboard
+        </Button>
+      </div>
     </div>
   );
 };
@@ -605,11 +600,11 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
     ].filter(s => s.value > 0);
 
     return (
-      <div className="h-2 flex gap-px rounded-full overflow-hidden">
+      <div className="h-2 flex gap-0.5 rounded-full overflow-hidden">
         {segments.map((segment) => (
           <div
             key={segment.key}
-            className={cn(segment.color)}
+            className={cn(segment.color, "rounded-sm")}
             style={{ width: `${(segment.value / grandTotal) * 100}%` }}
           />
         ))}
@@ -620,9 +615,11 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
   // Com ramificação
   const leftPercent = postTotal === 0 ? 100 : preTotal === 0 ? 0 : (preTotal / grandTotal) * 100;
   const rightPercent = preTotal === 0 ? 100 : postTotal === 0 ? 0 : (postTotal / grandTotal) * 100;
+  // Para tamanhos proporcionais dos ramos
+  const maxBranch = Math.max(simpleTotal, formularioTotal);
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       {/* Fase pré-decisão */}
       {preTotal > 0 && (() => {
         const preSegments = [
@@ -634,18 +631,18 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
         return (
           <>
             <div style={{ width: `${leftPercent}%` }}>
-              <div className="h-2 flex gap-px rounded-l-full overflow-hidden">
+              <div className="h-2.5 flex gap-0.5">
                 {preSegments.map((segment) => (
                   <div
                     key={segment.key}
-                    className={cn(segment.color)}
+                    className={cn(segment.color, "rounded-sm")}
                     style={{ width: `${(segment.value / preTotal) * 100}%` }}
                   />
                 ))}
               </div>
             </div>
             {postTotal > 0 && (
-              <ChevronRight className="h-3 w-3 text-muted-foreground/50 shrink-0" />
+              <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
             )}
           </>
         );
@@ -653,7 +650,7 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
 
       {/* Fase pós-decisão com ramificação */}
       {postTotal > 0 && (
-        <div style={{ width: `${rightPercent}%` }} className="space-y-0.5">
+        <div style={{ width: `${rightPercent}%` }} className="space-y-1">
           {/* Ramo Simple */}
           {simpleTotal > 0 && (() => {
             const simpleSegments = [
@@ -662,18 +659,24 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
               { key: 'complete', value: stats.simple.completo, color: 'bg-status-complete' },
             ].filter(s => s.value > 0);
 
+            // Largura proporcional ao máximo dos ramos
+            const branchWidth = (simpleTotal / maxBranch) * 100;
+
             return (
-              <div className="flex items-center gap-1">
-                <div className="h-2 flex gap-px rounded-r-full overflow-hidden flex-1">
+              <div className="flex items-center gap-1.5">
+                <div
+                  className="h-2.5 flex gap-0.5"
+                  style={{ width: `${branchWidth}%` }}
+                >
                   {simpleSegments.map((segment) => (
                     <div
                       key={segment.key}
-                      className={cn(segment.color)}
+                      className={cn(segment.color, "rounded-sm")}
                       style={{ width: `${(segment.value / simpleTotal) * 100}%` }}
                     />
                   ))}
                 </div>
-                <span className="text-[10px] text-muted-foreground font-bold shrink-0">S</span>
+                <span className="text-[10px] text-foreground font-bold shrink-0">S</span>
               </div>
             );
           })()}
@@ -685,18 +688,24 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
               { key: 'complete', value: stats.formulario.completo, color: 'bg-status-complete' },
             ].filter(s => s.value > 0);
 
+            // Largura proporcional ao máximo dos ramos
+            const branchWidth = (formularioTotal / maxBranch) * 100;
+
             return (
-              <div className="flex items-center gap-1">
-                <div className="h-2 flex gap-px rounded-r-full overflow-hidden flex-1">
+              <div className="flex items-center gap-1.5">
+                <div
+                  className="h-2.5 flex gap-0.5"
+                  style={{ width: `${branchWidth}%` }}
+                >
                   {formularioSegments.map((segment) => (
                     <div
                       key={segment.key}
-                      className={cn(segment.color)}
+                      className={cn(segment.color, "rounded-sm")}
                       style={{ width: `${(segment.value / formularioTotal) * 100}%` }}
                     />
                   ))}
                 </div>
-                <span className="text-[10px] text-muted-foreground font-bold shrink-0">F</span>
+                <span className="text-[10px] text-foreground font-bold shrink-0">F</span>
               </div>
             );
           })()}
