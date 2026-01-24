@@ -652,9 +652,36 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
           </div>
           <div className={cn("border rounded-md px-3 py-2 flex items-center justify-between", client.isArchived ? "bg-background" : cn(shadows.sm, "bg-card"))}>
             <span className="text-xs text-muted-foreground">Alertas</span>
-            <span className={cn("text-sm font-bold", client.isArchived ? "text-muted-foreground" : (alerts.length > 0 ? "text-warning" : "text-success"))}>
-              {alerts.length > 0 ? alerts.length : 'OK'}
-            </span>
+            {alerts.length > 0 ? (
+              <div className="flex items-center gap-1.5">
+                <span className={cn("text-sm font-bold", client.isArchived ? "text-muted-foreground" : "text-destructive")}>
+                  {alerts.length}
+                </span>
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <AlertTriangle className={cn("h-4 w-4", client.isArchived ? "text-muted-foreground" : "text-destructive")} />
+                    </TooltipTrigger>
+                    <TooltipContent side="left">
+                      <div className="space-y-1">
+                        {alerts.filter(a => a.type === 'bounce').map((alert, i) => (
+                          <p key={i} className="text-xs">{alert.message}</p>
+                        ))}
+                        {alerts.filter(a => a.type !== 'bounce').length > 0 && (
+                          <p className="text-xs text-muted-foreground">
+                            +{alerts.filter(a => a.type !== 'bounce').length} outros alertas
+                          </p>
+                        )}
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            ) : (
+              <span className={cn("text-sm font-bold", client.isArchived ? "text-muted-foreground" : "text-success")}>
+                OK
+              </span>
+            )}
           </div>
         </div>
         {/* Gráfico à direita */}
