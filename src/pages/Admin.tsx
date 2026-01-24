@@ -4,6 +4,7 @@ import { usePageTitle } from "@/lib/usePageTitle";
 import {
   Building2,
   MapPin,
+  Landmark,
   Users,
   TrendingUp,
   Search,
@@ -456,7 +457,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       client.isArchived && "opacity-60"
     )}>
       {/* Header do card */}
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-start gap-4 mb-4">
         {/* Avatar/Logo maior (80px) */}
         <div className={cn(
           "w-20 h-20 rounded-xl flex items-center justify-center overflow-hidden shrink-0",
@@ -482,10 +483,19 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="font-bold text-foreground text-lg line-clamp-1">{client.name}</h3>
-          <p className="text-sm text-muted-foreground">
-            {client.type === 'municipio' ? 'Município' : 'Empresa'}
-            {client.isArchived && <span className="text-warning ml-2">· Arquivado</span>}
-          </p>
+          {client.isArchived && (
+            <p className="text-sm text-warning">Arquivado</p>
+          )}
+        </div>
+        {/* Ícone tipo (estilo KPI) */}
+        <div className={cn(
+          "p-1.5 rounded shrink-0",
+          client.type === 'municipio' ? "bg-primary/10" : "bg-muted"
+        )}>
+          {client.type === 'municipio'
+            ? <Landmark className="h-4 w-4 text-primary" />
+            : <Building2 className="h-4 w-4 text-muted-foreground" />
+          }
         </div>
       </div>
 
