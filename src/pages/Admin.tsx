@@ -618,15 +618,15 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       <div className="grid grid-cols-3 gap-3 mb-4">
         {/* Grelha 2x2 */}
         <div className="grid grid-cols-2 gap-3 col-span-2">
-          <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
+          <div className={cn("border rounded-md px-3 py-2 flex items-center justify-between", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
             <span className="text-xs text-muted-foreground">Empresas</span>
             <span className="text-sm font-bold text-foreground">{client.metrics.totalCompanies}</span>
           </div>
-          <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
+          <div className={cn("border rounded-md px-3 py-2 flex items-center justify-between", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
             <span className="text-xs text-muted-foreground">Conversão</span>
             <span className={cn("text-sm font-bold", conversionColor)}>{conversionRate}%</span>
           </div>
-          <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
+          <div className={cn("border rounded-md px-3 py-2 flex items-center justify-between", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
             <span className="text-xs text-muted-foreground">Último acesso</span>
             <span className="text-sm font-bold text-foreground">
               {client.metrics.lastActivity
@@ -634,7 +634,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
                 : '—'}
             </span>
           </div>
-          <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
+          <div className={cn("border rounded-md px-3 py-2 flex items-center justify-between", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
             <span className="text-xs text-muted-foreground">Alertas</span>
             <span className={cn("text-sm font-bold", alerts.length > 0 ? "text-warning" : "text-success")}>
               {alerts.length > 0 ? alerts.length : 'OK'}
@@ -642,7 +642,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
           </div>
         </div>
         {/* Gráfico à direita */}
-        <div className={cn("border rounded-md p-3 bg-card overflow-visible", shadows.sm)}>
+        <div className={cn("border rounded-md p-3 overflow-visible", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
           <div className="h-16 overflow-visible -mx-1">
             {client.metrics.weeklyCompletions && (
               <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
@@ -654,7 +654,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       </div>
 
       {/* Mini funil com ramificação */}
-      <div className={cn("border bg-card rounded-md p-3 mb-4", shadows.sm)}>
+      <div className={cn("border rounded-md p-3 mb-4", shadows.sm, client.isArchived ? "bg-background" : "bg-card")}>
         <p className="text-xs text-muted-foreground mb-2">Onboarding</p>
         <MiniFunnelBar stats={client.metrics.funnelStats} showBranches />
       </div>
