@@ -570,7 +570,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       elements.sectionCard,
       "p-5 transition-all",
       client.isArchived
-        ? "shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]"
+        ? "shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] bg-background"
         : "hover:shadow-lg"
     )}>
       {/* Header do card */}
