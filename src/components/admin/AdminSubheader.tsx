@@ -60,17 +60,8 @@ const AdminSubheaderContent = ({ client }: AdminSubheaderContentProps) => {
   };
 
   return (
-    <div
-      className={cn(
-        "sticky top-0 z-40",
-        "border-b border-border/50",
-        // Efeito frost - consistente com liquid glass do header
-        "bg-background/80 backdrop-blur-xl",
-        "supports-[backdrop-filter]:bg-background/60"
-      )}
-    >
-      <div className="max-w-[1400px] mx-auto px-8">
-        <div className="flex items-center justify-end h-12">
+    <div className="max-w-[1400px] mx-auto px-8 pt-4">
+      <div className="flex items-center justify-end">
           {/* Dropdown alinhado à direita com estilo liquid-glass */}
           <div className="liquid-glass-container flex items-center gap-2 p-1.5 pr-2 rounded-full backdrop-blur-xl">
             <span className="text-sm text-muted-foreground pl-2">A ver como:</span>
@@ -158,7 +149,6 @@ const AdminSubheaderContent = ({ client }: AdminSubheaderContentProps) => {
                 </ScrollArea>
               </PopoverContent>
             </Popover>
-          </div>
         </div>
       </div>
     </div>
