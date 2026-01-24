@@ -48,7 +48,7 @@ import { useUser } from '@/contexts/UserContext';
 import { Client } from '@/types/user';
 import { mockClients } from '@/data/mockClients';
 import { ClientFormDialog, ClientFormData } from '@/components/admin/ClientFormDialog';
-import { Area, AreaChart, ResponsiveContainer, YAxis } from 'recharts';
+import { Area, AreaChart, ResponsiveContainer } from 'recharts';
 
 // Tipos de filtro
 type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
@@ -386,17 +386,18 @@ interface ActivityLineChartProps {
 }
 
 const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
+  // Adicionar pequeno offset para evitar valores exactamente 0
+  // Isto previne que a linha toque no fundo absoluto do gráfico
   const chartData = data.map((value, index) => ({
     week: `S${index + 1}`,
-    completions: value,
+    completions: value + 0.1,
   }));
 
   const gradientId = `fillCompletions-${clientId}`;
 
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
-        <YAxis domain={[-0.5, 'dataMax + 0.5']} hide />
+      <AreaChart data={chartData} margin={{ top: 4, right: 0, bottom: 4, left: 0 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="hsl(var(--status-complete))" stopOpacity={0.8} />
@@ -410,6 +411,7 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
           fillOpacity={0.4}
           stroke="hsl(var(--status-complete))"
           strokeWidth={2}
+          isAnimationActive={false}
         />
       </AreaChart>
     </ResponsiveContainer>
