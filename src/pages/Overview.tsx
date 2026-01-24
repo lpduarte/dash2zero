@@ -26,6 +26,7 @@ import {
 import { getClustersByOwnerType } from "@/data/clusters";
 import { getSectorsWithCounts } from "@/data/sectors";
 import { Supplier, UniversalFilterState } from "@/types/supplier";
+import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
 
 // Função para calcular potencial de melhoria de um conjunto de fornecedores
