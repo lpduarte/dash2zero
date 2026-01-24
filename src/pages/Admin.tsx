@@ -610,11 +610,15 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
     ].filter(s => s.value > 0);
 
     return (
-      <div className="h-2 flex gap-0.5 rounded-full overflow-hidden">
-        {segments.map((segment) => (
+      <div className="h-2 flex gap-px rounded-full overflow-hidden">
+        {segments.map((segment, index) => (
           <div
             key={segment.key}
-            className={cn(segment.color, "rounded-sm")}
+            className={cn(
+              segment.color,
+              index === 0 && "rounded-l-sm",
+              index === segments.length - 1 && "rounded-r-sm"
+            )}
             style={{ width: `${(segment.value / grandTotal) * 100}%` }}
           />
         ))}
@@ -641,11 +645,15 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
         return (
           <>
             <div style={{ width: `${leftPercent}%` }}>
-              <div className="h-2.5 flex gap-0.5">
-                {preSegments.map((segment) => (
+              <div className="h-2.5 flex gap-px">
+                {preSegments.map((segment, index) => (
                   <div
                     key={segment.key}
-                    className={cn(segment.color, "rounded-sm")}
+                    className={cn(
+                      segment.color,
+                      index === 0 && "rounded-l-sm",
+                      index === preSegments.length - 1 && "rounded-r-sm"
+                    )}
                     style={{ width: `${(segment.value / preTotal) * 100}%` }}
                   />
                 ))}
@@ -675,13 +683,17 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
             return (
               <div className="flex items-center gap-1.5">
                 <div
-                  className="h-2.5 flex gap-0.5"
+                  className="h-2.5 flex gap-px"
                   style={{ width: `${branchWidth}%` }}
                 >
-                  {simpleSegments.map((segment) => (
+                  {simpleSegments.map((segment, index) => (
                     <div
                       key={segment.key}
-                      className={cn(segment.color, "rounded-sm")}
+                      className={cn(
+                        segment.color,
+                        index === 0 && "rounded-l-sm",
+                        index === simpleSegments.length - 1 && "rounded-r-sm"
+                      )}
                       style={{ width: `${(segment.value / simpleTotal) * 100}%` }}
                     />
                   ))}
@@ -711,13 +723,17 @@ const MiniFunnelBar = ({ stats, showBranches = false }: MiniFunnelBarProps) => {
             return (
               <div className="flex items-center gap-1.5">
                 <div
-                  className="h-2.5 flex gap-0.5"
+                  className="h-2.5 flex gap-px"
                   style={{ width: `${branchWidth}%` }}
                 >
-                  {formularioSegments.map((segment) => (
+                  {formularioSegments.map((segment, index) => (
                     <div
                       key={segment.key}
-                      className={cn(segment.color, "rounded-sm")}
+                      className={cn(
+                        segment.color,
+                        index === 0 && "rounded-l-sm",
+                        index === formularioSegments.length - 1 && "rounded-r-sm"
+                      )}
                       style={{ width: `${(segment.value / formularioTotal) * 100}%` }}
                     />
                   ))}
