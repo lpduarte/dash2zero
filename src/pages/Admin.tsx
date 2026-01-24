@@ -12,6 +12,7 @@ import {
   Archive,
   MoreHorizontal,
   ChevronRight,
+  TowerControl,
 } from 'lucide-react';
 import { Header } from '@/components/dashboard/Header';
 import { KPICard } from '@/components/ui/kpi-card';
@@ -139,7 +140,10 @@ const Admin = () => {
         {/* Título da secção */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Administração Get2C</h2>
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <TowerControl className="h-6 w-6 text-primary" />
+              Painel de controlo
+            </h2>
             <p className="text-muted-foreground mt-1">Gestão de clientes e visão global</p>
           </div>
           <Button onClick={() => setIsCreateDialogOpen(true)}>
