@@ -13,7 +13,7 @@ import {
   Archive,
   ChevronRight,
   TowerControl,
-  LayoutDashboard,
+  BarChart3,
   Pencil,
   AlertTriangle,
   Clock,
@@ -378,7 +378,7 @@ const Admin = () => {
           </Popover>
 
           <Button onClick={() => setIsCreateDialogOpen(true)}>
-            <UserPlus className="h-4 w-4 mr-2" />
+            <UserPlus className="h-4 w-4" />
             Novo cliente
           </Button>
         </div>
@@ -653,13 +653,13 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       {/* Botões em linha */}
       <div className="flex items-center gap-2">
         <Button variant="outline" size="sm" onClick={onEdit}>
-          <Pencil className="h-4 w-4 mr-1.5" />
+          <Pencil className="h-4 w-4" />
           Editar
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button variant="outline" size="sm">
-              <Archive className="h-4 w-4 mr-1.5" />
+              <Archive className="h-4 w-4" />
               Arquivar
             </Button>
           </AlertDialogTrigger>
@@ -685,11 +685,12 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
         </AlertDialog>
         <Button
           variant="default"
+          size="sm"
           className="flex-1"
           onClick={onEnter}
           disabled={client.isArchived}
         >
-          <LayoutDashboard className="h-4 w-4 mr-1.5" />
+          <BarChart3 className="h-4 w-4" />
           Dashboard
         </Button>
       </div>
