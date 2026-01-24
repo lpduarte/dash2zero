@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Leaf, BarChart3, CircleDot, Moon, Sun, Shield } from "lucide-react";
+import { Leaf, BarChart3, CircleDot, Moon, Sun, TowerControl } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
@@ -54,19 +54,19 @@ export const Header = () => {
               <UserTypeToggle currentType={userType} onTypeChange={setUserType} />
 
               <nav className="liquid-glass-container flex gap-2 p-2 rounded-full backdrop-blur-xl">
-                {/* Admin link - apenas para Get2C */}
+                {/* Painel de controlo - apenas para Get2C */}
                 {isGet2C && (
                   <Link to="/admin" className={cn(
                     "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
                     location.pathname === "/admin" ? "active border-primary/25" : "inactive"
                   )}>
-                    <Shield className="h-4 w-4 relative z-10" />
-                    <span className="relative z-10">Admin</span>
+                    <TowerControl className="h-4 w-4 relative z-10" />
+                    <span className="relative z-10">Painel de controlo</span>
                   </Link>
                 )}
 
-                {/* Dashboard e Clusters - apenas se não for Get2C OU se tiver cliente ativo */}
-                {(!isGet2C || activeClient) && (
+                {/* Dashboard e Clusters - apenas se não for Get2C OU se tiver cliente ativo (nunca em /admin) */}
+                {(!isGet2C || activeClient) && location.pathname !== '/admin' && (
                   <>
                     <Link to="/" className={cn(
                       "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
