@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Leaf, BarChart3, CircleDot, Moon, Sun, TowerControl, ChevronDown, Building2, MapPin, Search, Check } from "lucide-react";
+import { Leaf, BarChart3, CircleDot, Moon, Sun, UserRoundCog, ChevronDown, Building2, MapPin, Search, Check } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { UserTypeToggle } from "./UserTypeToggle";
@@ -77,7 +77,7 @@ export const Header = () => {
                     "liquid-glass-btn relative flex items-center justify-center gap-2 h-9 px-5 rounded-full text-sm font-medium overflow-hidden border border-transparent",
                     location.pathname === "/admin" ? "active border-primary/25" : "inactive"
                   )}>
-                    <TowerControl className="h-4 w-4 relative z-10" />
+                    <UserRoundCog className="h-4 w-4 relative z-10" />
                     <span className="relative z-10">Painel de controlo</span>
                   </Link>
                 )}

@@ -36,7 +36,7 @@ type ClientTypeFilter = 'todos' | 'municipio' | 'empresa';
 type StatusFilter = 'ativos' | 'arquivados' | 'todos';
 
 const Admin = () => {
-  usePageTitle("Administração");
+  usePageTitle("Painel de controlo");
   const navigate = useNavigate();
   const { setActiveClient } = useUser();
 
