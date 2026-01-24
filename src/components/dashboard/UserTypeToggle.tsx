@@ -1,4 +1,4 @@
-import { Building2, Landmark, Shield } from "lucide-react";
+import { Building2, Landmark, UserStar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserType } from "@/types/user";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -55,7 +55,7 @@ export const UserTypeToggle = ({ currentType, onTypeChange }: UserTypeToggleProp
                 currentType === 'get2c' ? "active border-primary/25" : "inactive"
               )}
             >
-              <Shield className="h-4 w-4 relative z-10" />
+              <UserStar className="h-4 w-4 relative z-10" />
             </button>
           </TooltipTrigger>
           <TooltipContent>
