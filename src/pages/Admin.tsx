@@ -405,7 +405,7 @@ const ActivityLineChart = ({ data, clientId }: ActivityLineChartProps) => {
   const gradientId = `fillCompletions-${clientId}`;
 
   return (
-    <ChartContainer config={activityChartConfig} className="h-12 w-full !aspect-auto">
+    <ChartContainer config={activityChartConfig} className="h-full w-full !aspect-auto">
       <AreaChart data={chartData} margin={{ top: 2, right: 0, bottom: 2, left: 0 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -505,9 +505,11 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
           <p className="text-xs text-muted-foreground">Conversão</p>
         </div>
         <div className="border rounded-lg p-3 bg-card">
-          {client.metrics.weeklyCompletions && (
-            <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
-          )}
+          <div className="h-12">
+            {client.metrics.weeklyCompletions && (
+              <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
+            )}
+          </div>
           <Separator className="my-2 -mx-3 w-[calc(100%+1.5rem)]" />
           <p className="text-xs text-muted-foreground text-center">Atividade</p>
         </div>
