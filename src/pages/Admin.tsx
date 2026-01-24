@@ -494,9 +494,9 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
       </div>
 
       {/* Métricas em mini-cards */}
-      <div className="flex gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-3 mb-4">
         {/* Grelha 2x2 */}
-        <div className="grid grid-cols-2 gap-2 flex-1">
+        <div className="grid grid-cols-2 gap-3">
           <div className={cn("border bg-card rounded-md px-3 py-2 flex items-center justify-between", shadows.sm)}>
             <span className="text-xs text-muted-foreground">Empresas</span>
             <span className="text-sm font-bold text-foreground">{client.metrics.totalCompanies}</span>
@@ -521,7 +521,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
           </div>
         </div>
         {/* Gráfico à direita */}
-        <div className={cn("border rounded-md p-3 bg-card w-32", shadows.sm)}>
+        <div className={cn("border rounded-md p-3 bg-card", shadows.sm)}>
           <div className="h-12">
             {client.metrics.weeklyCompletions && (
               <ActivityLineChart data={client.metrics.weeklyCompletions} clientId={client.id} />
