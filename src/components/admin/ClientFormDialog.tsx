@@ -119,13 +119,23 @@ export const ClientFormDialog = ({
     setActiveTab('dados');
   }, [client, open]);
 
-  // Aplicar perfil de permissões
+  // Aplicar perfil de permissões (toggle)
   const handleProfileChange = (profile: PermissionProfile) => {
-    setSelectedProfile(profile);
-    setFormData(prev => ({
-      ...prev,
-      permissions: PERMISSION_PROFILES[profile],
-    }));
+    if (selectedProfile === profile) {
+      // Desselecionar e limpar permissões
+      setSelectedProfile(null);
+      setFormData(prev => ({
+        ...prev,
+        permissions: emptyPermissions,
+      }));
+    } else {
+      // Selecionar perfil
+      setSelectedProfile(profile);
+      setFormData(prev => ({
+        ...prev,
+        permissions: PERMISSION_PROFILES[profile],
+      }));
+    }
   };
 
   // Atualizar permissão individual
