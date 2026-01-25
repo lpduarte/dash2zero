@@ -116,11 +116,17 @@ export const ClientFormDialog = ({
     setSelectedProfile('personalizado');
   };
 
+  // Validação de email
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   // Validação do step 1
   const isStep1Valid =
     formData.type !== undefined &&
     formData.name.trim() !== '' &&
-    formData.contactEmail.trim() !== '';
+    formData.contactEmail.trim() !== '' &&
+    isValidEmail(formData.contactEmail);
 
   // Validação completa
   const isValid = isStep1Valid;
@@ -190,20 +196,23 @@ export const ClientFormDialog = ({
 
             <button
               type="button"
-              onClick={() => setActiveTab('permissoes')}
+              onClick={() => isStep1Valid && setActiveTab('permissoes')}
+              disabled={!isStep1Valid}
               className="flex flex-col items-center gap-2"
             >
               <div className={cn(
                 "w-12 h-12 rounded-full flex items-center justify-center transition-all",
                 activeTab === 'permissoes'
                   ? "bg-primary text-primary-foreground"
-                  : "bg-background text-muted-foreground border-2 border-border hover:border-primary/50 hover:bg-primary/10"
+                  : "bg-background text-muted-foreground border-2 border-border hover:border-primary/50 hover:bg-primary/10",
+                !isStep1Valid && "opacity-50 cursor-not-allowed hover:border-border hover:bg-background"
               )}>
                 <Eye className="h-5 w-5" />
               </div>
               <span className={cn(
                 "text-sm font-bold",
-                activeTab === 'permissoes' ? "text-primary" : "text-muted-foreground"
+                activeTab === 'permissoes' ? "text-primary" : "text-muted-foreground",
+                !isStep1Valid && "opacity-50"
               )}>Permissões</span>
             </button>
           </div>
