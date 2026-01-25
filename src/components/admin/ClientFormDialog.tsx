@@ -341,7 +341,7 @@ export const ClientFormDialog = ({
             <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50 border border-dashed">
               <SquareDashedKanban className="h-5 w-5 text-muted-foreground shrink-0" />
               <p className="text-sm text-muted-foreground">
-                Em breve — integração com o Get2Zero Pro para sincronização de dados de Âmbito 3
+                Em breve — ligação com o Get2Zero Pro para sincronização de dados de Âmbito 3
               </p>
             </div>
           </div>
