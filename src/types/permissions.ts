@@ -6,8 +6,8 @@ export const PERMISSION_PROFILES: Record<PermissionProfile, ClientPermissions> =
     dashboard: {
       viewKPIs: true,
       viewCharts: true,
-      viewSupplierDetails: false,
-      useFilters: false,
+      viewSupplierDetails: true,
+      useFilters: true,
     },
     clusters: {
       viewKPIs: true,
