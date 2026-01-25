@@ -270,7 +270,13 @@ export const ClientFormDialog = ({
               <Label htmlFor="name">Nome do cliente *</Label>
               <Input
                 id="name"
-                placeholder={formData.type === 'municipio' ? 'Ex: Câmara Municipal de Valdouros' : 'Ex: Iberotejo'}
+                placeholder={
+                  formData.type === 'municipio'
+                    ? 'Ex: Câmara Municipal de Valdouros'
+                    : formData.type === 'empresa'
+                      ? 'Ex: Iberotejo'
+                      : ''
+                }
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               />
