@@ -51,16 +51,45 @@ export const ClientFormDialog = ({
 }: ClientFormDialogProps) => {
   const isEditing = !!client;
 
+  // Permissões vazias (nenhum checkmark activo)
+  const emptyPermissions: ClientPermissions = {
+    dashboard: {
+      viewKPIs: false,
+      viewCharts: false,
+      viewSupplierDetails: false,
+      useFilters: false,
+    },
+    clusters: {
+      viewKPIs: false,
+      viewList: false,
+      createCluster: false,
+      editCluster: false,
+      deleteCluster: false,
+      manageCompanies: false,
+    },
+    incentives: {
+      viewKPIs: false,
+      viewFunnel: false,
+      viewCompanyList: false,
+      sendEmails: false,
+      manageTemplates: false,
+    },
+    pipeline: {
+      view: false,
+      edit: false,
+    },
+  };
+
   // Estado do formulário
   const [formData, setFormData] = useState<ClientFormData>({
     name: '',
     type: undefined,
     contactEmail: '',
     contactName: '',
-    permissions: PERMISSION_PROFILES['gestao-completa'],
+    permissions: emptyPermissions,
   });
 
-  const [selectedProfile, setSelectedProfile] = useState<PermissionProfile | 'personalizado'>('gestao-completa');
+  const [selectedProfile, setSelectedProfile] = useState<PermissionProfile | 'personalizado' | null>(null);
   const [activeTab, setActiveTab] = useState('dados');
   const [iconPreview, setIconPreview] = useState<string | null>(null);
 
@@ -82,9 +111,9 @@ export const ClientFormDialog = ({
         type: undefined,
         contactEmail: '',
         contactName: '',
-        permissions: PERMISSION_PROFILES['gestao-completa'],
+        permissions: emptyPermissions,
       });
-      setSelectedProfile('gestao-completa');
+      setSelectedProfile(null);
       setIconPreview(null);
     }
     setActiveTab('dados');
