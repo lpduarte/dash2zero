@@ -11,15 +11,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import {
   Building2,
   MapPin,
   Mail,
   User,
-  Shield,
-  Settings,
+  Eye,
   Info,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -139,20 +137,53 @@ export const ClientFormDialog = ({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="dados" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Dados
-            </TabsTrigger>
-            <TabsTrigger value="permissoes" className="gap-2">
-              <Shield className="h-4 w-4" />
-              Permissões
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex-1 overflow-hidden flex flex-col">
+          {/* Step Indicator */}
+          <div className="flex items-center justify-center gap-3 py-4">
+            <button
+              type="button"
+              onClick={() => setActiveTab('dados')}
+              className="flex flex-col items-center gap-1.5"
+            >
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                activeTab === 'dados'
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              )}>
+                <User className="h-5 w-5" />
+              </div>
+              <span className={cn(
+                "text-xs font-bold",
+                activeTab === 'dados' ? "text-primary" : "text-muted-foreground"
+              )}>Dados</span>
+            </button>
 
-          {/* Tab: Dados Básicos */}
-          <TabsContent value="dados" className="flex-1 overflow-auto mt-4 space-y-4">
+            <div className="h-px w-12 bg-border" />
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('permissoes')}
+              className="flex flex-col items-center gap-1.5"
+            >
+              <div className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                activeTab === 'permissoes'
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              )}>
+                <Eye className="h-5 w-5" />
+              </div>
+              <span className={cn(
+                "text-xs font-bold",
+                activeTab === 'permissoes' ? "text-primary" : "text-muted-foreground"
+              )}>Permissões</span>
+            </button>
+          </div>
+
+          {/* Step: Dados Básicos */}
+          {activeTab === 'dados' && (
+          <div className="flex-1 overflow-auto space-y-4">
             {/* Tipo de cliente */}
             <div className="space-y-2">
               <Label>Tipo de cliente</Label>
@@ -261,10 +292,12 @@ export const ClientFormDialog = ({
                 </p>
               </div>
             </div>
-          </TabsContent>
+          </div>
+          )}
 
-          {/* Tab: Permissões */}
-          <TabsContent value="permissoes" className="flex-1 overflow-auto mt-4 space-y-6">
+          {/* Step: Permissões */}
+          {activeTab === 'permissoes' && (
+          <div className="flex-1 overflow-auto space-y-6">
             {/* Quick select de perfil */}
             <div className="space-y-3">
               <Label>Perfil de acesso</Label>
@@ -356,16 +389,30 @@ export const ClientFormDialog = ({
                 onChange={(key, value) => handlePermissionChange('pipeline', key, value)}
               />
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+          )}
+        </div>
 
         <DialogFooter className="mt-6">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button onClick={handleSubmit} disabled={!isValid}>
-            {isEditing ? 'Guardar alterações' : 'Criar cliente'}
-          </Button>
+          {activeTab === 'dados' ? (
+            <>
+              <Button variant="outline" onClick={() => onOpenChange(false)}>
+                Cancelar
+              </Button>
+              <Button onClick={() => setActiveTab('permissoes')}>
+                Seguinte
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="outline" onClick={() => setActiveTab('dados')}>
+                Anterior
+              </Button>
+              <Button onClick={handleSubmit} disabled={!isValid}>
+                {isEditing ? 'Guardar alterações' : 'Criar cliente'}
+              </Button>
+            </>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
