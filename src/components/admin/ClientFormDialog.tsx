@@ -19,6 +19,7 @@ import {
   User,
   Eye,
   Info,
+  ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Client, ClientPermissions, PermissionProfile } from '@/types/user';
@@ -26,10 +27,11 @@ import { PERMISSION_PROFILES, detectPermissionProfile } from '@/types/permission
 
 export interface ClientFormData {
   name: string;
-  type: 'municipio' | 'empresa';
+  type: 'municipio' | 'empresa' | undefined;
   contactEmail: string;
   contactName: string;
   permissions: ClientPermissions;
+  icon?: string;
 }
 
 interface ClientFormDialogProps {
@@ -50,7 +52,7 @@ export const ClientFormDialog = ({
   // Estado do formulário
   const [formData, setFormData] = useState<ClientFormData>({
     name: '',
-    type: 'municipio',
+    type: undefined,
     contactEmail: '',
     contactName: '',
     permissions: PERMISSION_PROFILES['gestao-completa'],
@@ -58,6 +60,7 @@ export const ClientFormDialog = ({
 
   const [selectedProfile, setSelectedProfile] = useState<PermissionProfile | 'personalizado'>('gestao-completa');
   const [activeTab, setActiveTab] = useState('dados');
+  const [iconPreview, setIconPreview] = useState<string | null>(null);
 
   // Preencher dados quando em modo edição
   useEffect(() => {
@@ -74,12 +77,13 @@ export const ClientFormDialog = ({
       // Reset para valores default ao criar
       setFormData({
         name: '',
-        type: 'municipio',
+        type: undefined,
         contactEmail: '',
         contactName: '',
         permissions: PERMISSION_PROFILES['gestao-completa'],
       });
       setSelectedProfile('gestao-completa');
+      setIconPreview(null);
     }
     setActiveTab('dados');
   }, [client, open]);
@@ -112,8 +116,28 @@ export const ClientFormDialog = ({
     setSelectedProfile('personalizado');
   };
 
-  // Validação básica
-  const isValid = formData.name.trim() !== '' && formData.contactEmail.trim() !== '';
+  // Validação do step 1
+  const isStep1Valid =
+    formData.type !== undefined &&
+    formData.name.trim() !== '' &&
+    formData.contactEmail.trim() !== '';
+
+  // Validação completa
+  const isValid = isStep1Valid;
+
+  // Handler do ícone
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setIconPreview(result);
+        setFormData(prev => ({ ...prev, icon: result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Submeter
   const handleSubmit = () => {
@@ -189,7 +213,7 @@ export const ClientFormDialog = ({
           <div className="flex-1 overflow-auto space-y-4">
             {/* Tipo de cliente */}
             <div className="space-y-2">
-              <Label>Tipo de cliente</Label>
+              <Label>Tipo de cliente *</Label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
@@ -212,7 +236,6 @@ export const ClientFormDialog = ({
                   </div>
                   <div className="text-left">
                     <p className="font-bold">Município</p>
-                    <p className="text-sm text-muted-foreground">Câmara Municipal</p>
                   </div>
                 </button>
 
@@ -237,7 +260,6 @@ export const ClientFormDialog = ({
                   </div>
                   <div className="text-left">
                     <p className="font-bold">Empresa</p>
-                    <p className="text-sm text-muted-foreground">Organização parceira</p>
                   </div>
                 </button>
               </div>
@@ -248,15 +270,15 @@ export const ClientFormDialog = ({
               <Label htmlFor="name">Nome do cliente *</Label>
               <Input
                 id="name"
-                placeholder={formData.type === 'municipio' ? 'Ex: Câmara Municipal de Lisboa' : 'Ex: Montepio'}
+                placeholder={formData.type === 'municipio' ? 'Ex: Câmara Municipal de Valdouros' : 'Ex: Iberotejo'}
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               />
             </div>
 
-            {/* Email de contacto */}
+            {/* Email de acesso */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email de contacto *</Label>
+              <Label htmlFor="email">Email de acesso *</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -285,11 +307,37 @@ export const ClientFormDialog = ({
               </div>
             </div>
 
-            {/* Nota sobre ZeroPro */}
+            {/* Logótipo */}
+            <div className="space-y-2">
+              <Label>Logótipo (opcional)</Label>
+              <div className="flex items-start gap-4">
+                {/* Preview */}
+                <div className="w-16 h-16 rounded-lg border-2 border-dashed border-border flex items-center justify-center bg-muted/50 shrink-0">
+                  {iconPreview ? (
+                    <img src={iconPreview} alt="Preview" className="w-full h-full object-contain rounded-lg" />
+                  ) : (
+                    <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Input
+                    type="file"
+                    accept=".png,.svg,.jpg,.jpeg"
+                    onChange={handleIconChange}
+                    className="text-sm"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    PNG, SVG ou JPG. Recomendado: 200×200px, formato quadrado.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Nota sobre Get2Zero Pro */}
             <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50 border border-dashed">
               <Info className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-bold text-foreground">Integração ZeroPro</p>
+                <p className="text-sm font-bold text-foreground">Integração Get2Zero Pro</p>
                 <p className="text-sm text-muted-foreground">
                   Em breve: sincronização de dados de âmbito 3 com o ZeroPro.
                 </p>
@@ -402,7 +450,7 @@ export const ClientFormDialog = ({
               <Button variant="outline" onClick={() => onOpenChange(false)}>
                 Cancelar
               </Button>
-              <Button onClick={() => setActiveTab('permissoes')}>
+              <Button onClick={() => setActiveTab('permissoes')} disabled={!isStep1Valid}>
                 Seguinte
               </Button>
             </>
