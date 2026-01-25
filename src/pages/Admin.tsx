@@ -578,6 +578,18 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
   // Alertas
   const alerts = getClientAlerts(client, conversionRate);
 
+  // Calcular taxa de bounce
+  const contactedCompanies = funnelStats.semInteracao +
+                             funnelStats.interessada +
+                             funnelStats.simple.registada +
+                             funnelStats.simple.emProgresso +
+                             funnelStats.simple.completo +
+                             funnelStats.formulario.emProgresso +
+                             funnelStats.formulario.completo;
+  const bounceRate = contactedCompanies > 0
+    ? Math.round(((client.metrics.emailBounces ?? 0) / contactedCompanies) * 100)
+    : 0;
+
   // Cor condicional para conversão
   const conversionColor = 'text-foreground';
 
@@ -662,14 +674,31 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
                     <TooltipTrigger asChild>
                       <AlertTriangle className={cn("h-4 w-4", client.isArchived ? "text-muted-foreground" : "text-destructive")} />
                     </TooltipTrigger>
-                    <TooltipContent side="left">
-                      <div className="space-y-1">
-                        {alerts.filter(a => a.type === 'bounce').map((alert, i) => (
-                          <p key={i} className="text-xs">{alert.message}</p>
-                        ))}
-                        {alerts.filter(a => a.type !== 'bounce').length > 0 && (
-                          <p className="text-xs text-muted-foreground">
-                            +{alerts.filter(a => a.type !== 'bounce').length} outros alertas
+                    <TooltipContent side="left" className="p-0 overflow-hidden">
+                      <div className="px-3 py-2 bg-destructive/10 border-b border-destructive/20">
+                        <div className="flex items-center gap-2">
+                          <MailWarning className="h-4 w-4 text-destructive" />
+                          <span className="text-sm font-bold text-destructive">Emails falhados</span>
+                        </div>
+                      </div>
+                      <div className="px-3 py-2 space-y-2">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-lg font-bold">{client.metrics.emailBounces ?? 0}</span>
+                          <span className="text-xs text-muted-foreground">bounces</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-destructive rounded-full"
+                              style={{ width: `${Math.min(bounceRate, 100)}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-bold text-muted-foreground w-8">{bounceRate}%</span>
+                        </div>
+                        {bounceRate > 5 && (
+                          <p className="text-xs text-warning flex items-center gap-1">
+                            <AlertTriangle className="h-3 w-3" />
+                            Taxa acima do normal
                           </p>
                         )}
                       </div>
