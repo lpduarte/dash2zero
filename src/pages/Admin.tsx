@@ -425,7 +425,7 @@ const Admin = () => {
 };
 
 // Função auxiliar para calcular alertas do cliente
-const getClientAlerts = (client: Client, conversionRate: number) => {
+const getClientAlerts = (client: Client) => {
   const alerts: Array<{ type: string; message: string; icon: typeof AlertTriangle; color: string }> = [];
 
   // Email bounces
@@ -435,39 +435,6 @@ const getClientAlerts = (client: Client, conversionRate: number) => {
       message: `${client.metrics.emailBounces} emails falharam`,
       icon: AlertTriangle,
       color: 'text-destructive',
-    });
-  }
-
-  // Inatividade (> 14 dias)
-  if (client.metrics.lastActivity) {
-    const daysSince = Math.floor((Date.now() - client.metrics.lastActivity.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysSince > 14) {
-      alerts.push({
-        type: 'inactivity',
-        message: `Sem atividade há ${daysSince} dias`,
-        icon: Clock,
-        color: 'text-warning',
-      });
-    }
-  }
-
-  // Conversão crítica (< 10%)
-  if (conversionRate < 10 && conversionRate > 0) {
-    alerts.push({
-      type: 'conversion',
-      message: `Conversão crítica (${conversionRate}%)`,
-      icon: TrendingDown,
-      color: 'text-warning',
-    });
-  }
-
-  // Muitos por contactar (> 50)
-  if (client.metrics.funnelStats.porContactar > 50) {
-    alerts.push({
-      type: 'pending',
-      message: `${client.metrics.funnelStats.porContactar} empresas por contactar`,
-      icon: Mail,
-      color: 'text-muted-foreground',
     });
   }
 
@@ -576,7 +543,7 @@ const ClientCard = ({ client, onEnter, onEdit, onToggleArchive }: ClientCardProp
     : 0;
 
   // Alertas
-  const alerts = getClientAlerts(client, conversionRate);
+  const alerts = getClientAlerts(client);
 
   // Cor condicional para conversão
   const conversionColor = 'text-foreground';
