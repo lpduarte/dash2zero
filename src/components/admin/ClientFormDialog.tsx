@@ -429,17 +429,6 @@ export const ClientFormDialog = ({
                 }}
                 onChange={(key, value) => handlePermissionChange('incentives', key, value)}
               />
-
-              {/* Pipeline */}
-              <PermissionGroup
-                title="Pipeline"
-                permissions={formData.permissions.pipeline}
-                labels={{
-                  view: 'Ver pipeline',
-                  edit: 'Editar pipeline',
-                }}
-                onChange={(key, value) => handlePermissionChange('pipeline', key, value)}
-              />
             </div>
           </div>
           )}
