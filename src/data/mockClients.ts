@@ -100,7 +100,7 @@ export const mockClients: Client[] = [
         },
       },
       lastActivity: new Date('2026-01-20'),
-      emailBounces: 5,
+      emailBounces: 0,
       weeklyCompletions: [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
     },
     zeroProIntegration: {
