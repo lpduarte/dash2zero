@@ -7,9 +7,9 @@
   },
   "summary": {
     "total": 14,
-    "completed": 5,
+    "completed": 6,
     "inProgress": 0,
-    "pending": 9
+    "pending": 8
   },
   "categories": [
     {
@@ -189,17 +189,17 @@
       "title": "Documentação e Metodologia",
       "description": "Atualizar página de metodologia com info sobre incentivos e boas práticas",
       "category": "normal",
-      "status": "pending",
+      "status": "completed",
       "priority": 10,
       "briefing": "10-documentacao-metodologia.md",
       "criteria": [
-        { "text": "Secção sobre Incentivos adicionada", "done": false },
-        { "text": "KPIs documentados", "done": false },
-        { "text": "Boas práticas de email incluídas", "done": false },
-        { "text": "Processo de envio explicado", "done": false }
+        { "text": "Secção sobre Incentivos adicionada", "done": true },
+        { "text": "KPIs documentados", "done": true },
+        { "text": "Boas práticas de email incluídas", "done": true },
+        { "text": "Processo de envio explicado", "done": true }
       ],
-      "dependencies": ["05"],
-      "notes": "Documentar após implementar melhorias de email"
+      "dependencies": [],
+      "notes": "Concluído em d116e14 - docs: adicionar secções clusters, dashboard, incentivos e email"
     },
     {
       "id": "11",
