@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Check, ChevronsUpDown, Search } from 'lucide-react';
+import { Check, ChevronDown, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -55,16 +54,21 @@ export const MunicipioCombobox = ({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
+        <button
+          type="button"
           role="combobox"
           aria-expanded={open}
           disabled={disabled}
-          className="w-full justify-between font-normal"
+          className={cn(
+            "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            !value && "text-muted-foreground"
+          )}
         >
-          {value || <span className="text-muted-foreground/60">{placeholder}</span>}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
+          <span className={cn("line-clamp-1", !value && "text-muted-foreground/50")}>
+            {value || placeholder}
+          </span>
+          <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+        </button>
       </PopoverTrigger>
       <PopoverContent
         className="w-[--radix-popover-trigger-width] p-0"
@@ -88,10 +92,10 @@ export const MunicipioCombobox = ({
               Nenhum município encontrado.
             </div>
           ) : (
-            <div className="py-1">
-              {filteredDistritos.map((distrito, index) => (
-                <div key={distrito.distrito} className={index > 0 ? 'mt-2' : ''}>
-                  <div className="px-3 py-2 text-xs font-bold text-primary bg-primary/5 border-y">
+            <div className="p-1">
+              {filteredDistritos.map((distrito) => (
+                <div key={distrito.distrito}>
+                  <div className="sticky top-0 z-10 py-1.5 pl-8 pr-2 text-sm font-bold text-primary bg-primary/5">
                     {distrito.distrito}
                   </div>
                   {distrito.municipios.map((municipio) => {
