@@ -66,6 +66,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { KPICard } from "@/components/ui/kpi-card";
 import { riskColors, scopeColors, iconSizes } from "@/lib/styles";
+import { colors } from "@/lib/colors";
 // Recharts
 import {
   AreaChart, Area, PieChart as RechartsPieChart, Pie, Cell,
@@ -117,61 +118,54 @@ const sections = [
   { id: 'icones', label: 'Ícones', icon: Star },
 ];
 
-// SIMPLIFIED COLOR SYSTEM - CSS variables reduced, Tailwind classes preserved via aliases
-const allColors = {
-  // Base colors (6 CSS variables)
-  base: [
-    { name: '--background', tailwind: 'bg-background', hsl: '170 15% 97%', hex: '#F5F8F7', note: 'Fundo principal da aplicação' },
-    { name: '--foreground', tailwind: 'text-foreground', hsl: '175 25% 12%', hex: '#172423', note: 'Texto principal' },
-    { name: '--card', tailwind: 'bg-card', hsl: '0 0% 100%', hex: '#FFFFFF', note: 'Branco - cards, popovers, texto sobre cores' },
-    { name: '--muted', tailwind: 'bg-muted', hsl: '170 15% 94%', hex: '#EEF2F1', note: 'Fundo subtil' },
-    { name: '--muted-foreground', tailwind: 'text-muted-foreground', hsl: '175 15% 40%', hex: '#57726D', note: 'Texto secundário' },
-    { name: '--border', tailwind: 'border-border', hsl: '175 20% 88%', hex: '#D6E3E0', note: 'Bordas, inputs, grelhas' },
-  ],
-  // Brand/Primary colors (3 CSS variables)
-  brand: [
-    { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: '#219F94', note: 'Cor principal da marca (= success)' },
-    { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Primary mais claro' },
-    { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: '#157068', note: 'Primary mais escuro (= accent, secondary)' },
-  ],
-  // Status colors (3 CSS variables)
-  status: [
-    { name: '--warning', tailwind: 'bg-warning', hsl: '42 90% 50%', hex: '#F2A91E', note: 'Atenção / Médio Risco (texto usa --foreground)' },
-    { name: '--danger', tailwind: 'bg-danger', hsl: '0 70% 55%', hex: '#DF4545', note: 'Erro / Alto Risco (= destructive)' },
-    { name: '--autumn', tailwind: 'bg-autumn', hsl: '28 80% 50%', hex: '#E67A1A', note: 'Cor de outono para elementos decorativos' },
-  ],
-  // Scope/Âmbito colors for emissions charts (3 CSS variables)
-  scope: [
-    { name: '--scope-1', tailwind: 'bg-scope-1', hsl: '12 50% 65%', hex: '#CC9080', note: 'Âmbito 1 - Emissões Diretas (Coral)' },
-    { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '45 50% 65%', hex: '#CCB380', note: 'Âmbito 2 - Energia (Âmbar)' },
-    { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '195 45% 55%', hex: '#5A9EB3', note: 'Âmbito 3 - Cadeia de Valor (Petróleo)' },
-  ],
-  // Onboarding status colors (6 CSS variables)
-  onboarding: [
-    { name: '--status-pending', tailwind: 'bg-status-pending', hsl: '215 16% 65%', hex: '#94A3B8', note: 'Por contactar' },
-    { name: '--status-contacted', tailwind: 'bg-status-contacted', hsl: '21 90% 48%', hex: '#EA580C', note: 'Sem interação' },
-    { name: '--status-interested', tailwind: 'bg-status-interested', hsl: '38 92% 50%', hex: '#F59E0B', note: 'Interessada' },
-    { name: '--status-registered', tailwind: 'bg-status-registered', hsl: '78 50% 48%', hex: '#8FB85C', note: 'Registada' },
-    { name: '--status-progress', tailwind: 'bg-status-progress', hsl: '175 55% 48%', hex: '#3AB5A8', note: 'Em progresso' },
-    { name: '--status-complete', tailwind: 'bg-status-complete', hsl: '175 66% 38%', hex: '#219F94', note: 'Completo' },
-  ],
-  // Medal/Ranking colors (3 CSS variables)
-  medals: [
-    { name: '--medal-gold', tailwind: 'bg-medal-gold', hsl: '51 100% 50%', hex: '#FFD700', note: 'Ouro - 1º lugar' },
-    { name: '--medal-silver', tailwind: 'bg-medal-silver', hsl: '0 0% 75%', hex: '#C0C0C0', note: 'Prata - 2º lugar' },
-    { name: '--medal-bronze', tailwind: 'bg-medal-bronze', hsl: '30 59% 50%', hex: '#CD7F32', note: 'Bronze - 3º lugar' },
-  ],
+// COLOR SYSTEM - Uses colors from lib/colors.ts for theme-aware HEX values
+const getColors = (isDark: boolean) => {
+  const c = isDark ? colors.dark : colors.light;
+  return {
+    // Base colors (6 CSS variables)
+    base: [
+      { name: '--background', tailwind: 'bg-background', hsl: '170 15% 97%', hex: c.background, note: 'Fundo principal da aplicação' },
+      { name: '--foreground', tailwind: 'text-foreground', hsl: '175 25% 12%', hex: c.foreground, note: 'Texto principal' },
+      { name: '--card', tailwind: 'bg-card', hsl: '0 0% 100%', hex: c.card, note: 'Branco - cards, popovers, texto sobre cores' },
+      { name: '--muted', tailwind: 'bg-muted', hsl: '170 15% 94%', hex: c.muted, note: 'Fundo subtil' },
+      { name: '--muted-foreground', tailwind: 'text-muted-foreground', hsl: '175 15% 40%', hex: c.mutedForeground, note: 'Texto secundário' },
+      { name: '--border', tailwind: 'border-border', hsl: '175 20% 88%', hex: c.border, note: 'Bordas, inputs, grelhas' },
+    ],
+    // Brand/Primary colors (3 CSS variables)
+    brand: [
+      { name: '--primary', tailwind: 'bg-primary', hsl: '175 66% 38%', hex: c.primary, note: 'Cor principal da marca (= success)' },
+      { name: '--primary-light', tailwind: 'bg-primary-light', hsl: '175 55% 48%', hex: c.primaryLight, note: 'Primary mais claro' },
+      { name: '--primary-dark', tailwind: 'bg-primary-dark', hsl: '175 70% 28%', hex: c.primaryDark, note: 'Primary mais escuro (= accent, secondary)' },
+    ],
+    // Status colors (3 CSS variables)
+    status: [
+      { name: '--warning', tailwind: 'bg-warning', hsl: '42 90% 50%', hex: c.warning, note: 'Atenção / Médio Risco (texto usa --foreground)' },
+      { name: '--danger', tailwind: 'bg-danger', hsl: '0 70% 55%', hex: c.danger, note: 'Erro / Alto Risco (= destructive)' },
+      { name: '--autumn', tailwind: 'bg-autumn', hsl: '28 80% 50%', hex: c.autumn, note: 'Cor de outono para elementos decorativos' },
+    ],
+    // Scope/Âmbito colors for emissions charts (3 CSS variables)
+    scope: [
+      { name: '--scope-1', tailwind: 'bg-scope-1', hsl: '12 50% 65%', hex: c.scope1, note: 'Âmbito 1 - Emissões Diretas (Coral)' },
+      { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '45 50% 65%', hex: c.scope2, note: 'Âmbito 2 - Energia (Âmbar)' },
+      { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '195 45% 55%', hex: c.scope3, note: 'Âmbito 3 - Cadeia de Valor (Petróleo)' },
+    ],
+    // Onboarding status colors (6 CSS variables)
+    onboarding: [
+      { name: '--status-pending', tailwind: 'bg-status-pending', hsl: '215 16% 65%', hex: c.statusPending, note: 'Por contactar' },
+      { name: '--status-contacted', tailwind: 'bg-status-contacted', hsl: '21 90% 48%', hex: c.statusContacted, note: 'Sem interação' },
+      { name: '--status-interested', tailwind: 'bg-status-interested', hsl: '38 92% 50%', hex: c.statusInterested, note: 'Interessada' },
+      { name: '--status-registered', tailwind: 'bg-status-registered', hsl: '78 50% 48%', hex: c.statusRegistered, note: 'Registada' },
+      { name: '--status-progress', tailwind: 'bg-status-progress', hsl: '175 55% 48%', hex: c.statusProgress, note: 'Em progresso' },
+      { name: '--status-complete', tailwind: 'bg-status-complete', hsl: '175 66% 38%', hex: c.statusComplete, note: 'Completo' },
+    ],
+    // Medal/Ranking colors (3 CSS variables)
+    medals: [
+      { name: '--medal-gold', tailwind: 'bg-medal-gold', hsl: '51 100% 50%', hex: c.medalGold, note: 'Ouro - 1º lugar' },
+      { name: '--medal-silver', tailwind: 'bg-medal-silver', hsl: '0 0% 75%', hex: c.medalSilver, note: 'Prata - 2º lugar' },
+      { name: '--medal-bronze', tailwind: 'bg-medal-bronze', hsl: '30 59% 50%', hex: c.medalBronze, note: 'Bronze - 3º lugar' },
+    ],
+  };
 };
-
-// Computed arrays for display
-const primaryColors = [
-  ...allColors.base,
-  ...allColors.brand,
-];
-
-const semanticColors = allColors.status.filter(c =>
-  ['--success', '--warning', '--danger'].includes(c.name)
-).map(c => ({ ...c, label: c.note }));
 
 const commonIcons = [
   { icon: Factory, name: "Factory" },
@@ -430,6 +424,9 @@ const StyleGuide = () => {
   usePageTitle("Style Guide");
   const { darkMode, setDarkMode } = useTheme();
   const [activeSection, setActiveSection] = useState('stack');
+
+  // Color palette updates when theme changes
+  const allColors = getColors(darkMode);
 
   useEffect(() => {
     const handleScroll = () => {

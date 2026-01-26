@@ -1,6 +1,6 @@
 // GERADO AUTOMATICAMENTE - NAO EDITAR
 // Fonte: src/index.css
-// Gerado em: 2026-01-26T14:43:48.175Z
+// Gerado em: 2026-01-26T14:51:47.751Z
 // Script: scripts/extract-colors.js
 
 /**
