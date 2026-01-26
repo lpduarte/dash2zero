@@ -273,7 +273,7 @@ export const ManageInfrastructureModal = ({
     const value = values[infraKey];
 
     return (
-      <div className={`border rounded-lg ${shadows.sm}`}>
+      <div className={`border rounded-lg ${isVisible ? shadows.sm : ''}`}>
         {/* Header with toggle - always full opacity */}
         <div className="p-4 pb-3">
           <div className="flex items-center justify-between">
