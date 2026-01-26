@@ -176,13 +176,14 @@ export const ManageInfrastructureModal = ({
     if (value !== '' && !regex.test(value)) {
       return; // Reject non-numeric input
     }
-    const newValues = { ...values, [key]: value };
-    setValues(newValues);
-    saveValues(newValues);
+    // Only update local state while typing - save on blur
+    setValues(prev => ({ ...prev, [key]: value }));
   };
 
   const handleValueBlur = (key: InfrastructureKey) => {
     const value = values[key];
+    // Save the current value
+    saveValues(values);
     // If empty or zero, set to removed
     if (value === '' || value === '0' || value === '0.0') {
       const newVisibility = { ...visibility, [key]: false };
@@ -190,6 +191,35 @@ export const ManageInfrastructureModal = ({
       saveVisibility(newVisibility);
       onVisibilityChange?.(newVisibility);
     }
+  };
+
+  // Validate all empty values when modal closes
+  const handleModalClose = (open: boolean) => {
+    if (!open) {
+      // Check all infrastructure values and mark empty ones as removed
+      let newVisibility = { ...visibility };
+      let hasChanges = false;
+
+      (Object.keys(values) as InfrastructureKey[]).forEach((key) => {
+        const value = values[key];
+        if (value === '' || value === '0' || value === '0.0') {
+          if (newVisibility[key]) {
+            newVisibility[key] = false;
+            hasChanges = true;
+          }
+        }
+      });
+
+      if (hasChanges) {
+        setVisibility(newVisibility);
+        saveVisibility(newVisibility);
+        onVisibilityChange?.(newVisibility);
+      }
+
+      // Save all values
+      saveValues(values);
+    }
+    onOpenChange(open);
   };
 
   const updateSource = (key: keyof InfrastructureSources, source: SourceType) => {
@@ -332,6 +362,7 @@ export const ManageInfrastructureModal = ({
                   type="text"
                   inputMode={step ? 'decimal' : 'numeric'}
                   value={value}
+                  placeholder="0"
                   onChange={(e) => updateValue(infraKey, e.target.value, !!step)}
                   onBlur={() => handleValueBlur(infraKey)}
                   disabled={isApiSource}
@@ -364,7 +395,7 @@ export const ManageInfrastructureModal = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleModalClose}>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
@@ -457,7 +488,7 @@ export const ManageInfrastructureModal = ({
         </div>
 
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)}>
+          <Button onClick={() => handleModalClose(false)}>
             Fechar
           </Button>
         </DialogFooter>
