@@ -15,10 +15,9 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/contexts/UserContext';
-import { mockInfrastructure } from '@/data/mockInfrastructure';
 import { KPICard } from '@/components/ui/kpi-card';
 import { SectionHeader } from '@/components/ui/section-header';
-import { ManageInfrastructureModal, getInfrastructureVisibility, InfrastructureVisibility, InfrastructureKey } from './infrastructure';
+import { ManageInfrastructureModal, getInfrastructureVisibility, getInfrastructureValues, InfrastructureVisibility, InfrastructureValues, InfrastructureKey } from './infrastructure';
 import { cn } from '@/lib/utils';
 
 interface KPIDefinition {
@@ -34,24 +33,22 @@ interface KPIDefinition {
 }
 
 export const InfrastructureKPIs = () => {
-  const { user, isMunicipio } = useUser();
+  const { isMunicipio } = useUser();
 
   // Estados para modal e colapso
   const [showInfrastructureModal, setShowInfrastructureModal] = useState(false);
   const [isInfrastructureExpanded, setIsInfrastructureExpanded] = useState(true);
   const [visibility, setVisibility] = useState<InfrastructureVisibility>(getInfrastructureVisibility);
+  const [infraValues, setInfraValues] = useState<InfrastructureValues>(getInfrastructureValues);
 
-  // Município sempre vê apenas os seus próprios dados
-  const data = mockInfrastructure.find(m => m.municipality === user.municipality);
-
-  // Se não houver dados ou não for município, não renderiza
-  if (!data || !isMunicipio) return null;
+  // Se não for município, não renderiza
+  if (!isMunicipio) return null;
 
   const allKpis: KPIDefinition[] = [
     {
       key: 'chargingStations',
       label: 'Postos de Carregamento',
-      value: data.chargingStations,
+      value: infraValues.chargingStations,
       icon: Zap,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
@@ -59,7 +56,7 @@ export const InfrastructureKPIs = () => {
     {
       key: 'ecoPoints',
       label: 'Ecopontos',
-      value: data.ecoPoints,
+      value: infraValues.ecoPoints,
       icon: Recycle,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
@@ -67,7 +64,7 @@ export const InfrastructureKPIs = () => {
     {
       key: 'bikeStations',
       label: 'Estações de Bicicletas',
-      value: data.bikeStations,
+      value: infraValues.bikeStations,
       icon: Bike,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
@@ -75,15 +72,16 @@ export const InfrastructureKPIs = () => {
     {
       key: 'organicBins',
       label: 'Contentores Orgânicos',
-      value: data.organicBins,
+      value: infraValues.organicBins,
       icon: Leaf,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
     },
     {
       key: 'cycleways',
-      label: 'Ciclovias (km)',
-      value: 47.3,
+      label: 'Ciclovias',
+      value: infraValues.cycleways,
+      unit: 'km',
       icon: Route,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
@@ -91,7 +89,7 @@ export const InfrastructureKPIs = () => {
     {
       key: 'publicTransport',
       label: 'Paragens Transportes Públicos',
-      value: 312,
+      value: infraValues.publicTransport,
       icon: Bus,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10'
@@ -99,8 +97,7 @@ export const InfrastructureKPIs = () => {
     {
       key: 'airQuality',
       label: 'Qualidade do Ar',
-      value: 'Bom',
-      inlineSubtitle: '3 estações',
+      value: infraValues.airQuality,
       icon: Wind,
       iconColor: 'text-primary',
       iconBgColor: 'bg-primary/10',
@@ -125,6 +122,15 @@ export const InfrastructureKPIs = () => {
 
   const handleVisibilityChange = (newVisibility: InfrastructureVisibility) => {
     setVisibility(newVisibility);
+  };
+
+  const handleModalClose = (open: boolean) => {
+    setShowInfrastructureModal(open);
+    if (!open) {
+      // Refresh values from localStorage when modal closes
+      setInfraValues(getInfrastructureValues());
+      setVisibility(getInfrastructureVisibility());
+    }
   };
 
   return (
@@ -177,7 +183,7 @@ export const InfrastructureKPIs = () => {
                       <KPICard
                         key={kpi.key}
                         title={kpi.label}
-                        value={typeof kpi.value === 'number' ? kpi.value.toLocaleString('pt-PT') : kpi.value}
+                        value={kpi.unit ? `${kpi.value} ${kpi.unit}` : kpi.value}
                         icon={kpi.icon}
                         iconColor={kpi.iconColor}
                         iconBgColor={kpi.iconBgColor}
@@ -194,7 +200,7 @@ export const InfrastructureKPIs = () => {
                         <KPICard
                           key={kpi.key}
                           title={kpi.label}
-                          value={typeof kpi.value === 'number' ? kpi.value.toLocaleString('pt-PT') : kpi.value}
+                          value={kpi.unit ? `${kpi.value} ${kpi.unit}` : kpi.value}
                           icon={kpi.icon}
                           iconColor={kpi.iconColor}
                           iconBgColor={kpi.iconBgColor}
@@ -213,7 +219,7 @@ export const InfrastructureKPIs = () => {
 
       <ManageInfrastructureModal
         open={showInfrastructureModal}
-        onOpenChange={setShowInfrastructureModal}
+        onOpenChange={handleModalClose}
         onVisibilityChange={handleVisibilityChange}
       />
     </>

@@ -77,7 +77,7 @@ const saveVisibility = (visibility: InfrastructureVisibility) => {
 };
 
 // Default values for infrastructure
-interface InfrastructureValues {
+export interface InfrastructureValues {
   chargingStations: string;
   ecoPoints: string;
   bikeStations: string;
@@ -97,7 +97,7 @@ const defaultValues: InfrastructureValues = {
   airQuality: 'Bom',
 };
 
-const getStoredValues = (): InfrastructureValues => {
+export const getInfrastructureValues = (): InfrastructureValues => {
   try {
     const stored = localStorage.getItem(VALUES_STORAGE_KEY);
     if (stored) {
@@ -338,7 +338,7 @@ export const ManageInfrastructureModal = ({
   const [visibility, setVisibility] = useState<InfrastructureVisibility>(getInfrastructureVisibility);
 
   // Values state
-  const [values, setValues] = useState<InfrastructureValues>(getStoredValues);
+  const [values, setValues] = useState<InfrastructureValues>(getInfrastructureValues);
 
   // Sources state (for API-capable infrastructures)
   const [sources, setSources] = useState<InfrastructureSources>(getStoredSources);
