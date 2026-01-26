@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import {
   Zap,
   Recycle,
@@ -310,13 +311,13 @@ export const ManageInfrastructureModal = ({
               )}
 
               <div className="flex items-center gap-3">
-                <input
+                <Input
                   type={step ? 'number' : 'text'}
                   step={step}
                   value={value}
                   onChange={(e) => updateValue(infraKey, e.target.value)}
                   disabled={isApiSource}
-                  className={`${elements.inputSmall} ${isApiSource ? 'bg-muted cursor-not-allowed' : ''}`}
+                  className="w-24"
                 />
                 {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
                 {isApiSource && (
