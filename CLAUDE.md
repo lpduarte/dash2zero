@@ -31,7 +31,13 @@ src/
 
 ## Git
 
-No final de cada tarefa concluída, fazer commit e push automaticamente:
+Commits agrupados por tarefa/tema para reduzir deployments no Vercel.
+
+### Quando fazer commit
+- Quando uma funcionalidade completa estiver pronta
+- Quando mudar de tema/área de trabalho
+- Quando o utilizador pedir explicitamente
+- No final de uma sessão de trabalho
 
 ### Formato do commit
 ```
@@ -54,17 +60,16 @@ No final de cada tarefa concluída, fazer commit e push automaticamente:
 - `chore: atualizar dependências`
 
 ### Processo
-1. Após concluir uma tarefa, executar:
+1. Após concluir uma tarefa/tema, executar:
    ```bash
    git add -A
    git commit -m "<tipo>: <descrição>"
    git push origin main
    ```
 2. Informar o utilizador do commit feito (mensagem e hash curto)
-3. Não pedir confirmação — fazer automaticamente
 
 ### Notas
-- Uma tarefa = um commit (não fazer commits por cada ficheiro)
+- Agrupar alterações relacionadas num único commit
 - Descrição em português de Portugal
 - Manter descrição curta (<50 caracteres se possível)
 - Se houver erro no push, informar o utilizador

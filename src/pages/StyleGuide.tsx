@@ -8,7 +8,7 @@ import {
   Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
   Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
   Eye, Mail, Users, Leaf, Copy, Code, Truck, Plus, MessageSquare,
-  ListOrdered, User, Euro, FileText
+  ListOrdered, User, Euro, FileText, FileCode
 } from "lucide-react";
 
 // ============================================
@@ -578,8 +578,8 @@ const StyleGuide = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <Card className="p-4">
-              <div className="p-2 rounded-lg bg-[#61DAFB]/10 w-fit mb-3">
-                <ReactIcon className="h-5 w-5 text-[#61DAFB]" />
+              <div className="p-2 rounded-lg bg-primary/10 w-fit mb-3">
+                <ReactIcon className="h-5 w-5 text-primary" />
               </div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-bold">React</span>
@@ -590,8 +590,8 @@ const StyleGuide = () => {
               </p>
             </Card>
             <Card className="p-4">
-              <div className="p-2 rounded-lg bg-[#3178C6]/10 w-fit mb-3">
-                <TypeScriptIcon className="h-5 w-5 text-[#3178C6]" />
+              <div className="p-2 rounded-lg bg-primary/10 w-fit mb-3">
+                <TypeScriptIcon className="h-5 w-5 text-primary" />
               </div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-bold">TypeScript</span>
@@ -602,8 +602,8 @@ const StyleGuide = () => {
               </p>
             </Card>
             <Card className="p-4">
-              <div className="p-2 rounded-lg bg-[#06B6D4]/10 w-fit mb-3">
-                <TailwindIcon className="h-5 w-5 text-[#06B6D4]" />
+              <div className="p-2 rounded-lg bg-primary/10 w-fit mb-3">
+                <TailwindIcon className="h-5 w-5 text-primary" />
               </div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-bold">Tailwind CSS</span>
@@ -753,6 +753,79 @@ const StyleGuide = () => {
                   note={c.note}
                 />
               ))}
+            </div>
+          </div>
+
+          {/* Cores a Organizar */}
+          <div>
+            <h3 className="text-xl font-bold mb-2">Cores a Organizar</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Cores hardcoded encontradas no código que precisam de revisão —
+              podem ser catalogadas como variáveis CSS ou substituídas por cores existentes
+            </p>
+
+            <div className="space-y-4">
+              {/* NotFound.tsx */}
+              <Card className="p-4">
+                <h4 className="font-bold text-sm mb-3 flex items-center gap-2">
+                  <FileCode className="h-4 w-4" />
+                  NotFound.tsx
+                </h4>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                  <div className="flex items-center gap-2 p-2 rounded border bg-muted/30">
+                    <div
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: "hsl(175 66% 38% / 0.18)" }}
+                    />
+                    <code className="text-xs">primary/18</code>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded border bg-muted/30">
+                    <div
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: "hsl(175 66% 38% / 0.22)" }}
+                    />
+                    <code className="text-xs">primary/22</code>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded border bg-muted/30">
+                    <div
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: "hsl(175 66% 38% / 0.25)" }}
+                    />
+                    <code className="text-xs">primary/25</code>
+                  </div>
+                  <div className="flex items-center gap-2 p-2 rounded border bg-muted/30">
+                    <div
+                      className="w-6 h-6 rounded border"
+                      style={{ backgroundColor: "hsl(28 80% 50% / 0.15)" }}
+                    />
+                    <code className="text-xs">orange/15</code>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Efeitos de glow animados na página 404 — variantes de opacidade da cor primary + overlay laranja
+                </p>
+              </Card>
+
+              {/* Header.tsx */}
+              <Card className="p-4">
+                <h4 className="font-bold text-sm mb-3 flex items-center gap-2">
+                  <FileCode className="h-4 w-4" />
+                  Header.tsx
+                </h4>
+                <div className="flex items-center gap-2 p-2 rounded border bg-muted/30 w-fit">
+                  <div
+                    className="w-20 h-6 rounded border"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent 0%, hsl(175 66% 38%) 20%, hsl(175 66% 38%) 80%, transparent 100%)',
+                      boxShadow: '0 0 8px hsl(175 66% 38% / 0.4)'
+                    }}
+                  />
+                  <code className="text-xs">primary gradient + glow</code>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Linha decorativa com gradiente e efeito de brilho — usa HSL hardcoded para primary
+                </p>
+              </Card>
             </div>
           </div>
 
