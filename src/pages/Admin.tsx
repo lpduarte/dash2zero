@@ -1243,12 +1243,31 @@ const InfrastructureConfig = () => {
     }
   };
 
-  const testChargingStations = async () => {
+  const testChargingStations = async (municipality: string) => {
     const apiKey = import.meta.env.VITE_OPEN_CHARGE_MAP_API_KEY;
     if (!apiKey) {
       return { count: 0, error: 'API key não configurada (VITE_OPEN_CHARGE_MAP_API_KEY)' };
     }
-    return { count: 0, error: 'Teste disponível com API key configurada' };
+    try {
+      const response = await fetch(
+        `https://api.openchargemap.io/v3/poi/?countrycode=PT&maxresults=500&compact=true&verbose=false&key=${apiKey}`,
+        { headers: { 'Accept': 'application/json' } }
+      );
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const municipalityLower = municipality.toLowerCase();
+      const filtered = data.filter((station: any) => {
+        const town = station.AddressInfo?.Town?.toLowerCase() || '';
+        const state = station.AddressInfo?.StateOrProvince?.toLowerCase() || '';
+        const address = station.AddressInfo?.AddressLine1?.toLowerCase() || '';
+        return town.includes(municipalityLower) ||
+               state.includes(municipalityLower) ||
+               address.includes(municipalityLower);
+      });
+      return { count: filtered.length };
+    } catch (error) {
+      return { count: 0, error: error instanceof Error ? error.message : 'Erro desconhecido' };
+    }
   };
 
   // Configuration for each infrastructure API
