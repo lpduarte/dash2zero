@@ -7,9 +7,9 @@
   },
   "summary": {
     "total": 14,
-    "completed": 6,
+    "completed": 7,
     "inProgress": 0,
-    "pending": 8
+    "pending": 7
   },
   "categories": [
     {
@@ -140,17 +140,17 @@
       "title": "Design System: Cores e Consistência",
       "description": "Ajustar cores dos âmbitos e documentar dark mode",
       "category": "normal",
-      "status": "pending",
+      "status": "completed",
       "priority": 7,
       "briefing": "07-design-system-cores.md",
       "criteria": [
-        { "text": "Cores dos âmbitos funcionam com paleta atual", "done": false },
-        { "text": "Variáveis CSS para todas as cores de âmbitos", "done": false },
+        { "text": "Cores dos âmbitos funcionam com paleta atual", "done": true },
+        { "text": "Variáveis CSS para todas as cores de âmbitos", "done": true },
         { "text": "Dark mode documentado no STYLE-GUIDE.md", "done": true },
-        { "text": "Sem hardcoded colors no código", "done": false }
+        { "text": "Sem hardcoded colors no código", "done": true }
       ],
       "dependencies": [],
-      "notes": ""
+      "notes": "Concluído em 14f32db - Proposta A: Rosa (#CB4D8C), Dourado (#CAAA2B), Azul Petróleo (#2E95B8)"
     },
     {
       "id": "08",
