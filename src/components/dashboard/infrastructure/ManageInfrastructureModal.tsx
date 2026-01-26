@@ -182,8 +182,6 @@ export const ManageInfrastructureModal = ({
 
   const handleValueBlur = (key: InfrastructureKey) => {
     const value = values[key];
-    // Save the current value
-    saveValues(values);
     // If empty or zero, set to removed
     if (value === '' || value === '0' || value === '0.0') {
       const newVisibility = { ...visibility, [key]: false };
@@ -365,7 +363,7 @@ export const ManageInfrastructureModal = ({
                   placeholder="0"
                   onChange={(e) => updateValue(infraKey, e.target.value, !!step)}
                   onBlur={() => handleValueBlur(infraKey)}
-                  disabled={isApiSource}
+                  disabled={isApiSource || !isVisible}
                   className="w-24"
                 />
                 {unit && <span className="text-sm text-muted-foreground">{unit}</span>}
