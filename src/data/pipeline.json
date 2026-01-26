@@ -146,7 +146,7 @@
       "criteria": [
         { "text": "Cores dos âmbitos funcionam com paleta atual", "done": false },
         { "text": "Variáveis CSS para todas as cores de âmbitos", "done": false },
-        { "text": "Dark mode documentado no STYLE-GUIDE.md", "done": false },
+        { "text": "Dark mode documentado no STYLE-GUIDE.md", "done": true },
         { "text": "Sem hardcoded colors no código", "done": false }
       ],
       "dependencies": [],
