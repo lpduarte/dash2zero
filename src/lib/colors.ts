@@ -1,6 +1,6 @@
 // GERADO AUTOMATICAMENTE - NAO EDITAR
 // Fonte: src/index.css
-// Gerado em: 2026-01-26T14:51:47.751Z
+// Gerado em: 2026-01-26T15:24:09.286Z
 // Script: scripts/extract-colors.js
 
 /**
@@ -24,9 +24,9 @@ export const colors = {
     'warning': '#F2AD0D',
     'danger': '#DD3C3C',
     'autumn': '#E67919',
-    'scope1': '#D28B79',
-    'scope2': '#D2BC79',
-    'scope3': '#59A6C0',
+    'scope1': '#CB4D8C',
+    'scope2': '#CAAA2B',
+    'scope3': '#2E95B8',
     'statusPending': '#97A3B4',
     'statusContacted': '#E9590C',
     'statusInterested': '#F59F0A',
@@ -54,9 +54,9 @@ export const colors = {
     'warning': '#EEB32B',
     'danger': '#DA4E4E',
     'autumn': '#E28736',
-    'scope1': '#D69585',
-    'scope2': '#D6C285',
-    'scope3': '#6BB0C7',
+    'scope1': '#D16199',
+    'scope2': '#D7B942',
+    'scope3': '#33A6CC',
     'statusPending': '#7588A3',
     'statusContacted': '#EE6F2B',
     'statusInterested': '#EEA62B',
@@ -84,9 +84,9 @@ export const colors = {
     'warning': 'hsl(42, 90%, 50%)',
     'danger': 'hsl(0, 70%, 55%)',
     'autumn': 'hsl(28, 80%, 50%)',
-    'scope1': 'hsl(12, 50%, 65%)',
-    'scope2': 'hsl(45, 50%, 65%)',
-    'scope3': 'hsl(195, 45%, 55%)',
+    'scope1': 'hsl(330, 55%, 55%)',
+    'scope2': 'hsl(48, 65%, 48%)',
+    'scope3': 'hsl(195, 60%, 45%)',
     'statusPending': 'hsl(215, 16%, 65%)',
     'statusContacted': 'hsl(21, 90%, 48%)',
     'statusInterested': 'hsl(38, 92%, 50%)',

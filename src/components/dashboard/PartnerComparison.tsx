@@ -114,15 +114,15 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                       <p className="font-bold mb-2">{data.fullName}</p>
                       <div className="space-y-1 text-sm">
                         <p>
-                          <span className="text-danger">A1 (Diretas): </span>
+                          <span className="text-scope-1">A1 (Diretas): </span>
                           <span className="font-bold">{data.scope1.toFixed(0)} ton</span>
                         </p>
                         <p>
-                          <span className="text-warning">A2 (Energia): </span>
+                          <span className="text-scope-2">A2 (Energia): </span>
                           <span className="font-bold">{data.scope2.toFixed(0)} ton</span>
                         </p>
                         <p>
-                          <span className="text-primary">A3 (Indiretas): </span>
+                          <span className="text-scope-3">A3 (Indiretas): </span>
                           <span className="font-bold">{data.scope3.toFixed(0)} ton</span>
                         </p>
                         <p className="pt-2 border-t">
@@ -134,9 +134,9 @@ export const PartnerComparison = ({ suppliers }: PartnerComparisonProps) => {
                   );
                 }}
               />
-              <Bar dataKey="scope1" stackId="a" fill="hsl(var(--danger))" name="A1 (Diretas)" />
-              <Bar dataKey="scope2" stackId="a" fill="hsl(var(--warning))" name="A2 (Energia)" />
-              <Bar dataKey="scope3" stackId="a" fill="hsl(var(--primary))" name="A3 (Indiretas)" />
+              <Bar dataKey="scope1" stackId="a" fill="hsl(var(--scope-1))" name="A1 (Diretas)" />
+              <Bar dataKey="scope2" stackId="a" fill="hsl(var(--scope-2))" name="A2 (Energia)" />
+              <Bar dataKey="scope3" stackId="a" fill="hsl(var(--scope-3))" name="A3 (Indiretas)" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

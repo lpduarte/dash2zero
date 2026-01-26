@@ -35,9 +35,9 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --radius: 0.75rem;
 
     /* Scope/Âmbito colors for emissions charts */
-    --scope-1: 12 50% 65%;   /* Coral - Emissões Diretas */
-    --scope-2: 45 50% 65%;   /* Âmbar - Energia */
-    --scope-3: 195 45% 55%;  /* Petróleo - Cadeia de Valor */
+    --scope-1: 330 55% 55%;  /* Rosa/Magenta - Emissões Diretas */
+    --scope-2: 48 65% 48%;   /* Dourado/Mostarda - Energia */
+    --scope-3: 195 60% 45%;  /* Azul Petróleo - Cadeia de Valor */
 
     /* Onboarding status colors */
     --status-pending: 215 16% 65%;      /* Por contactar - Slate */
@@ -80,9 +80,9 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     --autumn: 28 75% 55%;  /* Cor de outono para elementos decorativos */
 
     /* Scope/Âmbito colors for emissions charts (dark mode) */
-    --scope-1: 12 50% 68%;   /* Coral - Emissões Diretas */
-    --scope-2: 45 50% 68%;   /* Âmbar - Energia */
-    --scope-3: 195 45% 60%;  /* Petróleo - Cadeia de Valor */
+    --scope-1: 330 55% 60%;  /* Rosa/Magenta - Emissões Diretas */
+    --scope-2: 48 65% 55%;   /* Dourado/Mostarda - Energia */
+    --scope-3: 195 60% 50%;  /* Azul Petróleo - Cadeia de Valor */
 
     /* Onboarding status colors (dark mode) */
     --status-pending: 215 20% 55%;      /* Por contactar - Slate */

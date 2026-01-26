@@ -64,8 +64,8 @@ export const scopeColors = {
     bg: 'bg-scope-1',
     bgLight: 'bg-scope-1/10',
     border: 'border-scope-1/30',
-    badge: 'bg-scope-1/15 text-orange-700 dark:text-scope-1 dark:bg-scope-1/20 border-scope-1/30 hover:bg-scope-1/25 transition-colors',
-    label: 'Âmbito 1 - Emissões Diretas (Coral)',
+    badge: 'bg-scope-1/15 text-pink-700 dark:text-scope-1 dark:bg-scope-1/20 border-scope-1/30 hover:bg-scope-1/25 transition-colors',
+    label: 'Âmbito 1 - Emissões Diretas (Rosa/Magenta)',
   },
   2: {
     text: 'text-scope-2',
@@ -73,8 +73,8 @@ export const scopeColors = {
     bg: 'bg-scope-2',
     bgLight: 'bg-scope-2/10',
     border: 'border-scope-2/30',
-    badge: 'bg-scope-2/15 text-amber-700 dark:text-scope-2 dark:bg-scope-2/20 border-scope-2/30 hover:bg-scope-2/25 transition-colors',
-    label: 'Âmbito 2 - Energia (Âmbar)',
+    badge: 'bg-scope-2/15 text-yellow-700 dark:text-scope-2 dark:bg-scope-2/20 border-scope-2/30 hover:bg-scope-2/25 transition-colors',
+    label: 'Âmbito 2 - Energia (Dourado/Mostarda)',
   },
   3: {
     text: 'text-scope-3',
@@ -83,7 +83,7 @@ export const scopeColors = {
     bgLight: 'bg-scope-3/10',
     border: 'border-scope-3/30',
     badge: 'bg-scope-3/15 text-cyan-700 dark:text-scope-3 dark:bg-scope-3/20 border-scope-3/30 hover:bg-scope-3/25 transition-colors',
-    label: 'Âmbito 3 - Cadeia de Valor (Petróleo)',
+    label: 'Âmbito 3 - Cadeia de Valor (Azul Petróleo)',
   },
 } as const;
 

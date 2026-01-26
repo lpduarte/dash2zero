@@ -145,9 +145,9 @@ const getColors = (isDark: boolean) => {
     ],
     // Scope/Âmbito colors for emissions charts (3 CSS variables)
     scope: [
-      { name: '--scope-1', tailwind: 'bg-scope-1', hsl: '12 50% 65%', hex: c.scope1, note: 'Âmbito 1 - Emissões Diretas (Coral)' },
-      { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '45 50% 65%', hex: c.scope2, note: 'Âmbito 2 - Energia (Âmbar)' },
-      { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '195 45% 55%', hex: c.scope3, note: 'Âmbito 3 - Cadeia de Valor (Petróleo)' },
+      { name: '--scope-1', tailwind: 'bg-scope-1', hsl: '330 55% 55%', hex: c.scope1, note: 'Âmbito 1 - Emissões Diretas (Rosa/Magenta)' },
+      { name: '--scope-2', tailwind: 'bg-scope-2', hsl: '48 65% 48%', hex: c.scope2, note: 'Âmbito 2 - Energia (Dourado/Mostarda)' },
+      { name: '--scope-3', tailwind: 'bg-scope-3', hsl: '195 60% 45%', hex: c.scope3, note: 'Âmbito 3 - Cadeia de Valor (Azul Petróleo)' },
     ],
     // Onboarding status colors (6 CSS variables)
     onboarding: [
@@ -702,10 +702,7 @@ const StyleGuide = () => {
           <div>
             <h3 className="text-xl font-bold mb-2">Âmbitos</h3>
             <p className="text-sm text-muted-foreground mb-4">Cores para gráficos de emissões por âmbito</p>
-
-            {/* Current colors */}
-            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Actuais (pastel)</p>
-            <div className="grid grid-cols-3 gap-2 mb-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
               {allColors.scope.map((c) => (
                 <ColorSwatch
                   key={c.name}
@@ -716,71 +713,6 @@ const StyleGuide = () => {
                   note={c.note}
                 />
               ))}
-            </div>
-
-            {/* Proposta A: Rosa + Dourado + Azul (vibrante e moderna) */}
-            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Proposta A: Rosa + Dourado + Azul</p>
-            <div className="grid grid-cols-3 gap-2 mb-6">
-              <ColorSwatch label="scope-1-a" hsl="330 55% 55%" tailwind="—" note="Âmbito 1 - Rosa/Magenta" />
-              <ColorSwatch label="scope-2-a" hsl="48 65% 48%" tailwind="—" note="Âmbito 2 - Dourado/Mostarda" />
-              <ColorSwatch label="scope-3-a" hsl="195 60% 45%" tailwind="—" note="Âmbito 3 - Azul Petróleo" />
-            </div>
-
-            {/* Proposta B: Roxo + Verde Lima + Azul (paleta fria/natural) */}
-            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Proposta B: Roxo + Verde + Azul</p>
-            <div className="grid grid-cols-3 gap-2 mb-6">
-              <ColorSwatch label="scope-1-b" hsl="280 50% 55%" tailwind="—" note="Âmbito 1 - Roxo" />
-              <ColorSwatch label="scope-2-b" hsl="85 45% 45%" tailwind="—" note="Âmbito 2 - Verde Lima" />
-              <ColorSwatch label="scope-3-b" hsl="195 60% 45%" tailwind="—" note="Âmbito 3 - Azul Petróleo" />
-            </div>
-
-            {/* Proposta C: Terracota + Castanho + Azul (tons terra) */}
-            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Proposta C: Terracota + Castanho + Azul</p>
-            <div className="grid grid-cols-3 gap-2 mb-6">
-              <ColorSwatch label="scope-1-c" hsl="18 45% 48%" tailwind="—" note="Âmbito 1 - Terracota" />
-              <ColorSwatch label="scope-2-c" hsl="32 50% 45%" tailwind="—" note="Âmbito 2 - Castanho Dourado" />
-              <ColorSwatch label="scope-3-c" hsl="195 60% 45%" tailwind="—" note="Âmbito 3 - Azul Petróleo" />
-            </div>
-
-            {/* Visual comparison with mini charts */}
-            <p className="text-xs font-bold text-muted-foreground mb-2 uppercase tracking-wide">Comparação visual</p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Current */}
-              <div className="border rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-2 text-center">Actuais</p>
-                <div className="flex gap-1 h-20">
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(12 50% 65%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(45 50% 65%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(195 45% 55%)' }} />
-                </div>
-              </div>
-              {/* Proposta A */}
-              <div className="border rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-2 text-center">Proposta A</p>
-                <div className="flex gap-1 h-20">
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(330 55% 55%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(48 65% 48%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(195 60% 45%)' }} />
-                </div>
-              </div>
-              {/* Proposta B */}
-              <div className="border rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-2 text-center">Proposta B</p>
-                <div className="flex gap-1 h-20">
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(280 50% 55%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(85 45% 45%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(195 60% 45%)' }} />
-                </div>
-              </div>
-              {/* Proposta C */}
-              <div className="border rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-2 text-center">Proposta C</p>
-                <div className="flex gap-1 h-20">
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(18 45% 48%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(32 50% 45%)' }} />
-                  <div className="flex-1 rounded" style={{ backgroundColor: 'hsl(195 60% 45%)' }} />
-                </div>
-              </div>
             </div>
           </div>
 

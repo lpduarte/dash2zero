@@ -400,9 +400,9 @@ const ScopeCard = ({
   const isBreakdownValid = breakdownSum === 0 || breakdownSum === 100;
   
   const scopeColors = {
-    1: "border-l-violet-500",
-    2: "border-l-blue-500",
-    3: "border-l-orange-500",
+    1: "border-l-scope-1",
+    2: "border-l-scope-2",
+    3: "border-l-scope-3",
   };
 
   return (
