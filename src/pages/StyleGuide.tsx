@@ -8,7 +8,7 @@ import {
   Zap, TrendingUp, TrendingDown, Download, Filter, Search, Settings,
   Info, AlertTriangle, CheckCircle, XCircle, ChevronDown, ChevronRight,
   Eye, Mail, Users, Leaf, Copy, Code, Truck, Plus, MessageSquare,
-  ListOrdered, User, Euro, FileText, FileCode
+  ListOrdered, User, Euro, FileText
 } from "lucide-react";
 
 // ============================================
@@ -754,38 +754,6 @@ const StyleGuide = () => {
                   note={c.note}
                 />
               ))}
-            </div>
-          </div>
-
-          {/* Cores a Organizar */}
-          <div>
-            <h3 className="text-xl font-bold mb-2">Cores a Organizar</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Cores hardcoded encontradas no código que precisam de revisão —
-              podem ser catalogadas como variáveis CSS ou substituídas por cores existentes
-            </p>
-
-            <div className="space-y-4">
-              {/* Header.tsx */}
-              <Card className="p-4">
-                <h4 className="font-bold text-sm mb-3 flex items-center gap-2">
-                  <FileCode className="h-4 w-4" />
-                  Header.tsx
-                </h4>
-                <div className="flex items-center gap-2 p-2 rounded border bg-muted/30 w-fit">
-                  <div
-                    className="w-20 h-6 rounded border"
-                    style={{
-                      background: 'linear-gradient(90deg, transparent 0%, hsl(175 66% 38%) 20%, hsl(175 66% 38%) 80%, transparent 100%)',
-                      boxShadow: '0 0 8px hsl(175 66% 38% / 0.4)'
-                    }}
-                  />
-                  <code className="text-xs">primary gradient + glow</code>
-                </div>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Linha decorativa com gradiente e efeito de brilho — usa HSL hardcoded para primary
-                </p>
-              </Card>
             </div>
           </div>
 
