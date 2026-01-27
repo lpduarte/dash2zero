@@ -14,6 +14,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
   Search,
@@ -36,7 +38,11 @@ import {
   MousePointerClick,
   ShieldAlert,
   Rocket,
-  FileText
+  FileText,
+  CheckCircle,
+  Filter,
+  ChevronDown,
+  X
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
@@ -61,9 +67,10 @@ interface CompanyWithTracking extends SupplierWithoutFootprint {
   // Deliverability
   hasDeliveryIssues: boolean;
   lastDeliveryIssue?: {
-    type: 'bounced' | 'spam';
+    type: 'bounced' | 'spam' | 'optout';
     reason?: string;
     date: string;
+    emailAtIssue?: string;  // Email que causou o problema
   };
   // Archive reason
   archiveReason?: 'spam' | 'optout' | 'completed';
@@ -108,6 +115,10 @@ const Incentive = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isMetricsExpanded, setIsMetricsExpanded] = useState(true);
   const [showSmartSendDialog, setShowSmartSendDialog] = useState(false);
+  const [showSmartSendSuccess, setShowSmartSendSuccess] = useState(false);
+  // Filtros do diálogo de envio em massa
+  const [bulkStatusFilter, setBulkStatusFilter] = useState<string[]>([]);
+  const [bulkEmailCountFilter, setBulkEmailCountFilter] = useState<string[]>([]);
   const [showKPIsModal, setShowKPIsModal] = useState(false);
 
   // Modal de envio de email individual
@@ -421,19 +432,75 @@ const Incentive = () => {
     console.log(`Update email for ${companyId} to ${email}`);
   };
 
-  // Smart send summary - group companies by suggested template
+  // Helper to check if sending is blocked for a company
+  const isSendingBlocked = (company: CompanyWithTracking) => {
+    if (!company.hasDeliveryIssues) return false;
+    if (company.lastDeliveryIssue?.type === 'spam') return true;
+    if (company.lastDeliveryIssue?.type === 'optout') return true;
+    if (company.lastDeliveryIssue?.type === 'bounced' &&
+        company.lastDeliveryIssue?.emailAtIssue === company.contact.email) return true;
+    return false;
+  };
+
+  // Contagens por estado de onboarding (para filtros do diálogo)
+  const bulkStatusCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    filteredCompanies.forEach(c => {
+      counts[c.onboardingStatus] = (counts[c.onboardingStatus] || 0) + 1;
+    });
+    return counts;
+  }, [filteredCompanies]);
+
+  // Contagens por nº emails enviados (para filtros do diálogo)
+  const bulkEmailCountCounts = useMemo(() => ({
+    '0': filteredCompanies.filter(c => c.emailsSent === 0).length,
+    '1': filteredCompanies.filter(c => c.emailsSent === 1).length,
+    '2': filteredCompanies.filter(c => c.emailsSent === 2).length,
+    '3+': filteredCompanies.filter(c => c.emailsSent >= 3).length,
+  }), [filteredCompanies]);
+
+  // Breakdown das exclusões (para tooltip)
+  const exclusionBreakdown = useMemo(() => {
+    const blocked = filteredCompanies.filter(c => isSendingBlocked(c));
+    return {
+      spam: blocked.filter(c => c.lastDeliveryIssue?.type === 'spam').length,
+      bounce: blocked.filter(c => c.lastDeliveryIssue?.type === 'bounced').length,
+      optout: blocked.filter(c => c.lastDeliveryIssue?.type === 'optout').length,
+    };
+  }, [filteredCompanies]);
+
+  // Smart send summary - group ALL pending companies by suggested template
   const getSmartSendSummary = useMemo(() => {
-    if (selectedCompanies.length === 0) return [];
-    
-    const groups: Record<string, { template: string; templateName: string; companies: string[] }> = {};
-    
-    selectedCompanies.forEach(companyId => {
-      const company = companiesWithoutFootprint.find(c => c.id === companyId);
-      if (!company) return;
-      
+    // Usar todas as empresas pendentes (filtradas pela tab)
+    let companies = filteredCompanies;
+
+    // Aplicar filtro de status do diálogo
+    if (bulkStatusFilter.length > 0) {
+      companies = companies.filter(c => bulkStatusFilter.includes(c.onboardingStatus));
+    }
+
+    // Aplicar filtro de nº emails do diálogo
+    if (bulkEmailCountFilter.length > 0) {
+      companies = companies.filter(c => {
+        if (bulkEmailCountFilter.includes('0') && c.emailsSent === 0) return true;
+        if (bulkEmailCountFilter.includes('1') && c.emailsSent === 1) return true;
+        if (bulkEmailCountFilter.includes('2') && c.emailsSent === 2) return true;
+        if (bulkEmailCountFilter.includes('3+') && c.emailsSent >= 3) return true;
+        return false;
+      });
+    }
+
+    if (companies.length === 0) return { groups: [], eligibleCount: 0, excludedCount: 0, totalFiltered: 0 };
+
+    const eligibleCompanies = companies.filter(c => !isSendingBlocked(c));
+    const excludedCount = companies.length - eligibleCompanies.length;
+
+    const groups: Record<string, { template: string; templateName: string; companies: { name: string; email: string }[] }> = {};
+
+    eligibleCompanies.forEach(company => {
       const suggestedId = templateSuggestions[company.onboardingStatus] || 't1';
       const template = defaultEmailTemplates.find(t => t.id === suggestedId);
-      
+
       if (!groups[suggestedId]) {
         groups[suggestedId] = {
           template: suggestedId,
@@ -441,24 +508,36 @@ const Incentive = () => {
           companies: []
         };
       }
-      groups[suggestedId].companies.push(company.name);
+      groups[suggestedId].companies.push({
+        name: company.name,
+        email: company.contact.email
+      });
     });
-    
-    return Object.values(groups);
-  }, [selectedCompanies, companiesWithoutFootprint]);
+
+    return {
+      groups: Object.values(groups),
+      eligibleCount: eligibleCompanies.length,
+      excludedCount,
+      totalFiltered: companies.length
+    };
+  }, [filteredCompanies, bulkStatusFilter, bulkEmailCountFilter]);
   
   const handleSmartSendPreview = () => {
     setShowSmartSendDialog(true);
   };
   
   const handleSmartSend = async () => {
-    setShowSmartSendDialog(false);
     setIsLoading(true);
-
     await new Promise(resolve => setTimeout(resolve, 1500));
-
-    setSelectedCompanies([]);
     setIsLoading(false);
+    setShowSmartSendSuccess(true);
+  };
+
+  const handleCloseSmartSend = () => {
+    setShowSmartSendDialog(false);
+    setShowSmartSendSuccess(false);
+    setBulkStatusFilter([]);
+    setBulkEmailCountFilter([]);
   };
 
   // Sync selectedTemplateInModal when dialog opens
@@ -649,7 +728,7 @@ const Incentive = () => {
                                     const data = payload[0].payload;
                                     return (
                                       <div className="bg-popover border rounded-md shadow-md px-3 py-2 whitespace-nowrap">
-                                        <p className="text-xs font-medium">{data.name}</p>
+                                        <p className="text-xs font-bold">{data.name}</p>
                                         <p className="text-xs text-muted-foreground">{data.value} empresas</p>
                                       </div>
                                     );
@@ -706,7 +785,7 @@ const Incentive = () => {
                                     const data = payload[0].payload;
                                     return (
                                       <div className="bg-popover border rounded-md shadow-md px-3 py-2 whitespace-nowrap">
-                                        <p className="text-xs font-medium">{data.name}</p>
+                                        <p className="text-xs font-bold">{data.name}</p>
                                         <p className="text-xs text-muted-foreground">{data.conversions}% conversão</p>
                                       </div>
                                     );
@@ -937,11 +1016,10 @@ const Incentive = () => {
                 <Button
                   onClick={handleSmartSendPreview}
                   size="sm"
-                  disabled={selectedCompanies.length === 0}
                   className="shrink-0"
                 >
                   <Rocket className="h-4 w-4 mr-1.5" />
-                  Envio emails em massa
+                  Enviar a todas
                 </Button>
               </div>
             </div>
@@ -971,46 +1049,285 @@ const Incentive = () => {
         </div>
         
         {/* Smart Send Dialog */}
-        <Dialog open={showSmartSendDialog} onOpenChange={setShowSmartSendDialog}>
+        <Dialog open={showSmartSendDialog} onOpenChange={handleCloseSmartSend}>
           <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader className="pr-12">
-              <DialogTitle className="flex items-center gap-2">
-                <Zap className="h-5 w-5 text-primary" />
-                Confirmar Envio Inteligente
-              </DialogTitle>
-              <DialogDescription>
-                Os emails serão enviados com o template mais adequado ao status de cada empresa.
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-3 py-4">
-              {getSmartSendSummary.map(group => (
-                <div key={group.template} className="p-3 border rounded-lg bg-muted/30">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="font-normal text-sm">{group.templateName}</p>
-                    <Badge variant="secondary">{group.companies.length}</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {group.companies.slice(0, 3).join(', ')}
-                    {group.companies.length > 3 && ` +${group.companies.length - 3} mais`}
+            {showSmartSendSuccess ? (
+              /* Estado de sucesso */
+              <div className="space-y-6 text-center py-8">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-success/20">
+                  <CheckCircle className="h-8 w-8 text-success" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Emails enviados com sucesso!</h3>
+                  <p className="text-muted-foreground">
+                    {getSmartSendSummary.eligibleCount} email{getSmartSendSummary.eligibleCount !== 1 ? 's foram enviados' : ' foi enviado'}.
                   </p>
                 </div>
-              ))}
-            </div>
-            
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button variant="outline" onClick={() => setShowSmartSendDialog(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleSmartSend} disabled={isLoading}>
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Send className="mr-2 h-4 w-4" />
-                )}
-                Enviar {selectedCompanies.length} emails
-              </Button>
-            </DialogFooter>
+                <Button onClick={handleCloseSmartSend}>
+                  Fechar
+                </Button>
+              </div>
+            ) : (
+              /* Estado normal - formulário */
+              <>
+                <DialogHeader className="pr-12">
+                  <DialogTitle className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-primary" />
+                    Envio Inteligente
+                  </DialogTitle>
+                  <DialogDescription>
+                    Os templates recomendados serão enviados automaticamente. Para personalizar, use o envio manual.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4 py-4">
+                  {/* Filtros */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Filter className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">Filtrar empresas a contactar:</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {/* Filtro de Estado */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-8">
+                            Estado de onboarding
+                            {bulkStatusFilter.length > 0 && (
+                              <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[10px]">
+                                {bulkStatusFilter.length}
+                              </Badge>
+                            )}
+                            <ChevronDown className="ml-1 h-3 w-3" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-64 p-3" align="start">
+                          <div className="space-y-2">
+                            {[
+                              { value: 'por_contactar', label: 'Por contactar' },
+                              { value: 'sem_interacao', label: 'Sem interação' },
+                              { value: 'interessada', label: 'Interessada' },
+                              { value: 'registada_simple', label: 'Registada' },
+                              { value: 'em_progresso_simple', label: 'Em progresso (Simple)' },
+                              { value: 'em_progresso_formulario', label: 'Em progresso (Formulário)' },
+                            ].map(option => {
+                              const count = bulkStatusCounts[option.value] || 0;
+                              return (
+                                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                  <Checkbox
+                                    checked={bulkStatusFilter.includes(option.value)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setBulkStatusFilter([...bulkStatusFilter, option.value]);
+                                      } else {
+                                        setBulkStatusFilter(bulkStatusFilter.filter(v => v !== option.value));
+                                      }
+                                    }}
+                                    disabled={count === 0}
+                                  />
+                                  <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
+                                    {option.label}
+                                  </span>
+                                  <span className={cn(
+                                    "text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center",
+                                    count === 0 ? "bg-muted/50 text-muted-foreground/50" : "bg-muted text-muted-foreground"
+                                  )}>
+                                    {count}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          {bulkStatusFilter.length > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full mt-2 h-7 text-xs"
+                              onClick={() => setBulkStatusFilter([])}
+                            >
+                              Limpar
+                            </Button>
+                          )}
+                        </PopoverContent>
+                      </Popover>
+
+                      {/* Filtro de Nº Emails */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" size="sm" className="h-8">
+                            Emails enviados
+                            {bulkEmailCountFilter.length > 0 && (
+                              <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[10px]">
+                                {bulkEmailCountFilter.length}
+                              </Badge>
+                            )}
+                            <ChevronDown className="ml-1 h-3 w-3" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-44 p-3" align="start">
+                          <div className="space-y-2">
+                            {[
+                              { value: '0', label: '0 emails' },
+                              { value: '1', label: '1 email' },
+                              { value: '2', label: '2 emails' },
+                              { value: '3+', label: '3+ emails' },
+                            ].map(option => {
+                              const count = bulkEmailCountCounts[option.value as keyof typeof bulkEmailCountCounts] || 0;
+                              return (
+                                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                                  <Checkbox
+                                    checked={bulkEmailCountFilter.includes(option.value)}
+                                    onCheckedChange={(checked) => {
+                                      if (checked) {
+                                        setBulkEmailCountFilter([...bulkEmailCountFilter, option.value]);
+                                      } else {
+                                        setBulkEmailCountFilter(bulkEmailCountFilter.filter(v => v !== option.value));
+                                      }
+                                    }}
+                                    disabled={count === 0}
+                                  />
+                                  <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
+                                    {option.label}
+                                  </span>
+                                  <span className={cn(
+                                    "text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center",
+                                    count === 0 ? "bg-muted/50 text-muted-foreground/50" : "bg-muted text-muted-foreground"
+                                  )}>
+                                    {count}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          {bulkEmailCountFilter.length > 0 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full mt-2 h-7 text-xs"
+                              onClick={() => setBulkEmailCountFilter([])}
+                            >
+                              Limpar
+                            </Button>
+                          )}
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    {/* Chips de filtros ativos */}
+                    {(bulkStatusFilter.length > 0 || bulkEmailCountFilter.length > 0) && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {bulkStatusFilter.map(status => (
+                          <Badge key={status} variant="secondary" className="pl-2 pr-1 py-0.5 gap-1">
+                            {getStatusLabel(status as OnboardingStatus)}
+                            <button
+                              onClick={() => setBulkStatusFilter(prev => prev.filter(s => s !== status))}
+                              className="ml-1 hover:bg-muted rounded-full p-0.5"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                        {bulkEmailCountFilter.map(count => (
+                          <Badge key={count} variant="secondary" className="pl-2 pr-1 py-0.5 gap-1">
+                            {count === '3+' ? '3+ emails' : `${count} email${count === '1' ? '' : 's'}`}
+                            <button
+                              onClick={() => setBulkEmailCountFilter(prev => prev.filter(c => c !== count))}
+                              className="ml-1 hover:bg-muted rounded-full p-0.5"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Estatísticas */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-success/10 border border-success/30 rounded-lg text-center">
+                      <p className="text-2xl font-bold text-success">{getSmartSendSummary.eligibleCount}</p>
+                      <p className="text-xs text-success">elegíveis</p>
+                    </div>
+                    {getSmartSendSummary.excludedCount > 0 ? (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg text-center cursor-help">
+                              <p className="text-2xl font-bold text-warning">{getSmartSendSummary.excludedCount}</p>
+                              <p className="text-xs text-warning flex items-center justify-center gap-1">
+                                excluídas
+                                <Info className="h-3 w-3" />
+                              </p>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="max-w-[200px]">
+                            <p className="font-bold mb-1">Empresas excluídas por:</p>
+                            <ul className="text-xs space-y-0.5">
+                              {exclusionBreakdown.spam > 0 && <li>• {exclusionBreakdown.spam} marcaram spam</li>}
+                              {exclusionBreakdown.bounce > 0 && <li>• {exclusionBreakdown.bounce} email inválido</li>}
+                              {exclusionBreakdown.optout > 0 && <li>• {exclusionBreakdown.optout} opt-out</li>}
+                            </ul>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ) : (
+                      <div className="p-3 bg-muted/50 border-muted border rounded-lg text-center">
+                        <p className="text-2xl font-bold text-muted-foreground">0</p>
+                        <p className="text-xs text-muted-foreground">excluídas</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Grupos por template */}
+                  {getSmartSendSummary.groups.length > 0 ? (
+                    <div className="space-y-3 max-h-[250px] overflow-y-auto">
+                      {getSmartSendSummary.groups.map(group => (
+                        <div key={group.template} className="p-3 border rounded-lg bg-muted/30">
+                          <div className="flex items-center justify-between mb-2">
+                            <p className="font-bold text-sm">{group.templateName}</p>
+                            <Badge variant="secondary">{group.companies.length}</Badge>
+                          </div>
+                          <div className="space-y-1">
+                            {group.companies.slice(0, 2).map((company, idx) => (
+                              <p key={idx} className="text-xs text-muted-foreground">
+                                {company.name} <span className="text-muted-foreground/60">({company.email})</span>
+                              </p>
+                            ))}
+                            {group.companies.length > 2 && (
+                              <p className="text-xs text-muted-foreground/60">
+                                +{group.companies.length - 2} mais
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-4 text-muted-foreground">
+                      <p>Nenhuma empresa elegível para envio.</p>
+                    </div>
+                  )}
+                </div>
+
+                <DialogFooter className="gap-2 sm:gap-0">
+                  <Button variant="outline" onClick={handleCloseSmartSend}>
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={handleSmartSend}
+                    disabled={isLoading || getSmartSendSummary.eligibleCount === 0}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="mr-2 h-4 w-4" />
+                    )}
+                    Enviar {getSmartSendSummary.eligibleCount} email{getSmartSendSummary.eligibleCount !== 1 ? 's' : ''}
+                  </Button>
+                </DialogFooter>
+              </>
+            )}
           </DialogContent>
         </Dialog>
 
@@ -1027,14 +1344,14 @@ const Incentive = () => {
             <div className="space-y-4 py-4">
               {/* Linha 1: Métricas de Performance */}
               <div>
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Métricas de Performance</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Métricas de Performance</p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 border rounded-lg">
                     <div className="p-2 rounded-lg bg-success/10">
                       <TrendingUp className="h-4 w-4 text-success" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Taxa de Conversão</p>
+                      <p className="font-bold text-sm">Taxa de Conversão</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Percentagem de empresas que completaram o cálculo da pegada de carbono.
                         É o indicador principal de sucesso do programa de onboarding.
@@ -1047,7 +1364,7 @@ const Incentive = () => {
                       <Clock className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Time to Value</p>
+                      <p className="font-bold text-sm">Time to Value</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Tempo médio (em dias) desde o primeiro contacto até à conclusão do cálculo da pegada.
                         Quanto menor, mais eficiente é o processo de onboarding.
@@ -1060,10 +1377,10 @@ const Incentive = () => {
                       <Mail className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Open Rate</p>
+                      <p className="font-bold text-sm">Open Rate</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Percentagem de emails abertos pelos destinatários.
-                        Benchmark B2B: <span className="text-success font-medium">&gt;20%</span> é considerado bom.
+                        Benchmark B2B: <span className="text-success font-bold">&gt;20%</span> é considerado bom.
                         Indica a eficácia do assunto e timing dos emails.
                       </p>
                     </div>
@@ -1074,10 +1391,10 @@ const Incentive = () => {
                       <Zap className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Click-to-Open (CTOR)</p>
+                      <p className="font-bold text-sm">Click-to-Open (CTOR)</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Percentagem de quem clicou no link entre quem abriu o email.
-                        Benchmark B2B: <span className="text-success font-medium">&gt;30%</span> é considerado bom.
+                        Benchmark B2B: <span className="text-success font-bold">&gt;30%</span> é considerado bom.
                         Mede a qualidade e relevância do conteúdo do email.
                       </p>
                     </div>
@@ -1087,14 +1404,14 @@ const Incentive = () => {
 
               {/* Linha 2: Insights Accionáveis */}
               <div>
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Insights Accionáveis</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Insights Accionáveis</p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 border rounded-lg border-warning/30 bg-warning/5">
                     <div className="p-2 rounded-lg bg-warning/10">
                       <AlertTriangle className="h-4 w-4 text-warning" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Bottleneck</p>
+                      <p className="font-bold text-sm">Bottleneck</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Identifica a fase do funil onde mais empresas estão acumuladas sem avançar.
                         O gráfico circular mostra a distribuição por fase. É onde deve concentrar esforços
@@ -1108,7 +1425,7 @@ const Incentive = () => {
                       <Star className="h-4 w-4 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Melhor Template</p>
+                      <p className="font-bold text-sm">Melhor Template</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         O template de email com maior taxa de conversão histórica.
                         O gráfico circular mostra a comparação entre templates. Use-o como referência
@@ -1121,23 +1438,23 @@ const Incentive = () => {
 
               {/* Alertas de Deliverability */}
               <div>
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Alertas de Deliverability</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Alertas de Deliverability</p>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3 p-3 border rounded-lg border-danger/30 bg-danger/5">
                     <div className="p-2 rounded-lg bg-danger/10">
                       <MailX className="h-4 w-4 text-danger" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Bounce Rate</p>
+                      <p className="font-bold text-sm">Bounce Rate</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Percentagem de emails que não foram entregues. Existem dois tipos:
                       </p>
                       <ul className="text-xs text-muted-foreground mt-1 ml-4 list-disc">
-                        <li><span className="font-medium">Hard bounce:</span> endereço inválido ou domínio inexistente (permanente)</li>
-                        <li><span className="font-medium">Soft bounce:</span> caixa cheia ou servidor temporariamente indisponível</li>
+                        <li><span className="font-bold">Hard bounce:</span> endereço inválido ou domínio inexistente (permanente)</li>
+                        <li><span className="font-bold">Soft bounce:</span> caixa cheia ou servidor temporariamente indisponível</li>
                       </ul>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Benchmark: <span className="text-danger font-medium">&lt;2%</span> é aceitável. Acima de 5% requer ação imediata.
+                        Benchmark: <span className="text-danger font-bold">&lt;2%</span> é aceitável. Acima de 5% requer ação imediata.
                       </p>
                     </div>
                   </div>
@@ -1147,13 +1464,13 @@ const Incentive = () => {
                       <ShieldAlert className="h-4 w-4 text-warning" />
                     </div>
                     <div>
-                      <p className="font-medium text-sm">Spam Rate</p>
+                      <p className="font-bold text-sm">Spam Rate</p>
                       <p className="text-xs text-muted-foreground mt-1">
                         Percentagem de destinatários que marcaram o email como spam.
                         Este é um indicador crítico pois afeta a reputação do domínio remetente.
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Benchmark: <span className="text-danger font-medium">&lt;0.1%</span> é o ideal.
+                        Benchmark: <span className="text-danger font-bold">&lt;0.1%</span> é o ideal.
                         Acima de 0.5% pode resultar em bloqueio pelos provedores de email.
                       </p>
                     </div>
@@ -1223,51 +1540,6 @@ const Incentive = () => {
                   </p>
                 </div>
 
-                {/* Context: emails sent + warnings */}
-                <div className="flex items-center gap-2 text-sm flex-wrap">
-                  <Badge variant="outline">
-                    {sendEmailDialog.company.emailsSent} email{sendEmailDialog.company.emailsSent !== 1 ? 's' : ''} enviado{sendEmailDialog.company.emailsSent !== 1 ? 's' : ''}
-                  </Badge>
-                  {sendEmailDialog.company.hasDeliveryIssues && sendEmailDialog.company.lastDeliveryIssue && (
-                    <Badge variant="destructive" className="gap-1">
-                      {sendEmailDialog.company.lastDeliveryIssue.type === 'bounced' ? (
-                        <>
-                          <MailX className="h-3 w-3" />
-                          Bounce
-                        </>
-                      ) : (
-                        <>
-                          <ShieldAlert className="h-3 w-3" />
-                          Spam
-                        </>
-                      )}
-                    </Badge>
-                  )}
-                  {sendEmailDialog.company.emailsSent >= 3 && !sendEmailDialog.company.hasDeliveryIssues && (
-                    <Badge variant="outline" className="gap-1 border-warning text-warning">
-                      <AlertTriangle className="h-3 w-3" />
-                      Saturação
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Warning message for delivery issues */}
-                {sendEmailDialog.company.hasDeliveryIssues && sendEmailDialog.company.lastDeliveryIssue && (
-                  <div className="p-3 bg-danger/10 border border-danger/30 rounded-lg">
-                    <p className="text-xs text-danger font-bold flex items-center gap-1.5">
-                      <AlertTriangle className="h-3.5 w-3.5" />
-                      {sendEmailDialog.company.lastDeliveryIssue.type === 'bounced'
-                        ? 'O último email não foi entregue'
-                        : 'O destinatário marcou como spam'}
-                    </p>
-                    {sendEmailDialog.company.lastDeliveryIssue.reason && (
-                      <p className="text-xs text-danger/80 mt-1">
-                        {sendEmailDialog.company.lastDeliveryIssue.reason}
-                      </p>
-                    )}
-                  </div>
-                )}
-
                 {/* Histórico de emails */}
                 {sendEmailDialog.company.emailHistory.length > 0 && (
                   <div className="border rounded-lg overflow-hidden">
@@ -1319,6 +1591,7 @@ const Incentive = () => {
                     </div>
                   </div>
                 )}
+
               </div>
             )}
 

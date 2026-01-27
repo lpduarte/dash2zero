@@ -101,9 +101,10 @@ export interface CompanyEmailTracking {
   // Flag para alertas visuais
   hasDeliveryIssues: boolean;  // true se tem bounce ou spam
   lastDeliveryIssue?: {
-    type: 'bounced' | 'spam';
+    type: 'bounced' | 'spam' | 'optout';
     reason?: string;
     date: string;
+    emailAtIssue?: string;  // Email que causou o problema (para verificar se foi alterado)
   };
 }
 
@@ -208,16 +209,30 @@ const createTrackingWithIssue = (
   companyId: string,
   emailsSent: number,
   startDaysAgo: number,
-  issue: 'bounced' | 'spam',
-  issueDetails?: { bounceType?: BounceType; bounceReason?: string }
+  issue: 'bounced' | 'spam' | 'optout',
+  issueDetails?: { bounceType?: BounceType; bounceReason?: string; emailAtIssue?: string }
 ): CompanyEmailTracking => {
-  const history = generateEmailHistory(companyId, emailsSent, startDaysAgo, {
-    deliveryIssue: issue,
+  // Para opt-out, não geramos deliveryIssue no histórico pois não é um evento de email
+  const history = generateEmailHistory(companyId, emailsSent, startDaysAgo, issue !== 'optout' ? {
+    deliveryIssue: issue as 'bounced' | 'spam',
     bounceType: issueDetails?.bounceType,
     bounceReason: issueDetails?.bounceReason,
-  });
+  } : undefined);
 
   const lastEmail = history[0]; // Mais recente
+  const now = new Date();
+
+  const reasonMap = {
+    bounced: lastEmail?.bounceReason || 'Email não entregue',
+    spam: 'Marcado como spam pelo destinatário',
+    optout: 'Pediu para não ser contactado',
+  };
+
+  const dateMap = {
+    bounced: lastEmail?.bouncedAt || now.toISOString(),
+    spam: lastEmail?.spamReportedAt || now.toISOString(),
+    optout: new Date(now.getTime() - startDaysAgo * 24 * 60 * 60 * 1000).toISOString(),
+  };
 
   return {
     companyId,
@@ -226,8 +241,9 @@ const createTrackingWithIssue = (
     hasDeliveryIssues: true,
     lastDeliveryIssue: {
       type: issue,
-      reason: issue === 'bounced' ? lastEmail.bounceReason : 'Marcado como spam pelo destinatário',
-      date: issue === 'bounced' ? lastEmail.bouncedAt! : lastEmail.spamReportedAt!,
+      reason: reasonMap[issue],
+      date: dateMap[issue],
+      emailAtIssue: issueDetails?.emailAtIssue,
     },
   };
 };
@@ -243,7 +259,8 @@ export const mockEmailTracking: Record<string, CompanyEmailTracking> = {
   'emp-sup-np-002': createTracking('emp-sup-np-002', 0),
   'emp-sup-np-003': createTrackingWithIssue('emp-sup-np-003', 3, 80, 'bounced', {
     bounceType: 'hard',
-    bounceReason: 'Email address does not exist'
+    bounceReason: 'Email address does not exist',
+    emailAtIssue: 'comercial@componentestecnicos.pt'
   }),
   'emp-sup-np-004': createTracking('emp-sup-np-004', 1, 30),
   'emp-sup-np-005': createTracking('emp-sup-np-005', 1, 15),
@@ -256,14 +273,17 @@ export const mockEmailTracking: Record<string, CompanyEmailTracking> = {
   'emp-cli-np-003': createTracking('emp-cli-np-003', 2, 60),
   'emp-cli-np-004': createTracking('emp-cli-np-004', 1, 20),
   'emp-cli-np-005': createTracking('emp-cli-np-005', 0),
-  'emp-cli-np-006': createTrackingWithIssue('emp-cli-np-006', 3, 90, 'spam'),
+  'emp-cli-np-006': createTrackingWithIssue('emp-cli-np-006', 3, 90, 'spam', {
+    emailAtIssue: 'info@fitnesspro.pt'
+  }),
   'emp-cli-np-007': createTracking('emp-cli-np-007', 0),
   'emp-cli-np-008': createTracking('emp-cli-np-008', 2, 50),
-  'emp-cli-np-009': createTracking('emp-cli-np-009', 1, 12),
+  'emp-cli-np-009': createTrackingWithIssue('emp-cli-np-009', 2, 40, 'optout'),  // OPT-OUT
   'emp-cli-np-010': createTracking('emp-cli-np-010', 0),
   'emp-cli-np-011': createTrackingWithIssue('emp-cli-np-011', 2, 55, 'bounced', {
     bounceType: 'soft',
-    bounceReason: 'Mailbox full'
+    bounceReason: 'Mailbox full',
+    emailAtIssue: 'reservas@viagensmundo.pt'
   }),
   'emp-cli-np-012': createTracking('emp-cli-np-012', 1, 35),
   'emp-cli-np-013': createTracking('emp-cli-np-013', 0),
@@ -281,7 +301,8 @@ export const mockEmailTracking: Record<string, CompanyEmailTracking> = {
   'emp-par-np-006': createTracking('emp-par-np-006', 0),
   'emp-par-np-007': createTrackingWithIssue('emp-par-np-007', 3, 75, 'bounced', {
     bounceType: 'hard',
-    bounceReason: 'Domain does not exist'
+    bounceReason: 'Domain does not exist',
+    emailAtIssue: 'orcamentos@limpezaspro.pt'
   }),
   'emp-par-np-008': createTracking('emp-par-np-008', 1, 32),
   'emp-par-np-009': createTracking('emp-par-np-009', 0),
@@ -292,7 +313,9 @@ export const mockEmailTracking: Record<string, CompanyEmailTracking> = {
   'emp-par-np-014': createTracking('emp-par-np-014', 2, 65),
   'emp-par-np-015': createTracking('emp-par-np-015', 1, 40),
   'emp-par-np-016': createTracking('emp-par-np-016', 0),
-  'emp-par-np-017': createTrackingWithIssue('emp-par-np-017', 3, 88, 'spam'),
+  'emp-par-np-017': createTrackingWithIssue('emp-par-np-017', 3, 88, 'spam', {
+    emailAtIssue: 'orcamentos@jardinagemverde.pt'
+  }),
   'emp-par-np-018': createTracking('emp-par-np-018', 1, 8),
   'emp-par-np-019': createTracking('emp-par-np-019', 0),
   'emp-par-np-020': createTracking('emp-par-np-020', 2, 38),
@@ -305,7 +328,8 @@ export const mockEmailTracking: Record<string, CompanyEmailTracking> = {
   'mun-apo-np-004': createTracking('mun-apo-np-004', 0),
   'mun-apo-np-005': createTrackingWithIssue('mun-apo-np-005', 3, 70, 'bounced', {
     bounceType: 'hard',
-    bounceReason: 'User unknown'
+    bounceReason: 'User unknown',
+    emailAtIssue: 'papelaria.escolar@mail.pt'
   }),
   'mun-apo-np-006': createTracking('mun-apo-np-006', 1, 15),
   'mun-apo-np-007': createTracking('mun-apo-np-007', 0),
