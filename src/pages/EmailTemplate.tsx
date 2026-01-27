@@ -53,8 +53,8 @@ const templates: EmailTemplateData[] = [
   { id: "t2", name: "Lembrete", subject: "Ainda a tempo: ferramenta municipal de poupança energética", description: "Follow-up amigável" },
   { id: "t3", name: "Benefícios", subject: "Como empresas em Cascais estão a otimizar os seus custos energéticos", description: "Foco em poupança" },
   { id: "t4", name: "Urgente", subject: "Informação: Novos requisitos europeus de cálculo de emissões", description: "Prazos e regulamentação" },
-  { id: "t5", name: "Simple - Lembrete", subject: "Precisa de ajuda para finalizar o cálculo da pegada?", description: "Para quem iniciou Simple" },
-  { id: "t6", name: "Formulário - Lembrete", subject: "Faltam poucos minutos para finalizar", description: "Para quem iniciou formulário" },
+  { id: "t5", name: "Simple", subject: "Precisa de ajuda para finalizar o cálculo da pegada?", description: "Para quem iniciou Simple" },
+  { id: "t6", name: "Formulário", subject: "Falta pouco para finalizar", description: "Para quem iniciou formulário" },
 ];
 
 const EmailTemplate = () => {
@@ -301,7 +301,7 @@ const EmailTemplate = () => {
                   {selectedTemplate === "t3" && "Sem custos, sem compromissos."}
                   {selectedTemplate === "t4" && "A nossa equipa está disponível para apoio. Responda para agendar."}
                   {selectedTemplate === "t5" && "Estamos aqui para ajudar. Responda se tiver dúvidas."}
-                  {selectedTemplate === "t6" && "É rápido — demora menos de 5 minutos."}
+                  {selectedTemplate === "t6" && "Estamos aqui para ajudar. Responda se tiver dúvidas."}
                 </p>
 
                 {/* Signature */}
@@ -754,6 +754,11 @@ const SimpleLembreteBody = () => (
           title: "Prefere ser guiado?",
           text: "Agende uma chamada de 15 minutos connosco"
         },
+        {
+          icon: <Save className="h-5 w-5" style={{ color: emailColors.primary }} />,
+          title: "O seu progresso está guardado",
+          text: "Pode continuar de onde parou, a qualquer momento"
+        },
       ].map((item, i) => (
         <div
           key={i}
@@ -778,28 +783,7 @@ const SimpleLembreteBody = () => (
       ))}
     </div>
 
-    {/* Progress saved note */}
-    <div
-      style={{
-        backgroundColor: withOpacity("primaryDark", 0.08),
-        borderLeft: `4px solid ${emailColors.primary}`,
-        padding: "16px",
-        borderRadius: "0 8px 8px 0",
-        marginBottom: "24px",
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "12px"
-      }}
-    >
-      <Save className="h-5 w-5" style={{ color: emailColors.primary, flexShrink: 0, marginTop: "2px" }} />
-      <p style={{ fontSize: "14px", color: emailColors.text, margin: 0, lineHeight: 1.5 }}>
-        <strong>O seu progresso está guardado</strong> — pode continuar de onde parou, a qualquer momento.
-      </p>
-    </div>
 
-    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "32px" }}>
-      Se preferir, também pode <a href="#" style={{ color: emailColors.primary, textDecoration: "underline" }}>agendar uma chamada</a> com a nossa equipa para o ajudar a completar o processo.
-    </p>
   </>
 );
 
@@ -813,11 +797,11 @@ const FormularioLembreteBody = () => (
     </p>
 
     <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "16px" }}>
-      Vimos que iniciou a submissão dos dados de pegada de carbono na plataforma <strong style={{ color: emailColors.text }}>Get2Zero Simple</strong>.
+      Vimos que iniciou a submissão da pegada de carbono que já tinha calculada.
     </p>
 
     <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "24px" }}>
-      Boas notícias: <strong style={{ color: emailColors.text }}>falta muito pouco para finalizar</strong>. O processo demora menos de 5 minutos.
+      Boas notícias: <strong style={{ color: emailColors.text }}>falta muito pouco para finalizar</strong>.
     </p>
 
     {/* Steps */}
@@ -865,16 +849,15 @@ const FormularioLembreteBody = () => (
       </div>
     </div>
 
-    {/* Benefits */}
+    {/* Porquê submeter */}
     <p style={{ fontSize: "14px", fontWeight: 700, color: emailColors.text, marginBottom: "12px" }}>
-      Ao finalizar, ganha acesso a:
+      Porquê finalizar a submissão?
     </p>
     <div style={{ marginBottom: "24px" }}>
       {[
-        { icon: <CheckCircle2 className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Registo oficial no programa municipal de sustentabilidade" },
-        { icon: <BarChart3 className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Análises comparativas com empresas do mesmo sector" },
-        { icon: <Target className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Recomendações personalizadas de redução de emissões" },
-        { icon: <Euro className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Informação sobre apoios e financiamentos disponíveis" },
+        { icon: <FileCheck className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Os seus dados ficam registados no programa municipal de sustentabilidade" },
+        { icon: <Building2 className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Contribui para o planeamento de ações climáticas em Cascais" },
+        { icon: <Award className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "A sua empresa fica elegível para futuras iniciativas e apoios" },
       ].map((item, i) => (
         <div
           key={i}
@@ -883,7 +866,7 @@ const FormularioLembreteBody = () => (
             alignItems: "center",
             gap: "12px",
             padding: "10px 0",
-            borderBottom: i < 3 ? `1px solid ${emailColors.borderLighter}` : "none"
+            borderBottom: i < 2 ? `1px solid ${emailColors.borderLighter}` : "none"
           }}
         >
           <div style={{ flexShrink: 0, width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -894,6 +877,19 @@ const FormularioLembreteBody = () => (
           </span>
         </div>
       ))}
+    </div>
+
+    {/* Upsell Simple */}
+    <div style={{
+      backgroundColor: withOpacity("primaryDark", 0.08),
+      borderLeft: `4px solid ${emailColors.primary}`,
+      padding: "16px",
+      borderRadius: "0 8px 8px 0",
+      marginBottom: "24px"
+    }}>
+      <p style={{ fontSize: "14px", color: emailColors.text, margin: 0, lineHeight: 1.5 }}>
+        <strong>Quer ir mais longe?</strong><br />Após submeter, pode registar-se na plataforma Get2Zero Simple para aceder a análises comparativas, recomendações personalizadas e acompanhar a sua evolução.
+      </p>
     </div>
 
     <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "32px" }}>
