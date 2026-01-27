@@ -7,9 +7,9 @@
   },
   "summary": {
     "total": 14,
-    "completed": 7,
+    "completed": 8,
     "inProgress": 0,
-    "pending": 7
+    "pending": 6
   },
   "categories": [
     {
@@ -89,17 +89,17 @@
       "title": "Modal de Infraestruturas",
       "description": "Melhorar modal de gestão de infraestruturas para municípios",
       "category": "important",
-      "status": "pending",
+      "status": "completed",
       "priority": 4,
       "briefing": "04-modal-infraestruturas.md",
       "criteria": [
-        { "text": "Modal usa variáveis do tema (sem hardcoded colors)", "done": false },
-        { "text": "Toggle redesenhado", "done": false },
+        { "text": "Modal usa variáveis do tema (sem hardcoded colors)", "done": true },
+        { "text": "Toggle redesenhado", "done": true },
         { "text": "Município identificado automaticamente", "done": true },
-        { "text": "Empty state com ícones e CTA adequado", "done": false }
+        { "text": "Empty state com ícones e CTA adequado", "done": true }
       ],
       "dependencies": ["02"],
-      "notes": "Depende do setup de utilizadores para contexto do município. Município via activeClient corrigido."
+      "notes": "Concluído em 86bbb52 - modal de infraestruturas com tema, toggle e município dinâmico"
     },
     {
       "id": "05",
