@@ -25,7 +25,13 @@ import {
   Banknote,
   Award,
   Mail,
-  SearchAlert
+  SearchAlert,
+  HelpCircle,
+  Phone,
+  Save,
+  CheckCircle2,
+  ArrowRight,
+  MessageCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
@@ -33,7 +39,7 @@ import { header } from "@/lib/styles";
 import { emailColors, withOpacity } from "@/lib/colors";
 import headerImage from "/img/header.jpg";
 
-type TemplateId = "t1" | "t2" | "t3" | "t4";
+type TemplateId = "t1" | "t2" | "t3" | "t4" | "t5" | "t6";
 
 interface EmailTemplateData {
   id: TemplateId;
@@ -47,6 +53,8 @@ const templates: EmailTemplateData[] = [
   { id: "t2", name: "Lembrete", subject: "Ainda a tempo: ferramenta municipal de poupança energética", description: "Follow-up amigável" },
   { id: "t3", name: "Benefícios", subject: "Como empresas em Cascais estão a otimizar os seus custos energéticos", description: "Foco em poupança" },
   { id: "t4", name: "Urgente", subject: "Informação: Novos requisitos europeus de cálculo de emissões", description: "Prazos e regulamentação" },
+  { id: "t5", name: "Simple - Lembrete", subject: "Precisa de ajuda para finalizar o cálculo da pegada?", description: "Para quem iniciou Simple" },
+  { id: "t6", name: "Formulário - Lembrete", subject: "Faltam poucos minutos para finalizar", description: "Para quem iniciou formulário" },
 ];
 
 const EmailTemplate = () => {
@@ -92,6 +100,10 @@ const EmailTemplate = () => {
         return <BeneficiosBody />;
       case "t4":
         return <UrgenteBody />;
+      case "t5":
+        return <SimpleLembreteBody />;
+      case "t6":
+        return <FormularioLembreteBody />;
       default:
         return <ConviteInicialBody />;
     }
@@ -278,7 +290,7 @@ const EmailTemplate = () => {
                       textDecoration: "none"
                     }}
                   >
-                    {selectedTemplate === "t4" ? "Calcular a pegada de carbono" : "Calcular a pegada de carbono"}
+                    {selectedTemplate === "t5" ? "Continuar o cálculo" : selectedTemplate === "t6" ? "Finalizar submissão" : "Calcular a pegada de carbono"}
                   </a>
                 </div>
 
@@ -288,6 +300,8 @@ const EmailTemplate = () => {
                   {selectedTemplate === "t2" && "Responda a este email se precisar de ajuda. Temos uma equipa pronta para apoiar."}
                   {selectedTemplate === "t3" && "Sem custos, sem compromissos."}
                   {selectedTemplate === "t4" && "A nossa equipa está disponível para apoio. Responda para agendar."}
+                  {selectedTemplate === "t5" && "Estamos aqui para ajudar. Responda se tiver dúvidas."}
+                  {selectedTemplate === "t6" && "É rápido — demora menos de 5 minutos."}
                 </p>
 
                 {/* Signature */}
@@ -701,6 +715,189 @@ const UrgenteBody = () => (
     <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "32px" }}>
       O Município de Cascais oferece esta plataforma gratuitamente.
       <strong style={{ color: emailColors.text }}> Estamos disponíveis para apoiar.</strong>
+    </p>
+  </>
+);
+
+// ============================================================================
+// TEMPLATE 5: SIMPLE - LEMBRETE (em progresso)
+// ============================================================================
+const SimpleLembreteBody = () => (
+  <>
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, marginBottom: "24px" }}>
+      Caro/a responsável,
+    </p>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "16px" }}>
+      Reparámos que começou a calcular a pegada de carbono da sua empresa na plataforma <strong style={{ color: emailColors.text }}>Get2Zero Simple</strong>, mas ainda não finalizou o processo.
+    </p>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "24px" }}>
+      Sabemos que reunir faturas e dados de consumo pode levar algum tempo — <strong style={{ color: emailColors.text }}>estamos aqui para ajudar</strong>.
+    </p>
+
+    {/* Help options */}
+    <div style={{ marginBottom: "24px" }}>
+      {[
+        {
+          icon: <Calculator className="h-5 w-5" style={{ color: emailColors.primary }} />,
+          title: "Não tem todas as faturas?",
+          text: "Podemos usar estimativas baseadas no seu sector e dimensão"
+        },
+        {
+          icon: <MessageCircle className="h-5 w-5" style={{ color: emailColors.primary }} />,
+          title: "Tem dúvidas sobre algum passo?",
+          text: "Responda a este email que esclarecemos"
+        },
+        {
+          icon: <Phone className="h-5 w-5" style={{ color: emailColors.primary }} />,
+          title: "Prefere ser guiado?",
+          text: "Agende uma chamada de 15 minutos connosco"
+        },
+      ].map((item, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "12px",
+            padding: "14px 16px",
+            backgroundColor: withOpacity("primaryDark", 0.05),
+            borderRadius: "8px",
+            marginBottom: "8px"
+          }}
+        >
+          <div style={{ flexShrink: 0, width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {item.icon}
+          </div>
+          <div>
+            <span style={{ fontSize: "14px", color: emailColors.text, fontWeight: 700 }}>{item.title}</span>
+            <p style={{ fontSize: "14px", color: emailColors.textLight, margin: "4px 0 0 0" }}>{item.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Progress saved note */}
+    <div
+      style={{
+        backgroundColor: withOpacity("primaryDark", 0.08),
+        borderLeft: `4px solid ${emailColors.primary}`,
+        padding: "16px",
+        borderRadius: "0 8px 8px 0",
+        marginBottom: "24px",
+        display: "flex",
+        alignItems: "flex-start",
+        gap: "12px"
+      }}
+    >
+      <Save className="h-5 w-5" style={{ color: emailColors.primary, flexShrink: 0, marginTop: "2px" }} />
+      <p style={{ fontSize: "14px", color: emailColors.text, margin: 0, lineHeight: 1.5 }}>
+        <strong>O seu progresso está guardado</strong> — pode continuar de onde parou, a qualquer momento.
+      </p>
+    </div>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "32px" }}>
+      Se preferir, também pode <a href="#" style={{ color: emailColors.primary, textDecoration: "underline" }}>agendar uma chamada</a> com a nossa equipa para o ajudar a completar o processo.
+    </p>
+  </>
+);
+
+// ============================================================================
+// TEMPLATE 6: FORMULÁRIO - LEMBRETE (em progresso)
+// ============================================================================
+const FormularioLembreteBody = () => (
+  <>
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, marginBottom: "24px" }}>
+      Caro/a responsável,
+    </p>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "16px" }}>
+      Vimos que iniciou a submissão dos dados de pegada de carbono na plataforma <strong style={{ color: emailColors.text }}>Get2Zero Simple</strong>.
+    </p>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "24px" }}>
+      Boas notícias: <strong style={{ color: emailColors.text }}>falta muito pouco para finalizar</strong>. O processo demora menos de 5 minutos.
+    </p>
+
+    {/* Steps */}
+    <div
+      style={{
+        backgroundColor: withOpacity("primaryDark", 0.08),
+        borderRadius: "8px",
+        padding: "20px",
+        marginBottom: "24px"
+      }}
+    >
+      <p style={{ fontSize: "14px", fontWeight: 700, color: emailColors.text, marginBottom: "16px" }}>
+        São apenas 3 passos simples:
+      </p>
+      <div style={{ display: "flex", flexDirection: "column" as const, gap: "12px" }}>
+        {[
+          { step: "Identificação", desc: "Dados básicos da empresa" },
+          { step: "Emissões", desc: "Valores que já calculou" },
+          { step: "Confirmação", desc: "Revisão e submissão" }
+        ].map((item, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "50%",
+                backgroundColor: emailColors.primary,
+                color: emailColors.background,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "14px",
+                fontWeight: 700,
+                flexShrink: 0
+              }}
+            >
+              {i + 1}
+            </div>
+            <div>
+              <span style={{ fontSize: "14px", fontWeight: 700, color: emailColors.text }}>{item.step}</span>
+              <span style={{ fontSize: "14px", color: emailColors.textLight }}> — {item.desc}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Benefits */}
+    <p style={{ fontSize: "14px", fontWeight: 700, color: emailColors.text, marginBottom: "12px" }}>
+      Ao finalizar, ganha acesso a:
+    </p>
+    <div style={{ marginBottom: "24px" }}>
+      {[
+        { icon: <CheckCircle2 className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Registo oficial no programa municipal de sustentabilidade" },
+        { icon: <BarChart3 className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Análises comparativas com empresas do mesmo sector" },
+        { icon: <Target className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Recomendações personalizadas de redução de emissões" },
+        { icon: <Euro className="h-5 w-5" style={{ color: emailColors.primary }} />, text: "Informação sobre apoios e financiamentos disponíveis" },
+      ].map((item, i) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            padding: "10px 0",
+            borderBottom: i < 3 ? `1px solid ${emailColors.borderLighter}` : "none"
+          }}
+        >
+          <div style={{ flexShrink: 0, width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {item.icon}
+          </div>
+          <span style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.4 }}>
+            {item.text}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    <p style={{ fontSize: "14px", color: emailColors.textSecondary, lineHeight: 1.6, marginBottom: "32px" }}>
+      O seu progresso está guardado. Clique no botão abaixo para continuar de onde parou.
     </p>
   </>
 );
