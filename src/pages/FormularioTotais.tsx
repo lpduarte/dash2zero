@@ -628,7 +628,7 @@ const FormularioTotais = () => {
     return (
       <div className="min-h-screen bg-diagonal-pattern relative z-10 overflow-hidden">
         {/* Pulsing background */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
           <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-primary/30 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(-50%, -50%)' }} />
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/40 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(30%, -40%)' }} />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/35 rounded-full blur-3xl animate-pulse-slower" style={{ transform: 'translate(20%, -20%)', animationDelay: '0.5s' }} />
@@ -637,7 +637,7 @@ const FormularioTotais = () => {
           <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-primary/25 rounded-full blur-2xl animate-pulse-slower" style={{ animationDelay: '0.8s' }} />
           <div className="absolute bottom-1/4 right-1/3 w-40 h-40 bg-primary/25 rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
         </div>
-        <div className="max-w-3xl mx-auto px-6 py-12">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 py-12">
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="inline-flex items-center gap-3">
@@ -765,7 +765,7 @@ const FormularioTotais = () => {
     return (
       <div className="min-h-screen bg-diagonal-pattern relative z-10 overflow-hidden">
         {/* Pulsing background */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
           <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-primary/30 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(-50%, -50%)' }} />
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/40 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(30%, -40%)' }} />
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/35 rounded-full blur-3xl animate-pulse-slower" style={{ transform: 'translate(20%, -20%)', animationDelay: '0.5s' }} />
@@ -774,7 +774,7 @@ const FormularioTotais = () => {
           <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-primary/25 rounded-full blur-2xl animate-pulse-slower" style={{ animationDelay: '0.8s' }} />
           <div className="absolute bottom-1/4 right-1/3 w-40 h-40 bg-primary/25 rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
         </div>
-        <div className="max-w-[800px] mx-auto px-6 py-12">
+        <div className="relative z-10 max-w-[800px] mx-auto px-6 py-12">
           {/* Logo */}
           <div className="text-center mb-4">
             <div className="inline-flex items-center gap-3 mb-4">
@@ -782,7 +782,7 @@ const FormularioTotais = () => {
               <span className="text-2xl font-bold">Dash2Zero</span>
             </div>
           </div>
-          
+
           {/* Title */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-foreground mb-2">
@@ -888,7 +888,7 @@ const FormularioTotais = () => {
   return (
     <div className="min-h-screen bg-diagonal-pattern relative z-10 overflow-hidden">
       {/* Pulsing background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-primary/30 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(-50%, -50%)' }} />
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/40 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(30%, -40%)' }} />
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/35 rounded-full blur-3xl animate-pulse-slower" style={{ transform: 'translate(20%, -20%)', animationDelay: '0.5s' }} />
@@ -898,7 +898,7 @@ const FormularioTotais = () => {
         <div className="absolute bottom-1/4 right-1/3 w-40 h-40 bg-primary/25 rounded-full blur-2xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
       </div>
 
-      <div className="max-w-[800px] mx-auto px-6 py-12">
+      <div className="relative z-10 max-w-[800px] mx-auto px-6 py-12">
         {/* Logo */}
         <div className="text-center mb-4">
           <div className="inline-flex items-center gap-3 mb-4">

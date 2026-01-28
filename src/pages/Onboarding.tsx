@@ -1,4 +1,4 @@
-import { Calculator, FileText, Check, X, HelpCircle, Leaf, ChevronDown, CheckCircle } from "lucide-react";
+import { Calculator, FileText, Check, X, HelpCircle, Leaf, CheckCircle } from "lucide-react";
 import { usePageTitle } from "@/lib/usePageTitle";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,49 +17,39 @@ const logos = [
 // Logo Ticker Component
 const LogoTicker = () => (
   <div className="w-full py-8 overflow-hidden relative">
-    <p className="text-center text-sm text-muted-foreground mb-6">
-      Empresas e municípios que confiam em nós
+    <p className="text-center text-base font-bold text-primary mb-6">
+      Clientes que confiam em nós
     </p>
 
-    <div className="relative">
-      {/* Gradient edges */}
-      <div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{
-          background: 'linear-gradient(to right, hsl(var(--background)) 0%, transparent 15%, transparent 85%, hsl(var(--background)) 100%)'
-        }}
-      />
-
-      {/* Ticker */}
-      <div className="ticker-wrap overflow-hidden">
-        <div className="ticker-track">
-          {/* First set of logos */}
-          {logos.map((logo, index) => (
-            <div
-              key={`logo-1-${index}`}
-              className="flex items-center justify-center shrink-0 px-8 h-10 opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="h-full w-auto object-contain"
-              />
-            </div>
-          ))}
-          {/* Duplicate set for seamless loop */}
-          {logos.map((logo, index) => (
-            <div
-              key={`logo-2-${index}`}
-              className="flex items-center justify-center shrink-0 px-8 h-10 opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <img
-                src={logo.src}
-                alt={logo.alt}
-                className="h-full w-auto object-contain"
-              />
-            </div>
-          ))}
-        </div>
+    {/* Ticker with CSS mask for smooth edge fade */}
+    <div
+      className="ticker-wrap overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)'
+      }}
+    >
+      <div className="ticker-track">
+        {/* Double set for seamless loop */}
+        {[1, 2].map((set) => (
+          <div key={`set-${set}`} className="flex min-w-full shrink-0 justify-around">
+            {logos.map((logo, index) => (
+              <div
+                key={`logo-${set}-${index}`}
+                className="flex items-center justify-center shrink-0 px-8 h-20"
+              >
+                <img
+                  src={logo.src}
+                  alt={logo.alt}
+                  className="h-full w-auto object-contain"
+                  style={{
+                    filter: 'brightness(0) saturate(100%) invert(52%) sepia(45%) saturate(537%) hue-rotate(127deg) brightness(91%) contrast(89%)'
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   </div>
@@ -115,7 +105,7 @@ const Onboarding = () => {
   return (
     <div className="min-h-screen bg-diagonal-pattern relative z-10 overflow-hidden">
       {/* Pulsing background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-1/2 left-1/2 w-[800px] h-[800px] bg-primary/30 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(-50%, -50%)' }} />
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/40 rounded-full blur-3xl animate-pulse-slow" style={{ transform: 'translate(30%, -40%)' }} />
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/35 rounded-full blur-3xl animate-pulse-slower" style={{ transform: 'translate(20%, -20%)', animationDelay: '0.5s' }} />
@@ -126,7 +116,7 @@ const Onboarding = () => {
       </div>
 
       {/* Section 1: Choice */}
-      <section className="min-h-screen flex items-center justify-center p-6 relative">
+      <section className="min-h-screen flex items-center justify-center p-6 relative z-10">
         <div className="w-full max-w-[1000px] animate-fade-in">
           {/* Logo & Header */}
           <div className="text-center mb-12">
@@ -253,23 +243,13 @@ const Onboarding = () => {
             </Card>
           </div>
 
-          {/* Logo Ticker */}
-          <LogoTicker />
-
-          {/* Scroll indicator */}
-          <div className="text-center">
-            <button
-              onClick={scrollToVantagens}
-              className="inline-flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors animate-bounce"
-            >
-              <ChevronDown className="h-5 w-5" />
-            </button>
-          </div>
+          {/* Logo Ticker - temporariamente oculto */}
+          {/* <LogoTicker /> */}
         </div>
       </section>
 
       {/* Section 2: Benefits */}
-      <section id="vantagens" className="py-24 px-6 bg-muted/30 relative shadow-[0_-8px_20px_-8px_rgba(0,0,0,0.08)]">
+      <section id="vantagens" className="py-24 px-6 bg-muted/30 relative z-10 shadow-[0_-8px_20px_-8px_rgba(0,0,0,0.08)]">
         <div className="w-full max-w-[1000px] mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-4">
@@ -318,7 +298,7 @@ const Onboarding = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-6 text-center border-t bg-background">
+      <footer className="py-8 px-6 text-center border-t bg-background relative z-10">
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
             Mais de <span className="font-bold text-foreground">500 empresas</span> já calcularam a sua pegada

@@ -113,6 +113,17 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
   *:has(> select:disabled) > label {
     @apply opacity-50 cursor-not-allowed;
   }
+
+  /* Remove spinners from number inputs */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
 
 /* Fade-in animation for header pulsing elements */
@@ -511,9 +522,6 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
 .ticker-track {
   display: flex;
   width: max-content;
-  animation: ticker-scroll 30s linear infinite;
-}
-
-.ticker-wrap:hover .ticker-track {
-  animation-play-state: paused;
+  gap: 0;
+  animation: ticker-scroll 20s linear infinite;
 }
