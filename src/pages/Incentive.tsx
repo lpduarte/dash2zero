@@ -14,7 +14,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,10 +38,7 @@ import {
   ShieldAlert,
   Rocket,
   FileText,
-  CheckCircle,
-  Filter,
-  ChevronDown,
-  X
+  CheckCircle
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
@@ -247,8 +243,13 @@ const Incentive = () => {
   const funnelMetrics = useMemo(() => {
     const allCompanies = globalFilteredCompanies;
     const total = allCompanies.length;
-    
-    const statusCounts = allCompanies.reduce((acc, c) => {
+
+    // Separar empresas incontactáveis (bounce, spam, opt-out) das activas
+    const incontactaveis = allCompanies.filter(c => c.hasDeliveryIssues).length;
+    const activeCompanies = allCompanies.filter(c => !c.hasDeliveryIssues);
+
+    // Contar status apenas das empresas ACTIVAS (sem delivery issues)
+    const statusCounts = activeCompanies.reduce((acc, c) => {
       acc[c.onboardingStatus] = (acc[c.onboardingStatus] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -260,8 +261,8 @@ const Incentive = () => {
     const emProgresso = (statusCounts['em_progresso_simple'] || 0) +
                         (statusCounts['em_progresso_formulario'] || 0);
 
-    // Contagem de completos por caminho (baseado em completedVia)
-    const completedCompanies = allCompanies.filter(c => c.onboardingStatus === 'completo');
+    // Contagem de completos por caminho (baseado em completedVia) - apenas empresas activas
+    const completedCompanies = activeCompanies.filter(c => c.onboardingStatus === 'completo');
     const completoSimple = completedCompanies.filter(c => c.completedVia === 'simple').length;
     const completoFormulario = completedCompanies.filter(c => c.completedVia === 'formulario').length;
     const completo = completoSimple + completoFormulario;
@@ -324,10 +325,11 @@ const Incentive = () => {
     const openRate = emailsSent > 0 ? Math.round((emailsOpened / emailsSent) * 100) : 0;
     const clickToOpenRate = emailsOpened > 0 ? Math.round((emailsClicked / emailsOpened) * 100) : 0;
 
-    // Deliverability metrics (bounces e spam)
+    // Deliverability metrics (bounces, spam e opt-out)
     const deliveryMetrics = getDeliveryMetrics(allCompanies.map(c => c.id));
     const companiesWithBounce = allCompanies.filter(c => c.hasDeliveryIssues && c.lastDeliveryIssue?.type === 'bounced').length;
     const companiesWithSpam = allCompanies.filter(c => c.hasDeliveryIssues && c.lastDeliveryIssue?.type === 'spam').length;
+    const companiesWithOptout = allCompanies.filter(c => c.hasDeliveryIssues && c.lastDeliveryIssue?.type === 'optout').length;
     
     const chartData = [
       {
@@ -360,6 +362,7 @@ const Incentive = () => {
       bestTemplate,
       bestTemplateRate,
       total,
+      incontactaveis,
       completo,
       completoPerc,
       chartData,
@@ -390,6 +393,7 @@ const Incentive = () => {
       spam: deliveryMetrics.spam,
       companiesWithBounce,
       companiesWithSpam,
+      companiesWithOptout,
     };
   }, [globalFilteredCompanies]);
 
@@ -444,30 +448,40 @@ const Incentive = () => {
 
   // Contagens por estado de onboarding (para filtros do diálogo)
   const bulkStatusCounts = useMemo(() => {
+    // Aplicar filtro de emails primeiro (se existir)
+    let companies = filteredCompanies;
+    if (bulkEmailCountFilter.length > 0) {
+      companies = companies.filter(c => {
+        if (bulkEmailCountFilter.includes('0') && c.emailsSent === 0) return true;
+        if (bulkEmailCountFilter.includes('1') && c.emailsSent === 1) return true;
+        if (bulkEmailCountFilter.includes('2') && c.emailsSent === 2) return true;
+        if (bulkEmailCountFilter.includes('3+') && c.emailsSent >= 3) return true;
+        return false;
+      });
+    }
+
     const counts: Record<string, number> = {};
-    filteredCompanies.forEach(c => {
+    companies.forEach(c => {
       counts[c.onboardingStatus] = (counts[c.onboardingStatus] || 0) + 1;
     });
     return counts;
-  }, [filteredCompanies]);
+  }, [filteredCompanies, bulkEmailCountFilter]);
 
   // Contagens por nº emails enviados (para filtros do diálogo)
-  const bulkEmailCountCounts = useMemo(() => ({
-    '0': filteredCompanies.filter(c => c.emailsSent === 0).length,
-    '1': filteredCompanies.filter(c => c.emailsSent === 1).length,
-    '2': filteredCompanies.filter(c => c.emailsSent === 2).length,
-    '3+': filteredCompanies.filter(c => c.emailsSent >= 3).length,
-  }), [filteredCompanies]);
+  const bulkEmailCountCounts = useMemo(() => {
+    // Aplicar filtro de status primeiro (se existir)
+    let companies = filteredCompanies;
+    if (bulkStatusFilter.length > 0) {
+      companies = companies.filter(c => bulkStatusFilter.includes(c.onboardingStatus));
+    }
 
-  // Breakdown das exclusões (para tooltip)
-  const exclusionBreakdown = useMemo(() => {
-    const blocked = filteredCompanies.filter(c => isSendingBlocked(c));
     return {
-      spam: blocked.filter(c => c.lastDeliveryIssue?.type === 'spam').length,
-      bounce: blocked.filter(c => c.lastDeliveryIssue?.type === 'bounced').length,
-      optout: blocked.filter(c => c.lastDeliveryIssue?.type === 'optout').length,
+      '0': companies.filter(c => c.emailsSent === 0).length,
+      '1': companies.filter(c => c.emailsSent === 1).length,
+      '2': companies.filter(c => c.emailsSent === 2).length,
+      '3+': companies.filter(c => c.emailsSent >= 3).length,
     };
-  }, [filteredCompanies]);
+  }, [filteredCompanies, bulkStatusFilter]);
 
   // Smart send summary - group ALL pending companies by suggested template
   const getSmartSendSummary = useMemo(() => {
@@ -634,7 +648,6 @@ const Incentive = () => {
                         icon={TrendingUp}
                         iconColor="text-success"
                         iconBgColor="bg-success/10"
-                        valueColor="text-success"
                       />
                       <KPICard
                         title="Time to Value"
@@ -651,7 +664,6 @@ const Incentive = () => {
                         icon={Mail}
                         iconColor={funnelMetrics.openRate >= 20 ? "text-success" : "text-warning"}
                         iconBgColor={funnelMetrics.openRate >= 20 ? "bg-success/10" : "bg-warning/10"}
-                        valueColor={funnelMetrics.openRate >= 20 ? "text-success" : "text-warning"}
                       />
                       <KPICard
                         title="Click-to-Open"
@@ -660,7 +672,6 @@ const Incentive = () => {
                         icon={Zap}
                         iconColor={funnelMetrics.clickToOpenRate >= 30 ? "text-success" : "text-primary"}
                         iconBgColor={funnelMetrics.clickToOpenRate >= 30 ? "bg-success/10" : "bg-primary/10"}
-                        valueColor={funnelMetrics.clickToOpenRate >= 30 ? "text-success" : "text-primary"}
                       />
                       <KPICard
                         title="Bounce Rate"
@@ -672,13 +683,13 @@ const Incentive = () => {
                         valueColor={funnelMetrics.bounceRate > 5 ? "text-danger" : funnelMetrics.bounceRate > 2 ? "text-warning" : undefined}
                       />
                       <KPICard
-                        title="Spam Rate"
-                        value={`${funnelMetrics.spamRate}%`}
-                        unit={`${funnelMetrics.spam} reportados`}
+                        title="Rejeições"
+                        value={funnelMetrics.companiesWithSpam + funnelMetrics.companiesWithOptout}
+                        unit={`${funnelMetrics.companiesWithSpam} spam · ${funnelMetrics.companiesWithOptout} opt-out`}
                         icon={ShieldAlert}
-                        iconColor={funnelMetrics.spamRate > 1 ? "text-danger" : funnelMetrics.spamRate > 0.5 ? "text-warning" : "text-muted-foreground"}
-                        iconBgColor={funnelMetrics.spamRate > 1 ? "bg-danger/10" : funnelMetrics.spamRate > 0.5 ? "bg-warning/10" : "bg-muted"}
-                        valueColor={funnelMetrics.spamRate > 1 ? "text-danger" : funnelMetrics.spamRate > 0.5 ? "text-warning" : undefined}
+                        iconColor="text-danger"
+                        iconBgColor="bg-danger/10"
+                        valueColor="text-danger"
                       />
                     </div>
 
@@ -803,7 +814,7 @@ const Incentive = () => {
 
                 {/* Funil com ramificação - largura total */}
                 {(() => {
-                  const preTotal = funnelMetrics.porContactar + funnelMetrics.semInteracao + funnelMetrics.interessada;
+                  const preTotal = funnelMetrics.incontactaveis + funnelMetrics.porContactar + funnelMetrics.semInteracao + funnelMetrics.interessada;
                   const simpleTotal = funnelMetrics.simple.registered + funnelMetrics.simple.progress + funnelMetrics.simple.complete;
                   const formularioTotal = funnelMetrics.formulario.progress + funnelMetrics.formulario.complete;
                   const postTotal = simpleTotal + formularioTotal;
@@ -813,6 +824,7 @@ const Incentive = () => {
                   const rightPercent = preTotal === 0 ? 100 : postTotal === 0 ? 0 : (postTotal / grandTotal) * 100;
 
                   const legendItems = [
+                    { label: 'Incontactáveis', value: funnelMetrics.incontactaveis, color: 'bg-foreground', borderColor: 'border-foreground', tooltip: 'Bounce, spam ou opt-out' },
                     { label: 'Por contactar', value: funnelMetrics.porContactar, color: 'bg-status-pending', borderColor: 'border-status-pending', tooltip: 'Ainda não recebeu nenhum email' },
                     { label: 'Sem interação', value: funnelMetrics.semInteracao, color: 'bg-status-contacted', borderColor: 'border-status-contacted', tooltip: 'Recebeu email mas não clicou no link' },
                     { label: 'Interessada', value: funnelMetrics.interessada, color: 'bg-status-interested', borderColor: 'border-status-interested', tooltip: 'Clicou no link do email' },
@@ -828,6 +840,7 @@ const Incentive = () => {
                         {/* Fase pré-decisão */}
                         {preTotal > 0 && (() => {
                           const preSegments = [
+                            { key: 'unreachable', value: funnelMetrics.incontactaveis, color: 'bg-foreground', label: 'Incontactáveis' },
                             { key: 'pending', value: funnelMetrics.porContactar, color: 'bg-status-pending', label: 'Por contactar' },
                             { key: 'contacted', value: funnelMetrics.semInteracao, color: 'bg-status-contacted', label: 'Sem interação' },
                             { key: 'interested', value: funnelMetrics.interessada, color: 'bg-status-interested', label: 'Interessada' },
@@ -1019,7 +1032,7 @@ const Incentive = () => {
                   className="shrink-0"
                 >
                   <Rocket className="h-4 w-4 mr-1.5" />
-                  Enviar a todas
+                  Envio em massa
                 </Button>
               </div>
             </div>
@@ -1050,7 +1063,7 @@ const Incentive = () => {
         
         {/* Smart Send Dialog */}
         <Dialog open={showSmartSendDialog} onOpenChange={handleCloseSmartSend}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[700px]">
             {showSmartSendSuccess ? (
               /* Estado de sucesso */
               <div className="space-y-6 text-center py-8">
@@ -1072,260 +1085,161 @@ const Incentive = () => {
               <>
                 <DialogHeader className="pr-12">
                   <DialogTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-primary" />
-                    Envio Inteligente
+                    <Rocket className="h-5 w-5 text-primary" />
+                    Envie emails para múltiplas empresas de uma só vez
                   </DialogTitle>
                   <DialogDescription>
-                    Os templates recomendados serão enviados automaticamente. Para personalizar, use o envio manual.
+                    Use os filtros à esquerda para selecionar empresas por estado de onboarding ou número de emails já enviados.
+                    O sistema escolhe automaticamente o template adequado para cada empresa.
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-4 py-4">
-                  {/* Filtros */}
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Filter className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">Filtrar empresas a contactar:</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      {/* Filtro de Estado */}
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8">
-                            Estado de onboarding
-                            {bulkStatusFilter.length > 0 && (
-                              <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[10px]">
-                                {bulkStatusFilter.length}
-                              </Badge>
-                            )}
-                            <ChevronDown className="ml-1 h-3 w-3" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-64 p-3" align="start">
-                          <div className="space-y-2">
-                            {[
-                              { value: 'por_contactar', label: 'Por contactar' },
-                              { value: 'sem_interacao', label: 'Sem interação' },
-                              { value: 'interessada', label: 'Interessada' },
-                              { value: 'registada_simple', label: 'Registada' },
-                              { value: 'em_progresso_simple', label: 'Em progresso (Simple)' },
-                              { value: 'em_progresso_formulario', label: 'Em progresso (Formulário)' },
-                            ].map(option => {
-                              const count = bulkStatusCounts[option.value] || 0;
-                              return (
-                                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                  <Checkbox
-                                    checked={bulkStatusFilter.includes(option.value)}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        setBulkStatusFilter([...bulkStatusFilter, option.value]);
-                                      } else {
-                                        setBulkStatusFilter(bulkStatusFilter.filter(v => v !== option.value));
-                                      }
-                                    }}
-                                    disabled={count === 0}
-                                  />
-                                  <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
-                                    {option.label}
-                                  </span>
-                                  <span className={cn(
-                                    "text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center",
-                                    count === 0 ? "bg-muted/50 text-muted-foreground/50" : "bg-muted text-muted-foreground"
-                                  )}>
-                                    {count}
-                                  </span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                          {bulkStatusFilter.length > 0 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full mt-2 h-7 text-xs"
-                              onClick={() => setBulkStatusFilter([])}
-                            >
-                              Limpar
-                            </Button>
-                          )}
-                        </PopoverContent>
-                      </Popover>
-
-                      {/* Filtro de Nº Emails */}
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8">
-                            Emails enviados
-                            {bulkEmailCountFilter.length > 0 && (
-                              <Badge variant="secondary" className="ml-1.5 px-1.5 py-0 text-[10px]">
-                                {bulkEmailCountFilter.length}
-                              </Badge>
-                            )}
-                            <ChevronDown className="ml-1 h-3 w-3" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-44 p-3" align="start">
-                          <div className="space-y-2">
-                            {[
-                              { value: '0', label: '0 emails' },
-                              { value: '1', label: '1 email' },
-                              { value: '2', label: '2 emails' },
-                              { value: '3+', label: '3+ emails' },
-                            ].map(option => {
-                              const count = bulkEmailCountCounts[option.value as keyof typeof bulkEmailCountCounts] || 0;
-                              return (
-                                <label key={option.value} className="flex items-center gap-2 cursor-pointer">
-                                  <Checkbox
-                                    checked={bulkEmailCountFilter.includes(option.value)}
-                                    onCheckedChange={(checked) => {
-                                      if (checked) {
-                                        setBulkEmailCountFilter([...bulkEmailCountFilter, option.value]);
-                                      } else {
-                                        setBulkEmailCountFilter(bulkEmailCountFilter.filter(v => v !== option.value));
-                                      }
-                                    }}
-                                    disabled={count === 0}
-                                  />
-                                  <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
-                                    {option.label}
-                                  </span>
-                                  <span className={cn(
-                                    "text-xs font-bold px-2 py-0.5 rounded-full min-w-[28px] text-center",
-                                    count === 0 ? "bg-muted/50 text-muted-foreground/50" : "bg-muted text-muted-foreground"
-                                  )}>
-                                    {count}
-                                  </span>
-                                </label>
-                              );
-                            })}
-                          </div>
-                          {bulkEmailCountFilter.length > 0 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="w-full mt-2 h-7 text-xs"
-                              onClick={() => setBulkEmailCountFilter([])}
-                            >
-                              Limpar
-                            </Button>
-                          )}
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    {/* Chips de filtros ativos */}
-                    {(bulkStatusFilter.length > 0 || bulkEmailCountFilter.length > 0) && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {bulkStatusFilter.map(status => (
-                          <Badge key={status} variant="secondary" className="pl-2 pr-1 py-0.5 gap-1">
-                            {getStatusLabel(status as OnboardingStatus)}
-                            <button
-                              onClick={() => setBulkStatusFilter(prev => prev.filter(s => s !== status))}
-                              className="ml-1 hover:bg-muted rounded-full p-0.5"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </Badge>
-                        ))}
-                        {bulkEmailCountFilter.map(count => (
-                          <Badge key={count} variant="secondary" className="pl-2 pr-1 py-0.5 gap-1">
-                            {count === '3+' ? '3+ emails' : `${count} email${count === '1' ? '' : 's'}`}
-                            <button
-                              onClick={() => setBulkEmailCountFilter(prev => prev.filter(c => c !== count))}
-                              className="ml-1 hover:bg-muted rounded-full p-0.5"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </Badge>
-                        ))}
+                <div className="grid grid-cols-[300px_1fr] gap-6 py-4">
+                  {/* Coluna esquerda: Filtros */}
+                  <Card className="p-4 h-fit">
+                    <p className="text-sm font-bold mb-4">Filtrar por</p>
+                    {/* Filtro de Estado */}
+                    <div>
+                      <p className="text-xs font-normal text-muted-foreground mb-3">
+                        Estado de onboarding
+                      </p>
+                      <div className="space-y-1.5">
+                        {[
+                          { value: 'por_contactar', label: 'Por contactar' },
+                          { value: 'sem_interacao', label: 'Sem interação' },
+                          { value: 'interessada', label: 'Interessada' },
+                          { value: 'registada_simple', label: 'Registada' },
+                          { value: 'em_progresso_simple', label: 'Em progresso (Simple)' },
+                          { value: 'em_progresso_formulario', label: 'Em progresso (Formulário)' },
+                        ].map(option => {
+                          const count = bulkStatusCounts[option.value] || 0;
+                          return (
+                            <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                              <Checkbox
+                                checked={bulkStatusFilter.includes(option.value)}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    setBulkStatusFilter([...bulkStatusFilter, option.value]);
+                                  } else {
+                                    setBulkStatusFilter(bulkStatusFilter.filter(v => v !== option.value));
+                                  }
+                                }}
+                                disabled={count === 0}
+                              />
+                              <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
+                                {option.label}
+                              </span>
+                              <span className={cn(
+                                "text-xs bg-muted px-1.5 rounded min-w-[24px] text-center",
+                                count === 0 && "text-muted-foreground/50"
+                              )}>
+                                {count}
+                              </span>
+                            </label>
+                          );
+                        })}
                       </div>
-                    )}
-                  </div>
-
-                  {/* Estatísticas */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-success/10 border border-success/30 rounded-lg text-center">
-                      <p className="text-2xl font-bold text-success">{getSmartSendSummary.eligibleCount}</p>
-                      <p className="text-xs text-success">elegíveis</p>
                     </div>
-                    {getSmartSendSummary.excludedCount > 0 ? (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div className="p-3 bg-warning/10 border border-warning/30 rounded-lg text-center cursor-help">
-                              <p className="text-2xl font-bold text-warning">{getSmartSendSummary.excludedCount}</p>
-                              <p className="text-xs text-warning flex items-center justify-center gap-1">
-                                excluídas
-                                <Info className="h-3 w-3" />
-                              </p>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="max-w-[200px]">
-                            <p className="font-bold mb-1">Empresas excluídas por:</p>
-                            <ul className="text-xs space-y-0.5">
-                              {exclusionBreakdown.spam > 0 && <li>• {exclusionBreakdown.spam} marcaram spam</li>}
-                              {exclusionBreakdown.bounce > 0 && <li>• {exclusionBreakdown.bounce} email inválido</li>}
-                              {exclusionBreakdown.optout > 0 && <li>• {exclusionBreakdown.optout} opt-out</li>}
-                            </ul>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ) : (
-                      <div className="p-3 bg-muted/50 border-muted border rounded-lg text-center">
-                        <p className="text-2xl font-bold text-muted-foreground">0</p>
-                        <p className="text-xs text-muted-foreground">excluídas</p>
-                      </div>
-                    )}
-                  </div>
 
-                  {/* Grupos por template */}
-                  {getSmartSendSummary.groups.length > 0 ? (
-                    <div className="space-y-3 max-h-[250px] overflow-y-auto">
-                      {getSmartSendSummary.groups.map(group => (
-                        <div key={group.template} className="p-3 border rounded-lg bg-muted/30">
-                          <div className="flex items-center justify-between mb-2">
-                            <p className="font-bold text-sm">{group.templateName}</p>
-                            <Badge variant="secondary">{group.companies.length}</Badge>
-                          </div>
-                          <div className="space-y-1">
-                            {group.companies.slice(0, 2).map((company, idx) => (
-                              <p key={idx} className="text-xs text-muted-foreground">
-                                {company.name} <span className="text-muted-foreground/60">({company.email})</span>
-                              </p>
+                    <Separator className="my-4 -mx-4 w-[calc(100%+2rem)]" />
+
+                    {/* Filtro de Nº Emails */}
+                    <div>
+                      <p className="text-xs font-normal text-muted-foreground mb-3">
+                        Emails enviados
+                      </p>
+                      <div className="space-y-1.5">
+                        {[
+                          { value: '0', label: '0 emails' },
+                          { value: '1', label: '1 email' },
+                          { value: '2', label: '2 emails' },
+                          { value: '3+', label: '3+ emails' },
+                        ].map(option => {
+                          const count = bulkEmailCountCounts[option.value as keyof typeof bulkEmailCountCounts] || 0;
+                          return (
+                            <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                              <Checkbox
+                                checked={bulkEmailCountFilter.includes(option.value)}
+                                onCheckedChange={(checked) => {
+                                  if (checked) {
+                                    setBulkEmailCountFilter([...bulkEmailCountFilter, option.value]);
+                                  } else {
+                                    setBulkEmailCountFilter(bulkEmailCountFilter.filter(v => v !== option.value));
+                                  }
+                                }}
+                                disabled={count === 0}
+                              />
+                              <span className={cn("text-sm flex-1", count === 0 && "text-muted-foreground")}>
+                                {option.label}
+                              </span>
+                              <span className={cn(
+                                "text-xs bg-muted px-1.5 rounded min-w-[24px] text-center",
+                                count === 0 && "text-muted-foreground/50"
+                              )}>
+                                {count}
+                              </span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Coluna direita: Info + Templates + Botões */}
+                  <div className="flex flex-col justify-between">
+                    <div className="space-y-4">
+                      {/* Info sobre exclusões */}
+                      <div className="p-3 border border-warning/30 bg-warning/5 rounded-lg flex items-start gap-2">
+                        <AlertTriangle className="h-4 w-4 text-warning shrink-0" />
+                        <p className="text-xs text-muted-foreground">
+                          Empresas que marcaram spam, fizeram opt-out ou que têm endereços de email inválidos não estão incluídas neste envio.
+                        </p>
+                      </div>
+
+                      {/* Templates em lista compacta */}
+                      <div>
+                        <p className="text-sm font-bold mb-4">
+                          Templates a enviar
+                        </p>
+                        {getSmartSendSummary.groups.length > 0 ? (
+                          <div className="space-y-2">
+                            {getSmartSendSummary.groups.map(group => (
+                              <div key={group.template} className="flex items-center gap-2">
+                                <span className="text-sm">{group.templateName}</span>
+                                <span className="flex-1 border-b border-dotted border-muted-foreground/30" />
+                                <span className="text-sm text-muted-foreground">
+                                  {group.companies.length} empresa{group.companies.length !== 1 ? 's' : ''}
+                                </span>
+                              </div>
                             ))}
-                            {group.companies.length > 2 && (
-                              <p className="text-xs text-muted-foreground/60">
-                                +{group.companies.length - 2} mais
-                              </p>
-                            )}
                           </div>
-                        </div>
-                      ))}
+                        ) : (
+                          <div className="text-center py-8 text-muted-foreground border rounded-lg bg-muted/10">
+                            <p>Nenhuma empresa elegível para envio.</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  ) : (
-                    <div className="text-center py-4 text-muted-foreground">
-                      <p>Nenhuma empresa elegível para envio.</p>
-                    </div>
-                  )}
-                </div>
 
-                <DialogFooter className="gap-2 sm:gap-0">
-                  <Button variant="outline" onClick={handleCloseSmartSend}>
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={handleSmartSend}
-                    disabled={isLoading || getSmartSendSummary.eligibleCount === 0}
-                  >
-                    {isLoading ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Send className="mr-2 h-4 w-4" />
-                    )}
-                    Enviar {getSmartSendSummary.eligibleCount} email{getSmartSendSummary.eligibleCount !== 1 ? 's' : ''}
-                  </Button>
-                </DialogFooter>
+                    {/* Botões no canto inferior direito */}
+                    <div className="flex justify-end gap-2 pt-4">
+                      <Button variant="outline" onClick={handleCloseSmartSend}>
+                        Cancelar
+                      </Button>
+                      <Button
+                        onClick={handleSmartSend}
+                        disabled={isLoading || getSmartSendSummary.eligibleCount === 0}
+                      >
+                        {isLoading ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Send className="mr-2 h-4 w-4" />
+                        )}
+                        Enviar {getSmartSendSummary.eligibleCount} email{getSmartSendSummary.eligibleCount !== 1 ? 's' : ''}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
           </DialogContent>
@@ -1464,14 +1378,16 @@ const Incentive = () => {
                       <ShieldAlert className="h-4 w-4 text-warning" />
                     </div>
                     <div>
-                      <p className="font-bold text-sm">Spam Rate</p>
+                      <p className="font-bold text-sm">Rejeições</p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Percentagem de destinatários que marcaram o email como spam.
-                        Este é um indicador crítico pois afeta a reputação do domínio remetente.
+                        Empresas que sinalizaram não querer receber comunicações:
                       </p>
+                      <ul className="text-xs text-muted-foreground mt-1 ml-4 list-disc">
+                        <li><span className="font-bold">Spam:</span> marcou o email como spam</li>
+                        <li><span className="font-bold">Opt-out:</span> pediu para não ser contactado</li>
+                      </ul>
                       <p className="text-xs text-muted-foreground mt-1">
-                        Benchmark: <span className="text-danger font-bold">&lt;0.1%</span> é o ideal.
-                        Acima de 0.5% pode resultar em bloqueio pelos provedores de email.
+                        Ambos os tipos bloqueiam futuros envios e afectam a reputação do domínio remetente.
                       </p>
                     </div>
                   </div>
