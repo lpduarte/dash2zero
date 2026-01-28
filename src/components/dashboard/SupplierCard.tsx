@@ -1,9 +1,10 @@
 import { memo } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Supplier } from "@/types/supplier";
-import { Mail, FileText, Building2, Users, Handshake, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
+import { Mail, FileText, Building2, TrendingUp, Euro, UserRound, Maximize2, BarChart3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getSectorName } from "@/data/sectors";
+import { clusterLabelsSingular } from "@/config/clusters";
 
 interface SupplierCardProps {
   supplier: Supplier;
@@ -18,29 +19,10 @@ const getRegionLabel = (region: string) => {
   };
   return labels[region] || region;
 };
-const getClusterInfo = (cluster: string) => {
-  const info: Record<string, {
-    label: string;
-    icon: typeof Building2;
-  }> = {
-    fornecedor: {
-      label: 'Fornecedor',
-      icon: Building2
-    },
-    cliente: {
-      label: 'Cliente',
-      icon: Users
-    },
-    parceiro: {
-      label: 'Parceiro',
-      icon: Handshake
-    }
-  };
-  return info[cluster] || {
-    label: cluster,
-    icon: Building2
-  };
-};
+const getClusterInfo = (cluster: string) => ({
+  label: clusterLabelsSingular[cluster] || cluster,
+  icon: Building2
+});
 export const SupplierCard = memo(({
   supplier,
   sectorAverage
