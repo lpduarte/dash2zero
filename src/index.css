@@ -601,11 +601,4 @@ Brand color: #219F94 = HSL(175, 66%, 38%)
     break-inside: avoid;
   }
 
-  @page {
-    margin: 2cm;
-  }
-
-  @page :first {
-    margin-top: 3cm;
-  }
 }
